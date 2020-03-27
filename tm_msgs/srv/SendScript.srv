@@ -1,0 +1,5 @@
+# request fields
+string id
+string script
+---
+bool success

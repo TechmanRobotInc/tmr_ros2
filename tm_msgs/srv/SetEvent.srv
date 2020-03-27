@@ -1,0 +1,7 @@
+int8 EVENT_STOP = 1
+int8 EVENT_PAUSE = 2
+int8 EVENT_RESUME = 3
+
+int8 event_type
+---
+bool success

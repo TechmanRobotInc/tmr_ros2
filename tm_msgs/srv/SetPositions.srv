@@ -1,0 +1,17 @@
+int8 PTP_J = 1
+int8 PTP_T = 2
+#int8 LINE_J = 3
+int8 LINE_T = 4
+#int8 CIRC_J = 5
+int8 CIRC_T = 6
+#int8 PLINE_J = 7
+int8 PLINE_T = 8
+
+int8 motion_type
+float64[] positions
+float64 velocity
+float64 acc_time
+int32 blend_percentage
+bool fine_goal
+---
+bool success

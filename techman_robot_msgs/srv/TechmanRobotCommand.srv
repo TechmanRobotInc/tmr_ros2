@@ -1,0 +1,4 @@
+string command
+string command_parameter_string
+---
+bool is_success

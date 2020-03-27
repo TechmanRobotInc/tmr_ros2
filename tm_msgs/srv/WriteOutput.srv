@@ -1,0 +1,14 @@
+int8 FUN_SET_MB_DIGITAL_OUT = 0
+int8 FUN_SET_EE_DIGITAL_OUT = 1
+int8 FUN_SET_MB_ANALOG_OUT = 2
+int8 FUN_SET_EE_ANALOG_OUT = 3
+
+int8 STATE_OFF = 0
+int8 STATE_ON = 1
+
+# request fields
+int8 fun
+int8 pin
+float32 state
+---
+bool success

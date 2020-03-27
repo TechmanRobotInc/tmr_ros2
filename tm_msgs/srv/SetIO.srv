@@ -1,0 +1,20 @@
+int8 MODULE_CONTROLBOX = 0
+int8 MODULE_ENDEFFECTOR = 1
+
+int8 TYPE_DIGITAL_IN = 0
+int8 TYPE_DIGITAL_OUT = 1
+int8 TYPE_INSTANT_DO = 2
+int8 TYPE_ANALOG_IN = 3
+int8 TYPE_ANALOG_OUT = 4
+int8 TYPE_INSTANT_AO = 5
+
+int8 STATE_OFF = 0
+int8 STATE_ON = 1
+
+# request fields
+int8 module
+int8 type
+int8 pin
+float32 state
+---
+bool success
