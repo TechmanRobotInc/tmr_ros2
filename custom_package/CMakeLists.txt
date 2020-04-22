@@ -23,6 +23,7 @@ find_package(sensor_msgs REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(OpenCV REQUIRED)
 find_package(techman_robot_msgs REQUIRED)
+find_package(ament_index_cpp REQUIRED)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
@@ -47,11 +48,17 @@ ament_target_dependencies(sub_img
 "sensor_msgs"
 "std_msgs"
 "OpenCV"
+"ament_index_cpp"
 )
 
 install(TARGETS
 tm_send_command
   sub_img
 	DESTINATION lib/${PROJECT_NAME}
+)
+
+install(
+  DIRECTORY image
+  DESTINATION share/${PROJECT_NAME}
 )
 ament_package()
