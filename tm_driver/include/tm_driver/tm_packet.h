@@ -16,7 +16,7 @@
 
 class TmCPError;
 class TmSctData;
-//class TmStaData;
+class TmStaData;
 class TmSvrData;
 
 class TmPacket
@@ -86,6 +86,10 @@ public:
 		build_packet(*this, data);
 	}
 	explicit TmPacket(const TmSctData &data)
+	{
+		build_packet(*this, data);
+	}
+	explicit TmPacket(const TmStaData &data)
 	{
 		build_packet(*this, data);
 	}
@@ -209,6 +213,7 @@ public:
 
 	static void build_packet(TmPacket &packet, const TmSvrData &data);
 	static void build_packet(TmPacket &packet, const TmSctData &data);
+	static void build_packet(TmPacket &packet, const TmStaData &data);
 };
 
 //
@@ -218,14 +223,16 @@ public:
 class TmSvrData
 {
 public:
-	enum SrcType { Move, Copy };
+	enum SrcType { Shallow, Deep };
 
 	enum class Mode : char {
 		RESPONSE = 0,
 		BINARY,
 		STRING,
 		JSON,
-
+		READ_BINARY = 11,
+		READ_STRING,
+		READ_JSON,
 		UNKNOW
 	};
 	enum class ErrorCode {
@@ -243,9 +250,7 @@ public:
 private:
 	std::string _transaction_id;
 	Mode _mode = Mode::RESPONSE;
-
-	SrcType _src_type = SrcType::Move;
-
+	std::string _content_str;
 	const char *_content = NULL;
 	size_t _len = 0;
 	size_t _size = 0;
@@ -257,6 +262,10 @@ private:
 
 public:
 	TmSvrData() {}
+	explicit TmSvrData(const TmSvrData &other, SrcType type)
+	{
+		build_TmSvrData(*this, other, type);
+	}
 	explicit TmSvrData(const std::string &id, Mode mode, const char *content, size_t len, SrcType type)
 	{
 		build_TmSvrData(*this, id, mode, content, len, type);
@@ -272,6 +281,7 @@ public:
 
 	std::string transaction_id() { return _transaction_id; }
 	Mode mode() { return _mode; }
+	std::string content_str() { return _content_str; }
 	const char *content() { return _content; }
 	size_t content_len() { return _len; }
 	size_t data_size() { return _size; }
@@ -284,6 +294,7 @@ private:
 public:
 	static void clear_content(TmSvrData &data);
 
+	static void build_TmSvrData(TmSvrData &data, const TmSvrData &other, SrcType type);
 	static void build_TmSvrData(TmSvrData &data, const std::string &id, Mode mode, const char *content, size_t len, SrcType type);
 	static void build_TmSvrData(TmSvrData &data, const char *bytes, size_t size, SrcType type);
 	
@@ -309,13 +320,11 @@ public:
 class TmSctData
 {
 public:
-	enum SrcType { Move, Copy };
+	enum SrcType { Shallow, Deep };
 
 private:
 	std::string _script_id;
-
-	SrcType _src_type = SrcType::Move;
-
+	std::string _script_str;
 	const char *_script;
 	size_t _len = 0;
 	size_t _size = 0;
@@ -328,6 +337,10 @@ private:
 
 public:
 	TmSctData() {}
+	explicit TmSctData(const TmSctData &other, SrcType type)
+	{
+		build_TmSctData(*this, other, type);
+	}
 	explicit TmSctData(const std::string &id, const char *script, size_t len, SrcType type)
 	{
 		build_TmSctData(*this, id, script, len, type);
@@ -341,8 +354,9 @@ public:
 		clear_script(*this);
 	}
 
-	const char *script() { return _script; }
 	std::string script_id() { return _script_id; }
+	std::string script_str() { return _script_str; }
+	const char *script() { return _script; }
 	size_t script_len() { return _len; }
 	size_t data_size() { return _size; }
 	bool is_ok() { return _is_ok; }
@@ -352,8 +366,8 @@ public:
 public:
 	static void clear_script(TmSctData &data);
 
+	static void build_TmSctData(TmSctData &data, const TmSctData &other, SrcType type);
 	static void build_TmSctData(TmSctData &data, const std::string &id, const char *script, size_t len, SrcType type);
-
 	static void build_TmSctData(TmSctData &data, const char *bytes, size_t size, SrcType type);
 
 	static void build_bytes(std::vector<char> &bytes, const TmSctData &data);
@@ -362,6 +376,63 @@ public:
 //
 // TMSTA
 //
+
+class TmStaData
+{
+public:
+	enum SrcType { Shallow, Deep };
+
+private:
+	unsigned char _subcmd;
+	std::string _subcmd_str;
+	std::string _subdata_str;
+	const char *_subdata;
+	size_t _len = 0;
+	size_t _size = 0;
+
+	bool _is_valid = false;
+	bool _is_copy = false;
+
+public:
+	TmStaData() {}
+	explicit TmStaData(const TmStaData &other, SrcType type)
+	{
+		build_TmStaData(*this, other, type);
+	}
+	explicit TmStaData(const std::string &sub_cmd, const char *sub_data, size_t len, SrcType type)
+	{
+		build_TmStaData(*this, sub_cmd, sub_data, len, type);
+	}
+	explicit TmStaData(const unsigned char sub_cmd, const char *sub_data, size_t len, SrcType type)
+	{
+		build_TmStaData(*this, sub_cmd, sub_data, len, type);
+	}
+	explicit TmStaData(const char *data, size_t size, SrcType type)
+	{
+		build_TmStaData(*this, data, size, type);
+	}
+	~TmStaData()
+	{
+		clear_subdata(*this);
+	}
+
+	unsigned char subcmd() { return _subcmd; }
+	std::string subcmd_str() { return _subcmd_str; }
+	const char *subdata() { return _subdata; }
+	size_t subdata_len() { return _len; }
+	size_t data_size() { return _size; }
+	bool is_valid() { return _is_valid; }
+
+public:
+	static void clear_subdata(TmStaData &data);
+
+	static void build_TmStaData(TmStaData &data, const TmStaData &other, SrcType type);
+	static void build_TmStaData(TmStaData &data, const std::string &sub_cmd, const char *sub_data, size_t len, SrcType type);
+	static void build_TmStaData(TmStaData &data, unsigned char sub_cmd, const char *sub_data, size_t len, SrcType type);
+	static void build_TmStaData(TmStaData &data, const char *bytes, size_t size, SrcType type);
+
+	static void build_bytes(std::vector<char> &bytes, const TmStaData &data);
+};
 
 //
 // CPERR

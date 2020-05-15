@@ -199,7 +199,7 @@ size_t TmRobotState::_deserialize(const char *data, size_t size, bool use_mtx)
 			{
 				std::stringstream ss;
 				for (size_t i = 0; i < bsize; ++i) {
-					ss << *(data + boffset);
+					ss << *(data + boffset + i);
 				}
 				_error_content = ss.str();
 			}
@@ -261,7 +261,7 @@ size_t TmRobotState::_deserialize(const char *data, size_t size, bool use_mtx)
 	//boffset = _deserialize_copy_wo_check(&_ma_mode_, data, boffset);
 
 	// Stick_PlayPause
-	//boffset = _deserialize_copy_wo_check(&_stick_play_pause_, data, boffset);
+	boffset = _deserialize_copy_wo_check(&_stick_play_pause_, data, boffset);
 
 	// Robot Light 4
 	//boffset = _deserialize_copy_wo_check(&_robot_light_, data, boffset);
@@ -287,7 +287,7 @@ size_t TmRobotState::_deserialize(const char *data, size_t size, bool use_mtx)
 		boffset = _deserialize_copy_wo_check(&_ee_DO_[i], data, boffset);
 	}
 	// End_DIx
-	for (int i = 0; i < 4; ++i) {
+	for (int i = 0; i < 3; ++i) {
 		boffset = _deserialize_copy_wo_check(&_ee_DI_[i], data, boffset);
 	}
 	// End_AOx

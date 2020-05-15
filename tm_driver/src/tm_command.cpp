@@ -7,6 +7,18 @@
 #include <sstream>
 #include <iomanip>
 
+std::string TmCommand::set_tag(int tag, int wait)
+{
+	std::stringstream ss;
+	ss << "QueueTag(" << tag << "," << wait << ")";
+	return ss.str();
+}
+std::string TmCommand::set_wait_tag(int tag, int timeout_ms)
+{
+	std::stringstream ss;
+	ss << "WaitQueueTag(" << tag << "," << timeout_ms << ")";
+	return ss.str();
+}
 std::string TmCommand::set_io(TmIOModule module, TmIOType type, int pin, float state)
 {
 	static std::string io_module_name[] = { "ControlBox", "EndModule" };

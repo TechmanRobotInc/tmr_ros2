@@ -68,6 +68,9 @@ public:
 	// Fucntions
 	////////////////////////////////
 
+	static std::string script_exit() { return "ScriptExit()"; }
+	static std::string set_tag(int tag, int wait = 0);
+	static std::string set_wait_tag(int tag, int timeout_ms = 0);
 	static std::string set_stop() { return "StopAndClearBuffer()"; }
 	static std::string set_pause() { return "Pause()"; }
 	static std::string set_resume() { return "Resume()"; }

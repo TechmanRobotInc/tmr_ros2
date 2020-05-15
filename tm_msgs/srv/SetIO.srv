@@ -17,4 +17,4 @@ int8 type
 int8 pin
 float32 state
 ---
-bool success
+bool ok

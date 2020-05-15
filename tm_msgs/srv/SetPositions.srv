@@ -14,4 +14,4 @@ float64 acc_time
 int32 blend_percentage
 bool fine_goal
 ---
-bool success
+bool ok

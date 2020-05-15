@@ -32,7 +32,7 @@ TmDriver::TmDriver(const std::string &ip,
 	}
 }
 
-bool TmDriver::start(int timeout_ms)
+bool TmDriver::start(int timeout_ms, bool stick_play)
 {
 	halt();
 	print_info("TM_DRV: start");
@@ -40,15 +40,11 @@ bool TmDriver::start(int timeout_ms)
 	bool rb = svr.start(timeout_ms);
 	if (!rb) return rb;
 	// send command to run project
-	rb = (svr.send_play_cmd() == RC_OK);
-	if (!rb) return rb;
+	if (stick_play) {
+		svr.send_stick_play();
+	}
 	// connect to listen node
 	rb = sct.start(timeout_ms);
-	if (!rb) {
-		svr.halt();
-		return rb;
-	}
-	_is_all_connected = true;
 	return rb;
 }
 
@@ -57,14 +53,13 @@ void TmDriver::halt()
 	print_info("TM_DRV: halt");
 	if (sct.is_connected()) {
 		// send command to stop project
-		sct.send_script_exit_cmd();
+		sct.send_script_exit();
 	}
 	sct.halt();
 	if (svr.is_connected()) {
 		// send command to stop project
 	}
 	svr.halt();
-	_is_all_connected = false;
 }
 
 ////////////////////////////////
@@ -75,6 +70,18 @@ void TmDriver::halt()
 // SCT Robot Function (set_XXX)
 ////////////////////////////////
 
+bool TmDriver::script_exit(const std::string &id)
+{
+	return (sct.send_script_str(id, TmCommand::script_exit()) == RC_OK);
+}
+bool TmDriver::set_tag(int tag, int wait, const std::string &id)
+{
+	return (sct.send_script_str(id, TmCommand::set_tag(tag, wait)) == RC_OK);
+}
+bool TmDriver::set_wait_tag(int tag, int timeout_ms, const std::string &id)
+{
+	return (sct.send_script_str(id, TmCommand::set_tag(tag, timeout_ms)) == RC_OK);
+}
 bool TmDriver::set_stop(const std::string &id)
 {
 	return (sct.send_script_str(id, TmCommand::set_stop()) == RC_OK);
@@ -132,7 +139,6 @@ bool TmDriver::set_pvt_point(TmPvtMode mode,
 }
 bool TmDriver::set_pvt_point(TmPvtMode mode, const TmPvtPoint &point, const std::string &id)
 {
-	//return set_pvt_point(mode, point.time, point.positions, point.velocities, id);
 	return (sct.send_script_str(id, TmCommand::set_pvt_point(mode, point)) == RC_OK);
 }
 

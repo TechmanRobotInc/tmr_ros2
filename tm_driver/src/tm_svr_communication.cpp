@@ -81,16 +81,23 @@ void TmSvrCommunication::halt()
 	}
 }
 
-TmCommRC TmSvrCommunication::send_content_str(const std::string &id, const std::string &content)
+TmCommRC TmSvrCommunication::send_content(const std::string &id, TmSvrData::Mode mode, const std::string &content)
 {
 	std::string cntt = content;
-	TmSvrData cmd{ id, TmSvrData::Mode::STRING, cntt.data(), cntt.size(), TmSvrData::SrcType::Move };
+	TmSvrData cmd{ id, mode, cntt.data(), cntt.size(), TmSvrData::SrcType::Shallow };
 	TmPacket pack{ cmd };
 	return send_packet_all(pack);
 }
-TmCommRC TmSvrCommunication::send_play_cmd()
+TmCommRC TmSvrCommunication::send_content_str(const std::string &id, const std::string &content)
 {
-	return send_content_str("0", "Stick_PlayPause=1\r\n");
+	std::string cntt = content;
+	TmSvrData cmd{ id, TmSvrData::Mode::STRING, cntt.data(), cntt.size(), TmSvrData::SrcType::Shallow };
+	TmPacket pack{ cmd };
+	return send_packet_all(pack);
+}
+TmCommRC TmSvrCommunication::send_stick_play()
+{
+	return send_content_str("Play", "Stick_PlayPause=1");
 }
 
 void TmSvrCommunication::thread_function()
@@ -99,6 +106,9 @@ void TmSvrCommunication::thread_function()
 	_keep_thread_alive = true;
 	while (_keep_thread_alive) {
 		bool reconnect = false;
+		if (!recv_init()) {
+			print_info("TM_SVR: is not connected");
+		}
 		while (_keep_thread_alive && is_connected() && !reconnect) {
 			TmCommRC rc = tmsvr_function();
 			_updated = true;
@@ -115,20 +125,30 @@ void TmSvrCommunication::thread_function()
 			}
 		}
 		Close();
-		print_info("TM_SVR: reconnect in ");
-		int cnt = 5;
-		while (_keep_thread_alive && cnt > 0) {
-			print_info("%d sec...", cnt);
-			std::this_thread::sleep_for(std::chrono::seconds(1));
-			--cnt;
-		}
-		if (_keep_thread_alive) {
-			print_info("TM_SVR: connect...");
-			Connect(1000);
-		}
+		reconnect_function();
 	}
 	Close();
 	print_info("TM_SVR: thread end");
+}
+void TmSvrCommunication::reconnect_function()
+{
+	if (!_keep_thread_alive) return;
+	if (_reconnect_timeval_ms <= 0) {
+		std::this_thread::sleep_for(std::chrono::milliseconds(100));
+	}
+	print_info("TM_SVR: reconnect in ");
+	int cnt = 0;
+	while (_keep_thread_alive && cnt < _reconnect_timeval_ms) {
+		if (cnt % 500 == 0) {
+			print_info("%.1f sec...", 0.001 * (_reconnect_timeval_ms - cnt));
+		}
+		std::this_thread::sleep_for(std::chrono::milliseconds(1));
+		++cnt;
+	}
+	if (_keep_thread_alive && _reconnect_timeval_ms >= 0) {
+		print_info("0 sec\nTM_SVR: connect(%dms)...", _reconnect_timeout_ms);
+		Connect(_reconnect_timeout_ms);
+	}
 }
 TmCommRC TmSvrCommunication::tmsvr_function()
 {
@@ -150,18 +170,23 @@ TmCommRC TmSvrCommunication::tmsvr_function()
 			
 			err_data.error_code(TmCPError::Code::Ok);
 
-			TmSvrData::build_TmSvrData(data, pack.data.data(), pack.data.size(), TmSvrData::SrcType::Move);
+			TmSvrData::build_TmSvrData(data, pack.data.data(), pack.data.size(), TmSvrData::SrcType::Shallow);
 			
 			if (data.is_valid()) {
 				switch (data.mode()) {
 				case TmSvrData::Mode::RESPONSE:
-					print_info("TM_SVR: response (%d)", int(data.error_code()));
+					print_info("TM_SVR: RESPONSE (%s): [%d]: %s", data.transaction_id().c_str(),
+						(int)(data.error_code()), std::string(data.content(), data.content_len()).c_str());
 					break;
 				case TmSvrData::Mode::BINARY:
 					state.mtx_deserialize(data.content(), data.content_len());
 					break;
+				case TmSvrData::Mode::READ_STRING:
+					print_info("TM_SVR: READ_STRING (%s): %s", data.transaction_id().c_str(),
+						std::string(data.content(), data.content_len()).c_str());
+					break;
 				default:
-					print_info("TM_SVR: invalid mode (%d)", int(data.mode()));
+					print_info("TM_SVR: (%s): invalid mode (%d)", data.transaction_id().c_str(), (int)(data.mode()));
 					break;
 				}
 			}

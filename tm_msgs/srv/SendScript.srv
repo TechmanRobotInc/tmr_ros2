@@ -2,4 +2,4 @@
 string id
 string script
 ---
-bool success
+bool ok

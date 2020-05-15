@@ -45,7 +45,7 @@ public:
 
 	bool is_connected() { return (_sockfd > 0); }
 
-	bool Connect(int timeout_ms = -1);
+	bool Connect(int timeout_ms = 0);
 
 	void Close();
 
@@ -58,6 +58,8 @@ public:
 	TmCommRC send_packet_all(TmPacket &packet, int *n = nullptr);
 
 	TmCommRC send_packet_(TmPacket &packet, int *n = nullptr);
+
+	bool recv_init();
 
 	TmCommRC recv_spin_once(int timeval_ms, int *n = NULL);
 

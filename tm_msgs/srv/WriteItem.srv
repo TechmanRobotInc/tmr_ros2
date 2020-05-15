@@ -1,0 +1,7 @@
+# 'Write'
+
+string id
+string item
+string value
+---
+bool ok

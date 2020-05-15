@@ -1,6 +1,11 @@
 
 std_msgs/Header header
 
+# Connection Status
+
+bool is_svr_connected
+bool is_sct_connected
+
 # Movement
 
 float64[] joint_pos
@@ -32,8 +37,8 @@ string error_content
 
 # IO
 
-bool[] cb_digital_input
+uint8[] cb_digital_input
 float32[] cb_analog_input
-bool[] ee_digital_input
+uint8[] ee_digital_input
 float32[] ee_analog_input
 

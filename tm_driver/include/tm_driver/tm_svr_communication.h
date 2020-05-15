@@ -13,6 +13,9 @@ private:
 private:
 	bool _updated = false;
 
+	int _reconnect_timeout_ms = 1000;
+	int _reconnect_timeval_ms = 3000;
+
 public:
 	TmCPError err_data{ TmCPError::Code::Ok };
 	TmSvrData data;
@@ -26,8 +29,15 @@ public:
 	bool start(int timeout_ms);
 	void halt();
 
+	void set_reconnect_timeout(int timeout_ms)
+	{ _reconnect_timeout_ms = timeout_ms; }
+	void set_reconnect_timeval(int timeval_ms)
+	{ _reconnect_timeval_ms = timeval_ms; }
+
+	TmCommRC send_content(const std::string &id, TmSvrData::Mode mode, const std::string &content);
 	TmCommRC send_content_str(const std::string &id, const std::string &content);
-	TmCommRC send_play_cmd();
+
+	TmCommRC send_stick_play();
 	//TmCommRC send_stop_cmd();
 
 	bool state_updated() { return _updated; }
@@ -43,6 +53,7 @@ public:
 	}
 private:
 	void thread_function();
+	void reconnect_function();
 public:
 	TmCommRC tmsvr_function();
 };

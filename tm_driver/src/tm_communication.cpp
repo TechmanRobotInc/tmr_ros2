@@ -157,7 +157,7 @@ size_t _recv_fake_svr_pack_data(char *buf)
 	FakeTmSvrPacket svr_pack;
 	FakeTmSvrPacket::build_content(svr_pack.content, angle, pose);
 	TmSvrData::build_TmSvrData(svr_pack.data, "0", TmSvrData::Mode::BINARY,
-		svr_pack.content.data(), svr_pack.content.size(), TmSvrData::SrcType::Move);
+		svr_pack.content.data(), svr_pack.content.size(), TmSvrData::SrcType::Shallow);
 	TmSvrData::build_bytes(svr_pack.packet.data, svr_pack.data);
 	svr_pack.packet.setup_header(TmPacket::Header::TMSVR);
 	std::vector<char> pack_byte;
@@ -183,7 +183,7 @@ TmCommRC TmCommRecv::spin_once(int timeval_ms, int *n)
 	TmCommRC rc = TmCommRC::OK;
 	int nb = 0;
 	int rv = 0;
-	//int sp = 0;
+	int sp = 0;
 	timeval tv;
 
 	// fake
@@ -365,7 +365,7 @@ bool TmCommunication::Connect(int timeout_ms)
 {
 	if (_sockfd > 0) return true;
 
-	if (timeout_ms < 0) timeout_ms = -1;
+	if (timeout_ms < 0) timeout_ms = 0;
 
 #ifdef _WIN32
 	addrinfo hints;
@@ -408,6 +408,10 @@ bool TmCommunication::Connect(int timeout_ms)
 
 void TmCommunication::Close()
 {
+	// reset
+	_recv_rc = TmCommRC::OK;
+	_recv_ready = false;
+
 	if (_sockfd <= 0) return;
 #ifdef _WIN32
 	closesocket((SOCKET)_sockfd);
@@ -490,19 +494,27 @@ TmCommRC TmCommunication::send_packet_(TmPacket &packet, int *n)
 		return send_bytes(bytes.data(), bytes.size(), n);
 }
 
+bool TmCommunication::recv_init()
+{
+	_recv_ready = _recv->setup(_sockfd);
+	return _recv_ready;
+}
+
 TmCommRC TmCommunication::recv_spin_once(int timeval_ms, int *n)
 {
 	TmCommRC rc = TmCommRC::OK;
 
 	if (n) *n = 0;
 
+	//if (_sockfd <= 0) return TmCommRC::NOTCONNECT;
+
 	// first init.
-	if (!_recv_ready) {
+	/*if (!_recv_ready) {
 		if (_recv->setup(_sockfd))
 			_recv_ready = true;
 		else
 			return TmCommRC::NOTREADY;
-	}
+	}*/
 
 	// spin once
 	int nb = 0;

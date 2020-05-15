@@ -21,8 +21,8 @@ int main(int argc, char *argv[])
     rclcpp::executors::SingleThreadedExecutor exec;
     rclcpp::NodeOptions options;
 
-    std::condition_variable sct_cv;
-    TmDriver iface(host, nullptr, &sct_cv);
+    //std::condition_variable sct_cv;
+    TmDriver iface(host, nullptr, nullptr);
 
     auto tm_svr = std::make_shared<TmSvrRos2>(options, iface);
     exec.add_node(tm_svr);
@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
 
     exec.spin();
 
-    iface.halt();
+    //iface.halt();
 
     rclcpp::shutdown();
 

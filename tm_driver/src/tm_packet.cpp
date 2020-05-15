@@ -305,41 +305,70 @@ TmSvrData::ErrorCode TmSvrData::_error_code(const char *buf)
 
 void TmSvrData::clear_content(TmSvrData &data)
 {
-	if (data._is_copy && data._content) {
+	/*if (data._is_copy && data._content) {
 		delete data._content;
 		data._content = nullptr;
-		data._size -= data._len;
-		data._len = 0;
+	}*/
+	if (data._is_copy) {
+		data._content_str.clear();
 	}
-	else {
-		data._content = nullptr;
-		data._size -= data._len;
-		data._len = 0;
-	}
+	data._content = nullptr;
+	data._size -= data._len;
+	data._len = 0;
 }
 
+void TmSvrData::build_TmSvrData(TmSvrData &data, const TmSvrData &other, SrcType type)
+{
+	data._is_copy = (type != SrcType::Shallow);
+	data._transaction_id = other._transaction_id;
+	data._mode = other._mode;
+	if (data._is_copy) {
+		data._content_str = std::string{ other._content, other._len };
+		data._content = data._content_str.data();
+	}
+	else {
+		data._content_str.clear();
+		data._content = other._content;
+	}
+	data._err_code = other._err_code;
+	data._len = other._len;
+	data._size = other._size;
+	data._is_valid = other._is_valid;
+}
 void TmSvrData::build_TmSvrData(TmSvrData &data, const std::string &id, Mode mode, const char *content, size_t len, SrcType type)
 {
-	data._is_copy = (type != SrcType::Move);
+	data._is_copy = (type != SrcType::Shallow);
 	data._is_valid = false;
 	data._transaction_id = id;
 	data._mode = mode;
 	if (data._is_copy) {
-		char *pch = new char[len];
+		/*char *pch = new char[len];
 		memcpy(pch, content, len);
-		data._content = pch;
+		data._content = pch;*/
+		data._content_str = std::string{ content, len };
+		data._content = data._content_str.data();
 	}
 	else {
+		data._content_str.clear();
 		data._content = content;
 	}
 	data._len = len;
-	data._size = len + id.size() + 3;
+
+	// mode 0/1/2/3/ AND 11/12/13
+	if (data._mode < Mode::READ_BINARY)
+		data._size = len + id.size() + 3;
+	else
+		data._size = len + id.size() + 4;
+
+	// mode 0~255 ?
+
+	data._err_code = ErrorCode::Ok;
 	data._is_valid = true;
 }
 
 void TmSvrData::build_TmSvrData(TmSvrData &data, const char *bytes, size_t size, SrcType type)
 {
-	data._is_copy = (type != SrcType::Move);
+	data._is_copy = (type != SrcType::Shallow);
 	data._is_valid = false;
 
 	if (!bytes) {
@@ -362,19 +391,56 @@ void TmSvrData::build_TmSvrData(TmSvrData &data, const char *bytes, size_t size,
 	++ind_e;
 	//ind_b = ind_e;
 
-	// mode
-	char amode[] = { bytes[ind_e], '\0' };
+	// mode 0/1/2/3/ (deprecated)
+
+	/*char amode[] = { bytes[ind_e], '\0' };
 	char cmode = std::atoi(amode);
 	if (cmode > char(Mode::UNKNOW) || bytes[ind_e] < char(Mode::RESPONSE)) {
 		return;
 	}
 	data._mode = Mode(cmode);
-
 	++ind_e;
 	if (bytes[ind_e] != TmPacket::P_SEPR) {
 		return;
 	}
+	++ind_e;*/
+
+	// mode 0/1/2/3/ AND 11/12/13
+
+	char amode[] = { bytes[ind_e], '\0', '\0' };
+	char cmode = 0;
+	if (bytes[ind_e + 1] == TmPacket::P_SEPR) {
+		++ind_e;
+	}
+	else if (bytes[ind_e + 2] == TmPacket::P_SEPR) {
+		amode[1] = bytes[ind_e + 1];
+		ind_e += 2;
+	}
+	else {
+		return;
+	}
+	cmode = std::atoi(amode);
+	if (cmode > (char)(Mode::UNKNOW)) {
+		return;
+	}
 	++ind_e;
+	data._mode = Mode(cmode);
+
+	// mode 0~255 ?
+
+	// find end of mode (P_SEPR)
+	/*size_t ind_b = ind_e;
+	while (ind_e < size && bytes[ind_e] != TmPacket::P_SEPR) {
+		++ind_e;
+	}
+	std::string smode = std::string{ bytes + ind_b, ind_e - ind_b };
+	char cmode = std::atoi(smode.c_str());
+	if (cmode > (char)(Mode::UNKNOW)) {
+		return;
+	}
+	++ind_e;
+	data._mode = Mode(cmode);
+	*/
 
 	if (data._mode == Mode::RESPONSE) {
 		if (ind_e + 3 > size) {
@@ -397,11 +463,14 @@ void TmSvrData::build_TmSvrData(TmSvrData &data, const char *bytes, size_t size,
 	data._len = size - ind_e;
 
 	if (data._is_copy) {
-		char *pch = new char[data._len];
+		/*char *pch = new char[data._len];
 		memcpy(pch, bytes + ind_e, data._len);
-		data._content = pch;
+		data._content = pch;*/
+		data._content_str = std::string{ bytes + ind_e, data._len };
+		data._content = data._content_str.data();
 	}
 	else {
+		data._content_str.clear();
 		data._content = bytes + ind_e;
 	}
 	data._size = size;
@@ -536,43 +605,60 @@ void FakeTmSvrPacket::build_content(std::vector<char> &content, float *angle, fl
 	content.push_back(ulen.ca[1]);
 }
 
+//
+// TMSCT
+//
 
 void TmSctData::clear_script(TmSctData &data)
 {
-	if (data._is_copy && data._script) {
+	/*if (data._is_copy && data._script) {
 		delete data._script;
 		data._script = nullptr;
-		data._size -= data._len;
-		data._len = 0;
+	}*/
+	if (data._is_copy) {
+		data._script_str.clear();
 	}
-	else {
-		data._script = nullptr;
-		data._size -= data._len;
-		data._len = 0;
-	}
+	data._script = nullptr;
+	data._size -= data._len;
+	data._len = 0;
 }
 
+void TmSctData::build_TmSctData(TmSctData &data, const TmSctData &other, SrcType type)
+{
+	data._is_copy = (type != SrcType::Shallow);
+	data._script_id = other._script_id;
+	if (data._is_copy) {
+		data._script_str = std::string{ other._script, other._len };
+		data._script = data._script_str.data();
+	}
+	else {
+		data._script_str.clear();
+		data._script = other._script;
+	}
+	data._len = other._len;
+	data._size = other._size;
+	data._is_valid = other._is_valid;
+}
 void TmSctData::build_TmSctData(TmSctData &data, const std::string &id, const char *script, size_t len, SrcType type)
 {
-	data._is_copy = (type != SrcType::Move);
+	data._is_copy = (type != SrcType::Shallow);
 	data._is_valid = false;
 	data._script_id = id;
 	if (data._is_copy) {
-		char *pch = new char[len];
-		memcpy(pch, script, len);
-		data._script = pch;
+		data._script_str = std::string{ script, len };
+		data._script = data._script_str.data();
 	}
 	else {
+		data._script_str.clear();
 		data._script = script;
 	}
 	data._len = len;
 	data._size = len + id.size() + 1;
 	data._is_valid = true;
 }
-
 void TmSctData::build_TmSctData(TmSctData &data, const char *bytes, size_t size, SrcType type)
 {
-	data._is_copy = (type != SrcType::Move);
+	data._is_copy = (type != SrcType::Shallow);
 	data._is_valid = false;
 	data._has_error = false;
 	data._is_ok = false;
@@ -592,11 +678,14 @@ void TmSctData::build_TmSctData(TmSctData &data, const char *bytes, size_t size,
 	data._len = size - ind_e;
 
 	if (data._is_copy) {
-		char *pch = new char[data._len];
+		/*char *pch = new char[data._len];
 		memcpy(pch, bytes + ind_e, data._len);
-		data._script = pch;
+		data._script = pch;*/
+		data._script_str = std::string{ bytes + ind_e, data._len };
+		data._script = data._script_str.data();
 	}
 	else {
+		data._script_str.clear();
 		data._script = bytes + ind_e;
 	}
 	data._size = size;
@@ -632,6 +721,135 @@ void TmPacket::build_packet(TmPacket &packet, const TmSctData &data)
 	TmSctData::build_bytes(packet.data, data);
 }
 
+//
+// TMSTA
+//
+
+void TmStaData::clear_subdata(TmStaData &data)
+{
+	if (data._is_copy) {
+		data._subcmd_str.clear();
+	}
+	data._subdata = nullptr;
+	data._size -= data._len;
+	data._len = 0;
+}
+
+void TmStaData::build_TmStaData(TmStaData &data, const TmStaData &other, SrcType type)
+{
+	data._is_copy = (type != SrcType::Shallow);
+	data._subcmd = other._subcmd;
+	data._subcmd_str = other._subcmd_str;
+	if (data._is_copy) {
+		data._subdata_str = std::string{ other._subdata, other._len };
+		data._subdata = data._subdata_str.data();
+	}
+	else {
+		data._subdata_str.clear();
+		data._subdata = other._subdata;
+	}
+	data._len = other._len;
+	data._size = other._size;
+	data._is_valid = other._is_valid;
+}
+void TmStaData::build_TmStaData(TmStaData &data, const std::string &sub_cmd, const char *sub_data, size_t len, SrcType type)
+{
+	data._is_copy = (type != SrcType::Shallow);
+	data._is_valid = false;
+	data._subcmd = TmPacket::hex_uint8_from_string(sub_cmd);
+	data._subcmd_str = sub_cmd;
+	if (data._is_copy) {
+		data._subdata_str = std::string{ sub_data, len };
+		data._subdata = data._subdata_str.data();
+	}
+	else {
+		data._subdata_str.clear();
+		data._subdata = sub_data;
+	}
+	data._len = len;
+	data._size = len + sub_cmd.size() + 1;
+	data._is_valid = true;
+}
+void TmStaData::build_TmStaData(TmStaData &data, unsigned char sub_cmd, const char *sub_data, size_t len, SrcType type)
+{
+	data._is_copy = (type != SrcType::Shallow);
+	data._is_valid = false;
+	data._subcmd = sub_cmd;
+	data._subcmd_str = TmPacket::string_from_hex_uint8(sub_cmd);	
+	if (data._is_copy) {
+		data._subdata_str = std::string{ sub_data, len };
+		data._subdata = data._subdata_str.data();
+	}
+	else {
+		data._subdata_str.clear();
+		data._subdata = sub_data;
+	}
+	data._len = len;
+	data._size = len + data._subcmd_str.size() + 1;
+	data._is_valid = true;
+}
+void TmStaData::build_TmStaData(TmStaData &data, const char *bytes, size_t size, SrcType type)
+{
+	data._is_copy = (type != SrcType::Shallow);
+	data._is_valid = false;
+
+	size_t ind_e = 0;
+	// find end of SubCmd (P_SEPR)
+	while (ind_e < size && bytes[ind_e] != TmPacket::P_SEPR) {
+		++ind_e;
+	}
+	if (ind_e + 1 > size) {
+		return;
+	}
+	data._subcmd_str = std::string{ bytes, ind_e };
+	data._subcmd = TmPacket::hex_uint8_from_string(data._subcmd_str);
+
+	++ind_e;
+
+	data._len = size - ind_e;
+
+	if (data._is_copy) {
+		/*char *pch = new char[data._len];
+		memcpy(pch, bytes + ind_e, data._len);
+		data._subdata = pch;*/
+		data._subdata_str = std::string{ bytes + ind_e, data._len };
+		data._subdata = data._subdata_str.data();
+	}
+	else {
+		data._subdata_str.clear();
+		data._subdata = bytes + ind_e;
+	}
+	data._size = size;
+
+	data._is_valid = true;
+}
+
+void TmStaData::build_bytes(std::vector<char> &bytes, const TmStaData &data)
+{
+	if (bytes.size() != 0) {
+		bytes.clear();
+	}
+	bytes.insert(bytes.end(), std::begin(data._subcmd_str), std::end(data._subcmd_str));
+	bytes.push_back(TmPacket::P_SEPR);
+	size_t ind_b = bytes.size();
+	size_t ind_e = ind_b;
+	size_t new_size = ind_e + data._len;
+	bytes.resize(new_size);
+	for (; ind_e < new_size; ++ind_e) {
+		bytes[ind_e] = data._subdata[ind_e - ind_b];
+	}
+}
+
+void TmPacket::build_packet(TmPacket &packet, const TmStaData &data)
+{
+	packet.setup_header(TmPacket::Header::TMSTA);
+	TmStaData::build_bytes(packet.data, data);
+}
+
+//
+// CPERR
+//
+
 void TmCPError::set_CPError(Code ec)
 {
 	_err_code = ec;
@@ -644,7 +862,7 @@ void TmCPError::set_CPError(const char *bytes, size_t size)
 		_err_code_str.clear();
 		return;
 	}
-	_err_code_str = std::string{ bytes , size };
+	_err_code_str = std::string{ bytes, size };
 
 	_err_code = Code(TmPacket::hex_uint8_from_string(_err_code_str));
 }

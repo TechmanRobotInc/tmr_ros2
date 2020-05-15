@@ -1,0 +1,18 @@
+int8 TMSVR = 0
+int8 TMSCT = 1
+
+#float64 DEFAULT_TIMEOUT = 1.0
+#float64 DEFAULT_TIMEVAL = 3.0
+
+int8 server
+
+bool connect
+
+bool reconnect
+
+float64 timeout
+
+float64 timeval
+
+---
+bool ok
