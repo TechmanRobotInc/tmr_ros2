@@ -1,5 +1,8 @@
 # request fields
+# More details please refer to the TM_Robot_Expression.pdf Chapter 8.4
+
 string id
 string script
 ---
+#ok =   Correctness of the script.
 bool ok

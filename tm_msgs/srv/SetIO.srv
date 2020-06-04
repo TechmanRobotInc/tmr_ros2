@@ -1,3 +1,4 @@
+# More details please refer to the TM_Robot_Expression.pdf Chapter 8.5
 int8 MODULE_CONTROLBOX = 0
 int8 MODULE_ENDEFFECTOR = 1
 
@@ -17,4 +18,5 @@ int8 type
 int8 pin
 float32 state
 ---
+#ok= set function status
 bool ok

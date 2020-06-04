@@ -1,4 +1,5 @@
 # For WriteItem / AskItem service
+#More details please refer to the TM_Robot_Expression.pdf Chapter 10.6
 
 std_msgs/Header header
 

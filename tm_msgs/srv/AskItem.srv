@@ -1,4 +1,8 @@
 # Ask: request 'Read'
+# id        : The discribtion you want to name. 
+# item      : More details please refer to the TM_Robot_Expression.pdf Chapter 10.2
+# wait_time : set wait time.
+# More details please refer to the TM_Robot_Expression.pdf Chapter 10.2
 
 string id
 string item
@@ -6,7 +10,10 @@ string item
 float64 wait_time
 
 ---
+# ok        : read status 
 bool ok
 
+# id        : The discribtion you want to name.
+# value     : The value of asked item.
 string id
 string value

@@ -1,7 +1,10 @@
 # 'Write'
+# id        : The discribtion you want to name. 
+# item/value: More details please refer to the TM_Robot_Expression.pdf Chapter 10.3
 
 string id
 string item
 string value
 ---
+#ok =   write status
 bool ok

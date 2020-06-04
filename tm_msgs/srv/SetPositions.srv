@@ -1,3 +1,6 @@
+#motion_type :  PTP_J , PTP_T , LINE_J , LINE_T ,
+#               CIRC_J ,CIRC_T , PLINE_J ,PLINE_T
+# More details please refer to the TM_Robot_Expression.pdf Chapter 9.6-9.9
 int8 PTP_J = 1
 int8 PTP_T = 2
 #int8 LINE_J = 3
@@ -14,4 +17,5 @@ float64 acc_time
 int32 blend_percentage
 bool fine_goal
 ---
+# ok :  set motion status 
 bool ok

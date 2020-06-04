@@ -1,3 +1,4 @@
+# More details please refer to the tm_eos_service.cpp/set_event function.
 int8 TAG = 1
 int8 WAIT_TAG = 2
 int8 STOP = 11
@@ -12,5 +13,6 @@ int8 arg0
 int8 arg1
 
 ---
+#ok == complete status
 bool ok
 # int8 rv
