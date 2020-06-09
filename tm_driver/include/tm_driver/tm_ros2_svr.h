@@ -34,6 +34,10 @@ public:
         tm_msgs::msg::SvrResponse svr_msg;
     } pm_;
 
+    bool svr_updated_;
+    std::condition_variable svr_cond_;
+    std::mutex svr_mtx_;
+
     int pub_reconnect_timeout_ms_;
     int pub_reconnect_timeval_ms_;
     std::thread pub_thread_;

@@ -19,6 +19,8 @@ TmSvrRos2::TmSvrRos2(const rclcpp::NodeOptions &options, TmDriver &iface, bool s
     pm_.tool_pose_pub = create_publisher<geometry_msgs::msg::PoseStamped>("tool_pose", 1);
     pm_.svr_pub = create_publisher<tm_msgs::msg::SvrResponse>("svr_response", 1);
 
+    svr_updated_ = false;
+
     pub_reconnect_timeout_ms_ = 1000;
     pub_reconnect_timeval_ms_ = 3000;
     pub_thread_ = std::thread(std::bind(&TmSvrRos2::publisher, this));
@@ -37,6 +39,8 @@ TmSvrRos2::TmSvrRos2(const rclcpp::NodeOptions &options, TmDriver &iface, bool s
 }
 TmSvrRos2::~TmSvrRos2()
 {
+    svr_updated_ = true;
+    svr_cond_.notify_all();
     if (svr_.is_connected()) {
     }
     svr_.halt();
@@ -94,10 +98,15 @@ void TmSvrRos2::publish_svr()
     PubMsg &pm = pm_;
     TmSvrData &data = svr_.data;
 
+    svr_mtx_.lock();
     pm.svr_msg.id = data.transaction_id();
     pm.svr_msg.mode = (int)(data.mode());
     pm.svr_msg.content = std::string{ data.content(), data.content_len() };
     pm.svr_msg.error_code = (int)(data.error_code());
+    svr_mtx_.unlock();
+
+    svr_updated_ = true;
+    svr_cond_.notify_all();
 
     print_info("TM_ROS: (TM_SVR): (%s) (%d) %s",
         pm.svr_msg.id.c_str(), pm.svr_msg.mode, pm.svr_msg.content.c_str());
@@ -134,7 +143,6 @@ bool TmSvrRos2::publish_func()
 
             svr.err_data.error_code(TmCPError::Code::Ok);
 
-            //TODO ? lock and copy for service response
             TmSvrData::build_TmSvrData(svr.data, pack.data.data(), pack.data.size(), TmSvrData::SrcType::Shallow);
 
             if (svr.data.is_valid()) {
@@ -251,7 +259,27 @@ bool TmSvrRos2::ask_item(
     const std::shared_ptr<tm_msgs::srv::AskItem::Request> req,
     std::shared_ptr<tm_msgs::srv::AskItem::Response> res)
 {
-    bool rb = (svr_.send_content(req->id, TmSvrData::Mode::READ_STRING, req->item) == TmCommRC::OK);
+    PubMsg &pm = pm_;
+    bool rb= false;
+
+    svr_updated_ = false;
+
+    rb = (svr_.send_content(req->id, TmSvrData::Mode::READ_STRING, req->item) == TmCommRC::OK);
+
+    if (req->wait_time > 0.0) {
+        std::mutex lock;
+        std::unique_lock<std::mutex> locker(lock);
+        if (!svr_updated_) {
+            svr_cond_.wait_for(locker, std::chrono::duration<double>(req->wait_time));
+        }
+        if (svr_updated_) {
+            svr_mtx_.lock();
+            res->id = pm.svr_msg.id;
+            res->value = pm.svr_msg.content;
+            svr_mtx_.unlock();
+            svr_updated_ = false;
+        }
+    }
     res->ok = rb;
     return rb;
 }

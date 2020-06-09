@@ -11,6 +11,8 @@ TmSctRos2::TmSctRos2(const rclcpp::NodeOptions &options, TmDriver &iface)
     sm_.sct_pub = create_publisher<tm_msgs::msg::SctResponse>("sct_response", 1);
     sm_.sta_pub = create_publisher<tm_msgs::msg::StaResponse>("sta_response", 1);
 
+    sta_updated_ = false;
+
     sct_reconnect_timeout_ms_ = 1000;
     sct_reconnect_timeval_ms_ = 3000;
     sct_thread_ = std::thread(std::bind(&TmSctRos2::sct_responsor, this));
@@ -40,6 +42,8 @@ TmSctRos2::TmSctRos2(const rclcpp::NodeOptions &options, TmDriver &iface)
 }
 TmSctRos2::~TmSctRos2()
 {
+    sta_updated_ = true;
+    sta_cond_.notify_all();
     if (sct_.is_connected()) {
     }
     sct_.halt();
@@ -69,8 +73,13 @@ void TmSctRos2::sta_msg()
     SctMsg &sm = sm_;
     TmStaData &data = sct_.sta_data;
 
+    sta_mtx_.lock();
     sm.sta_msg.subcmd = data.subcmd_str();
     sm.sta_msg.subdata = std::string{ data.subdata(), data.subdata_len() };
+    sta_mtx_.unlock();
+
+    sta_updated_ = true;
+    sta_cond_.notify_all();
 
     print_info("TM_ROS: (TM_STA): res: (%s): %s", sm.sta_msg.subcmd.c_str(), sm.sta_msg.subdata.c_str());
 
@@ -117,7 +126,6 @@ bool TmSctRos2::sct_func()
 
             sct.err_data.error_code(TmCPError::Code::Ok);
 
-            //TODO ? lock and copy for service response
             TmStaData::build_TmStaData(sct.sta_data, pack.data.data(), pack.data.size(), TmStaData::SrcType::Shallow);
 
             sta_msg();
@@ -267,7 +275,28 @@ bool TmSctRos2::ask_sta(
         const std::shared_ptr<tm_msgs::srv::AskSta::Request> req,
         std::shared_ptr<tm_msgs::srv::AskSta::Response> res)
 {
-    bool rb = (sct_.send_script_str(req->subcmd, req->subdata) == iface_.RC_OK);
+    SctMsg &sm = sm_;
+    bool rb = false;
+
+    sta_updated_ = false;
+
+    rb = (sct_.send_script_str(req->subcmd, req->subdata) == iface_.RC_OK);
+
+    if (req->wait_time > 0.0) {
+        std::mutex lock;
+        std::unique_lock<std::mutex> locker(lock);
+        if (!sta_updated_) {
+            sta_cond_.wait_for(locker, std::chrono::duration<double>(req->wait_time));
+        }
+        if (sta_updated_) {
+            sta_mtx_.lock();
+            res->subcmd = sm.sta_msg.subcmd;
+            res->subdata = sm.sta_msg.subdata;
+            sta_mtx_.unlock();
+            sta_updated_ = false;
+        }
+        else rb = false;
+    }
     res->ok = rb;
     return rb;
 }
