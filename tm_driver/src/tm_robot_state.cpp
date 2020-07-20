@@ -179,7 +179,7 @@ size_t TmRobotState::_deserialize(const char *data, size_t size, bool use_mtx)
 	boffset = _deserialize_copy_wo_check(&_is_ESTOP_pressed_, data, boffset);
 
 	// Camera_Light
-	//boffset = _deserialize_copy_wo_check(&_camera_light_, data, boffset);
+	boffset = _deserialize_copy_wo_check(&_camera_light_, data, boffset);
 
 	// Robot_Model
 
@@ -187,7 +187,7 @@ size_t TmRobotState::_deserialize(const char *data, size_t size, bool use_mtx)
 	boffset = _deserialize_copy_wo_check(&_error_code_, data, boffset);
 
 	// Error_Content
-	if (use_mtx) mtx_lock();
+	/*if (use_mtx) mtx_lock();
 	{
 		bsize = 2;
 		memcpy(&uslen, data + boffset, bsize);
@@ -206,7 +206,7 @@ size_t TmRobotState::_deserialize(const char *data, size_t size, bool use_mtx)
 			boffset += bsize;
 		}
 	}
-	if (use_mtx) mtx_unlock();
+	if (use_mtx) mtx_unlock();*/
 
 	// Error_Time
 
@@ -225,17 +225,17 @@ size_t TmRobotState::_deserialize(const char *data, size_t size, bool use_mtx)
 	// Coord_Robot_Tool
 	boffset = _deserialize_copy_wo_check(&_tool_pose_, data, boffset);
 
-	// TCP_Force 18
-	//boffset = _deserialize_copy_wo_check(&_tcp_force_vec_, data, boffset);
+	// TCP_Force 12
+	boffset = _deserialize_copy_wo_check(&_tcp_force_vec_, data, boffset);
 
 	// TCP_Force3D 4
-	//boffset = _deserialize_copy_wo_check(&_tcp_force_, data, boffset);
+	boffset = _deserialize_copy_wo_check(&_tcp_force_, data, boffset);
 
 	// TCP_Speed 24
 	boffset = _deserialize_copy_wo_check(&_tcp_speed_vec_, data, boffset);
 
 	// TCP_Speed3D 4
-	//boffset = _deserialize_copy_wo_check(&_tcp_speed_, data, boffset);
+	boffset = _deserialize_copy_wo_check(&_tcp_speed_, data, boffset);
 
 	// Joint_Speed 24
 	boffset = _deserialize_copy_wo_check(&_joint_speed_, data, boffset);
@@ -254,17 +254,19 @@ size_t TmRobotState::_deserialize(const char *data, size_t size, bool use_mtx)
 	// TCP_MCF
 	//boffset = _deserialize_copy_wo_check(&_tcp_cog_, data, boffset);
 
+	// Project_Name
+
 	// Project_Speed 1
-	//boffset = _deserialize_copy_wo_check(&_proj_speed_, data, boffset);
+	boffset = _deserialize_copy_wo_check(&_proj_speed_, data, boffset);
 
 	// MA_Mode 4
-	//boffset = _deserialize_copy_wo_check(&_ma_mode_, data, boffset);
+	boffset = _deserialize_copy_wo_check(&_ma_mode_, data, boffset);
 
 	// Stick_PlayPause
-	boffset = _deserialize_copy_wo_check(&_stick_play_pause_, data, boffset);
+	//boffset = _deserialize_copy_wo_check(&_stick_play_pause_, data, boffset);
 
 	// Robot Light 4
-	//boffset = _deserialize_copy_wo_check(&_robot_light_, data, boffset);
+	boffset = _deserialize_copy_wo_check(&_robot_light_, data, boffset);
 
 	// Ctrl_DOx
 	for (int i = 0; i < 8; ++i) {
@@ -312,23 +314,26 @@ size_t TmRobotState::_deserialize(const char *data, size_t size, bool use_mtx)
 
 	_is_safeguard_A_triggered = _is_safeguard_A_triggered_;
 	_is_ESTOP_pressed = _is_ESTOP_pressed_;
-	//_camera_light = _camera_light_;
+	_camera_light = _camera_light_;
 	_error_code = _error_code_;
-	//_proj_speed = _proj_speed_;
+
+	_proj_speed = _proj_speed_;
+	_ma_mode = _ma_mode_;
 	//_stick_play_pause = _stick_play_pause_;
 
-	//_robot_light = _robot_light_;
+	_robot_light = _robot_light_;
 
 	if (use_mtx) mtx_lock();
 	{
-		//for (size_t i = 0; i < 3; ++i) { _flange_pose[i] = meter(double(_flange_pose_[i])); }
-		//for (size_t i = 3; i < 6; ++i) { _flange_pose[i] = rad(double(_flange_pose_[i])); }
-
 		_joint_angle = rads(_joint_angle_, DOF);
 
 		si_pose(_flange_pose, _flange_pose_, 6);
 
 		si_pose(_tool_pose, _tool_pose_, 6);
+
+		for (int i = 0; i < 3; ++i) { _tcp_force_vec[i] = double(_tcp_force_vec_[i]); }
+
+		_tcp_force = double(_tcp_force_);
 
 		si_pose(_tcp_speed_vec, _tcp_speed_vec_, 6);
 
@@ -373,8 +378,6 @@ void TmRobotState::print()
 	std::cout << "Coord_Robot_Tool={";
 	for (auto &val : _tool_pose) { std::cout << val << ", "; }
 	std::cout << "}\n";
-	
-	std::cout << "Stick_PlayPause=" << _stick_play_pause << "\n";
 
 	std::cout << "Error_Code=" << _error_code << "\n";
 	std::cout << "Error_Content=" << _error_content << "\n";

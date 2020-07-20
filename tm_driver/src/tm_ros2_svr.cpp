@@ -63,18 +63,25 @@ void TmSvrRos2::publish_fbs()
     pm.fbs_msg.joint_tor = state.joint_torque();
     pm.fbs_msg.tool_pose = state.tool_pose();
     pm.fbs_msg.tcp_speed = state.tcp_speed_vec();
+    pm.fbs_msg.tcp_force = state.tcp_force_vec();
     pm.fbs_msg.robot_link = state.is_linked();
     pm.fbs_msg.robot_error = state.has_error();
     pm.fbs_msg.project_run = state.is_project_running();
     pm.fbs_msg.project_pause = state.is_project_paused();
     pm.fbs_msg.safetyguard_a = state.is_safeguard_A();
     pm.fbs_msg.e_stop = state.is_EStop();
+    pm.fbs_msg.camera_light = state.camera_light();
     pm.fbs_msg.error_code = state.error_code();
-    pm.fbs_msg.error_content = state.error_content();
+    pm.fbs_msg.project_speed = state.project_speed();
+    pm.fbs_msg.ma_mode = state.ma_mode();
+    pm.fbs_msg.robot_light = state.robot_light();
+    pm.fbs_msg.cb_digital_output = state.ctrller_DO();
     pm.fbs_msg.cb_digital_input = state.ctrller_DI();
+    pm.fbs_msg.cb_analog_output = state.ctrller_AO();
     pm.fbs_msg.cb_analog_input = state.ctrller_AI();
-    pm.fbs_msg.ee_digital_input = state.ee_DI();
+    //pm.fbs_msg.ee_analog_output = state.ee_AO();
     pm.fbs_msg.ee_analog_input = state.ee_AI();
+    pm.fbs_msg.error_content = state.error_content();
     pm.fbs_pub->publish(pm.fbs_msg);
 
     // Publish joint state
