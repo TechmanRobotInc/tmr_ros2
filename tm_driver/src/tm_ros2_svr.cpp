@@ -40,7 +40,7 @@ TmSvrRos2::TmSvrRos2(const rclcpp::NodeOptions &options, TmDriver &iface, bool s
 TmSvrRos2::~TmSvrRos2()
 {
     svr_updated_ = true;
-    svr_cond_.notify_all();
+    svr_cv_.notify_all();
     if (svr_.is_connected()) {
     }
     svr_.halt();
@@ -104,16 +104,15 @@ void TmSvrRos2::publish_svr()
 {
     PubMsg &pm = pm_;
     TmSvrData &data = svr_.data;
-
-    svr_mtx_.lock();
-    pm.svr_msg.id = data.transaction_id();
-    pm.svr_msg.mode = (int)(data.mode());
-    pm.svr_msg.content = std::string{ data.content(), data.content_len() };
-    pm.svr_msg.error_code = (int)(data.error_code());
-    svr_mtx_.unlock();
-
-    svr_updated_ = true;
-    svr_cond_.notify_all();
+    {
+        std::lock_guard<std::mutex> lck(svr_mtx_);
+        pm.svr_msg.id = data.transaction_id();
+        pm.svr_msg.mode = (int)(data.mode());
+        pm.svr_msg.content = std::string{ data.content(), data.content_len() };
+        pm.svr_msg.error_code = (int)(data.error_code());
+        svr_updated_ = true;
+    }
+    svr_cv_.notify_all();
 
     print_info("TM_ROS: (TM_SVR): (%s) (%d) %s",
         pm.svr_msg.id.c_str(), pm.svr_msg.mode, pm.svr_msg.content.c_str());
@@ -269,23 +268,25 @@ bool TmSvrRos2::ask_item(
     PubMsg &pm = pm_;
     bool rb= false;
 
+    svr_mtx_.lock();
     svr_updated_ = false;
+    svr_mtx_.unlock();
 
     rb = (svr_.send_content(req->id, TmSvrData::Mode::READ_STRING, req->item) == TmCommRC::OK);
 
-    if (req->wait_time > 0.0) {
-        std::mutex lock;
-        std::unique_lock<std::mutex> locker(lock);
-        if (!svr_updated_) {
-            svr_cond_.wait_for(locker, std::chrono::duration<double>(req->wait_time));
-        }
-        if (svr_updated_) {
-            svr_mtx_.lock();
+    {
+        std::unique_lock<std::mutex> lck(svr_mtx_);
+        if (rb && req->wait_time > 0.0) {
+            if (!svr_updated_) {
+                svr_cv_.wait_for(lck, std::chrono::duration<double>(req->wait_time));
+            }
+            if (!svr_updated_) {
+                rb = false;
+            }
             res->id = pm.svr_msg.id;
             res->value = pm.svr_msg.content;
-            svr_mtx_.unlock();
-            svr_updated_ = false;
         }
+        svr_updated_ = false;
     }
     res->ok = rb;
     return rb;

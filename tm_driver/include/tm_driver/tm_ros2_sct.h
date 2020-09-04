@@ -32,8 +32,8 @@ public:
     } sm_;
 
     bool sta_updated_;
-    std::condition_variable sta_cond_;
     std::mutex sta_mtx_;
+    std::condition_variable sta_cv_;
 
     int sct_reconnect_timeout_ms_;
     int sct_reconnect_timeval_ms_;

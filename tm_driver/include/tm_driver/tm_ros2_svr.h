@@ -35,8 +35,8 @@ public:
     } pm_;
 
     bool svr_updated_;
-    std::condition_variable svr_cond_;
     std::mutex svr_mtx_;
+    std::condition_variable svr_cv_;
 
     int pub_reconnect_timeout_ms_;
     int pub_reconnect_timeval_ms_;

@@ -43,7 +43,7 @@ TmSctRos2::TmSctRos2(const rclcpp::NodeOptions &options, TmDriver &iface)
 TmSctRos2::~TmSctRos2()
 {
     sta_updated_ = true;
-    sta_cond_.notify_all();
+    sta_cv_.notify_all();
     if (sct_.is_connected()) {
     }
     sct_.halt();
@@ -72,14 +72,13 @@ void TmSctRos2::sta_msg()
 {
     SctMsg &sm = sm_;
     TmStaData &data = sct_.sta_data;
-
-    sta_mtx_.lock();
-    sm.sta_msg.subcmd = data.subcmd_str();
-    sm.sta_msg.subdata = std::string{ data.subdata(), data.subdata_len() };
-    sta_mtx_.unlock();
-
-    sta_updated_ = true;
-    sta_cond_.notify_all();
+    {
+        std::lock_guard<std::mutex> lck(sta_mtx_);
+        sm.sta_msg.subcmd = data.subcmd_str();
+        sm.sta_msg.subdata = std::string{ data.subdata(), data.subdata_len() };
+        sta_updated_ = true;
+    }
+    sta_cv_.notify_all();
 
     print_info("TM_ROS: (TM_STA): res: (%s): %s", sm.sta_msg.subcmd.c_str(), sm.sta_msg.subdata.c_str());
 
@@ -278,24 +277,25 @@ bool TmSctRos2::ask_sta(
     SctMsg &sm = sm_;
     bool rb = false;
 
+    sta_mtx_.lock();
     sta_updated_ = false;
+    sta_mtx_.unlock();
 
     rb = (sct_.send_script_str(req->subcmd, req->subdata) == iface_.RC_OK);
 
-    if (req->wait_time > 0.0) {
-        std::mutex lock;
-        std::unique_lock<std::mutex> locker(lock);
-        if (!sta_updated_) {
-            sta_cond_.wait_for(locker, std::chrono::duration<double>(req->wait_time));
-        }
-        if (sta_updated_) {
-            sta_mtx_.lock();
+    {
+        std::unique_lock<std::mutex> lck(sta_mtx_);
+        if (rb && req->wait_time > 0.0) {
+            if (!sta_updated_) {
+                sta_cv_.wait_for(lck, std::chrono::duration<double>(req->wait_time));
+            }
+            if (!sta_updated_) {
+                rb = false;
+            }
             res->subcmd = sm.sta_msg.subcmd;
             res->subdata = sm.sta_msg.subdata;
-            sta_mtx_.unlock();
-            sta_updated_ = false;
         }
-        else rb = false;
+        sta_updated_ = false;
     }
     res->ok = rb;
     return rb;
