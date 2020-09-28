@@ -1,0 +1,6 @@
+
+string id
+string script
+
+---
+bool ok

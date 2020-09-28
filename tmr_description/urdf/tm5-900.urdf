@@ -1,0 +1,157 @@
+<?xml version="1.0" ?>
+<robot name="tm5-900">
+
+  <link name="link_0">
+    <visual>
+      <geometry>
+        <mesh filename="package://tmr_description/meshes/tm5-900/visual/tm5_base.obj"/>
+      </geometry>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://tmr_description/meshes/tm5-900/collision/tm5_base_c.stl"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="joint_1" type="revolute">
+    <parent link="link_0"/>
+    <child link="link_1"/>
+    <origin xyz="0 0 0.1452" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="100.0" lower="-3.14" upper="3.14" velocity="1.0"/>
+  </joint>
+
+  <link name="link_1">
+    <visual>
+      <geometry>
+        <mesh filename="package://tmr_description/meshes/tm5-900/visual/tmr_400w_01.obj"/>
+      </geometry>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://tmr_description/meshes/tm5-900/collision/tmr_400w_01_c.stl"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="joint_2" type="revolute">
+    <parent link="link_1"/>
+    <child link="link_2"/>
+    <origin xyz="0 0 0" rpy="-1.570796327 -1.570796327 0"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="100.0" lower="-3.14" upper="3.14" velocity="1.0"/>
+  </joint>
+
+  <link name="link_2">
+    <visual>
+      <geometry>
+        <mesh filename="package://tmr_description/meshes/tm5-900/visual/tm5-900_arm1.obj"/>
+      </geometry>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://tmr_description/meshes/tm5-900/collision/tm5-900_arm1_c.stl"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="joint_3" type="revolute">
+    <parent link="link_2"/>
+    <child link="link_3"/>
+    <origin  xyz="0.429 0 0" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="100.0" lower="-3.14" upper="3.14" velocity="1.0"/>
+  </joint>
+
+  <link name="link_3">
+    <visual>
+      <geometry>
+        <mesh filename="package://tmr_description/meshes/tm5-900/visual/tm5-900_arm2.obj"/>
+      </geometry>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://tmr_description/meshes/tm5-900/collision/tm5-900_arm2_c.stl"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="joint_4" type="revolute">
+    <parent link="link_3"/>
+    <child link="link_4"/>
+    <origin xyz="0.4115 0 -0.1223" rpy="0 0 1.570796327"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10.0" lower="-3.14" upper="3.14" velocity="1.0"/>
+  </joint>
+
+  <link name="link_4">
+    <visual>
+      <geometry>
+        <mesh filename="package://tmr_description/meshes/tm5-900/visual/tmr_100w_01.obj"/>
+      </geometry>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://tmr_description/meshes/tm5-900/collision/tmr_100w_01_c.stl"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="joint_5" type="revolute">
+    <parent link="link_4"/>
+    <child link="link_5"/>
+    <origin xyz="0 -0.106 0" rpy="1.570796327 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10.0" lower="-3.14" upper="3.14" velocity="1.0"/>
+  </joint>
+
+  <link name="link_5">
+    <visual>
+      <geometry>
+        <mesh filename="package://tmr_description/meshes/tm5-900/visual/tmr_100w_02.obj"/>
+      </geometry>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://tmr_description/meshes/tm5-900/collision/tmr_100w_02_c.stl"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="joint_6" type="revolute">
+    <parent link="link_5"/>
+    <child link="link_6"/>
+    <origin xyz="0 -0.11315 0" rpy="1.570796327 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10.0" lower="-3.14" upper="3.14" velocity="1.0"/>
+  </joint>
+
+  <link name="link_6">
+    <visual>
+      <geometry>
+        <mesh filename="package://tmr_description/meshes/tm5-900/visual/tmr_ee.obj"/>
+      </geometry>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://tmr_description/meshes/tm5-900/collision/tmr_ee_c.stl"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="base" />
+  <joint name="base_fixed_joint" type="fixed">
+    <parent link="base"/>
+    <child link="link_0"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <link name="flange"/>
+  <joint name="flange_fixed_joint" type="fixed">
+    <parent link="link_6"/>
+    <child link="flange"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
+</robot>

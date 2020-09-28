@@ -1,0 +1,219 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro">
+
+  <xacro:include filename="$(find tmr_description)/xacro/macro.inertial.xacro" />
+
+  <xacro:macro name="tm5-900" params="ns prefix
+    color:=none format:=obj">
+<!--
+    <xacro:property name="shoulder_offset" value="0.146" />
+    <xacro:property name="elbow_offset" value="0.1297" />
+    <xacro:property name="wrist_offset" value="0.106" />
+-->
+    <xacro:property name="mass_0" value="1.0" />
+    <xacro:property name="mass_1" value="4.5" />
+    <xacro:property name="mass_2" value="11.0" />
+    <xacro:property name="mass_3" value="2.5" />
+    <xacro:property name="mass_4" value="1.45" />
+    <xacro:property name="mass_5" value="1.45" />
+    <xacro:property name="mass_6" value="0.4" />
+
+<!--LinkDescription-->
+  <link name="${prefix}link_0">
+    <visual>
+      <geometry>
+        <mesh filename="package://tmr_description/meshes/tm5-900/visual/tm5_base.${format}" />
+      </geometry>
+      <material name="${color}" />
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://tmr_description/meshes/tm5-900/collision/tm5_base_c.stl" />
+      </geometry>
+    </collision>
+<!--inertial-->
+    <xacro:cylinder_inertial_z radius="0.06" length="0.05" mass="${mass_0}">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+    </xacro:cylinder_inertial_z>
+  </link>
+
+  <joint name="${prefix}joint_1" type="revolute">
+    <parent link="${prefix}link_0" />
+    <child link="${prefix}link_1" />
+    <origin xyz="0 0 0.1452" rpy="0 0 0" />
+    <axis xyz="0 0 1" />
+<!--limit-->
+    <limit lower="${-1.5*pi}" upper="${1.5*pi}" velocity="3.14" effort="320.0" />
+  </joint>
+
+  <link name="${prefix}link_1">
+    <visual>
+      <geometry>
+        <mesh filename="package://tmr_description/meshes/tm5-900/visual/tmr_400w_01.${format}" />
+      </geometry>
+      <material name="${color}" />
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://tmr_description/meshes/tm5-900/collision/tmr_400w_01_c.stl" />
+      </geometry>
+    </collision>
+<!--inertial-->
+    <xacro:cylinder_inertial_z radius="0.06" length="0.15" mass="${mass_1}">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+    </xacro:cylinder_inertial_z>
+  </link>
+
+  <joint name="${prefix}joint_2" type="revolute">
+    <parent link="${prefix}link_1" />
+    <child link="${prefix}link_2" />
+    <origin xyz="0 0 0" rpy="${-0.5*pi} ${-0.5*pi} 0" />
+    <axis xyz="0 0 1" />
+<!--limit-->
+    <limit lower="${-pi}" upper="${pi}" velocity="3.14" effort="320" />
+  </joint>
+
+  <link name="${prefix}link_2">
+    <visual>
+      <geometry>
+        <mesh filename="package://tmr_description/meshes/tm5-900/visual/tm5-900_arm1.${format}" />
+      </geometry>
+      <material name="${color}" />
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://tmr_description/meshes/tm5-900/collision/tm5-900_arm1_c.stl" />
+      </geometry>
+    </collision>
+<!--inertial-->
+    <xacro:cylinder_inertial_x radius="0.06" length="0.429" mass="${mass_2}">
+      <origin xyz="0.2145 0 -0.146" rpy="0 0 0" />
+    </xacro:cylinder_inertial_x>
+  </link>
+
+  <joint name="${prefix}joint_3" type="revolute">
+    <parent link="${prefix}link_2" />
+    <child link="${prefix}link_3" />
+    <origin  xyz="0.429 0 0" rpy="0 0 0" />
+    <axis xyz="0 0 1" />
+<!--limit-->
+    <limit lower="${-pi}" upper="${pi}" velocity="3.14" effort="320" />
+  </joint>
+
+  <link name="${prefix}link_3">
+    <visual>
+      <geometry>
+        <mesh filename="package://tmr_description/meshes/tm5-900/visual/tm5-900_arm2.${format}" />
+      </geometry>
+      <material name="${color}" />
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://tmr_description/meshes/tm5-900/collision/tm5-900_arm2_c.stl" />
+      </geometry>
+    </collision>
+<!--inertial-->
+    <xacro:cylinder_inertial_x radius="0.045" length="0.4115" mass="${mass_3}">
+      <origin xyz="0.20575 0 -0.0163" rpy="0 0 0" />
+    </xacro:cylinder_inertial_x>
+  </link>
+
+  <joint name="${prefix}joint_4" type="revolute">
+    <parent link="${prefix}link_3" />
+    <child link="${prefix}link_4" />
+    <origin xyz="0.4115 0 -0.1223" rpy="0 0 ${0.5*pi}" />
+    <axis xyz="0 0 1" />
+<!--limit-->
+    <limit lower="${-pi}" upper="${pi}" velocity="3.92" effort="80" />
+  </joint>
+
+  <link name="${prefix}link_4">
+    <visual>
+      <geometry>
+        <mesh filename="package://tmr_description/meshes/tm5-900/visual/tmr_100w_01.${format}" />
+      </geometry>
+      <material name="${color}" />
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://tmr_description/meshes/tm5-900/collision/tmr_100w_01_c.stl" />
+      </geometry>
+    </collision>
+<!--inertial-->
+    <xacro:cylinder_inertial_y radius="0.045" length="0.12" mass="${mass_4}">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+    </xacro:cylinder_inertial_y>
+  </link>
+
+  <joint name="${prefix}joint_5" type="revolute">
+    <parent link="${prefix}link_4" />
+    <child link="${prefix}link_5" />
+    <origin xyz="0 -0.106 0" rpy="${0.5*pi} 0 0" />
+    <axis xyz="0 0 1" />
+<!--limit-->
+    <limit lower="${-pi}" upper="${pi}" velocity="3.92" effort="80" />
+  </joint>
+
+  <link name="${prefix}link_5">
+    <visual>
+      <geometry>
+        <mesh filename="package://tmr_description/meshes/tm5-900/visual/tmr_100w_02.${format}" />
+      </geometry>
+      <material name="${color}" />
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://tmr_description/meshes/tm5-900/collision/tmr_100w_02_c.stl" />
+      </geometry>
+    </collision>
+<!--inertial-->
+    <xacro:cylinder_inertial_y radius="0.045" length="0.12" mass="${mass_5}">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+    </xacro:cylinder_inertial_y>
+  </link>
+
+  <joint name="${prefix}joint_6" type="revolute">
+    <parent link="${prefix}link_5" />
+    <child link="${prefix}link_6" />
+    <origin xyz="0 -0.11315 0" rpy="${0.5*pi} 0 0" />
+    <axis xyz="0 0 1" />
+<!--limit-->
+    <limit lower="${-1.5*pi}" upper="${1.5*pi}" velocity="3.92" effort="80" />
+  </joint>
+
+  <link name="${prefix}link_6">
+    <visual>
+      <geometry>
+        <mesh filename="package://tmr_description/meshes/tm5-900/visual/tmr_ee.${format}" />
+      </geometry>
+      <material name="${color}" />
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://tmr_description/meshes/tm5-900/collision/tmr_ee_c.stl" />
+      </geometry>
+    </collision>
+<!--inertial-->
+    <xacro:cylinder_inertial_z radius="0.045" length="0.06" mass="${mass_6}">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+    </xacro:cylinder_inertial_z>
+  </link>
+
+  <link name="${prefix}base" />
+  <joint name="${prefix}base_fixed_joint" type="fixed">
+    <parent link="${prefix}base" />
+    <child link="${prefix}link_0" />
+    <origin xyz="0 0 0" rpy="0 0 0" />
+  </joint>
+
+  <link name="${prefix}flange" />
+  <joint name="${prefix}flange_fixed_joint" type="fixed">
+    <parent link="${prefix}link_6" />
+    <child link="${prefix}flange" />
+    <origin xyz="0 0 0" rpy="0 0 0" />
+  </joint>
+<!--LinkDescription-->
+
+  </xacro:macro>
+
+</robot>

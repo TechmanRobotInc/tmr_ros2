@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro" name="tm5-900">
+
+  <xacro:arg name="ns" default="" />
+  <xacro:arg name="prefix" default="" />
+
+  <xacro:arg name="gripper" default="none" />
+
+  <xacro:arg name="color" default="none" />
+
+  <xacro:arg name="trans_hw_iface" default="hardware_interface/PositionJointInterface" />
+
+  <xacro:include filename="$(find tmr_description)/xacro/macro.gazebo.xacro" />
+  <xacro:include filename="$(find tmr_description)/xacro/macro.transmission.xacro" />
+  <xacro:include filename="$(find tmr_description)/xacro/macro.materials.xacro" />
+
+  <!-- tm5-900 -->
+  <xacro:include filename="$(find tmr_description)/xacro/macro.tm5-900.urdf.xacro" />
+
+
+  <!--  -->
+  <xacro:tmr_gazebo ns="$(arg ns)" prefix="$(arg prefix)" />
+  <xacro:tmr_transmission prefix="$(arg prefix)" hw_iface="$(arg trans_hw_iface)" />
+  <xacro:tmr_materials/>
+
+
+  <!-- Arm -->
+  <xacro:property name="color" value="$(arg color)"/>
+  <xacro:if value="${color == 'none'}">
+    <xacro:tm5-900 ns="$(arg ns)" prefix="$(arg prefix)" />
+  </xacro:if>
+  <!-- Arm.color.stl -->
+  <xacro:unless value="${color == 'none'}">
+    <xacro:tm5-900 ns="$(arg ns)" prefix="$(arg prefix)" color="${color}" format="stl" />
+  </xacro:unless>
+
+  <!-- Arm + Gripper -->
+  <xacro:property name="gripper" value="$(arg gripper)"/>
+  <xacro:if value="${gripper == 'robotiq_2f'}">
+    <xacro:include filename="$(find tmr_description)/xacro/gripper/robotiq_2f.urdf.xacro" />
+    <xacro:robotiq_2f prefix="$(arg prefix)"/>
+  </xacro:if>
+
+<!--
+  <link name="world"/>
+  <joint name="world_joint" type="fixed">
+    <parent link="world" />
+    <child link="$(arg prefix)base"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+-->
+</robot>
