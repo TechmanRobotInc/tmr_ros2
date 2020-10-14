@@ -48,7 +48,7 @@ public:
     rclcpp::Service<tm_msgs::srv::AskItem>::SharedPtr ask_item_srv_;
 
 public:
-    explicit TmSvrRos2(const rclcpp::NodeOptions &options, TmDriver &iface, bool stick_play = true);
+    explicit TmSvrRos2(const rclcpp::NodeOptions &options, TmDriver &iface, bool stick_play = false);
     ~TmSvrRos2();
 
 protected:
