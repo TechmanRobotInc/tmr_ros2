@@ -66,6 +66,7 @@ TmSctRos2::TmSctRos2(const rclcpp::NodeOptions &options, tmr::Driver &iface, boo
     std::bind(&TmSctRos2::handle_cancel, this, std::placeholders::_1),
     std::bind(&TmSctRos2::handle_accepted, this, std::placeholders::_1)
   );
+  goal_id_.clear();
   has_goal_ = false;
 
 }
@@ -348,7 +349,8 @@ bool TmSctRos2::ask_sta(
 rclcpp_action::GoalResponse TmSctRos2::handle_goal(const rclcpp_action::GoalUUID & uuid,
   std::shared_ptr<const control_msgs::action::FollowJointTrajectory::Goal> goal)
 {
-  RCLCPP_INFO_STREAM(this->get_logger(), "Received new action goal " << rclcpp_action::to_string(uuid));
+  auto goal_id = rclcpp_action::to_string(uuid);
+  RCLCPP_INFO_STREAM(this->get_logger(), "Received new action goal " << goal_id);
 
   if (has_goal_) {
     return rclcpp_action::GoalResponse::ACCEPT_AND_DEFER;
@@ -376,29 +378,83 @@ rclcpp_action::GoalResponse TmSctRos2::handle_goal(const rclcpp_action::GoalUUID
 rclcpp_action::CancelResponse TmSctRos2::handle_cancel(
   const std::shared_ptr<rclcpp_action::ServerGoalHandle<control_msgs::action::FollowJointTrajectory>> goal_handle)
 {
-  RCLCPP_INFO_STREAM(this->get_logger(),
-    "Got request to cancel goal " << rclcpp_action::to_string(goal_handle->get_goal_id()));
-  iface_.stop_pvt_traj();
-  has_goal_ = false;
+  auto goal_id = rclcpp_action::to_string(goal_handle->get_goal_id());
+  RCLCPP_INFO_STREAM(this->get_logger(), "Got request to cancel goal " << goal_id);
+  {
+    std::lock_guard<std::mutex> lck(as_mtx_);
+    if (goal_id_.compare(goal_id) == 0 && has_goal_) {
+      has_goal_ = false;
+      iface_.stop_pvt_traj();
+    }
+  }
   return rclcpp_action::CancelResponse::ACCEPT;
 }
 void TmSctRos2::handle_accepted(
   std::shared_ptr<rclcpp_action::ServerGoalHandle<control_msgs::action::FollowJointTrajectory>> goal_handle)
 {
-  //actually, no need to reorder
-  std::vector<trajectory_msgs::msg::JointTrajectoryPoint> traj_points;
-  reorder_traj_joints(traj_points, goal_handle->get_goal()->trajectory);
+  {
+    std::unique_lock<std::mutex> lck(as_mtx_);
+    goal_id_ = rclcpp_action::to_string(goal_handle->get_goal_id());
+    has_goal_ = true;
+  }
+  // this needs to return quickly to avoid blocking the executor, so spin up a new thread
+  std::thread{std::bind(&TmSctRos2::execute_traj, this, std::placeholders::_1), goal_handle}.detach();
 
-  if (!is_positions_match(traj_points, 0.01)) {
-    RCLCPP_ERROR_STREAM(this->get_logger(), "Start point doesn't match current pose");
-    //std::shared_ptr<control_msgs::action::FollowJointTrajectory_Result> result;
-    //result = std::make_shared<control_msgs::action::FollowJointTrajectory_Result>()
-    //goal_handle->abort();
+}
+
+void TmSctRos2::execute_traj(
+  const std::shared_ptr<rclcpp_action::ServerGoalHandle<control_msgs::action::FollowJointTrajectory>> goal_handle)
+{
+  tmr_INFO_STREAM("TM_ROS: trajectory thread begin");
+
+  auto result = std::make_shared<control_msgs::action::FollowJointTrajectory::Result>();
+
+  //actually, no need to reorder
+  //std::vector<trajectory_msgs::msg::JointTrajectoryPoint> traj_points;
+  //reorder_traj_joints(traj_points, goal_handle->get_goal()->trajectory);
+  auto &traj_points = goal_handle->get_goal()->trajectory.points;
+
+  if (!is_positions_match(traj_points.front(), 0.01)) {
+    result->error_code = result->PATH_TOLERANCE_VIOLATED;
+    result->error_string = "Start point doesn't match current pose";
+    RCLCPP_WARN_STREAM(this->get_logger(), result->error_string);
+
+    //goal_handle->abort(result);
   }
 
-  has_goal_ = true;
+  auto pvts = get_pvt_traj(traj_points, 0.025);
+  tmr_INFO_STREAM("TM_ROS: traj. total time:=" << pvts->total_time);
 
-  std::thread(std::bind(&TmSctRos2::execute_traj, this, get_pvt_traj(traj_points, 0.025))).detach();
+  if (!goal_handle->is_executing()) {
+    goal_handle->execute();
+    tmr_INFO_STREAM("goal_handle->execute()");
+  }
+
+  if (!is_fake_) {
+    iface_.run_pvt_traj(*pvts);
+  }
+  else {
+    iface_.fake_run_pvt_traj(*pvts);
+  }
+  if (rclcpp::ok()) {
+    if (!is_positions_match(traj_points.back(), 0.01)) {
+      result->error_code = result->GOAL_TOLERANCE_VIOLATED;
+      result->error_string = "Current pose doesn't match Goal point";
+      RCLCPP_WARN_STREAM(this->get_logger(), result->error_string);
+    }
+    else {
+      result->error_code = result->SUCCESSFUL;
+      result->error_string = "Goal reached, success!";
+      RCLCPP_INFO_STREAM(this->get_logger(), result->error_string);
+    }
+    goal_handle->succeed(result);
+  }
+  {
+    std::lock_guard<std::mutex> lck(as_mtx_);
+    goal_id_.clear();
+    has_goal_ = false;
+  }
+  tmr_INFO_STREAM("TM_ROS: trajectory thread end");
 }
 
 void TmSctRos2::reorder_traj_joints(
@@ -449,11 +505,11 @@ bool TmSctRos2::is_traj_finite(const trajectory_msgs::msg::JointTrajectory &traj
   return true;
 }
 bool TmSctRos2::is_positions_match(
-  const std::vector<trajectory_msgs::msg::JointTrajectoryPoint> &traj_points, double eps)
+  const trajectory_msgs::msg::JointTrajectoryPoint &point, double eps)
 {
   auto q_act = state_.mtx_joint_angle();
-  for (size_t i = 0; i < traj_points[0].positions.size(); ++i) {
-    if (fabs(traj_points[0].positions[i] - q_act[i]) > eps)
+  for (size_t i = 0; i < point.positions.size(); ++i) {
+    if (fabs(point.positions[i] - q_act[i]) > eps)
       return false;
   }
   return true;
@@ -514,7 +570,6 @@ void TmSctRos2::set_pvt_traj(
     }
   }
   pvts.total_time = sec(traj_points.back().time_from_start);
-  tmr_INFO_STREAM("TM_ROS: traj. total time:=" << pvts.total_time);
 }
 std::shared_ptr<tmr::PvtTraj> TmSctRos2::get_pvt_traj(
     const std::vector<trajectory_msgs::msg::JointTrajectoryPoint> &traj_points, double Tmin)
@@ -522,16 +577,4 @@ std::shared_ptr<tmr::PvtTraj> TmSctRos2::get_pvt_traj(
   std::shared_ptr<tmr::PvtTraj> pvts = std::make_shared<tmr::PvtTraj>();
   set_pvt_traj(*pvts, traj_points, Tmin);
   return pvts;
-}
-void TmSctRos2::execute_traj(const std::shared_ptr<tmr::PvtTraj> pvts)
-{
-  tmr_INFO_STREAM("TM_ROS: trajectory thread begin");
-  if (!is_fake_) {
-    iface_.run_pvt_traj(*pvts);
-  }
-  else {
-    iface_.fake_run_pvt_traj(*pvts);
-  }
-  has_goal_ = false;
-  tmr_INFO_STREAM("TM_ROS: trajectory thread end");
 }

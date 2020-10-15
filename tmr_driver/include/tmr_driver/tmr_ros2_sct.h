@@ -61,6 +61,8 @@ public:
   rclcpp::Service<tmr_msgs::srv::AskSta>::SharedPtr ask_sta_srv_;
 
   rclcpp_action::Server<control_msgs::action::FollowJointTrajectory>::SharedPtr as_;
+  std::mutex as_mtx_;
+  std::string goal_id_;
   bool has_goal_;
 
 public:
@@ -96,6 +98,7 @@ public:
     std::shared_ptr<tmr_msgs::srv::AskSta::Response> res);
 
 
+protected:
   rclcpp_action::GoalResponse handle_goal(const rclcpp_action::GoalUUID & uuid,
     std::shared_ptr<const control_msgs::action::FollowJointTrajectory::Goal> goal
   );
@@ -105,19 +108,21 @@ public:
   void handle_accepted(
     std::shared_ptr<rclcpp_action::ServerGoalHandle<control_msgs::action::FollowJointTrajectory>> goal_handle
   );
-protected:
+  void execute_traj(
+    const std::shared_ptr<rclcpp_action::ServerGoalHandle<control_msgs::action::FollowJointTrajectory>> goal_handle
+  );
+
   void reorder_traj_joints(
     std::vector<trajectory_msgs::msg::JointTrajectoryPoint> &new_traj_points,
     const trajectory_msgs::msg::JointTrajectory &traj
   );
   bool has_points(const trajectory_msgs::msg::JointTrajectory &traj);
   bool is_traj_finite(const trajectory_msgs::msg::JointTrajectory &traj);
-  bool is_positions_match(const std::vector<trajectory_msgs::msg::JointTrajectoryPoint> &traj, double eps = 0.01);
+  bool is_positions_match(const trajectory_msgs::msg::JointTrajectoryPoint &point, double eps = 0.01);
   void set_pvt_traj(
     tmr::PvtTraj &pvts, const std::vector<trajectory_msgs::msg::JointTrajectoryPoint> &traj_points, double Tmin = 0.1
   );
   std::shared_ptr<tmr::PvtTraj> get_pvt_traj(
     const std::vector<trajectory_msgs::msg::JointTrajectoryPoint> &traj_points, double Tmin = 0.1
   );
-  void execute_traj(const std::shared_ptr<tmr::PvtTraj> pvts);
 };
