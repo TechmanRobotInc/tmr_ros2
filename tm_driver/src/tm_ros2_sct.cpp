@@ -6,7 +6,7 @@ TmSctRos2::TmSctRos2(const rclcpp::NodeOptions &options, TmDriver &iface)
     , sct_(iface.sct)
     , iface_(iface)
 {
-    bool rb = sct_.start(5000);
+    sct_.start(5000);
 
     sm_.sct_pub = create_publisher<tm_msgs::msg::SctResponse>("sct_response", 1);
     sm_.sta_pub = create_publisher<tm_msgs::msg::StaResponse>("sta_response", 1);

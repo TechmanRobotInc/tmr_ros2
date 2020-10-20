@@ -148,11 +148,10 @@ size_t TmRobotState::_deserialize_copy_wo_check(void *dst, const char *data, siz
 	return boffset;
 }
 
-size_t TmRobotState::_deserialize(const char *data, size_t size, bool use_mtx)
+size_t TmRobotState::_deserialize(const char *data, size_t, bool use_mtx)
 {
 	size_t boffset = 0;
-	size_t bsize = 0;
-	unsigned short uslen; // 2 bytes
+	//unsigned short uslen; // 2 bytes
 	/*union {
 		size_t size;
 		char bytes[2];

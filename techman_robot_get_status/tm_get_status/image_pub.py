@@ -7,7 +7,7 @@ from sensor_msgs.msg import Image
 
 from flask import Flask, request, jsonify
 import numpy as np
-from cv2 import cv2
+import cv2
 from waitress import serve
 from datetime import datetime
 from cv_bridge import CvBridge, CvBridgeError
