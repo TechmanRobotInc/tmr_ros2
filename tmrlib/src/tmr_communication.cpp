@@ -391,6 +391,19 @@ bool Communication::Connect(int timeout_ms)
 	setsockopt(_sockfd, IPPROTO_TCP, TCP_QUICKACK, (char*)&_optflag, sizeof(_optflag));
 #endif
 	setsockopt(_sockfd, SOL_SOCKET, SO_REUSEADDR, (char*)&_optflag, sizeof(_optflag));
+	struct timeval timeout;      
+    timeout.tv_sec = timeout_ms/1000;
+    timeout.tv_usec = 0;
+
+    if (setsockopt (_sockfd, SOL_SOCKET, SO_RCVTIMEO, (char *)&timeout,
+                sizeof(timeout)) < 0){
+        tmr_INFO_STREAM("setsockopt failed\n");
+	}
+
+    if (setsockopt (_sockfd, SOL_SOCKET, SO_SNDTIMEO, (char *)&timeout,
+                sizeof(timeout)) < 0){
+        tmr_INFO_STREAM("setsockopt failed\n");
+	}
 
 	if (connect_with_timeout(_sockfd, _ip, _port, timeout_ms) == 0) {
 		tmr_INFO_STREAM("TM_COM: O_NONBLOCK connection is ok");
