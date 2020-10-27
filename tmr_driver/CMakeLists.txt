@@ -25,7 +25,7 @@ find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(trajectory_msgs REQUIRED)
-find_package(control_msgs REQUIRED)
+#find_package(control_msgs REQUIRED)
 find_package(rclcpp_action REQUIRED)
 find_package(tmr_msgs REQUIRED)
 find_package(tmrlib REQUIRED)
@@ -46,34 +46,34 @@ include_directories(include
   ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-add_executable(tmr_driver
-  src/tmr_ros2_composition.cpp
-  src/tmr_ros2_sct.cpp
-  src/tmr_ros2_svr.cpp
-)
+#add_executable(tmr_driver
+#  src/tmr_ros2_composition.cpp
+#  src/tmr_ros2_sct.cpp
+#  src/tmr_ros2_svr.cpp
+#)
 
-ament_target_dependencies(tmr_driver
-  rclcpp
-  std_msgs
-  sensor_msgs
-  trajectory_msgs
-  control_msgs
-  rclcpp_action
-  tmr_msgs
-  tmrlib
-)
-target_link_libraries(tmr_driver
-  tmrlib::tmrdriver
-)
+#ament_target_dependencies(tmr_driver
+#  rclcpp
+#  std_msgs
+#  sensor_msgs
+#  trajectory_msgs
+#  control_msgs
+#  rclcpp_action
+#  tmr_msgs
+#  tmrlib
+#)
+#target_link_libraries(tmr_driver
+#  tmrlib::tmrdriver
+#)
 
-install(TARGETS
-  tmr_driver
-  DESTINATION lib/${PROJECT_NAME}
-)
+#install(TARGETS
+#  tmr_driver
+#  DESTINATION lib/${PROJECT_NAME}
+#)
 
-install(
-  DIRECTORY launch
-  DESTINATION share/${PROJECT_NAME}
-)
+#install(
+#  DIRECTORY launch
+#  DESTINATION share/${PROJECT_NAME}
+#)
 
 ament_package()

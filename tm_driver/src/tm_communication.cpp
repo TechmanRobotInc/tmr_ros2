@@ -183,7 +183,7 @@ TmCommRC TmCommRecv::spin_once(int timeval_ms, int *n)
 	TmCommRC rc = TmCommRC::OK;
 	int nb = 0;
 	int rv = 0;
-	int sp = 0;
+	//int sp = 0;
 	timeval tv;
 
 	// fake

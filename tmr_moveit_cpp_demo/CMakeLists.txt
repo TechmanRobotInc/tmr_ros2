@@ -12,7 +12,7 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
-find_package(moveit_ros_planning_interface REQUIRED)
+#find_package(moveit_ros_planning_interface REQUIRED)
 # This shouldn't be necessary (required by moveit_simple_controller_manager)
 find_package(rosidl_default_runtime REQUIRED)
 find_package(Boost REQUIRED COMPONENTS system)
@@ -20,16 +20,16 @@ find_package(Boost REQUIRED COMPONENTS system)
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
 
-add_executable(run_moveit_cpp src/run_moveit_cpp.cpp)
-ament_target_dependencies(run_moveit_cpp
-  moveit_ros_planning_interface
-  Boost
-)
+#add_executable(run_moveit_cpp src/run_moveit_cpp.cpp)
+#ament_target_dependencies(run_moveit_cpp
+#  moveit_ros_planning_interface
+#  Boost
+#)
 
-install(TARGETS run_moveit_cpp run_moveit_cpp
-  EXPORT export_${PROJECT_NAME}
-  DESTINATION lib/${PROJECT_NAME}
-)
+#install(TARGETS run_moveit_cpp run_moveit_cpp
+#  EXPORT export_${PROJECT_NAME}
+#  DESTINATION lib/${PROJECT_NAME}
+#)
 install(DIRECTORY launch
   DESTINATION share/${PROJECT_NAME}
 )
