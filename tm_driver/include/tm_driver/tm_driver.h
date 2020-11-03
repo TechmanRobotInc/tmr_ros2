@@ -72,7 +72,7 @@ public:
 	bool set_tool_pose_PTP(const std::vector<double> &pose,
 		double vel, double acc_time, int blend_percent, bool fine_goal = false, const std::string &id = "PTPT");
 	bool set_tool_pose_Line(const std::vector<double> &pose,
-		double vel, double acc_time, int blend_percent, bool fine_goal = false, const std::string &id = "Line");
+		double vel, double acc_time, int blend_percent, bool not_fine_goalfine_goal = false, const std::string &id = "Line");
 	// set_tool_pose_PLINE
 
 	//
