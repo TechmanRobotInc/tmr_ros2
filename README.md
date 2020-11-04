@@ -44,4 +44,23 @@ acc_time : to max speed time in millisecond<br/>
 blend_percentage : this cannot become 0
 fine_goal : if false, when it return in position, but not real in position, you should wait few ms<br/>
 > 8. demo_write_item: <br/>
-In this demo code, you can send TMSVR cmd by using this service. More details please refer to the TM_Robot_Expression.pdf Chapter(1.76.6300) 9.3 svr_write<br/>
+In this demo code, you can send TMSVR cmd by using this service. More details please refer to the TM_Robot_Expression.pdf Chapter(1.76.6300) 9.3 svr_write
+> 9. demo_leave_listen_node:<br/>
+In this demo code, you can use send_script service sending a script to leave the listen node.
+## How to use demo code & driver
+1. Creat a folder ``~/tm_driver`` by type<br/>
+``mkdir ~/tm_driver``<br/>
+``cd ~/tm_driver``
+2. Download this package by using git and change into dashing branch<br/>
+``git clone https://github.com/TechmanRobotInc/tmr_ros2.git``<br/>
+``git checkout dashing-devel``<br/>
+3. Build the source code and set the path<br/>
+``colcon build``<br/>
+``source ./install/setup.bash``<br/>
+4. Open a terminal and type<br/>
+``ros2 run tm_driver tm_driver <robot_ip>``<br/>
+<robot_ip> is tm robot ip address, you can get it by TM Flow, for example 192.168.10.2
+5. Open another terminal and type which demo you want to try. 
+For example you want to try demo_set_io, you can type<br/>
+``ros2 run demo demo_set_io``<br/>
+:warning: Some demos will let the robot move, please be careful.
