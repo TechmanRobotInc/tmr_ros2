@@ -45,7 +45,6 @@ int main(int argc, char **argv)
   } else {
     RCLCPP_ERROR(rclcpp::get_logger("rclcpp"), "Failed to call service");
   }
-  return true;
 
   rclcpp::shutdown();
   return 0;
