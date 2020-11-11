@@ -64,3 +64,31 @@ In this demo code, you can use send_script service sending a script to leave the
 For example you want to try demo_set_io, you can type<br/>
 ``ros2 run demo demo_set_io``<br/>
 :warning: Some demos will let the robot move, please be careful.
+
+## GUI debug and demo
+This GUI shows up tm_driver connection status, sct sta svr messages and robot status. You can use this GUI to check driver and robot connect status and send re-connect command and base on this GUI to modify.
+
+### Hoe to use it
+1. Creat a folder ``~/tm_driver`` by type<br/>
+``mkdir ~/tm_driver``<br/>
+``cd ~/tm_driver``
+2. Download this package by using git and change into dashing branch<br/>
+``git clone https://github.com/TechmanRobotInc/tmr_ros2.git``<br/>
+``git checkout dashing-devel``<br/>
+3. Build the source code and set the path<br/>
+``colcon build``<br/>
+``source ./install/setup.bash``<br/>
+4. Open a terminal and type<br/>
+``ros2 run tm_driver tm_driver <robot_ip>``<br/>
+<robot_ip> is tm robot ip address, you can get it by TM Flow, for example 192.168.10.2
+5. Open another terminal and type<br/>
+``ros2 run ui_for_debug_and_demo robot_ui``<br/>
+
+### UI description
+1. When ``is_srv_connect`` and ``is_sct_connect`` are true, it means the all connection is success.
+2. If ``is_srv_connect`` is false, you should check the data table is correct or not.
+3. If ``is_sct_connect`` is false, you should check whether you run the project or not.
+4. If ``is_srv_connect`` and ``is_sct_connect`` are true, but ``robot link`` is false. It means you connect the TM project, but you are not in listen node, so you when you send the move command, it doesn't work.
+5. When you send a command or click ``"change control box IO"``, you can see ``"Robot Response"`` add a response item, the item details you can reference ``SctResponse.msg``, ``StaResponse.msg`` and ``SvrResponse.msg``.
+6. You can click ``"clear"`` to clear the old response items.
+7. If you didn't open the ``tm_ros_driver``, you will see all items show ``"Not ini"``.
