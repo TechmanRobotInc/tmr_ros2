@@ -3,7 +3,7 @@
 
 void MainWindow::initial_ros_thread_to_ui_page(){
   connect(rosPage.get(), SIGNAL(send_ui_feed_back_status(tm_msgs::msg::FeedbackState::SharedPtr)), this, SLOT(send_ui_feed_back_status(tm_msgs::msg::FeedbackState::SharedPtr)));
-  connect(this, SIGNAL(change_control_box_io_button()),rosPage.get(),SLOT(change_control_box_io_button()));
+  connect(rosPage.get(), SIGNAL(send_to_ui_list(std::string)), this, SLOT(send_to_ui_list(std::string)));
 }
 void MainWindow::set_text_true_false(bool isTrue, QLabel* label){
   if(isTrue){
@@ -33,9 +33,7 @@ void MainWindow::send_ui_feed_back_status(tm_msgs::msg::FeedbackState::SharedPtr
     } else{
       set_text_true_false(true,ui->control_box_io1_status_label);
     }
-    
   }
-  
 }
 void MainWindow::click_set_sct_re_connect_button(){
   send_sct_as_re_connect();
@@ -51,10 +49,33 @@ void MainWindow::initial_ui_compoment(){
   connect(ui->set_sct_re_connect_button, SIGNAL(clicked()),this,SLOT(click_set_sct_re_connect_button()));
   connect(ui->set_svr_re_connect_button, SIGNAL(clicked()),this,SLOT(click_set_svr_re_connect_button()));
   connect(ui->change_control_box_io_button, SIGNAL(clicked()),this,SLOT(click_change_control_box_io_button()));
+  connect(ui->clear_response_button, SIGNAL(clicked()),this,SLOT(click_clear_response_button()));
+  
+  statusItemModel = std::make_unique<QStandardItemModel>();
+  ui->robot_response_listView->setModel(statusItemModel.get());
+  ui->robot_response_listView->setSelectionMode(QAbstractItemView::ExtendedSelection);
+  ui->robot_response_listView->setEditTriggers(QAbstractItemView::NoEditTriggers);
 }
 void MainWindow::initial_ui_page_to_ros_thread(){
   connect(this, SIGNAL(send_sct_as_re_connect()),rosPage.get(),SLOT(send_sct_as_re_connect()));
   connect(this, SIGNAL(send_svr_as_re_connect()),rosPage.get(),SLOT(send_svr_as_re_connect()));
+  connect(this, SIGNAL(change_control_box_io_button()),rosPage.get(),SLOT(change_control_box_io_button()));
+  
+}
+void MainWindow::send_to_ui_list(std::string showMessage){
+  QList<QStandardItem *> itemList;
+  itemList<< new QStandardItem(QString::fromStdString(showMessage));
+  statusItemModel->appendRow(itemList);
+  QModelIndex vIndex = statusItemModel->index(rowIndex, 0);
+  rowIndex++;
+  QMap<int, QVariant> vMap = statusItemModel->itemData(vIndex);
+  statusItemModel->setItemData(vIndex, vMap);
+}
+void MainWindow::click_clear_response_button(){
+  statusItemModel.reset();
+  statusItemModel = std::make_unique<QStandardItemModel>();
+  rowIndex = 0;
+  ui->robot_response_listView->setModel(statusItemModel.get());
 }
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)

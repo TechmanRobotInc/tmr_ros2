@@ -7,6 +7,7 @@ int main(int argc, char *argv[])
 {
   rclcpp::init(argc, argv);
   qRegisterMetaType<tm_msgs::msg::FeedbackState::SharedPtr>("tm_msgs::msg::FeedbackState::SharedPtr");
+  qRegisterMetaType<std::string>("std::string");
   QApplication a(argc, argv);
   MainWindow w;
   w.show();
