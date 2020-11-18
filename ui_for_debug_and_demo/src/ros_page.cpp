@@ -71,7 +71,7 @@ void RosPage::send_service(rclcpp::Client<tm_msgs::srv::ConnectTM>::SharedPtr cl
 }
 void RosPage::send_sct_as_re_connect(){
   auto request = std::make_shared<tm_msgs::srv::ConnectTM::Request>();
-  request->server = tm_msgs::srv::ConnectTM::Request::TMSVR;
+  request->server = tm_msgs::srv::ConnectTM::Request::TMSCT;
   request->reconnect = true;
   request->timeout = 0;
   request->timeval = 0;
@@ -79,7 +79,7 @@ void RosPage::send_sct_as_re_connect(){
 }
 void RosPage::send_svr_as_re_connect(){
   auto request = std::make_shared<tm_msgs::srv::ConnectTM::Request>();
-  request->server = tm_msgs::srv::ConnectTM::Request::TMSCT;
+  request->server = tm_msgs::srv::ConnectTM::Request::TMSVR;
   request->reconnect = true;
   request->timeout = 0;
   request->timeval = 0;
