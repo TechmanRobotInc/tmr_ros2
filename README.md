@@ -8,10 +8,9 @@ The TM Robot is a state-of-the-art production tool that is highly compatible and
 
 This driver is for ROS2 Foxy version.
 
-If you want to use Dashing version, please go to our Dashing version driver.
-[Foxy version driver](https://github.com/TechmanRobotInc/tmr_ros2)
- 
-If you want to know how to use this driver, please go to this link [TM ROS1 driver](https://github.com/TechmanRobotInc/tmr_ros1)
+If you want to use Dashing version, please go to our [Dashing version driver](https://github.com/TechmanRobotInc/tmr_ros2/tree/dashing-devel).
+
+If you want to know how to use this driver, please go to our [TM ROS1 driver](https://github.com/TechmanRobotInc/tmr_ros1)
 
 ### __ROS2 Driver__
 
@@ -256,8 +255,8 @@ For example you want to try demo_set_io, you can type<br/>
 ## GUI debug and demo
 This GUI shows up tm_driver connection status, sct sta svr messages and robot status. You can use this GUI to check driver and robot connect status and send re-connect command and base on this GUI to modify.
 
-### Hoe to use it
-1. Creat a folder ``~/tm_driver`` by type<br/>
+### How to use it
+1. Create a folder ``~/tm_driver`` by type<br/>
 ``mkdir ~/tm_driver``<br/>
 ``cd ~/tm_driver``
 2. Download this package by using git<br/>
