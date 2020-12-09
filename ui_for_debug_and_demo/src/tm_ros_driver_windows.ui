@@ -422,6 +422,32 @@ IO1</string>
      <string>Robot Response</string>
     </property>
    </widget>
+   <widget class="QLabel" name="is_data_table_ok_status_label">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>290</y>
+      <width>67</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Not Ini</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="is_data_table_ok_label">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>260</y>
+      <width>141</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Data Table Correct</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">

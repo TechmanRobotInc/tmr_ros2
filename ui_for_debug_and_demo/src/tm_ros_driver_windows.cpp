@@ -24,6 +24,7 @@ void MainWindow::send_ui_feed_back_status(tm_msgs::msg::FeedbackState::SharedPtr
   set_text_true_false(msg->project_pause,ui->project_pause_status_label);
   set_text_true_false(msg->safetyguard_a,ui->safetyguard_a_status_label);
   set_text_true_false(msg->e_stop,ui->e_stop_status_label);
+  set_text_true_false(msg->is_data_table_correct,ui->is_data_table_ok_status_label);
 
   ui->error_code_status_label->setText(QString::number(msg->error_code));
   ui->error_content_status_label->setText(QString::fromStdString(msg->error_content));
