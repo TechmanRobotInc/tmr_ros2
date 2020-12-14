@@ -12,10 +12,10 @@ int8 PLINE_T = 8
 
 int8 motion_type
 float64[] positions
-float64 velocity
-float64 acc_time
-int32 blend_percentage
-bool fine_goal
+float64 velocity # joint velocity-> max value is Pi -> 3.14 rad/s , line velocity ->m/s
+float64 acc_time # to max speed time in millisecond
+int32 blend_percentage # this cannot become 0
+bool fine_goal #if false, when it return in position, but not real in position, you should wait few ms
 ---
 # ok :  set motion status 
 bool ok
