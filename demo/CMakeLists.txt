@@ -149,6 +149,21 @@ install(TARGETS
 demo_write_item
   DESTINATION lib/${PROJECT_NAME}
 )
+add_executable(demo_ask_item
+  src/demo_ask_item.cpp
+ 
+)
+ament_target_dependencies(demo_ask_item
+  rclcpp
+  std_msgs
+  sensor_msgs
+  tm_msgs
+)
+
+install(TARGETS
+demo_ask_item
+  DESTINATION lib/${PROJECT_NAME}
+)
 add_executable(demo_get_feedback
   get_status_demo_src/demo_get_feedback.cpp
  
@@ -194,6 +209,7 @@ install(TARGETS
 demo_get_sta_response
   DESTINATION lib/${PROJECT_NAME}
 )
+
 add_executable(demo_get_svr_response
   get_status_demo_src/demo_get_svr_response.cpp
  
