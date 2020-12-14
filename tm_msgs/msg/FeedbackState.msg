@@ -19,7 +19,7 @@ float64[] tcp_force
 # Status
 
 bool robot_link
-
+bool is_data_table_correct
 bool robot_error
 
 bool project_run

@@ -13,6 +13,7 @@
 #include "tm_msgs/srv/write_item.hpp"
 #include "tm_msgs/srv/ask_item.hpp"
 
+#define PACKAGE_SIZE 857
 
 class TmSvrRos2 : public rclcpp::Node
 {
@@ -33,7 +34,8 @@ public:
         geometry_msgs::msg::PoseStamped tool_pose_msg;
         tm_msgs::msg::SvrResponse svr_msg;
     } pm_;
-
+    bool isDataTableCorrect = false;
+    int sizeErrorCount = 0;
     bool svr_updated_;
     std::mutex svr_mtx_;
     std::condition_variable svr_cv_;

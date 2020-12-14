@@ -18,7 +18,7 @@ int main(int argc, char **argv)
     node->create_client<tm_msgs::srv::AskItem>("ask_item");
   auto request = std::make_shared<tm_msgs::srv::AskItem::Request>();
   request->id = "demo";
-  request->item = "int var_i = 100";
+  request->item = "HandCamera_Value";
   request->wait_time = 0;
  
   while (!client->wait_for_service(1s)) {

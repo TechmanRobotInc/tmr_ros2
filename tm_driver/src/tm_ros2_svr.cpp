@@ -57,6 +57,7 @@ void TmSvrRos2::publish_fbs()
 
     pm.fbs_msg.is_svr_connected = svr_.is_connected();
     pm.fbs_msg.is_sct_connected = sct_.is_connected();
+    pm.fbs_msg.is_data_table_correct = isDataTableCorrect;
 
     pm.fbs_msg.joint_pos = state.joint_angle();
     pm.fbs_msg.joint_vel = state.joint_speed();
