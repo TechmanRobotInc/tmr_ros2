@@ -7,12 +7,20 @@ void MainWindow::initial_ros_thread_to_ui_page(){
 }
 void MainWindow::set_text_true_false(bool isTrue, QLabel* label){
   if(isTrue){
-    label->setText("TRUE");
-    label->setStyleSheet("QLabel { color : red; }");
+    label->setText("<html><head/><body><p><span style=\" font-size:20pt; font-weight:600; color:#73d216;\">True</span></p></body></html>");
+    //label->setStyleSheet("QLabel { color : red; }");
   } else{
-    label->setText("False");
-    label->setStyleSheet("QLabel { color : black; }");
+    label->setText("<html><head/><body><p><span style=\" font-size:20pt; color:#d3d7cf;\">False</span></p></body></html>");
+    //label->setStyleSheet("QLabel { color : black; }");
   }
+}
+QString MainWindow::formate_change(std::string msg){
+  std::string str;
+  str = "<html><head/><body><p><span style=\" font-size:20pt; font-weight:600; color:#73d216;\">";
+  str += msg;
+  str += "</span></p></body></html>";
+
+  return QString::fromStdString(str);
 }
 void MainWindow::send_ui_feed_back_status(tm_msgs::msg::FeedbackState::SharedPtr msg){
   set_text_true_false(msg->is_svr_connected,ui->is_svr_connected_status_label);
@@ -26,8 +34,10 @@ void MainWindow::send_ui_feed_back_status(tm_msgs::msg::FeedbackState::SharedPtr
   set_text_true_false(msg->e_stop,ui->e_stop_status_label);
   set_text_true_false(msg->is_data_table_correct,ui->is_data_table_ok_status_label);
 
-  ui->error_code_status_label->setText(QString::number(msg->error_code));
-  ui->error_content_status_label->setText(QString::fromStdString(msg->error_content));
+  
+
+  ui->error_code_status_label->setText(formate_change(std::to_string(msg->error_code)));
+  ui->error_content_status_label->setText(formate_change(msg->error_content));
   if(msg->cb_digital_output.size()>0){
     if(msg->cb_digital_output[0] == 0){
       set_text_true_false(false,ui->control_box_io1_status_label);
@@ -44,6 +54,7 @@ void MainWindow::click_set_svr_re_connect_button(){
 }
 void MainWindow::click_change_control_box_io_button(){
   std::cout<<"click_change_control_box_io_button"<<std::endl;
+  
   change_control_box_io_button();
 }
 void MainWindow::initial_ui_compoment(){
@@ -79,7 +90,7 @@ void MainWindow::click_clear_response_button(){
   ui->robot_response_listView->setModel(statusItemModel.get());
 }
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
+    : QDialog(parent)
     , ui(new Ui::MainWindow)
 {
   ui->setupUi(this);

@@ -55,17 +55,19 @@ class RosPage : public QThread {
   void run();
 };
 
-class MainWindow : public QMainWindow {
+class MainWindow : public QDialog {
   Q_OBJECT
  private:
   Ui::MainWindow *ui;
   std::unique_ptr<RosPage> rosPage;
   std::unique_ptr<QStandardItemModel> statusItemModel;
+  int testCount = 0;
   int rowIndex;
   void initial_ros_thread_to_ui_page();
   void initial_ui_page_to_ros_thread();
   void set_text_true_false(bool isTrue, QLabel* label);
   void initial_ui_compoment();
+  QString formate_change(std::string msg);
  signals:
   void send_sct_as_re_connect();
   void send_svr_as_re_connect();
