@@ -36,6 +36,7 @@ public:
     } pm_;
     bool isDataTableCorrect = false;
     int sizeErrorCount = 0;
+    bool isPrint = false;
     bool svr_updated_;
     std::mutex svr_mtx_;
     std::condition_variable svr_cv_;

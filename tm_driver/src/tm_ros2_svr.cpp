@@ -147,10 +147,21 @@ bool TmSvrRos2::publish_func()
 
         }
         else if (pack.type == TmPacket::Header::TMSVR) {
+            isDataTableCorrect = true;
 
             svr.err_data.error_code(TmCPError::Code::Ok);
 
             TmSvrData::build_TmSvrData(svr.data, pack.data.data(), pack.data.size(), TmSvrData::SrcType::Shallow);
+            if(svr.data.content_len() != PACKAGE_SIZE){
+                if(sizeErrorCount>3 && !isPrint){//to prevent in the begin, the data size is not full
+                    isPrint = true;
+                    print_error("TM_ROS: (TM_SVR): data table is not correct, please check the data table");
+                    std::cout<<"[INFO] [tm_driver] the correct data table size is "<<PACKAGE_SIZE<<", but recieved is "<<svr.data.content_len()<<std::endl;
+                }
+                sizeErrorCount++;
+                isDataTableCorrect = false;
+                fbs = true;
+            }
 
             if (svr.data.is_valid()) {
                 switch (svr.data.mode()) {
