@@ -11,10 +11,109 @@
 #include <sstream>
 #include <iostream>
 
+#include <map>
+
+class TmDataTable
+{
+public:
+	struct Item {
+		void *dst;
+		bool required;
+		bool checked;
+		enum { REQUIRED = 1 };
+		Item() : dst(nullptr), required(false), checked(false) {};
+		Item(void *d) : dst(d), required(false), checked(false) {};
+		Item(void *d, bool r) : dst(d), required(r), checked(false) {};
+	};
+private:
+	std::map<std::string, Item> _item_map;
+
+public:
+	TmDataTable(TmRobotState *rs)
+	{
+		print_debug("Create DataTable");
+
+		_item_map.clear();
+		//_item_map[""] = { Item:, &rs- };
+		_item_map["Robot_Link"         ] = { &rs->_is_linked_, };
+		_item_map["Robot_Error"        ] = { &rs->_has_error_, Item::REQUIRED };
+		_item_map["Project_Run"        ] = { &rs->_is_proj_running_ };
+		_item_map["Project_Pause"      ] = { &rs->_is_proj_paused_ };
+		_item_map["Safeguard_A"        ] = { &rs->_is_safeguard_A_triggered_};
+		_item_map["ESTOP"              ] = { &rs->_is_ESTOP_pressed_ };
+		_item_map["Camera_Light"       ] = { &rs->_camera_light_ };
+		_item_map["Error_Code"         ] = { &rs->_error_code_ };
+		_item_map["Joint_Angle"        ] = { &rs->_joint_angle_, Item::REQUIRED };
+		_item_map["Coord_Robot_Flange" ] = { &rs->_flange_pose_ };
+		_item_map["Coord_Robot_Tool"   ] = { &rs->_tool_pose_, Item::REQUIRED };
+		_item_map["TCP_Force"          ] = { &rs->_tcp_force_vec_ };
+		_item_map["TCP_Force3D"        ] = { &rs->_tcp_force_ };
+		_item_map["TCP_Speed"          ] = { &rs->_tcp_speed_vec_ };
+		_item_map["TCP_Speed3D"        ] = { &rs->_tcp_speed_ };
+		_item_map["Joint_Speed"        ] = { &rs->_joint_speed_ };
+		_item_map["Joint_Torque"       ] = { &rs->_joint_torque_ };
+		_item_map["Project_Speed"      ] = { &rs->_proj_speed_ };
+		_item_map["MA_Mode"            ] = { &rs->_ma_mode_ };
+		_item_map["Robot_Light"        ] = { &rs->_robot_light_ };
+		_item_map["Ctrl_DO0"           ] = { &rs->_ctrller_DO_[ 0] };
+		_item_map["Ctrl_DO1"           ] = { &rs->_ctrller_DO_[ 1] };
+		_item_map["Ctrl_DO2"           ] = { &rs->_ctrller_DO_[ 2] };
+		_item_map["Ctrl_DO3"           ] = { &rs->_ctrller_DO_[ 3] };
+		_item_map["Ctrl_DO4"           ] = { &rs->_ctrller_DO_[ 4] };
+		_item_map["Ctrl_DO5"           ] = { &rs->_ctrller_DO_[ 5] };
+		_item_map["Ctrl_DO6"           ] = { &rs->_ctrller_DO_[ 6] };
+		_item_map["Ctrl_DO7"           ] = { &rs->_ctrller_DO_[ 7] };
+		_item_map["Ctrl_DO8"           ] = { &rs->_ctrller_DO_[ 8] };
+		_item_map["Ctrl_DO9"           ] = { &rs->_ctrller_DO_[ 9] };
+		_item_map["Ctrl_DO10"          ] = { &rs->_ctrller_DO_[10] };
+		_item_map["Ctrl_DO11"          ] = { &rs->_ctrller_DO_[11] };
+		_item_map["Ctrl_DO12"          ] = { &rs->_ctrller_DO_[12] };
+		_item_map["Ctrl_DO13"          ] = { &rs->_ctrller_DO_[13] };
+		_item_map["Ctrl_DO14"          ] = { &rs->_ctrller_DO_[14] };
+		_item_map["Ctrl_DO15"          ] = { &rs->_ctrller_DO_[15] };
+		_item_map["Ctrl_DI0"           ] = { &rs->_ctrller_DI_[ 0] };
+		_item_map["Ctrl_DI1"           ] = { &rs->_ctrller_DI_[ 1] };
+		_item_map["Ctrl_DI2"           ] = { &rs->_ctrller_DI_[ 2] };
+		_item_map["Ctrl_DI3"           ] = { &rs->_ctrller_DI_[ 3] };
+		_item_map["Ctrl_DI4"           ] = { &rs->_ctrller_DI_[ 4] };
+		_item_map["Ctrl_DI5"           ] = { &rs->_ctrller_DI_[ 5] };
+		_item_map["Ctrl_DI6"           ] = { &rs->_ctrller_DI_[ 6] };
+		_item_map["Ctrl_DI7"           ] = { &rs->_ctrller_DI_[ 7] };
+		_item_map["Ctrl_DI8"           ] = { &rs->_ctrller_DI_[ 8] };
+		_item_map["Ctrl_DI9"           ] = { &rs->_ctrller_DI_[ 9] };
+		_item_map["Ctrl_DI10"          ] = { &rs->_ctrller_DI_[10] };
+		_item_map["Ctrl_DI11"          ] = { &rs->_ctrller_DI_[11] };
+		_item_map["Ctrl_DI12"          ] = { &rs->_ctrller_DI_[12] };
+		_item_map["Ctrl_DI13"          ] = { &rs->_ctrller_DI_[13] };
+		_item_map["Ctrl_DI14"          ] = { &rs->_ctrller_DI_[14] };
+		_item_map["Ctrl_DI15"          ] = { &rs->_ctrller_DI_[15] };
+		_item_map["Ctrl_AO0"           ] = { &rs->_ctrller_AO_[ 0] };
+		_item_map["Ctrl_AO1"           ] = { &rs->_ctrller_AO_[ 1] };
+		_item_map["Ctrl_AI0"           ] = { &rs->_ctrller_AI_[ 0] };
+		_item_map["Ctrl_AI1"           ] = { &rs->_ctrller_AI_[ 1] };
+		_item_map["End_DO0"            ] = { &rs->_ee_DO_[0] };
+		_item_map["End_DO1"            ] = { &rs->_ee_DO_[1] };
+		_item_map["End_DO2"            ] = { &rs->_ee_DO_[2] };
+		_item_map["End_DO3"            ] = { &rs->_ee_DO_[3] };
+		_item_map["End_DI0"            ] = { &rs->_ee_DI_[0] };
+		_item_map["End_DI1"            ] = { &rs->_ee_DI_[1] };
+		_item_map["End_DI2"            ] = { &rs->_ee_DI_[2] };
+		_item_map["End_DI3"            ] = { &rs->_ee_DI_[3] };
+		_item_map["End_AO0"            ] = { &rs->_ee_AO_[0] };
+		_item_map["End_AO1"            ] = { &rs->_ee_AO_[1] };
+		_item_map["End_AI0"            ] = { &rs->_ee_AI_[0] };
+		_item_map["End_AI1"            ] = { &rs->_ee_AI_[1] };
+	}
+	std::map<std::string, Item>  & get() { return _item_map; }
+	std::map<std::string, Item>::iterator find(const std::string &name) { return _item_map.find(name); }
+	std::map<std::string, Item>::iterator end() { return _item_map.end(); }
+};
 
 TmRobotState::TmRobotState()
 {
 	print_debug("TmRobotState::TmRobotState");
+
+	_data_table = new TmDataTable(this);
 
 	_joint_angle.assign(DOF, 0.0);
 	_flange_pose.assign(6, 0.0);
@@ -34,10 +133,19 @@ TmRobotState::TmRobotState()
 	_ee_DI.assign(4, false);
 	_ee_AO.assign(2, 0.0);
 	_ee_AI.assign(2, 0.0);
+
+	_f_deserialize_item[0] = std::bind(&TmRobotState::_deserialize_skip,
+		std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
+	_f_deserialize_item[1] = std::bind(&TmRobotState::_deserialize_copy_wo_check,
+		std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
+
+	_f_deserialize = std::bind(&TmRobotState::_deserialize_first_time, this,
+		std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
 }
 TmRobotState::~TmRobotState()
 {
 	print_debug("TmRobotState::~TmRobotState");
+	delete _data_table;
 }
 
 std::vector<double> TmRobotState::mtx_flange_pose()
@@ -129,6 +237,37 @@ std::vector<float> TmRobotState::mtx_ee_AI()
 	return rv;
 }
 
+size_t TmRobotState::_deserialize_get_name(std::string &name, const char *data, size_t offset)
+{
+	size_t boffset = offset;
+	unsigned short uslen; // 2 bytes
+
+	// item name length
+	memcpy(&uslen, data + boffset, 2);
+	boffset += 2;
+	// item name
+	name = std::string{data + boffset, uslen};
+	boffset += uslen;
+	// skip item
+	memcpy(&uslen, data + boffset, 2);
+	boffset += 2 + uslen;
+	return boffset;
+}
+size_t TmRobotState::_deserialize_skip(void *dst, const char *data, size_t offset)
+{
+	size_t boffset = offset;
+	unsigned short uslen; // 2 bytes
+
+	// skip item name
+	memcpy(&uslen, data + boffset, 2);
+	boffset += 2 + uslen;
+	// skip item
+	memcpy(&uslen, data + boffset, 2);
+	boffset += 2 + uslen;
+
+	if (dst) {}
+	return boffset;
+}
 size_t TmRobotState::_deserialize_copy_wo_check(void *dst, const char *data, size_t offset)
 {
 	size_t boffset = offset;
@@ -148,9 +287,93 @@ size_t TmRobotState::_deserialize_copy_wo_check(void *dst, const char *data, siz
 	return boffset;
 }
 
-size_t TmRobotState::_deserialize(const char *data, size_t , bool use_mtx)
+size_t TmRobotState::_deserialize_first_time(const char *data, size_t size, bool lock)
 {
 	size_t boffset = 0;
+	size_t count = 0;
+	size_t check_count = 0;
+	size_t skip_count = 0;
+	unsigned short uslen = 0; // 2 bytes
+	std::string item_name;
+
+	print_info("TM Flow DataTable Checked Item: ");
+	_item_updates.clear();
+	//_f_deserialize_item.clear();
+
+	while (boffset < size && count < 100) {
+		//boffset = _deserialize_get_name(item_name, data, boffset);
+		// item name length
+		memcpy(&uslen, data + boffset, 2);
+		boffset += 2;
+		// item name
+		item_name = std::string{data + boffset, uslen};
+		boffset += uslen;
+
+		ItemUpdate update{ nullptr, ItemUpdate::SKIP };
+		//std::function<size_t (void *, const char *, size_t)> func;
+		auto iter = _data_table->find(item_name);
+		if (iter != _data_table->end()) {
+			update.dst = iter->second.dst;
+			update.func = ItemUpdate::UPDATE;
+			//func = std::bind(&RobotState::_deserialize_copy_wo_check, iter->second.dst,
+			//	std::placeholders::_2, std::placeholders::_3);
+			iter->second.checked = true;
+			std::string msg = "- " + item_name + " - checked";
+			print_info(msg.c_str());
+			++check_count;
+		}
+		else {
+			//func = std::bind(&RobotState::_deserialize_skip, nullptr,
+			//	std::placeholders::_2, std::placeholders::_3);
+			std::string msg = "- " + item_name + " - skipped";
+			print_info(msg.c_str());
+			++skip_count;
+		}
+		_item_updates.push_back({ update.dst, update.func });
+		//_f_deserialize_item.push_back(func);
+
+		// item data length
+		memcpy(&uslen, data + boffset, 2);
+		boffset += 2;
+		if (update.func == ItemUpdate::SKIP) {
+			// skip item
+			boffset += uslen;
+		}
+		else {
+			// item data
+			memcpy(update.dst, data + boffset, uslen);
+			boffset += uslen;
+		}
+		++count;
+	}
+	{
+		std::string msg = "Total " + std::to_string(_item_updates.size()) + " item," +
+			std::to_string(check_count) + " checked, " + std::to_string(skip_count) + " skipped";
+		print_info(msg.c_str());
+	}
+
+	_deserialize_update(lock);
+
+	for (auto iter : _data_table->get()) {
+		if (iter.second.required && !iter.second.checked) {
+			std::string msg = "Required item" + iter.first + " is NOT checked";
+			print_error(msg.c_str());
+		}
+	}
+
+	_f_deserialize = std::bind(&TmRobotState::_deserialize, this,
+		std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
+
+	return boffset;
+}
+size_t TmRobotState::_deserialize(const char *data, size_t size, bool use_mtx)
+{
+	size_t boffset = 0;
+
+	for (auto &update : _item_updates) {
+		boffset = _f_deserialize_item[update.func](update.dst, data, boffset);
+	}
+
 	//size_t bsize = 0;
 	//unsigned short uslen; // 2 bytes
 	/*union {
@@ -158,6 +381,7 @@ size_t TmRobotState::_deserialize(const char *data, size_t , bool use_mtx)
 		char bytes[2];
 	} ulen;*/
 
+	/*
 	// Robot_Link (2 + 10 + 2 + 1 = 15)
 	boffset = _deserialize_copy_wo_check(&_is_linked_, data, boffset); // 15
 
@@ -185,6 +409,7 @@ size_t TmRobotState::_deserialize(const char *data, size_t , bool use_mtx)
 
 	// Error_Code (2 + 10 + 2 + 4 = 18)
 	boffset = _deserialize_copy_wo_check(&_error_code_, data, boffset);
+	*/
 
 	// Error_Content
 	/*if (use_mtx) mtx_lock();
@@ -208,6 +433,7 @@ size_t TmRobotState::_deserialize(const char *data, size_t , bool use_mtx)
 	}
 	if (use_mtx) mtx_unlock();*/
 
+	/*
 	// Error_Time
 
 	// Coord_Base_Flange
@@ -300,7 +526,15 @@ size_t TmRobotState::_deserialize(const char *data, size_t , bool use_mtx)
 	for (int i = 0; i < 1; ++i) {
 		boffset = _deserialize_copy_wo_check(&_ee_AI_[i], data, boffset);
 	}
+	*/
 
+	_deserialize_update(use_mtx);
+
+	if (boffset > size) {
+	}
+	return boffset;
+}
+void TmRobotState::_deserialize_update(bool lock) {
 	// ---------------
 	// update together
 	// ---------------
@@ -323,7 +557,7 @@ size_t TmRobotState::_deserialize(const char *data, size_t , bool use_mtx)
 
 	_robot_light = _robot_light_;
 
-	if (use_mtx) mtx_lock();
+	if (lock) mtx_lock();
 	{
 		_joint_angle = rads(_joint_angle_, DOF);
 
@@ -352,9 +586,7 @@ size_t TmRobotState::_deserialize(const char *data, size_t , bool use_mtx)
 		//for (int i = 0; i < 1; ++i) { _ee_AO[i] = _ee_AO_[i]; }
 		for (int i = 0; i < 1; ++i) { _ee_AI[i] = _ee_AI_[i]; }
 	}
-	if (use_mtx) mtx_unlock();
-
-	return boffset;
+	if (lock) mtx_unlock();
 }
 
 void TmRobotState::print()
