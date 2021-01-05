@@ -57,7 +57,7 @@ void TmSvrRos2::publish_fbs()
 
     pm.fbs_msg.is_svr_connected = svr_.is_connected();
     pm.fbs_msg.is_sct_connected = sct_.is_connected();
-    pm.fbs_msg.is_data_table_correct = isDataTableCorrect;
+    pm.fbs_msg.is_data_table_correct = state.is_data_table_correct();
 
     pm.fbs_msg.joint_pos = state.joint_angle();
     pm.fbs_msg.joint_vel = state.joint_speed();
@@ -147,23 +147,13 @@ bool TmSvrRos2::publish_func()
 
         }
         else if (pack.type == TmPacket::Header::TMSVR) {
-            isDataTableCorrect = true;
 
             svr.err_data.error_code(TmCPError::Code::Ok);
 
             TmSvrData::build_TmSvrData(svr.data, pack.data.data(), pack.data.size(), TmSvrData::SrcType::Shallow);
-            if(svr.data.content_len() != PACKAGE_SIZE){
-                if(sizeErrorCount>3 && !isPrint){//to prevent in the begin, the data size is not full
-                    isPrint = true;
-                    print_error("TM_ROS: (TM_SVR): data table is not correct, please check the data table");
-                    std::cout<<"[INFO] [tm_driver] the correct data table size is "<<PACKAGE_SIZE<<", but recieved is "<<svr.data.content_len()<<std::endl;
-                }
-                sizeErrorCount++;
-                isDataTableCorrect = false;
-                fbs = true;
-            }
-
+            
             if (svr.data.is_valid()) {
+                
                 switch (svr.data.mode()) {
                 case TmSvrData::Mode::RESPONSE:
                     //print_info("TM_ROS: (TM_SVR): (%s) RESPONSE [%d]",

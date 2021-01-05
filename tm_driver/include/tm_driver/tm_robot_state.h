@@ -6,10 +6,17 @@
 #include <vector>
 #include <string>
 #include <mutex>
+#include <functional>
 
+
+class TmDataTable;
 
 class TmRobotState
 {
+	friend class TmDataTable;
+private:
+	TmDataTable *_data_table;
+
 public:
 	enum { DOF = 6 };
 
@@ -57,6 +64,7 @@ private:
 	unsigned char _ee_DI_[4];
 	float _ee_AO_[2];
 	float _ee_AI_[2];
+	bool isDataTableCorrect = false; 
 
 private:
 	unsigned char _is_linked;
@@ -101,6 +109,16 @@ private:
 	std::vector<float> _ee_AO;
 	std::vector<float> _ee_AI;
 
+private:
+	std::function<size_t (void *, const char *, size_t)> _f_deserialize_item[2];
+	std::function<size_t (const char *, size_t, bool)> _f_deserialize;
+	struct ItemUpdate {
+		void *dst;
+		size_t func;
+		enum { SKIP, UPDATE };
+	};
+	std::vector<ItemUpdate> _item_updates;
+
 public:
 	TmRobotState();
 	~TmRobotState();
@@ -108,7 +126,7 @@ public:
 public:
 	unsigned char is_linked() { return _is_linked; }
 	unsigned char has_error() { return _has_error; }
-
+        bool is_data_table_correct(){return isDataTableCorrect;}
 	unsigned char is_project_running() { return _is_proj_running; }
 	unsigned char is_project_paused() { return _is_proj_paused; }
 
@@ -203,17 +221,21 @@ private:
 	}
 
 private:
+	static size_t _deserialize_get_name(std::string &name, const char *data, size_t offset);
+	static size_t _deserialize_skip(void *dst, const char *data, size_t offset);
 	static size_t _deserialize_copy_wo_check(void *dst, const char *data, size_t offset);
+	size_t _deserialize_first_time(const char *data, size_t size, bool lock);
 	size_t _deserialize(const char *data, size_t size, bool use_mtx);
+	void _deserialize_update(bool lock);
 
 public:
 	size_t deserialize(const char *data, size_t size)
 	{
-		return _deserialize(data, size, false);
+		return _f_deserialize(data, size, false);
 	}
 	size_t mtx_deserialize(const char *data, size_t size)
 	{
-		return _deserialize(data, size, true);
+		return _f_deserialize(data, size, true);
 	}
 
 	void print();
