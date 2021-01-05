@@ -20,9 +20,9 @@ public:
 		void *dst;
 		bool required;
 		bool checked;
-		enum { REQUIRED = 1 };
-		Item() : dst(nullptr), required(false), checked(false) {};
-		Item(void *d) : dst(d), required(false), checked(false) {};
+		enum { NOT_REQUIRE = 0 ,REQUIRED = 1 };
+		Item() : dst(nullptr), required(true), checked(false) {};
+		Item(void *d) : dst(d), required(true), checked(false) {};
 		Item(void *d, bool r) : dst(d), required(r), checked(false) {};
 	};
 private:
@@ -35,17 +35,17 @@ public:
 
 		_item_map.clear();
 		//_item_map[""] = { Item:, &rs- };
-		_item_map["Robot_Link"         ] = { &rs->_is_linked_, };
-		_item_map["Robot_Error"        ] = { &rs->_has_error_, Item::REQUIRED };
+		_item_map["Robot_Link"         ] = { &rs->_is_linked_ };
+		_item_map["Robot_Error"        ] = { &rs->_has_error_ };
 		_item_map["Project_Run"        ] = { &rs->_is_proj_running_ };
 		_item_map["Project_Pause"      ] = { &rs->_is_proj_paused_ };
 		_item_map["Safeguard_A"        ] = { &rs->_is_safeguard_A_triggered_};
 		_item_map["ESTOP"              ] = { &rs->_is_ESTOP_pressed_ };
 		_item_map["Camera_Light"       ] = { &rs->_camera_light_ };
 		_item_map["Error_Code"         ] = { &rs->_error_code_ };
-		_item_map["Joint_Angle"        ] = { &rs->_joint_angle_, Item::REQUIRED };
+		_item_map["Joint_Angle"        ] = { &rs->_joint_angle_ };
 		_item_map["Coord_Robot_Flange" ] = { &rs->_flange_pose_ };
-		_item_map["Coord_Robot_Tool"   ] = { &rs->_tool_pose_, Item::REQUIRED };
+		_item_map["Coord_Robot_Tool"   ] = { &rs->_tool_pose_ };
 		_item_map["TCP_Force"          ] = { &rs->_tcp_force_vec_ };
 		_item_map["TCP_Force3D"        ] = { &rs->_tcp_force_ };
 		_item_map["TCP_Speed"          ] = { &rs->_tcp_speed_vec_ };
@@ -63,14 +63,14 @@ public:
 		_item_map["Ctrl_DO5"           ] = { &rs->_ctrller_DO_[ 5] };
 		_item_map["Ctrl_DO6"           ] = { &rs->_ctrller_DO_[ 6] };
 		_item_map["Ctrl_DO7"           ] = { &rs->_ctrller_DO_[ 7] };
-		_item_map["Ctrl_DO8"           ] = { &rs->_ctrller_DO_[ 8] };
-		_item_map["Ctrl_DO9"           ] = { &rs->_ctrller_DO_[ 9] };
-		_item_map["Ctrl_DO10"          ] = { &rs->_ctrller_DO_[10] };
-		_item_map["Ctrl_DO11"          ] = { &rs->_ctrller_DO_[11] };
-		_item_map["Ctrl_DO12"          ] = { &rs->_ctrller_DO_[12] };
-		_item_map["Ctrl_DO13"          ] = { &rs->_ctrller_DO_[13] };
-		_item_map["Ctrl_DO14"          ] = { &rs->_ctrller_DO_[14] };
-		_item_map["Ctrl_DO15"          ] = { &rs->_ctrller_DO_[15] };
+		_item_map["Ctrl_DO8"           ] = { &rs->_ctrller_DO_[ 8],Item::NOT_REQUIRE };
+		_item_map["Ctrl_DO9"           ] = { &rs->_ctrller_DO_[ 9],Item::NOT_REQUIRE };
+		_item_map["Ctrl_DO10"          ] = { &rs->_ctrller_DO_[10],Item::NOT_REQUIRE };
+		_item_map["Ctrl_DO11"          ] = { &rs->_ctrller_DO_[11],Item::NOT_REQUIRE };
+		_item_map["Ctrl_DO12"          ] = { &rs->_ctrller_DO_[12],Item::NOT_REQUIRE };
+		_item_map["Ctrl_DO13"          ] = { &rs->_ctrller_DO_[13],Item::NOT_REQUIRE };
+		_item_map["Ctrl_DO14"          ] = { &rs->_ctrller_DO_[14],Item::NOT_REQUIRE };
+		_item_map["Ctrl_DO15"          ] = { &rs->_ctrller_DO_[15],Item::NOT_REQUIRE };
 		_item_map["Ctrl_DI0"           ] = { &rs->_ctrller_DI_[ 0] };
 		_item_map["Ctrl_DI1"           ] = { &rs->_ctrller_DI_[ 1] };
 		_item_map["Ctrl_DI2"           ] = { &rs->_ctrller_DI_[ 2] };
@@ -79,18 +79,18 @@ public:
 		_item_map["Ctrl_DI5"           ] = { &rs->_ctrller_DI_[ 5] };
 		_item_map["Ctrl_DI6"           ] = { &rs->_ctrller_DI_[ 6] };
 		_item_map["Ctrl_DI7"           ] = { &rs->_ctrller_DI_[ 7] };
-		_item_map["Ctrl_DI8"           ] = { &rs->_ctrller_DI_[ 8] };
-		_item_map["Ctrl_DI9"           ] = { &rs->_ctrller_DI_[ 9] };
-		_item_map["Ctrl_DI10"          ] = { &rs->_ctrller_DI_[10] };
-		_item_map["Ctrl_DI11"          ] = { &rs->_ctrller_DI_[11] };
-		_item_map["Ctrl_DI12"          ] = { &rs->_ctrller_DI_[12] };
-		_item_map["Ctrl_DI13"          ] = { &rs->_ctrller_DI_[13] };
-		_item_map["Ctrl_DI14"          ] = { &rs->_ctrller_DI_[14] };
-		_item_map["Ctrl_DI15"          ] = { &rs->_ctrller_DI_[15] };
+		_item_map["Ctrl_DI8"           ] = { &rs->_ctrller_DI_[ 8],Item::NOT_REQUIRE };
+		_item_map["Ctrl_DI9"           ] = { &rs->_ctrller_DI_[ 9],Item::NOT_REQUIRE };
+		_item_map["Ctrl_DI10"          ] = { &rs->_ctrller_DI_[10],Item::NOT_REQUIRE };
+		_item_map["Ctrl_DI11"          ] = { &rs->_ctrller_DI_[11],Item::NOT_REQUIRE };
+		_item_map["Ctrl_DI12"          ] = { &rs->_ctrller_DI_[12],Item::NOT_REQUIRE };
+		_item_map["Ctrl_DI13"          ] = { &rs->_ctrller_DI_[13],Item::NOT_REQUIRE };
+		_item_map["Ctrl_DI14"          ] = { &rs->_ctrller_DI_[14],Item::NOT_REQUIRE };
+		_item_map["Ctrl_DI15"          ] = { &rs->_ctrller_DI_[15],Item::NOT_REQUIRE };
 		_item_map["Ctrl_AO0"           ] = { &rs->_ctrller_AO_[ 0] };
-		_item_map["Ctrl_AO1"           ] = { &rs->_ctrller_AO_[ 1] };
+		_item_map["Ctrl_AO1"           ] = { &rs->_ctrller_AO_[ 1] ,Item::NOT_REQUIRE};
 		_item_map["Ctrl_AI0"           ] = { &rs->_ctrller_AI_[ 0] };
-		_item_map["Ctrl_AI1"           ] = { &rs->_ctrller_AI_[ 1] };
+		_item_map["Ctrl_AI1"           ] = { &rs->_ctrller_AI_[ 1],Item::NOT_REQUIRE };
 		_item_map["End_DO0"            ] = { &rs->_ee_DO_[0] };
 		_item_map["End_DO1"            ] = { &rs->_ee_DO_[1] };
 		_item_map["End_DO2"            ] = { &rs->_ee_DO_[2] };
@@ -98,11 +98,11 @@ public:
 		_item_map["End_DI0"            ] = { &rs->_ee_DI_[0] };
 		_item_map["End_DI1"            ] = { &rs->_ee_DI_[1] };
 		_item_map["End_DI2"            ] = { &rs->_ee_DI_[2] };
-		_item_map["End_DI3"            ] = { &rs->_ee_DI_[3] };
-		_item_map["End_AO0"            ] = { &rs->_ee_AO_[0] };
-		_item_map["End_AO1"            ] = { &rs->_ee_AO_[1] };
+		_item_map["End_DI3"            ] = { &rs->_ee_DI_[3],Item::NOT_REQUIRE };
+		_item_map["End_AO0"            ] = { &rs->_ee_AO_[0],Item::NOT_REQUIRE };
+		_item_map["End_AO1"            ] = { &rs->_ee_AO_[1],Item::NOT_REQUIRE };
 		_item_map["End_AI0"            ] = { &rs->_ee_AI_[0] };
-		_item_map["End_AI1"            ] = { &rs->_ee_AI_[1] };
+		_item_map["End_AI1"            ] = { &rs->_ee_AI_[1],Item::NOT_REQUIRE };
 	}
 	std::map<std::string, Item>  & get() { return _item_map; }
 	std::map<std::string, Item>::iterator find(const std::string &name) { return _item_map.find(name); }
@@ -346,19 +346,26 @@ size_t TmRobotState::_deserialize_first_time(const char *data, size_t size, bool
 		}
 		++count;
 	}
-	{
-		std::string msg = "Total " + std::to_string(_item_updates.size()) + " item," +
-			std::to_string(check_count) + " checked, " + std::to_string(skip_count) + " skipped";
-		print_info(msg.c_str());
-	}
+	
+	std::string msg = "Total " + std::to_string(_item_updates.size()) + " item," +
+	std::to_string(check_count) + " checked, " + std::to_string(skip_count) + " skipped";
+	print_info(msg.c_str());
+	isDataTableCorrect = true;
 
 	_deserialize_update(lock);
 
 	for (auto iter : _data_table->get()) {
 		if (iter.second.required && !iter.second.checked) {
 			std::string msg = "Required item" + iter.first + " is NOT checked";
+			isDataTableCorrect = false;
 			print_error(msg.c_str());
 		}
+	}
+
+	if(isDataTableCorrect){
+	  print_info("data table is correct!");
+	} else{
+          print_error("data table is not correct");
 	}
 
 	_f_deserialize = std::bind(&TmRobotState::_deserialize, this,
@@ -374,159 +381,6 @@ size_t TmRobotState::_deserialize(const char *data, size_t size, bool use_mtx)
 		boffset = _f_deserialize_item[update.func](update.dst, data, boffset);
 	}
 
-	//size_t bsize = 0;
-	//unsigned short uslen; // 2 bytes
-	/*union {
-		size_t size;
-		char bytes[2];
-	} ulen;*/
-
-	/*
-	// Robot_Link (2 + 10 + 2 + 1 = 15)
-	boffset = _deserialize_copy_wo_check(&_is_linked_, data, boffset); // 15
-
-	// Robot_Error (2 + 11 + 2 + 1 = 16)
-	boffset = _deserialize_copy_wo_check(&_has_error_, data, boffset); // 31
-
-	// Project_Edit
-
-	// Project_Run (2 + 11 + 2 + 1 = 16)
-	boffset = _deserialize_copy_wo_check(&_is_proj_running_, data, boffset); // 47
-	
-	// Project_Pause
-	boffset = _deserialize_copy_wo_check(&_is_proj_paused_, data, boffset);
-
-	// Safeguard_A
-	boffset = _deserialize_copy_wo_check(&_is_safeguard_A_triggered_, data, boffset);
-
-	// ESTOP
-	boffset = _deserialize_copy_wo_check(&_is_ESTOP_pressed_, data, boffset);
-
-	// Camera_Light
-	boffset = _deserialize_copy_wo_check(&_camera_light_, data, boffset);
-
-	// Robot_Model
-
-	// Error_Code (2 + 10 + 2 + 4 = 18)
-	boffset = _deserialize_copy_wo_check(&_error_code_, data, boffset);
-	*/
-
-	// Error_Content
-	/*if (use_mtx) mtx_lock();
-	{
-		bsize = 2;
-		memcpy(&uslen, data + boffset, bsize);
-		boffset += bsize + uslen; // = 13
-		memcpy(&uslen, data + boffset, bsize);
-		boffset += bsize;
-		if (uslen > 0) {
-			bsize = uslen;
-			{
-				std::stringstream ss;
-				for (size_t i = 0; i < bsize; ++i) {
-					ss << *(data + boffset + i);
-				}
-				_error_content = ss.str();
-			}
-			boffset += bsize;
-		}
-	}
-	if (use_mtx) mtx_unlock();*/
-
-	/*
-	// Error_Time
-
-	// Coord_Base_Flange
-	//boffset = _deserialize_copy_wo_check(&_flange_pose_, data, boffset);
-
-	// Joint_Angle
-	boffset = _deserialize_copy_wo_check(&_joint_angle_, data, boffset);
-
-	// Coord_Base_Tool
-	//boffset = _deserialize_copy_wo_check(&_tool_pose_, data, boffset);
-
-	// Coord_Robot_Flange
-	boffset = _deserialize_copy_wo_check(&_flange_pose_, data, boffset);
-
-	// Coord_Robot_Tool
-	boffset = _deserialize_copy_wo_check(&_tool_pose_, data, boffset);
-
-	// TCP_Force 12
-	boffset = _deserialize_copy_wo_check(&_tcp_force_vec_, data, boffset);
-
-	// TCP_Force3D 4
-	boffset = _deserialize_copy_wo_check(&_tcp_force_, data, boffset);
-
-	// TCP_Speed 24
-	boffset = _deserialize_copy_wo_check(&_tcp_speed_vec_, data, boffset);
-
-	// TCP_Speed3D 4
-	boffset = _deserialize_copy_wo_check(&_tcp_speed_, data, boffset);
-
-	// Joint_Speed 24
-	boffset = _deserialize_copy_wo_check(&_joint_speed_, data, boffset);
-
-	// Joint_Torque 24
-	boffset = _deserialize_copy_wo_check(&_joint_torque_, data, boffset);
-
-	// TCP_Name
-
-	// TCP_Value
-	//boffset = _deserialize_copy_wo_check(&_tcp_frame_, data, boffset);
-
-	// TCP_Mass
-	//boffset = _deserialize_copy_wo_check(&_tcp_mass_, data, boffset);
-
-	// TCP_MCF
-	//boffset = _deserialize_copy_wo_check(&_tcp_cog_, data, boffset);
-
-	// Project_Name
-
-	// Project_Speed 1
-	boffset = _deserialize_copy_wo_check(&_proj_speed_, data, boffset);
-
-	// MA_Mode 4
-	boffset = _deserialize_copy_wo_check(&_ma_mode_, data, boffset);
-
-	// Stick_PlayPause
-	//boffset = _deserialize_copy_wo_check(&_stick_play_pause_, data, boffset);
-
-	// Robot Light 4
-	boffset = _deserialize_copy_wo_check(&_robot_light_, data, boffset);
-
-	// Ctrl_DOx
-	for (int i = 0; i < 8; ++i) {
-		boffset = _deserialize_copy_wo_check(&_ctrller_DO_[i], data, boffset);
-	}
-	// Ctrl_DIx
-	for (int i = 0; i < 8; ++i) {
-		boffset = _deserialize_copy_wo_check(&_ctrller_DI_[i], data, boffset);
-	}
-	// Ctrl_AOx
-	for (int i = 0; i < 1; ++i) {
-		boffset = _deserialize_copy_wo_check(&_ctrller_AO_[i], data, boffset);
-	}
-	// Ctrl_AIx
-	for (int i = 0; i < 2; ++i) {
-		boffset = _deserialize_copy_wo_check(&_ctrller_AI_[i], data, boffset);
-	}
-	// End_DOx
-	for (int i = 0; i < 4; ++i) {
-		boffset = _deserialize_copy_wo_check(&_ee_DO_[i], data, boffset);
-	}
-	// End_DIx
-	for (int i = 0; i < 3; ++i) {
-		boffset = _deserialize_copy_wo_check(&_ee_DI_[i], data, boffset);
-	}
-	// End_AOx
-	//for (int i = 0; i < 1; ++i) {
-	//	boffset = _deserialize_copy_wo_check(&_ee_AO_[i], data, boffset);
-	//}
-	// End_AIx
-	for (int i = 0; i < 1; ++i) {
-		boffset = _deserialize_copy_wo_check(&_ee_AI_[i], data, boffset);
-	}
-	*/
 
 	_deserialize_update(use_mtx);
 
