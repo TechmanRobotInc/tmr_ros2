@@ -8,7 +8,7 @@ class MinimalSubscriber : public rclcpp::Node
 {
   public:
     MinimalSubscriber()
-    : Node("tm_feedback_state")
+    : Node("demo_get_svr_response")
     {
       subscription_ = this->create_subscription<tm_msgs::msg::SvrResponse>(
       "svr_response", 10, std::bind(&MinimalSubscriber::topic_callback, this, _1));

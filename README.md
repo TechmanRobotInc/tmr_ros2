@@ -10,21 +10,29 @@ This driver is for ROS2 Foxy version.
 
 If you want to use Dashing version, please go to our [Dashing version driver](https://github.com/TechmanRobotInc/tmr_ros2/tree/dashing-devel).
 
-If you want to know how to use this driver, please go to our [TM ROS1 driver](https://github.com/TechmanRobotInc/tmr_ros1)
+If you want to know how to use this driver, please go to [TM ROS1 driver](https://github.com/TechmanRobotInc/tmr_ros1).
 
 ### __ROS2 Driver__
 
 The driver for ROS2 publishes identical topics and provides identical services as ROS1 version, but for now there is no interface integration with MoveIt.  
-This driver uses _ros2 composition_, there are two nodes in the identical process:
+This driver uses _ROS2 composition_, there are two nodes in the identical process:
 one node publishes topics while the other node sets up service servers.
 
-> __Usage__
+> __ROS2 driver usage__
+
+> If you have set up the ROS2 environment and TM driver build based on a specific workspace, then type in your workspace`<workspace>` by starting a terminal, and remember to make the workspace visible to ROS.
+>
+> ```bash
+> source /opt/ros/foxy/setup.bash
+> cd <workspace>
+> source ./install/setup.bash
+> ```
 
 
->For example, execute the launch script to enable the driver to connect to tm5-900 robot  
+>Then, run the driver to connect to TM robot by type    
 >
 >```bash
->ros2 launch tm_driver tm5_900_bringup.py >robot_ip:=YOUR_ROBOT_IP_ADDRESS
+>ros2 run tm_driver tm_driver <robot_ip>
 >```
 >
 > __Techman robot vision__
@@ -32,16 +40,6 @@ one node publishes topics while the other node sets up service servers.
 > - type: sensor_msgs::msg::Image
 > - message name: techman_image
 
-### __Installation__
-
-> __Building from source__
->
-> 1. install ROS and dependency :  
-__for ROS2 :__  
-install ROS2 (dashing)  
-install ros-dashing-ros1-bridge
-> 2. create workspace and clone package folder into _${WORKSPACE}/src_  
-> 3. ```catkin_make```
 
 ## __3. Usage__
 
@@ -129,28 +127,8 @@ Click on the __Data Table Setting__ button and check the following boxes:
 > 8. Finally, assign a name to the model in  the __Model name__ blank text and click the __Save__ button.
 > ![save_model](figures/save_model.png)
 
-### __TM ROS driver usage__
 
-> Change the current working directory of the terminal to your workspace`<workspace>`and set up the environment.
->
-> ```bash
-> cd <workspace>
-> source devel/setup.bash
-> ```
->
-> Manipulate the virtual TM robot:
->
-> ```bash
-> roslaunch tm5_900_moveit_config tm5_900_moveit_planning_execution.launch sim:=True
-> ```
->
-> You can also manipulate TM robot in the real world:
->
-> ```bash
-> roslaunch tm5_900_moveit_config tm5_900_moveit_planning_execution.launch sim:=False robot_ip:=<robot_ip>
-> ```
->
-> The parameter `<robot_ip>` means the IP address of the robot control pc.
+
 
 ## __4. Vision__
 
@@ -168,20 +146,14 @@ Click on the __Data Table Setting__ button and check the following boxes:
 >   4. waitress
 >   5. datetime
 >
-> __Installation__
 >
-> Create a dictionary and downlaod the repository.
->
->```bash
-> mkdir ~/techman_ros2
-> cd ~/techman_ros2
-> colon build
-> ```
->
+
 > __The Techman Robot ROS2 node which publishes image data__
+
+> Under all environment settings have been finished with your workspace`<workspace>`, then type
 >
 > ```bash
-> cd ~/techman_ros2 && source install/setup.bash
+> cd ~/workspace && source install/setup.bash
 > ros2 run tm_get_status image_talker
 > ```
 >
@@ -193,8 +165,8 @@ Click on the __Data Table Setting__ button and check the following boxes:
 >
 > The viewer will display image data from _TMFlow_.
 
-## __3. Demo code__
-There are some demo codes to show how to use this driver.
+## __5. Code of Demo__
+There are some demo codes showing  how to use this driver.
 
 > 1. demo_send_script:<br/>
 In this demo code, it shows how to send a listen node script to control the robot. <br/>
@@ -203,78 +175,90 @@ You can use service named "send_script" to send script.<br/>
 "script"-> the script which you want to send.<br/>
 "ok" -> Correctness of the script.
 > 2. demo_ask_item:<br/>
-In this demo code, you can send TMSCT cmd by using this service. More details please refer to the Expression Editor and Listen Node.pdf(Chapter TMSCT<br/>
+In this demo code, you can use this service to send TMSCT cmd. More details please refer to the Expression Editor and Listen Node.pdf(Chapter7.4 TMSCT)<br/>
 > 3. demo_ask_sta:<br/>
-In this demo code, you can send TMSTA cmd by using this service. More details please refer to the Expression Editor and Listen Node.pdf(Chapter TMSTA<br/>
+In this demo code, you can use this service to send TMSTA cmd. More details please refer to the Expression Editor and Listen Node.pdf(Chapter7.5 TMSTA)<br/>
 > 4. demo_connect_tm:<br/>
-In this demo code, you can set connection. <br/>
+In this demo code, you can set the connection type. <br/>
 If you set to reconnect as true, every time when driver disconnects from listen node, it will try to re-connect it.<br/>
-There are two topics you can use, one is "connect_tmsvr" which is setting ethercad server connection, and the other is "connect_tmsct" which is setting TM-Flow connection.<br/>
+There are two kind connection settings you can select, one is "connect_tmsvr" for EtherCAT server connection, and the other is "connect_tmsct" for setting TM-Flow connection.<br/>
 > 5. demo_set_event:<br/>
-In this demo code, there are six types of events you can use.<br/> 
-func: You can use TAG, WAIT_TAG, STOP, PAUSE, RESUME and EXIT<br/>
-arg0: if fun is TAG or WAIT_TAG, arg0 is timeout in ms<br/>
-arg1: if fun is TAG or WAIT_TAG, arg1 is id<br/>
+In this demo code, six event types can be selected.<br/> 
+func: TAG, WAIT_TAG, STOP, PAUSE, RESUME and EXIT<br/>
+arg0: if func is TAG or WAIT_TAG, arg0 is timeout in ms<br/>
+arg1: if func is TAG or WAIT_TAG, arg1 is id<br/>
 > 6. demo_set_io:<br/>
-In this demo code, you should set module, type, pin and state.More details please refer to the Expression Editor and Listen Node.pdf(Chapter IO<br/>
+In this demo code, you should set module, type, pin and state. More details please refer to the Expression Editor and Listen Node.pdf(Chapter6.5 IO)<br/>
 module : MODULE_CONTROLBOX or MODULE_ENDEFFECTOR<br/>
 type: TYPE_DIGITAL_IN, TYPE_DIGITAL_OUT, TYPE_INSTANT_DO, TYPE_ANALOG_IN, TYPE_ANALOG_OUT, TYPE_INSTANT_AO<br/>
 pin: pin number<br/>
 state: STATE_OFF or STATE_ON or other value(if digitial IO)<br/>
 > 7. demo_set_positions:<br/>
-In this demo, you should be careful all units are not degree, they are rad.<br/>
-motion_type : PTP_J , PTP_T , LINE_J , LINE_T , CIRC_J ,CIRC_T , PLINE_J ,PLINE_T.  More details please refer to the Expression Editor and Listen Node.pdf(Chapter PTP, Line, Circle, Pline, Move_PTP, Move_Line, Move_PLine) <br/>
+In this demo, you should be careful with parameter units to operation.<br/>
+motion_type : PTP_J , PTP_T , LINE_J , LINE_T , CIRC_J ,CIRC_T , PLINE_J ,PLINE_T.  More details please refer to the Expression Editor and Listen Node.pdf(Chapter8 PTP, Line, Circle, Pline, Move_PTP, Move_Line, Move_PLine) <br/>
 positions : target position or target joint(rad)<br/>
 velocity : joint velocity-> max value is Pi -> 3.14 rad/s , line velocity ->m/s <br/>
 acc_time : to max speed time in millisecond<br/>
 blend_percentage : 0 has no blending
-fine_goal : in true case, controller will check the error of the final position and you should wait few ms<br/>
+fine_goal : In a real situation, the controller will check the erro of the final position and should wait a few milliseconds.<br/>
 > 8. demo_write_item: <br/>
-In this demo code, you can send TMSVR cmd by using this service. More details please refer to the Expression Editor and Listen Node.pdf(Chapter svr_write
+In this demo code, you can use this service to send TMSVR cmd. More details please refer to the Expression Editor and Listen Node.pdf(Chapter9.3 svr_write())
 > 9. demo_leave_listen_node:<br/>
 In this demo code, you can use send_script service sending a script to leave the listen node.
 
-## How to use demo code & driver
-1. Create a folder ``~/tm_driver`` by type<br/>
-``mkdir ~/tm_driver``<br/>
-``cd ~/tm_driver``
-2. Download this package by using git and change into dashing branch<br/>
+## Usage with demo code & driver
+> Note: If you have even successfully built a specific code(tmr_ros2), you only need to change to the TM driver workspace path  ``cd ~/tmdriver_ws`` , and then directly refer to steps 5~6 below. <br/>
+> 1. Type to create a root workspace directory by starting a terminal: For example,  ``tmdriver_ws`` or ``catkin_ws``, then type to change current directory into the workspace directory path.<br/>
+``mkdir ~/tmdriver_ws``<br/>
+``cd ~/tmdriver_ws``<br/>
+> 2. Clone the the TM driver of git repository into the current directory by typing<br/>
 ``git clone https://github.com/TechmanRobotInc/tmr_ros2.git``<br/>
-``git checkout dashing-devel``<br/>l
-3. Build the source code and set the path<br/>
+> 3. After the download done, rename the download folder ``tmr_ros2``(or ``tmr_ros2-master``) to ``src`` by typing<br/>
+``mv tmr_ros2 src``<br/>  (or right-click on the download folder, select "Rename...")<br/>
+> 4. At the workspace directory to build the download packages and source 'setup.bash' in this workspace to make the worksapce visible to ROS.<br/>
+Note: Do you set ``source /opt/ros/foxy/setup.bash`` ready? If check ok, then type below.<br/>
 ``colcon build``<br/>
 ``source ./install/setup.bash``<br/>
-4. Open a terminal and type<br/>
+> 5. In a new terminal: Source setup.bash in the workspace path and run the driver to connect to TM robot by typing<br/>
+``source ./install/setup.bash``<br/>
 ``ros2 run tm_driver tm_driver <robot_ip>``<br/>
-<robot_ip> is tm robot ip address, you can get it by TM Flow, for example 192.168.10.2
-5. Open another terminal and type which demo you want to try. 
-For example you want to try demo_set_io, you can type<br/>
+The <robot_ip> is the IP address of the TM robot, you can get it through TM Flow, for example 192.168.10.2<br/>
+> 6. In another new terminal: Source setup.bash in the workspace path and type specific demo node function which you want to study for applications. For example: you select to run demo_set_io, you can type<br/>
+``source ./install/setup.bash``<br/>
 ``ros2 run demo demo_set_io``<br/>
-:warning: Some demos will let the robot move, please be careful.
+>[CAUTION]:warning: Some demos will let the robot move, please be careful.<br/>
 
-## GUI debug and demo
-This GUI shows up tm_driver connection status, sct sta svr messages and robot status. You can use this GUI to check driver and robot connect status and send re-connect command and base on this GUI to modify.
 
-### How to use it
-1. Create a folder ``~/tm_driver`` by type<br/>
-``mkdir ~/tm_driver``<br/>
-``cd ~/tm_driver``
-2. Download this package by using git<br/>
+## TM GUI debugging and demonstration
+The GUI displays tm_driver connection status, sct, sta, svr messages and robot status. Easily judge the message between the driver and the robot through the GUI display. If the connection fails, you can also try to send a reconnect command on this GUI for debugging.
+
+### Usage with TM GUI debugging
+> Note: If you have even successfully built a specific code(tmr_ros2), you only need to change to the TM driver workspace path  ``cd ~/tmdriver_ws`` , and then directly refer to steps 5~6 below. <br/>
+> 1. Type to create a root workspace directory by starting a terminal: For example,  ``tmdriver_ws`` or ``catkin_ws``, then type to change current directory into the workspace directory path.<br/>
+``mkdir ~/tmdriver_ws``<br/>
+``cd ~/tmdriver_ws``
+> 2. Clone the the TM driver of git repository into the current directory by typing<br/>
 ``git clone https://github.com/TechmanRobotInc/tmr_ros2.git``<br/>
-3. Build the source code and set the path<br/>
+> 3. After the download done, rename the download folder ``tmr_ros2``(or ``tmr_ros2-master``) to ``src`` by typing<br/>
+``mv tmr_ros2 src``<br/>  (or right-click on the download folder, select "Rename...")<br/>
+> 4. At the workspace directory to build the download packages and source 'setup.bash' in this workspace to make the worksapce visible to ROS.<br/>
+Note: Do you set ``source /opt/ros/foxy/setup.bash`` ready? If cehck ok, then type below.<br/>
 ``colcon build``<br/>
 ``source ./install/setup.bash``<br/>
-4. Open a terminal and type<br/>
+> 5. In a new terminal: Source setup.bash in the workspace path and run the driver to connect to TM robot by typing<br/>
+``source ./install/setup.bash``<br/>
 ``ros2 run tm_driver tm_driver <robot_ip>``<br/>
-<robot_ip> is tm robot ip address, you can get it by TM Flow, for example 192.168.10.2
-5. Open another terminal and type<br/>
+The <robot_ip> is the IP address of the TM robot, you can get it through TM Flow, for example 192.168.10.2
+> 6. In another new terminal: Source setup.bash in the workspace path and start GUI debug by typing<br/>
+``source ./install/setup.bash``<br/>
 ``ros2 run ui_for_debug_and_demo robot_ui``<br/>
 
-### UI description
-1. When ``is_srv_connect`` and ``is_sct_connect`` are true, it means the all connection is success.
-2. If ``is_srv_connect`` is false, you should check the data table is correct or not.
-3. If ``is_sct_connect`` is false, you should check whether you run the project or not.
-4. If ``is_srv_connect`` and ``is_sct_connect`` are true, but ``robot link`` is false. It means you connect the TM project, but you are not in listen node, so you when you send the move command, it doesn't work.
-5. When you send a command or click ``"change control box IO"``, you can see ``"Robot Response"`` add a response item, the item details you can reference ``SctResponse.msg``, ``StaResponse.msg`` and ``SvrResponse.msg``.
-6. You can click ``"clear"`` to clear the old response items.
-7. If you didn't open the ``tm_ros_driver``, you will see all items show ``"Not ini"``.
+
+### Debugging description
+> * If ``is_srv_connect`` and ``is_sct_connect`` are true, it means that all connection is success.<br/>
+> * If ``is_srv_connect`` is false, you should check whether the data table is correct.<br/>
+> * If ``is_sct_connect`` is false, you should check whether the project is running.<br/>
+> * If ``is_srv_connect`` and ``is_sct_connect`` are true, and the ``robot link`` is false, it means that the driver has connected to the TM project, but the TMFlow listen node is set to abnormal. Therefore, when you send the move command, it does not work.<br/>
+> * When you send a command or click ``"change control box IO"``,  you will see a response item embedded in the ``Robot Response``. For details of this item, please refer to ``SctResponse.msg``, ``StaResponse.msg`` and ``SvrResponse.msg``.<br/>
+> * You can click ``"clear"`` to clear the old response items.<br/>
+> * If you forget to run the ``tm_ros_driver``, you will see all items displayed as ``"Not ini"``.<br/>

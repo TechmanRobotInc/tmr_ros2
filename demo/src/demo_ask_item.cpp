@@ -13,13 +13,13 @@ int main(int argc, char **argv)
   rclcpp::init(argc, argv);
 
 
-  std::shared_ptr<rclcpp::Node> node = rclcpp::Node::make_shared("ask_item_node");
+  std::shared_ptr<rclcpp::Node> node = rclcpp::Node::make_shared("demo_ask_item");
   rclcpp::Client<tm_msgs::srv::AskItem>::SharedPtr client =
     node->create_client<tm_msgs::srv::AskItem>("ask_item");
   auto request = std::make_shared<tm_msgs::srv::AskItem::Request>();
   request->id = "demo";
   request->item = "HandCamera_Value";
-  request->wait_time = 0;
+  request->wait_time = 1;
  
   while (!client->wait_for_service(1s)) {
     if (!rclcpp::ok()) {

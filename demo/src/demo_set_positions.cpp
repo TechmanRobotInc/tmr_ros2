@@ -12,7 +12,7 @@ int main(int argc, char **argv)
   rclcpp::init(argc, argv);
 
 
-  std::shared_ptr<rclcpp::Node> node = rclcpp::Node::make_shared("demo_node");
+  std::shared_ptr<rclcpp::Node> node = rclcpp::Node::make_shared("demo_set_positions");
   rclcpp::Client<tm_msgs::srv::SetPositions>::SharedPtr client =
     node->create_client<tm_msgs::srv::SetPositions>("set_positions");
   
