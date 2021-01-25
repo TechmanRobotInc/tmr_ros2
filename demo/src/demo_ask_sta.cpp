@@ -13,14 +13,14 @@ int main(int argc, char **argv)
   rclcpp::init(argc, argv);
 
 
-  std::shared_ptr<rclcpp::Node> node = rclcpp::Node::make_shared("demo_node");
+  std::shared_ptr<rclcpp::Node> node = rclcpp::Node::make_shared("demo_ask_sta");
   rclcpp::Client<tm_msgs::srv::AskSta>::SharedPtr client =
     node->create_client<tm_msgs::srv::AskSta>("ask_sta");
   
   auto request = std::make_shared<tm_msgs::srv::AskSta::Request>();
   request->subcmd = "00";
   request->subdata = "";
-  request->wait_time = 0;
+  request->wait_time = 1;
 
   while (!client->wait_for_service(1s)) {
     if (!rclcpp::ok()) {

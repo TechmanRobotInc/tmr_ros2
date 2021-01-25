@@ -12,7 +12,7 @@ int main(int argc, char **argv)
   rclcpp::init(argc, argv);
 
 
-  std::shared_ptr<rclcpp::Node> node = rclcpp::Node::make_shared("demo_node");
+  std::shared_ptr<rclcpp::Node> node = rclcpp::Node::make_shared("demo_set_io");
   rclcpp::Client<tm_msgs::srv::SetIO>::SharedPtr client =
     node->create_client<tm_msgs::srv::SetIO>("set_io");
   
