@@ -32,7 +32,7 @@ one node publishes topics while the other node sets up service servers.
 > If the user have set up the ROS2 environment and TM driver build based on a specific workspace, then type in your workspace`<workspace>` by starting a terminal, and remember to make the workspace visible to ROS.
 >
 > ```bash
-> source /opt/ros/dashing-devel/setup.bash
+> source /opt/ros/dashing/setup.bash
 > cd <workspace>
 > source ./install/setup.bash
 > ```
@@ -227,7 +227,7 @@ or<br/>
 > 3. After the download done, rename the download folder ``tmr_ros2``(or ``tmr_ros2-dashing-devel``) to ``src`` by typing<br/>
 ``mv tmr_ros2 src``<br/>  (or right-click on the download folder, select "Rename...")<br/>
 > 4. At the workspace directory to build the download packages and source 'setup.bash' in this workspace to make the worksapce visible to ROS.<br/>
-Note: Do you set ``source /opt/ros/dashing-devel/setup.bash`` ready? Make sure to obtain the correct setup file according to your workspace hierarchy, and then type the following below to compile.<br/>
+Note: Do you set ``source /opt/ros/dashing/setup.bash`` ready? Make sure to obtain the correct setup file according to your workspace hierarchy, and then type the following below to compile.<br/>
 ``colcon build``<br/>
 ``source ./install/setup.bash``<br/>
 > 5. In a new terminal: Source setup.bash in the workspace path and run the driver to connect to TM robot by typing<br/>
@@ -254,7 +254,7 @@ The GUI displays tm_driver connection status, sct, sta, svr messages and robot s
 > 3. After the download done, rename the download folder ``tmr_ros2``(or ``tmr_ros2-dashing-devel``) to ``src`` by typing<br/>
 ``mv tmr_ros2 src``<br/>  (or right-click on the download folder, select "Rename...")<br/>
 > 4. At the workspace directory to build the download packages and source 'setup.bash' in this workspace to make the worksapce visible to ROS.<br/>
-Note: Do you set ``source /opt/ros/dashing-devel/setup.bash`` ready? Make sure to obtain the correct setup file according to your workspace hierarchy, and then type the following below to compile.<br/>
+Note: Do you set ``source /opt/ros/dashing/setup.bash`` ready? Make sure to obtain the correct setup file according to your workspace hierarchy, and then type the following below to compile.<br/>
 ``colcon build``<br/>
 ``source ./install/setup.bash``<br/>
 > 5. In a new terminal: Source setup.bash in the workspace path and run the driver to connect to TM robot by typing<br/>
