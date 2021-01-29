@@ -12,12 +12,12 @@ If the user want to know how to use ROS1 driver, please go to [TM ROS1 driver](h
 
 
 More information: TM ROS driver list
-|ROS Distribution|TM ROS driver version|Remark: switch GitHub branches|
+|ROS Distribution (ROS Environment Setup)|TM ROS driver version|Remark: switch GitHub branches|
 |:---|:---|:---:|
 |[**<font color=#808080>ROS Noetic Ninjemys**](http://wiki.ros.org/noetic)|[<font color=#0000FF>**TM ROS1 Noetic driver**](https://github.com/TechmanRobotInc/tmr_ros1/tree/noetic)|noetic|
 |[**<font color=#808080>ROS Melodic Morenia**](http://wiki.ros.org/melodic)|[<font color=#0000FF>**TM ROS1 Melodic driver**](https://github.com/TechmanRobotInc/tmr_ros1/)|master|
 |[**<font color=#808080>ROS 2 Foxy Fitzroy**](https://index.ros.org/doc/ros2/Releases/Release-Foxy-Fitzroy/)|[**<font color=#800000>TM ROS2 Foxy driver**](https://github.com/TechmanRobotInc/tmr_ros2)|master|
-|[**<font color=#808080>ROS 2 Dashing Diademata**](https://index.ros.org/doc/ros2/Releases/)|[<font color=#800000>**TM ROS2 Dashing driver**](https://github.com/TechmanRobotInc/tmr_ros2/tree/dashing-devel)|dashing-devel|
+|[**<font color=#808080>ROS 2 Dashing Diademata**](https://index.ros.org/doc/ros2/Releases/Release-Dashing-Diademata/)|[<font color=#800000>**TM ROS2 Dashing driver**](https://github.com/TechmanRobotInc/tmr_ros2/tree/dashing-devel)|dashing-devel|
 Note: The two current master branches are ROS1 Melodic and ROS2 Foxy.
 
 
@@ -28,26 +28,24 @@ This driver uses _ROS2 composition_, there are two nodes in the identical proces
 one node publishes topics while the other node sets up service servers.
 
 > __ROS2 driver usage__
-
-> If the user have set up the ROS2 environment and TM driver build based on a specific workspace, then type in your workspace`<workspace>` by starting a terminal, and remember to make the workspace visible to ROS.
+> 
+> After the user has set up the ROS2 environment and built the TM driver based on the specific workspace, please enter your workspace `<workspace>` by launching the terminal, and remember to make the workspace visible to ROS.
+> 
 >
 > ```bash
 > source /opt/ros/dashing/setup.bash
 > cd <workspace>
 > source ./install/setup.bash
 > ```
-
-
->Then, run the driver to connect to TM robot by type    
+> :warning: Do you prepare the TM Robot ready ? Make sure that TM Robot's operating software (TMFlow) system/network settings are ready and the listening node is running. 
+> 
+>Then, run the driver to maintain the connection with the TM Robot by type 
 >
 >```bash
 >ros2 run tm_driver tm_driver <robot_ip>
 >```
 >
-> __Techman robot vision__
->
-> - type: sensor_msgs::msg::Image
-> - message name: techman_image
+>Now, you can use a new terminal to run each ROS node or command, but don't forget to source the correct setup shell files as starting a new terminal.
 
 
 ## __3. Usage__
@@ -122,7 +120,7 @@ Click on the __Data Table Setting__ button and check the following boxes:
 > ![choose_add_parameters](figures/choose_add_parameters.png)
 > In TMflow 1.80 version, click the __Setting__ button.
 >![change2](figures/change2.png)
-
+>
 > 6. To check whether the connection succeeds or not, please enter ``ROS_COMPUTER_IP:6189/api`` in the __HTTP Parameters__ blank text and click the __Send__ button to get the information of the remote computer for ROS.
 > ![check_connect_success](figures/check_connect_success.png)
 >
@@ -153,10 +151,13 @@ Click on the __Data Table Setting__ button and check the following boxes:
 >   4. waitress
 >   5. datetime
 >
+> __Techman robot vision__
 >
-
-> __The Techman Robot ROS2 node which publishes image data__
-
+> - type: sensor_msgs::msg::Image
+> - message name: techman_image
+> 
+> __Techman Robot ROS2 node which publishes image data__
+> 
 > Under all environment settings have been finished with your workspace`<workspace>`, then type
 >
 > ```bash
@@ -230,10 +231,10 @@ or<br/>
 Note: Do you set ``source /opt/ros/dashing/setup.bash`` ready? Make sure to obtain the correct setup file according to your workspace hierarchy, and then type the following below to compile.<br/>
 ``colcon build``<br/>
 ``source ./install/setup.bash``<br/>
-> 5. In a new terminal: Source setup.bash in the workspace path and run the driver to connect to TM robot by typing<br/>
+> 5. In a new terminal: Source setup.bash in the workspace path and run the driver to connect to TM Robot by typing<br/>
 ``source ./install/setup.bash``<br/>
 ``ros2 run tm_driver tm_driver <robot_ip>``<br/>
-The <robot_ip> is the IP address of the TM robot, the user can get it through TM Flow, for example 192.168.10.2<br/>
+The <robot_ip> is the IP address of the TM Robot, the user can get it through TM Flow, for example 192.168.10.2<br/>
 > 6. In another new terminal: Source setup.bash in the workspace path and type specific demo node function which the user want to study for applications. For example: the user select to run demo_set_io, the user can type<br/>
 ``source ./install/setup.bash``<br/>
 ``ros2 run demo demo_set_io``<br/>
@@ -257,10 +258,10 @@ The GUI displays tm_driver connection status, sct, sta, svr messages and robot s
 Note: Do you set ``source /opt/ros/dashing/setup.bash`` ready? Make sure to obtain the correct setup file according to your workspace hierarchy, and then type the following below to compile.<br/>
 ``colcon build``<br/>
 ``source ./install/setup.bash``<br/>
-> 5. In a new terminal: Source setup.bash in the workspace path and run the driver to connect to TM robot by typing<br/>
+> 5. In a new terminal: Source setup.bash in the workspace path and run the driver to connect to TM Robot by typing<br/>
 ``source ./install/setup.bash``<br/>
 ``ros2 run tm_driver tm_driver <robot_ip>``<br/>
-The <robot_ip> is the IP address of the TM robot, the user can get it through TM Flow, for example 192.168.10.2
+The <robot_ip> is the IP address of the TM Robot, the user can get it through TM Flow, for example 192.168.10.2
 > 6. In another new terminal: Source setup.bash in the workspace path and start GUI debug by typing<br/>
 ``source ./install/setup.bash``<br/>
 ``ros2 run ui_for_debug_and_demo robot_ui``<br/>
