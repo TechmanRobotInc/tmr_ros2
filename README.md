@@ -11,12 +11,12 @@ For using the driver, please make sure your ROS PC is installed correct.<br/>
 If the user want to know how to use ROS1 driver, please go to [TM ROS1 driver](https://github.com/TechmanRobotInc/tmr_ros1).
 
 More information: TM ROS driver list
-|ROS Distribution (ROS Environment Setup)|TM ROS driver version|Remark: switch GitHub branches|
-|:---|:---|:---:|
-|[**<font color=#808080>ROS Noetic Ninjemys**](http://wiki.ros.org/noetic)|[<font color=#0000FF>**TM ROS1 Noetic driver**](https://github.com/TechmanRobotInc/tmr_ros1/tree/noetic)|noetic|
-|[**<font color=#808080>ROS Melodic Morenia**](http://wiki.ros.org/melodic)|[<font color=#0000FF>**TM ROS1 Melodic driver**](https://github.com/TechmanRobotInc/tmr_ros1/)|master|
-|[**<font color=#808080>ROS 2 Foxy Fitzroy**](https://index.ros.org/doc/ros2/Releases/Release-Foxy-Fitzroy/)|[**<font color=#800000>TM ROS2 Foxy driver**](https://github.com/TechmanRobotInc/tmr_ros2)|master|
-|[**<font color=#808080>ROS 2 Dashing Diademata**](https://index.ros.org/doc/ros2/Releases/Release-Dashing-Diademata/)|[<font color=#800000>**TM ROS2 Dashing driver**](https://github.com/TechmanRobotInc/tmr_ros2/tree/dashing-devel)|dashing-devel|
+|ROS Distribution (ROS Environment Setup)|TM ROS driver version|TM ROS Vision|Remark: switch GitHub branches|
+|:---|:---|:---:|:---:|
+|[**<font color=#808080>ROS Noetic Ninjemys**](http://wiki.ros.org/noetic)|[<font color=#0000FF>**TM ROS1 Noetic driver**](https://github.com/TechmanRobotInc/tmr_ros1/tree/noetic)|x|noetic|
+|[**<font color=#808080>ROS Melodic Morenia**](http://wiki.ros.org/melodic)|[<font color=#0000FF>**TM ROS1 Melodic driver**](https://github.com/TechmanRobotInc/tmr_ros1/)|x|master|
+|[**<font color=#808080>ROS 2 Foxy Fitzroy**](https://index.ros.org/doc/ros2/Releases/Release-Foxy-Fitzroy/)|[**<font color=#800000>TM ROS2 Foxy driver**](https://github.com/TechmanRobotInc/tmr_ros2)|supported|master|
+|[**<font color=#808080>ROS 2 Dashing Diademata**](https://index.ros.org/doc/ros2/Releases/Release-Dashing-Diademata/)|[<font color=#800000>**TM ROS2 Dashing driver**](https://github.com/TechmanRobotInc/tmr_ros2/tree/dashing-devel)|supported|dashing-devel|
 Note: The two current master branches are ROS1 Melodic and ROS2 Foxy.
 
 
@@ -40,8 +40,9 @@ one node publishes topics while the other node sets up service servers.
 >Then, run the driver to connect to TM Robot by type    
 >
 >```bash
->ros2 run tm_driver tm_driver <robot_ip>
+>ros2 run tm_driver tm_driver <robot_ip_address>
 >```
+>Example :``ros2 run tm_driver tm_driver 192.168.10.2``, if your  <robot_ip_address> is 192.168.10.2
 >
 >Now, you can use a new terminal to run each ROS node or command, but don't forget to source the correct setup shell files as starting a new terminal.
 
@@ -229,8 +230,8 @@ Note: Do you set ``source /opt/ros/foxy/setup.bash`` ready? Make sure to obtain 
 ``source ./install/setup.bash``<br/>
 > 5. In a new terminal: Source setup.bash in the workspace path and run the driver to connect to TM Robot by typing<br/>
 ``source ./install/setup.bash``<br/>
-``ros2 run tm_driver tm_driver <robot_ip>``<br/>
-The <robot_ip> is the IP address of the TM Robot, the user can get it through TM Flow, for example 192.168.10.2<br/>
+``ros2 run tm_driver tm_driver <robot_ip_address>``<br/>
+The <robot_ip_address> is the IP address of the TM Robot, the user can get it through TM Flow, for example 192.168.10.2<br/>
 > 6. In another new terminal: Source setup.bash in the workspace path and type specific demo node function which the user want to study for applications. For example: the user select to run demo_set_io, the user can type<br/>
 ``source ./install/setup.bash``<br/>
 ``ros2 run demo demo_set_io``<br/>
@@ -256,8 +257,8 @@ Note: Do you set ``source /opt/ros/foxy/setup.bash`` ready? Make sure to obtain 
 ``source ./install/setup.bash``<br/>
 > 5. In a new terminal: Source setup.bash in the workspace path and run the driver to connect to TM Robot by typing<br/>
 ``source ./install/setup.bash``<br/>
-``ros2 run tm_driver tm_driver <robot_ip>``<br/>
-The <robot_ip> is the IP address of the TM Robot, the user can get it through TM Flow, for example 192.168.10.2
+``ros2 run tm_driver tm_driver <robot_ip_address>``<br/>
+The <robot_ip_address> is the IP address of the TM Robot, the user can get it through TM Flow, for example 192.168.10.2
 > 6. In another new terminal: Source setup.bash in the workspace path and start GUI debug by typing<br/>
 ``source ./install/setup.bash``<br/>
 ``ros2 run ui_for_debug_and_demo robot_ui``<br/>
