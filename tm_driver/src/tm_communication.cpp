@@ -183,7 +183,6 @@ TmCommRC TmCommRecv::spin_once(int timeval_ms, int *n)
 	TmCommRC rc = TmCommRC::OK;
 	int nb = 0;
 	int rv = 0;
-	//int sp = 0;
 	timeval tv;
 
 	// fake
@@ -392,14 +391,13 @@ bool TmCommunication::Connect(int timeout_ms)
     timeout.tv_sec = timeout_ms/1000;
     timeout.tv_usec = 0;
 
-    if (setsockopt (_sockfd, SOL_SOCKET, SO_RCVTIMEO, (char *)&timeout,
-                sizeof(timeout)) < 0){
-        print_info("setsockopt failed\n");
+    if (setsockopt (_sockfd, SOL_SOCKET, SO_RCVTIMEO, (char *)&timeout,sizeof(timeout)) < 0){
+        print_error("setsockopt failed\n");
 	}
+        
 
-    if (setsockopt (_sockfd, SOL_SOCKET, SO_SNDTIMEO, (char *)&timeout,
-                sizeof(timeout)) < 0){
-        print_info("setsockopt failed\n");
+    if (setsockopt (_sockfd, SOL_SOCKET, SO_SNDTIMEO, (char *)&timeout,sizeof(timeout)) < 0){
+		print_error("setsockopt failed\n");
 	}
         
 

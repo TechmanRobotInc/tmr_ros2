@@ -8,7 +8,8 @@ The TM Robot is a state-of-the-art production tool that is highly compatible and
 
 This driver is for <u>**ROS2 Foxy**</u> version. <br/>
 For using the driver, please make sure your ROS PC is installed correct.<br/>
-If the user want to know how to use ROS1 driver, please go to [TM ROS1 driver](https://github.com/TechmanRobotInc/tmr_ros1).
+If the user want to know how to use ROS1 driver, please go to [TM ROS1 driver](https://github.com/TechmanRobotInc/tmr_ros1).<br/>
+
 
 More information: TM ROS driver list
 |ROS Distribution (ROS Environment Setup)|TM ROS driver version|TM ROS Vision|Remark: switch GitHub branches|
@@ -30,6 +31,7 @@ one node publishes topics while the other node sets up service servers.
 > 
 > After the user has set up the ROS2 environment and built the TM driver based on the specific workspace, please enter your workspace `<workspace>` by launching the terminal, and remember to make the workspace visible to ROS. 
 >
+>
 > ```bash
 > source /opt/ros/foxy/setup.bash
 > cd <workspace>
@@ -37,14 +39,14 @@ one node publishes topics while the other node sets up service servers.
 > ```
 > :warning: Do you prepare the TM Robot ready ? Make sure that TM Robot's operating software (TMFlow) system/network settings are ready and the listening node is running. 
 > 
->Then, run the driver to connect to TM Robot by type    
+>Then, run the driver to maintain the connection with the TM Robot by type 
 >
 >```bash
 >ros2 run tm_driver tm_driver <robot_ip_address>
 >```
->Example :``ros2 run tm_driver tm_driver 192.168.10.2``, if your  <robot_ip_address> is 192.168.10.2
+>Example :``ros2 run tm_driver tm_driver 192.168.10.2``, if the <robot_ip_address> is 192.168.10.2
 >
->Now, you can use a new terminal to run each ROS node or command, but don't forget to source the correct setup shell files as starting a new terminal.
+>Now, the user can use a new terminal to run each ROS node or command, but don't forget to source the correct setup shell files as starting a new terminal.
 
 
 ## __3. Usage__
@@ -97,8 +99,9 @@ Click on the __Data Table Setting__ button and check the following boxes:
 >
 > :warning: Before going through the following steps, please build the vision ROS node on other  (remote) computer and then connect this computer to the local techman robot computer.
 >
-> 1. Access the techman robot HMI and create a vision task.
-> 2. Click the __AOI -only__ icon.
+> 1. Access the techman robot HMI and create a vision task.<br/>
+> ![create_a_vision_task](figures/create_a_vision_task.png)
+> 2. Click the __AOI -only__ icon.<br/>
 > ![choose_aoi_only](figures/choose_aoi_only.png)
 >
 >TMflow 1.76 second version only:<br/> 
@@ -120,7 +123,8 @@ Click on the __Data Table Setting__ button and check the following boxes:
 > In TMflow 1.80 version, click the __Setting__ button.
 >![change2](figures/change2.png)
 >
-> 6. To check whether the connection succeeds or not, please enter ``ROS_COMPUTER_IP:6189/api`` in the __HTTP Parameters__ blank text and click the __Send__ button to get the information of the remote computer for ROS.
+> 6. To check whether the connection succeeds or not, please enter ``<user_pc_ip_address>:6189/api`` in the __HTTP Parameters__ blank text and click the __Send__ button to get the information of the remote computer for ROS.<br/>
+> The `<user_pc_ip_address>` means the IP address of the user's ROS pc, for example 192.168.2.12<br/>
 > ![check_connect_success](figures/check_connect_success.png)
 >
 >       If the connection fails, __TIMEOUT__ error will be displayed in the window
@@ -128,10 +132,32 @@ Click on the __Data Table Setting__ button and check the following boxes:
 >
 >       If the IP address of the (remote) ROS computer doesn't exist, **ERROR_CODE_7** will be displayed in the window.
 > ![wrong_port](figures/wrong_port.png)
-> 7. Enter ``ROS_COMPUTER_IP:6189/api/DET`` in the URL blank text and type arbitrary letters in the __Value__ blank text; the __Key__ will be generated automatically.
+> 7. Enter ``<user_pc_ip_address>:6189/api/DET`` in the URL blank text and type arbitrary letters in the __Value__ blank text; the __Key__ will be generated automatically.
 > ![add_model](figures/add_model.png)
 > 8. Finally, assign a name to the model in  the __Model name__ blank text and click the __Save__ button.
 > ![save_model](figures/save_model.png)
+>
+### __TM ROS driver usage__
+
+> __Usage with MoveIt2 (Tentative)__ 
+>
+> See [Moveit2 tutorial](https://moveit.ros.org/install-moveit2/source/).<br/>
+>
+>The demo launches the RViz GUI and demonstrates planning and execution of a simple collision-free motion plan with the TM robot.
+>To bring up MoveIt2 demo environment in simulation mode with virtual TM Robot, by type
+>
+> ```bash
+> ros2 launch tmr_run_moveit_cpp_demo run_moveit_cpp.launch.py
+> ```
+>
+> The user can also manipulate real TM Robot to run:
+>
+> ```bash
+> ros2 launch tmr_run_moveit_cpp_demo run_moveit_cpp.launch.py robot_ip:=<robot_ip_address>
+> ```
+>
+> The parameter `<robot_ip_address>` means the IP address of the robot control pc.<br/>
+>[CAUTION]:warning: This demo will let the real TM robot move, please be careful.<br/>
 
 
 ## __4. Vision__

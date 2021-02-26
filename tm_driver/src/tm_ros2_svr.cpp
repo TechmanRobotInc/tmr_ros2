@@ -146,7 +146,6 @@ bool TmSvrRos2::publish_func()
             // cpe response
 
         }
-        
         else if (pack.type == TmPacket::Header::TMSVR) {
 
             svr.err_data.error_code(TmCPError::Code::Ok);
