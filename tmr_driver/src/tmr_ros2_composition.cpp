@@ -14,17 +14,21 @@ int main(int argc, char *argv[])
   std::string host;
   if (argc > 1) {
     host = argv[1];
-    if (host.find("ip:=") != std::string::npos) {
-      host.replace(host.begin(), host.begin() + 4, "");
-      is_fake = false;
-    }
+    //std::cout<<"host is "<<host<<std::endl;
     if (host.find("robot_ip:=") != std::string::npos) {
+      //std::cout<<"robot_ip is work"<<std::endl;
       host.replace(host.begin(), host.begin() + 10, "");
       is_fake = false;
-    }
+    } else if (host.find("ip:=") != std::string::npos) {
+      //std::cout<<"ip is work"<<std::endl;
+      host.replace(host.begin(), host.begin() + 4, "");
+      is_fake = false;
+    } else{
+      //std::cout<<"ip is not found, use fake robot"<<std::endl;
+    }    
   }
   if (is_fake) {
-    std::cout << "No. ip or robot_ip, is_fake:=true\n";
+    std::cout << "only ip or robot_ip support, but your type is "<<host<<std::endl;
   }
 
   rclcpp::executors::SingleThreadedExecutor exec;
