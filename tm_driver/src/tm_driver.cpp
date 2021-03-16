@@ -102,6 +102,7 @@ bool TmDriver::set_joint_pos_PTP(const std::vector<double> &angs,
 		double vel, double acc_time, int blend_percent, bool fine_goal, const std::string &id)
 {
 	int vel_pa = int(100.0 * (vel / _max_velocity));
+	if (vel_pa >= 100) vel_pa = 100; //max 100%
 	return (sct.send_script_str(
 		id, TmCommand::set_joint_pos_PTP(angs, vel_pa, acc_time, blend_percent, fine_goal)
 	) == RC_OK);
