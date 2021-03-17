@@ -11,7 +11,7 @@ For using the driver, please make sure your ROS PC is installed correct.<br/>
 If the user want to know how to use ROS1 driver, please go to [TM ROS1 driver](https://github.com/TechmanRobotInc/tmr_ros1).<br/>
 
 
-More information: TM ROS driver list
+More information: TM ROS driver support list
 |ROS Distribution (ROS Environment Setup)|TM ROS driver version|TM ROS Vision|Remark: switch GitHub branches|
 |:---|:---|:---:|:---:|
 |[**<font color=#808080>ROS Noetic Ninjemys**](http://wiki.ros.org/noetic)|[**<font color=#0000FF>TM ROS1 Noetic driver**](https://github.com/TechmanRobotInc/tmr_ros1/tree/noetic)|x|noetic|
@@ -27,6 +27,10 @@ Note: The two current master branches are ROS1 Melodic and ROS2 Foxy.<br/>
 The driver for ROS2 publishes identical topics and provides identical services as [TM ROS1 version](https://github.com/TechmanRobotInc/tmr_ros1).<br/>
 This driver uses _ROS2 composition_, there are two nodes in the identical process:
 one node publishes topics while the other node sets up service servers.
+
+### __Installation__
+Just clone the TM ROS driver of git repository into your working directory and then built it.<br/>
+The user can directly refer to the chapters introduced in the following text: steps 1 to 4 of __&sect; Usage with demo code & driver__.<br/>
 
 
 ## __3. Usage__
@@ -102,7 +106,7 @@ Enable the `Data Table Setting` item and check the following boxes as item prede
 > cd <workspace>
 > source ./install/setup.bash
 > ```
-> :warning: Do you prepare __TM Robot__ ready ? Make sure that TM Robot's operating software (__TMflow__) system/network settings are ready and the __Listen node__ is running. 
+> :bulb: Do you prepare __TM Robot__ ready ? Make sure that TM Robot's operating software (__TMflow__) system/network settings are ready and the __Listen node__ is running. 
 > 
 > Then, run the driver to maintain the connection with TM Robot by typing 
 >
@@ -124,7 +128,6 @@ Enable the `Data Table Setting` item and check the following boxes as item prede
 
 ### &sect; __TM ROS Vision usage__
 > Get image data through TMvision&trade; of TM Robot **(Built-in Vision System)**  
-> :warning: This package can be built and run in ROS2 Dashing. Other versions might not work.
 >
 > __Dependencies__
 >
@@ -155,7 +158,7 @@ Enable the `Data Table Setting` item and check the following boxes as item prede
 
 ### &sect; __TMflow Vision node setup__
 > The __Vision node__ provides the creation of a plane with fixed-point type, servo type, and object type as well as a variety of AOI identification functions.<br/>
-> :warning: Before going through the following steps, please build the TM ROS Vision driver node on your (remote) computer and then connect this (remote) computer to the local TM Robot computer.
+> :bulb: Before going through the following steps, please build the TM ROS Vision driver node on your (remote) computer and then connect this (remote) computer to the local TM Robot computer.
 >
 > 1. Create a _Vision task_ project of __TMflow__ software, and then drag the __Vision node__  from the _nodes menu_ onto the project flow, as shown below.<br/>
 > ![create_a_vision_task](figures/create_a_vision_task.png)
@@ -192,14 +195,16 @@ Enable the `Data Table Setting` item and check the following boxes as item prede
 > ![wrong_port](figures/wrong_port.png)
 > 7. Enter ``<user_pc_ip_address>:6189/api/DET`` in the URL blank text and type arbitrary letters in the __Value__ blank text; the __Key__ will be generated automatically.
 > ![add_model](figures/add_model.png)
-> 8. Finally, assign a name to the model in  the __Model name__ blank text and click the __Save__ button.
+> 8. Assign a name to the model in  the __Model name__ blank text and click the __Save__ button.
 > ![save_model](figures/save_model.png)
+>
+> 9. Press the Play/Pause Button on the Robot Stick to start running this _Vision task_ project.
 >
 >    Note: TMflow software version changes may have slightly different settings.([SW1.76_Rev2.00](https://www.tm-robot.com/zh-hant/wpdmdownload/software-manual-tmflow_sw1-76_rev2-00/)) ([SW1.80_Rev2.00](https://www.tm-robot.com/zh-hant/wpdmdownload/software-manual-tmflow_sw1-80_rev2-00-2/))<br/>
 
 
 ###  &sect; __Receive image data on the user's computer from TMflow Vision node__
-> :warning: Do you prepare the TM Robot ready ? Make sure that TM Robot's operating software (TMflow) relative __HTTP Parameters__ Vision settings are ready and the _Vision task_ project is running.<br/>
+> :bulb: Do you prepare the TM Robot ready ? Make sure that TM Robot's operating software (TMflow) relative __HTTP Parameters__ Vision settings are ready and the _Vision task_ project is running.<br/>
 >
 > Now, in a new terminal of your (remote) ROS computer : Source setup.bash in the workspace path and run to get image data from TMvision&trade; by typing
 >
@@ -215,43 +220,42 @@ Enable the `Data Table Setting` item and check the following boxes as item prede
 
 ### &sect; __Demo package description__
 > There are some demo codes showing  how to use TM ROS driver.<br/>
-><br/> 
-> &diams; demo_send_script:<br/>
+>
+> * demo_send_script:<br/>
 In this demo code, it shows how to send a __Listen node__ script to control the TM Robot. <br/>
 The user can use service named "send_script" to send script.<br/>
 "id" &rarr; The transaction number expressed in any <u>alphanumeric</u> <sup>1</sup> characters.<br/> 
 "script" &rarr; the script which the user want to send.<br/>
 "ok" &rarr; the correctness of the script.<br/>
  ><sup>1</sup> If a non-alphanumeric byte is encountered, a CPERR 04 error is reported. When used as a communication packet response, it is a transaction number and identifies which group of commands to respond.<br/>
-> <br/>
-> &diams; demo_ask_item:<br/>
+>
+> * demo_ask_item:<br/>
 In this demo code, the user can use this service to send TMSCT <sup>2</sup> cmd.<br/> 
-> <sup>2</sup>  More details please refer to _defined protocol_: the Expression Editor and Listen Node.pdf (Chapter7.4 TMSCT)<br/>
-> <br/>
-> &diams; demo_ask_sta:<br/>
+> <sup>2</sup>  More details please refer to _defined protocol_: Expression Editor and Listen Node.pdf (Chapter7.4 TMSCT)<br/>
+>
+> * demo_ask_sta:<br/>
 In this demo code, the user can use this service to send TMSTA <sup>3</sup> cmd.<br/>
 > <sup>3</sup> More details please refer to _defined protocol_ (Chapter7.5 TMSTA)<br/>
-> <br/>
-> &diams; demo_connect_tm:<br/>
+> * demo_connect_tm:<br/>
 In this demo code, the user can set the connection type. <br/>
 If the user sets reconnect to true, every time the driver disconnects from the __Listen node__, it will try to reconnect.<br/>
 There are two kind connection settings the user can select, one is "connect_tmsvr" for Ethernet server connection, and the other is "connect_tmsct" for  TMflow connection.<br/>
-> <br/>
-> &diams; demo_set_event:<br/>
+>
+> * demo_set_event:<br/>
 In this demo code, six event types can be selected.<br/> 
 func &rarr;  TAG, WAIT_TAG, STOP, PAUSE, RESUME and EXIT<br/>
 arg0 &rarr;  if func is TAG or WAIT_TAG, arg0 is timeout in ms<br/>
 arg1 &rarr;  if func is TAG or WAIT_TAG, arg1 is id<br/>
-> <br/>
-> &diams; demo_set_io:<br/>
+>
+> * demo_set_io:<br/>
 In this demo code, the user should set module, type, pin and state. <sup>4</sup> <br/>
 module &rarr;  MODULE_CONTROLBOX or MODULE_ENDEFFECTOR<br/>
 type &rarr;  TYPE_DIGITAL_IN, TYPE_DIGITAL_OUT, TYPE_INSTANT_DO, TYPE_ANALOG_IN, TYPE_ANALOG_OUT, TYPE_INSTANT_AO<br/>
 pin &rarr;  pin number<br/>
 state &rarr;  STATE_OFF or STATE_ON value, or other value (if type expressed in analog control module)<br/>
 > <sup>4</sup> More details please refer to _defined protocol_ (Chapter6.5 IO)<br/>
-> <br/>
-> &diams; demo_set_positions:<br/>
+>
+> * demo_set_positions:<br/>
 In this demo code, the user should pay attention to the parameter definition of the data format setting <sup>5</sup> and the unit of the parameter to be operated.  <br/>
 motion_type &rarr;  PTP_J , PTP_T , LINE_J , LINE_T , CIRC_J ,CIRC_T , PLINE_J ,PLINE_T <br/>
 positions &rarr;  motion target position: If expressed in Cartesian coordinate (unit: m), if expressed in joint angles (unit: rad)<br/>
@@ -261,12 +265,12 @@ blend_percentage &rarr; blending value: expressed as a percentage (unit: %, and 
 fine_goal &rarr; precise position mode : If activated, the amount of error in the final position will converge more, but it will take a few more milliseconds.<br/>
 > <sup>5</sup>  More details please refer to _defined protocol_ (Chapter8 PTP, Line, Circle, Pline, Move_PTP, Move_Line, Move_PLine) <br/>
 > <sup>6</sup> The unit of the parameters are different, the user can find the conversion in the program of TM ROS driver.<br/>
-> <br/>
-> &diams; demo_write_item: <br/>
+>
+> * demo_write_item: <br/>
 In this demo code, the user can use this service to send TMSVR <sup>7</sup> cmd. <br/>
 > <sup>7</sup> More details please refer to _defined protocol_ (Chapter9.3 svr_write())<br/>
-> <br/>
-> &diams; demo_leave_listen_node:<br/>
+>
+> * demo_leave_listen_node:<br/>
 In this demo code, the user can use send_script service sending a script to leave the __Listen node__.
 
 
@@ -292,7 +296,7 @@ The <robot_ip_address> is the IP address of the TM Robot, the user can get it th
 > 6. In another new terminal: Source setup.bash in the workspace path and type specific demo node function which the user want to study for applications. For example: the user select to run demo_set_io, the user can type<br/>
 ``source ./install/setup.bash``<br/>
 ``ros2 run demo demo_set_io``<br/>
->[CAUTION]:warning: Some demos will let the TM Robot move, please be careful.<br/>
+>:warning:[CAUTION] Some demos will let the TM Robot move, please be careful.<br/>
 ><br/>
 
 
