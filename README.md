@@ -11,7 +11,7 @@ For using the driver, please make sure your ROS PC is installed correct.<br/>
 If the user want to know how to use ROS1 driver, please go to [TM ROS1 driver](https://github.com/TechmanRobotInc/tmr_ros1).<br/>
 
 
-More information: TM ROS driver list
+More information: TM ROS driver support list
 |ROS Distribution (ROS Environment Setup)|TM ROS driver version|TM ROS Vision|Remark: switch GitHub branches|
 |:---|:---|:---:|:---:|
 |[**<font color=#808080>ROS Noetic Ninjemys**](http://wiki.ros.org/noetic)|[**<font color=#0000FF>TM ROS1 Noetic driver**](https://github.com/TechmanRobotInc/tmr_ros1/tree/noetic)|x|noetic|
@@ -27,6 +27,10 @@ Note: The two current master branches are ROS1 Melodic and ROS2 Foxy.<br/>
 The driver for ROS2 publishes identical topics and provides identical services as [TM ROS1 version](https://github.com/TechmanRobotInc/tmr_ros1).<br/>
 This driver uses _ROS2 composition_, there are two nodes in the identical process:
 one node publishes topics while the other node sets up service servers.
+
+### __Installation__
+Just clone the TM ROS driver of git repository into your working directory and then built it.<br/>
+The user can directly refer to the chapters introduced in the following text: steps 1 to 4 of __&sect; Usage with demo code & driver__.<br/>
 
 
 ## __3. Usage__
@@ -102,7 +106,7 @@ Enable the `Data Table Setting` item and check the following boxes as item prede
 > cd <workspace>
 > source ./install/setup.bash
 > ```
-> :point_up: Do you prepare __TM Robot__ ready ? Make sure that TM Robot's operating software (__TMflow__) system/network settings are ready and the __Listen node__ is running. 
+> :bulb: Do you prepare the __TM Robot__ ready ? Make sure that TM Robot's operating software (__TMflow__) network settings are ready and the __Listen node__ is running. 
 > 
 > Then, run the driver to maintain the connection with TM Robot by typing 
 >
@@ -141,7 +145,7 @@ Enable the `Data Table Setting` item and check the following boxes as item prede
 > ```
 >
 > The user can also manipulate real TM Robot to run, by typing<br/>
-> :point_up: Do you prepare __TM Robot__ ready ? Make sure that TM Robot's operating software (__TMflow__) system/network settings are ready and the _Listen task_ project is running. 
+> :bulb: Do you prepare the __TM Robot__ ready ? Make sure that TM Robot's operating software (__TMflow__) network settings are ready and the _Listen task_ project is running. 
 >
 > ```bash
 > ros2 launch tmr_run_moveit_cpp_demo run_moveit_cpp.launch.py robot_ip:=<robot_ip_address>
@@ -155,7 +159,6 @@ Enable the `Data Table Setting` item and check the following boxes as item prede
 
 ### &sect; __TM ROS Vision usage__
 > Get image data through TMvision&trade; of TM Robot **(Built-in Vision System)**  
-> :bulb: This package can be built and run in ROS2 Foxy. Other versions might not work.
 >
 > __Dependencies__
 >
@@ -186,7 +189,7 @@ Enable the `Data Table Setting` item and check the following boxes as item prede
 
 ### &sect; __TMflow Vision node setup__
 > The __Vision node__ provides the creation of a plane with fixed-point type, servo type, and object type as well as a variety of AOI identification functions.<br/>
-> :point_up: Before going through the following steps, please build the TM ROS Vision driver node on your (remote) computer and then connect this (remote) computer to the local TM Robot computer.
+> :bulb: Before going through the following steps, please build the TM ROS Vision driver node on your (remote) computer and then connect this (remote) computer to the local TM Robot computer.
 >
 > 1. Create a _Vision task_ project of __TMflow__ software, and then drag the __Vision node__  from the _nodes menu_ onto the project flow, as shown below.<br/>
 > ![create_a_vision_task](figures/create_a_vision_task.png)
@@ -226,11 +229,13 @@ Enable the `Data Table Setting` item and check the following boxes as item prede
 > 8. Finally, assign a name to the model in  the __Model name__ blank text and click the __Save__ button.
 > ![save_model](figures/save_model.png)
 >
+> 9. Press the Play/Pause Button on the Robot Stick to start running this _Vision task_ project.
+>
 >    Note: TMflow software version changes may have slightly different settings.([SW1.76_Rev2.00](https://www.tm-robot.com/zh-hant/wpdmdownload/software-manual-tmflow_sw1-76_rev2-00/)) ([SW1.80_Rev2.00](https://www.tm-robot.com/zh-hant/wpdmdownload/software-manual-tmflow_sw1-80_rev2-00-2/))<br/>
 
 
 ###  &sect; __Receive image data on the user's computer from TMflow Vision node__
-> :point_up: Do you prepare the TM Robot ready ? Make sure that TM Robot's operating software (TMflow) relative __HTTP Parameters__ Vision settings are ready and the _Vision task_ project is running.<br/>
+> :bulb: Do you prepare the TM Robot ready ? Make sure that TM Robot's operating software (TMflow) relative __HTTP Parameters__ Vision settings are ready and the _Vision task_ project is running.<br/>
 >
 > Now, in a new terminal of your (remote) ROS computer : Source setup.bash in the workspace path and run to get image data from TMvision&trade; by typing
 >
@@ -257,7 +262,7 @@ The user can use service named "send_script" to send script.<br/>
 >
 > * demo_ask_item:<br/>
 In this demo code, the user can use this service to send TMSCT <sup>2</sup> cmd.<br/> 
-> <sup>2</sup>  More details please refer to _defined protocol_: the Expression Editor and Listen Node.pdf (Chapter7.4 TMSCT)<br/>
+> <sup>2</sup>  More details please refer to _defined protocol_: Expression Editor and Listen Node.pdf (Chapter7.4 TMSCT)<br/>
 >
 > * demo_ask_sta:<br/>
 In this demo code, the user can use this service to send TMSTA <sup>3</sup> cmd.<br/>
