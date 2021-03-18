@@ -106,7 +106,7 @@ Enable the `Data Table Setting` item and check the following boxes as item prede
 > cd <workspace>
 > source ./install/setup.bash
 > ```
-> :bulb: Do you prepare __TM Robot__ ready ? Make sure that TM Robot's operating software (__TMflow__) system/network settings are ready and the __Listen node__ is running. 
+> :bulb: Do you prepare the __TM Robot__ ready ? Make sure that TM Robot's operating software (__TMflow__) network settings are ready and the __Listen node__ is running. 
 > 
 > Then, run the driver to maintain the connection with TM Robot by typing 
 >
