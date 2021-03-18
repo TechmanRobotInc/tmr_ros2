@@ -226,7 +226,7 @@ Enable the `Data Table Setting` item and check the following boxes as item prede
 > ![wrong_port](figures/wrong_port.png)
 > 7. Enter ``<user_pc_ip_address>:6189/api/DET`` in the URL blank text and type arbitrary letters in the __Value__ blank text; the __Key__ will be generated automatically.
 > ![add_model](figures/add_model.png)
-> 8. Finally, assign a name to the model in  the __Model name__ blank text and click the __Save__ button.
+> 8. Assign a name to the model in  the __Model name__ blank text and click the __Save__ button.
 > ![save_model](figures/save_model.png)
 >
 > 9. Press the Play/Pause Button on the Robot Stick to start running this _Vision task_ project.
