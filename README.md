@@ -165,10 +165,16 @@ Enable the `Data Table Setting` item and check the following boxes as item prede
 > - ROS2 Foxy
 > - Python packages:
 >   1. flask
->   2. numpy
->   3. opencv-python==3.7 (Minimum)
->   4. waitress
->   5. datetime
+>   2. waitress
+>   3. opencv-python==3.4.13.47 (Minimum)
+>   4. numpy
+>   5. datetime  
+>
+>    For example, install Python3 packages: 
+>      *  pip3 install flask
+>      *  pip3 install waitress
+>      *  pip3 install opencv-python
+>      *  pip3 install datetime
 >
 > __Techman Robot Vision__
 >
@@ -184,7 +190,7 @@ Enable the `Data Table Setting` item and check the following boxes as item prede
 > ros2 run tm_get_status image_talker
 > ```
 >
-> The terminal prints ``Serving on <your_ip_address>:6189`` if the initialization succeeds.
+> :bulb: The user can check whether the connection succeeds or not? When you proceed to the following steps introduced in the following text: steps 6 of § TMflow Vision node setup.
 
 
 ### &sect; __TMflow Vision node setup__

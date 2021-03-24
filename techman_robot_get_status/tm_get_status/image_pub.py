@@ -1,4 +1,5 @@
 import sys
+import socket
 import rclpy
 
 from rclpy.node import Node
@@ -160,6 +161,7 @@ def main():
         node = ImagePub('image_pub',isTest,None)
 
         set_route(app,node)
+        print("Listening on an ip port:6189 combination")
         serve(app, port=6189)
     rclpy.spin(node)
 
