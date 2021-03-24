@@ -159,7 +159,7 @@ Enable the `Data Table Setting` item and check the following boxes as item prede
 > ros2 run tm_get_status image_talker
 > ```
 >
-> :bulb: The user can check whether the connection succeeds or not? When you proceed to the following steps introduced in the following text: steps 6 of ¡± TMflow Vision node setup.
+> :bulb: The user can check whether the connection succeeds or not? When you proceed to the following steps introduced in the following text: steps 6 of Â§ TMflow Vision node setup.
 
 
 ### &sect; __TMflow Vision node setup__
