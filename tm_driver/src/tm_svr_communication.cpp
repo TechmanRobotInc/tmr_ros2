@@ -41,7 +41,7 @@ bool TmSvrCommunication::start(int timeout_ms)
 	halt();
 	print_info("TM_SVR: start");
 
-	bool rb = Connect(timeout_ms);
+	bool rb = connect_socket(timeout_ms);
 	//if (!rb) return rb; // ? start thread anyway
 
 	if (_has_thread) {
@@ -77,7 +77,7 @@ void TmSvrCommunication::halt()
 		//		_recv_thread.join();
 		//	}
 		//}
-		Close();
+		close_socket();
 	}
 }
 
@@ -124,10 +124,10 @@ void TmSvrCommunication::thread_function()
 			default: break;
 			}
 		}
-		Close();
+		close_socket();
 		reconnect_function();
 	}
-	Close();
+	close_socket();
 	print_info("TM_SVR: thread end");
 }
 void TmSvrCommunication::reconnect_function()
@@ -147,7 +147,7 @@ void TmSvrCommunication::reconnect_function()
 	}
 	if (_keep_thread_alive && _reconnect_timeval_ms >= 0) {
 		print_info("0 sec\nTM_SVR: connect(%dms)...", _reconnect_timeout_ms);
-		Connect(_reconnect_timeout_ms);
+		connect_socket(_reconnect_timeout_ms);
 	}
 }
 TmCommRC TmSvrCommunication::tmsvr_function()

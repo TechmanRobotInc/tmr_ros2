@@ -80,7 +80,7 @@ void TmRos2Node::publisher()
             default: break;
             }
         }
-        iface_.svr.Close();
+        iface_.svr.close_socket();
         print_info("TM_ROS: (TM_SVR) reconnect in ");
         int cnt = 5;
         while (rclcpp::ok() && cnt > 0) {
@@ -90,10 +90,10 @@ void TmRos2Node::publisher()
         }
         if (rclcpp::ok()) {
             print_info("TM_ROS: (TM_SVR) connect...");
-            iface_.svr.Connect(1000);
+            iface_.svr.connect_socket(1000);
         }
     }
-    iface_.svr.Close();
+    iface_.svr.close_socket();
     print_info("TM_ROS: publisher thread end");
 }
 

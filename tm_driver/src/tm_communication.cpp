@@ -360,7 +360,7 @@ int TmCommunication::connect_with_timeout(int sockfd, const char *ip, unsigned s
 	return rv;
 }
 
-bool TmCommunication::Connect(int timeout_ms)
+bool TmCommunication::connect_socket(int timeout_ms)
 {
 	if (_sockfd > 0) return true;
 
@@ -373,10 +373,11 @@ bool TmCommunication::Connect(int timeout_ms)
 	hints.ai_socktype = SOCK_STREAM;
 	hints.ai_protocol = IPPROTO_HOPOPTS;
 
-	_sockfd = socket(hints.ai_family, hints.ai_socktype, hints.ai_protocol);
+	socketFile = socket(hints.ai_family, hints.ai_socktype, hints.ai_protocol);
 #else
-	_sockfd = socket(AF_INET, SOCK_STREAM, 0);
+	socketFile = socket(AF_INET, SOCK_STREAM, 0);
 #endif
+    _sockfd = socketFile;
 	if (_sockfd < 0) {
 		print_error("TM_COM: Error socket");
 		return false;
@@ -418,17 +419,16 @@ bool TmCommunication::Connect(int timeout_ms)
 	}
 }
 
-void TmCommunication::Close()
+void TmCommunication::close_socket()
 {
 	// reset
 	_recv_rc = TmCommRC::OK;
 	_recv_ready = false;
 
-	if (_sockfd <= 0) return;
 #ifdef _WIN32
-	closesocket((SOCKET)_sockfd);
+	closesocket((SOCKET)socketFile);
 #else
-	close(_sockfd);
+	close(socketFile);
 #endif
 	_sockfd = -1;
 }

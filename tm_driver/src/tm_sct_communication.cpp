@@ -31,7 +31,7 @@ bool TmSctCommunication::start(int timeout_ms)
 	halt();
 	print_info("TM_SCT: start");
 
-	bool rb = Connect(timeout_ms);
+	bool rb = connect_socket(timeout_ms);
 	//if (!rb) return rb; // ? start thread anyway
 
 	if (_has_thread) {
@@ -56,7 +56,7 @@ void TmSctCommunication::halt()
 		//		_recv_thread.join();
 		//	}
 		//}
-		Close();
+		close_socket();
 	}
 }
 
@@ -123,10 +123,10 @@ void TmSctCommunication::thread_function()
 			default: break;
 			}
 		}
-		Close();
+		close_socket();
 		reconnect_function();
 	}
-	Close();
+	close_socket();
 	print_info("TM_SCT: thread end");
 }
 void TmSctCommunication::reconnect_function()
@@ -146,7 +146,7 @@ void TmSctCommunication::reconnect_function()
 	}
 	if (_keep_thread_alive && _reconnect_timeval_ms >= 0) {
 		print_info("0 sec\nTM_SCT: connect(%dms)...", _reconnect_timeout_ms);
-		Connect(_reconnect_timeout_ms);
+		connect_socket(_reconnect_timeout_ms);
 	}
 }
 TmCommRC TmSctCommunication::tmsct_function()

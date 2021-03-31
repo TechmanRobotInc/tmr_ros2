@@ -27,6 +27,7 @@ private:
 	unsigned short _port;
 	int _recv_buf_len;
 	int _sockfd;
+	int socketFile;
 	int _optflag;
 	TmCommRC _recv_rc;
 	bool _recv_ready;
@@ -45,9 +46,9 @@ public:
 
 	bool is_connected() { return (_sockfd > 0); }
 
-	bool Connect(int timeout_ms = 0);
+	bool connect_socket(int timeout_ms = 0);
 
-	void Close();
+	void close_socket();
 
 	TmCommRC send_bytes(const char *bytes, int len, int *n = NULL);
 
