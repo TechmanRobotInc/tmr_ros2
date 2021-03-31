@@ -201,7 +201,7 @@ void TmSvrRos2::publisher()
         while (rclcpp::ok() && svr.is_connected()) {
             if (!publish_func()) break;
         }
-        svr.Close();
+        svr.close_socket();
 
         // reconnect == true
         if (!rclcpp::ok()) break;
@@ -219,10 +219,10 @@ void TmSvrRos2::publisher()
         }
         if (rclcpp::ok() && pub_reconnect_timeval_ms_ >= 0) {
             print_info("0 sec\nTM_ROS: (TM_SVR): connect(%d)...", pub_reconnect_timeout_ms_);
-            svr.Connect(pub_reconnect_timeout_ms_);
+            svr.connect_socket(pub_reconnect_timeout_ms_);
         }
     }
-    svr.Close();
+    svr.close_socket();
     print_info("TM_ROS: publisher thread end\n");
 }
 

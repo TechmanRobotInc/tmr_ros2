@@ -153,7 +153,7 @@ void TmSctRos2::sct_responsor()
         while (rclcpp::ok() && sct.is_connected()) {
             if (!sct_func()) break;
         }
-        sct.Close();
+        sct.close_socket();
 
         // reconnect == true
         if (!rclcpp::ok()) break;
@@ -171,10 +171,10 @@ void TmSctRos2::sct_responsor()
         }
         if (rclcpp::ok() && sct_reconnect_timeval_ms_ >= 0) {
             print_info("0 sec\nTM_ROS: (TM_SCT) connect(%d)...", sct_reconnect_timeout_ms_);
-            sct.Connect(sct_reconnect_timeout_ms_);
+            sct.connect_socket(sct_reconnect_timeout_ms_);
         }
     }
-    sct.Close();
+    sct.close_socket();
     printf("TM_ROS: sct_response thread end\n");
 }
 
