@@ -126,7 +126,7 @@ public:
 public:
 	unsigned char is_linked() { return _is_linked; }
 	unsigned char has_error() { return _has_error; }
-        bool is_data_table_correct(){return isDataTableCorrect;}
+    bool is_data_table_correct(){return isDataTableCorrect;}
 	unsigned char is_project_running() { return _is_proj_running; }
 	unsigned char is_project_paused() { return _is_proj_paused; }
 

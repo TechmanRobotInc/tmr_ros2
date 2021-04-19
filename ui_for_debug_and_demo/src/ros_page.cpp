@@ -1,5 +1,13 @@
+/*****************************************************************************
+** Includes
+*****************************************************************************/
 #include "tm_ros_driver_windows.hpp"
+
 using namespace std::chrono_literals;
+
+/*****************************************************************************
+** Implementation
+*****************************************************************************/
 void RosPage::feedback_states_callback(tm_msgs::msg::FeedbackState::SharedPtr msg){
   send_ui_feed_back_status(msg);
 }
@@ -23,7 +31,6 @@ std::string RosPage::current_time() {
  
   return std::string(buf) + milliseconds_str;
 }
-
 void RosPage::sct_response_callback(tm_msgs::msg::SctResponse::SharedPtr msg){
   std::string re = "[sct]"+current_time()+"->"+msg->id+":"+msg->script;
   send_to_ui_list(re);
@@ -87,7 +94,7 @@ void RosPage::send_svr_as_re_connect(){
   send_service(connectSvrClient, request);
 }
 void RosPage::change_control_box_io_button(){
-  std::cout<<"ready to send io"<<std::endl;
+  //std::cout<<"ready to send io"<<std::endl;
   rclcpp::Client<tm_msgs::srv::SetIO>::SharedPtr client =
     node->create_client<tm_msgs::srv::SetIO>("set_io");
   
