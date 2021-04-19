@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1265</width>
-    <height>732</height>
+    <width>1045</width>
+    <height>692</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>QuickView_GUI</string>
   </property>
   <property name="styleSheet">
    <string notr="true">background-color: rgb(141, 192, 53);</string>
@@ -19,19 +19,19 @@
   <widget class="QWidget" name="widget_7" native="true">
    <property name="geometry">
     <rect>
-     <x>290</x>
+     <x>210</x>
      <y>70</y>
-     <width>191</width>
-     <height>161</height>
+     <width>161</width>
+     <height>151</height>
     </rect>
    </property>
    <property name="styleSheet">
     <string notr="true">background-color: rgb(81, 86, 90);</string>
    </property>
-   <widget class="QLabel" name="set_svr_re_connect_label_11">
+   <widget class="QLabel" name="demo_label_11">
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>30</x>
       <y>10</y>
       <width>181</width>
       <height>31</height>
@@ -46,15 +46,15 @@
      <string notr="true">co</string>
     </property>
     <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; color:#eeeeec;&quot;&gt;set_sct_re_connect&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt; color:#ad7fa8;&quot;&gt;SctClient&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
-   <widget class="QLabel" name="set_svr_re_connect_label_12">
+   <widget class="QLabel" name="demo_label_12">
     <property name="geometry">
      <rect>
-      <x>40</x>
+      <x>30</x>
       <y>50</y>
-      <width>121</width>
+      <width>131</width>
       <height>31</height>
      </rect>
     </property>
@@ -67,14 +67,14 @@
      <string notr="true">co</string>
     </property>
     <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:18pt; color:#ffffff;&quot;&gt;Conneting&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt; color:#ffffff;&quot;&gt;Re-Connect&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
    <widget class="QPushButton" name="set_sct_re_connect_button">
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>100</y>
+      <x>20</x>
+      <y>90</y>
       <width>121</width>
       <height>41</height>
      </rect>
@@ -83,28 +83,28 @@
      <string notr="true">background-color: rgb(130, 135, 139); color: white;</string>
     </property>
     <property name="text">
-     <string>Re-Connect</string>
+     <string>Test</string>
     </property>
    </widget>
   </widget>
   <widget class="QWidget" name="widget_11" native="true">
    <property name="geometry">
     <rect>
-     <x>500</x>
+     <x>390</x>
      <y>70</y>
-     <width>191</width>
-     <height>161</height>
+     <width>161</width>
+     <height>151</height>
     </rect>
    </property>
    <property name="styleSheet">
     <string notr="true">background-color: rgb(81, 86, 90);</string>
    </property>
-   <widget class="QLabel" name="set_svr_re_connect_label_17">
+   <widget class="QLabel" name="demo_label_17">
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>30</x>
       <y>10</y>
-      <width>181</width>
+      <width>161</width>
       <height>31</height>
      </rect>
     </property>
@@ -117,10 +117,10 @@
      <string notr="true">co</string>
     </property>
     <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; color:#eeeeec;&quot;&gt;Control Box&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt; color:#ad7fa8;&quot;&gt;Control Box&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
-   <widget class="QLabel" name="set_svr_re_connect_label_18">
+   <widget class="QLabel" name="demo_label_18">
     <property name="geometry">
      <rect>
       <x>40</x>
@@ -138,14 +138,14 @@
      <string notr="true">co</string>
     </property>
     <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:18pt; color:#ffffff;&quot;&gt;IO 01&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt; color:#ffffff;&quot;&gt;DO0 Ctrl&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
    <widget class="QPushButton" name="change_control_box_io_button">
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>100</y>
+      <x>20</x>
+      <y>90</y>
       <width>121</width>
       <height>41</height>
      </rect>
@@ -154,28 +154,28 @@
      <string notr="true">background-color: rgb(130, 135, 139); color: white;</string>
     </property>
     <property name="text">
-     <string>Change</string>
+     <string>H / L</string>
     </property>
    </widget>
   </widget>
   <widget class="QWidget" name="widget_3" native="true">
    <property name="geometry">
     <rect>
-     <x>80</x>
+     <x>30</x>
      <y>70</y>
-     <width>191</width>
-     <height>161</height>
+     <width>161</width>
+     <height>151</height>
     </rect>
    </property>
    <property name="styleSheet">
     <string notr="true">background-color: rgb(81, 86, 90);</string>
    </property>
-   <widget class="QLabel" name="set_svr_re_connect_label_5">
+   <widget class="QLabel" name="demo_label_5">
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>30</x>
       <y>10</y>
-      <width>181</width>
+      <width>161</width>
       <height>31</height>
      </rect>
     </property>
@@ -188,15 +188,15 @@
      <string notr="true">co</string>
     </property>
     <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; color:#eeeeec;&quot;&gt;set_svr_re_connect&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt; color:#ad7fa8;&quot;&gt;SvrClient&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
-   <widget class="QLabel" name="set_svr_re_connect_label_6">
+   <widget class="QLabel" name="demo_label_6">
     <property name="geometry">
      <rect>
-      <x>40</x>
+      <x>30</x>
       <y>50</y>
-      <width>121</width>
+      <width>131</width>
       <height>31</height>
      </rect>
     </property>
@@ -209,14 +209,14 @@
      <string notr="true">co</string>
     </property>
     <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:18pt; color:#ffffff;&quot;&gt;Conneting&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt; color:#ffffff;&quot;&gt;Re-Connect&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
    <widget class="QPushButton" name="set_svr_re_connect_button">
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>100</y>
+      <x>20</x>
+      <y>90</y>
       <width>121</width>
       <height>41</height>
      </rect>
@@ -225,28 +225,28 @@
      <string notr="true">background-color: rgb(130, 135, 139); color: white;</string>
     </property>
     <property name="text">
-     <string>Re-Connect</string>
+     <string>Test</string>
     </property>
    </widget>
   </widget>
   <widget class="QWidget" name="widget_14" native="true">
    <property name="geometry">
     <rect>
-     <x>80</x>
+     <x>30</x>
      <y>240</y>
-     <width>191</width>
-     <height>101</height>
+     <width>161</width>
+     <height>91</height>
     </rect>
    </property>
    <property name="styleSheet">
     <string notr="true">background-color: rgb(81, 86, 90);</string>
    </property>
-   <widget class="QLabel" name="set_svr_re_connect_label_22">
+   <widget class="QLabel" name="demo_label_22">
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>20</x>
       <y>10</y>
-      <width>181</width>
+      <width>161</width>
       <height>31</height>
      </rect>
     </property>
@@ -262,10 +262,10 @@
      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; color:#eeeeec;&quot;&gt;is_svr_connect&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
-   <widget class="QLabel" name="is_svr_connected_status_label">
+   <widget class="QLabel" name="svrclient_status_label">
     <property name="geometry">
      <rect>
-      <x>60</x>
+      <x>50</x>
       <y>50</y>
       <width>61</width>
       <height>31</height>
@@ -280,28 +280,28 @@
      <string notr="true">co</string>
     </property>
     <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:20pt; font-weight:600; color:#73d216;&quot;&gt;True&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt; font-weight:600; color:#2e3436;&quot;&gt;NaN&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
   </widget>
   <widget class="QWidget" name="widget_15" native="true">
    <property name="geometry">
     <rect>
-     <x>290</x>
+     <x>210</x>
      <y>240</y>
-     <width>191</width>
-     <height>101</height>
+     <width>161</width>
+     <height>91</height>
     </rect>
    </property>
    <property name="styleSheet">
     <string notr="true">background-color: rgb(81, 86, 90);</string>
    </property>
-   <widget class="QLabel" name="set_svr_re_connect_label_24">
+   <widget class="QLabel" name="demo_label_24">
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>20</x>
       <y>10</y>
-      <width>181</width>
+      <width>161</width>
       <height>31</height>
      </rect>
     </property>
@@ -314,13 +314,13 @@
      <string notr="true">co</string>
     </property>
     <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; color:#eeeeec;&quot;&gt;is_sct_connected&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; color:#eeeeec;&quot;&gt;is_sct_connect&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
-   <widget class="QLabel" name="is_sct_connected_label_status_label">
+   <widget class="QLabel" name="sctclient_status_label">
     <property name="geometry">
      <rect>
-      <x>60</x>
+      <x>50</x>
       <y>50</y>
       <width>61</width>
       <height>31</height>
@@ -335,28 +335,28 @@
      <string notr="true">co</string>
     </property>
     <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:20pt; color:#d3d7cf;&quot;&gt;False&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt; font-weight:600; color:#2e3436;&quot;&gt;NaN&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
   </widget>
   <widget class="QWidget" name="widget_16" native="true">
    <property name="geometry">
     <rect>
-     <x>500</x>
+     <x>390</x>
      <y>240</y>
-     <width>191</width>
-     <height>101</height>
+     <width>161</width>
+     <height>91</height>
     </rect>
    </property>
    <property name="styleSheet">
     <string notr="true">background-color: rgb(81, 86, 90);</string>
    </property>
-   <widget class="QLabel" name="set_svr_re_connect_label_26">
+   <widget class="QLabel" name="demo_label_26">
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>30</x>
       <y>10</y>
-      <width>181</width>
+      <width>161</width>
       <height>31</height>
      </rect>
     </property>
@@ -369,13 +369,13 @@
      <string notr="true">co</string>
     </property>
     <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; color:#eeeeec;&quot;&gt;Safetyguard A&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; color:#eeeeec;&quot;&gt;Safeguard_A&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
-   <widget class="QLabel" name="safetyguard_a_status_label">
+   <widget class="QLabel" name="safeguard_a_status_label">
     <property name="geometry">
      <rect>
-      <x>60</x>
+      <x>50</x>
       <y>50</y>
       <width>61</width>
       <height>31</height>
@@ -390,28 +390,28 @@
      <string notr="true">co</string>
     </property>
     <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:20pt; font-weight:600; color:#73d216;&quot;&gt;True&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt; font-weight:600; color:#2e3436;&quot;&gt;NaN&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
   </widget>
   <widget class="QWidget" name="widget_17" native="true">
    <property name="geometry">
     <rect>
-     <x>80</x>
-     <y>350</y>
-     <width>191</width>
-     <height>101</height>
+     <x>30</x>
+     <y>340</y>
+     <width>161</width>
+     <height>91</height>
     </rect>
    </property>
    <property name="styleSheet">
     <string notr="true">background-color: rgb(81, 86, 90);</string>
    </property>
-   <widget class="QLabel" name="set_svr_re_connect_label_40">
+   <widget class="QLabel" name="demo_label_40">
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>30</x>
       <y>10</y>
-      <width>181</width>
+      <width>161</width>
       <height>31</height>
      </rect>
     </property>
@@ -424,13 +424,13 @@
      <string notr="true">co</string>
     </property>
     <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; color:#eeeeec;&quot;&gt;Robot Link&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; color:#eeeeec;&quot;&gt;Robot_Link&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
    <widget class="QLabel" name="robot_link_status_label">
     <property name="geometry">
      <rect>
-      <x>60</x>
+      <x>50</x>
       <y>50</y>
       <width>61</width>
       <height>31</height>
@@ -445,28 +445,28 @@
      <string notr="true">co</string>
     </property>
     <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:20pt; font-weight:600; color:#73d216;&quot;&gt;True&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt; font-weight:600; color:#2e3436;&quot;&gt;NaN&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
   </widget>
   <widget class="QWidget" name="widget_18" native="true">
    <property name="geometry">
     <rect>
-     <x>290</x>
-     <y>350</y>
-     <width>191</width>
-     <height>101</height>
+     <x>210</x>
+     <y>340</y>
+     <width>161</width>
+     <height>91</height>
     </rect>
    </property>
    <property name="styleSheet">
     <string notr="true">background-color: rgb(81, 86, 90);</string>
    </property>
-   <widget class="QLabel" name="set_svr_re_connect_label_42">
+   <widget class="QLabel" name="demo_label_42">
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>30</x>
       <y>10</y>
-      <width>181</width>
+      <width>161</width>
       <height>31</height>
      </rect>
     </property>
@@ -479,13 +479,13 @@
      <string notr="true">co</string>
     </property>
     <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; color:#eeeeec;&quot;&gt;Robot Error&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; color:#eeeeec;&quot;&gt;Robot_Error&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
    <widget class="QLabel" name="robot_error_status_label">
     <property name="geometry">
      <rect>
-      <x>60</x>
+      <x>50</x>
       <y>50</y>
       <width>61</width>
       <height>31</height>
@@ -500,28 +500,28 @@
      <string notr="true">co</string>
     </property>
     <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:20pt; font-weight:600; color:#73d216;&quot;&gt;True&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt; font-weight:600; color:#2e3436;&quot;&gt;NaN&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
   </widget>
   <widget class="QWidget" name="widget_19" native="true">
    <property name="geometry">
     <rect>
-     <x>500</x>
-     <y>350</y>
-     <width>191</width>
-     <height>101</height>
+     <x>390</x>
+     <y>340</y>
+     <width>161</width>
+     <height>91</height>
     </rect>
    </property>
    <property name="styleSheet">
     <string notr="true">background-color: rgb(81, 86, 90);</string>
    </property>
-   <widget class="QLabel" name="set_svr_re_connect_label_46">
+   <widget class="QLabel" name="demo_label_46">
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>30</x>
       <y>10</y>
-      <width>181</width>
+      <width>161</width>
       <height>31</height>
      </rect>
     </property>
@@ -534,13 +534,13 @@
      <string notr="true">co</string>
     </property>
     <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; color:#eeeeec;&quot;&gt;Project run&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; color:#eeeeec;&quot;&gt;Project_Run&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
    <widget class="QLabel" name="project_run_status_label">
     <property name="geometry">
      <rect>
-      <x>60</x>
+      <x>50</x>
       <y>50</y>
       <width>61</width>
       <height>31</height>
@@ -555,28 +555,28 @@
      <string notr="true">co</string>
     </property>
     <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:20pt; font-weight:600; color:#73d216;&quot;&gt;True&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt; font-weight:600; color:#2e3436;&quot;&gt;NaN&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
   </widget>
   <widget class="QWidget" name="widget_20" native="true">
    <property name="geometry">
     <rect>
-     <x>80</x>
-     <y>460</y>
-     <width>191</width>
-     <height>101</height>
+     <x>30</x>
+     <y>440</y>
+     <width>161</width>
+     <height>91</height>
     </rect>
    </property>
    <property name="styleSheet">
     <string notr="true">background-color: rgb(81, 86, 90);</string>
    </property>
-   <widget class="QLabel" name="set_svr_re_connect_label_50">
+   <widget class="QLabel" name="demo_label_50">
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>20</x>
       <y>10</y>
-      <width>181</width>
+      <width>161</width>
       <height>31</height>
      </rect>
     </property>
@@ -589,13 +589,13 @@
      <string notr="true">co</string>
     </property>
     <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; color:#eeeeec;&quot;&gt;Project Pause&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; color:#eeeeec;&quot;&gt;Project_Pause&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
    <widget class="QLabel" name="project_pause_status_label">
     <property name="geometry">
      <rect>
-      <x>60</x>
+      <x>50</x>
       <y>50</y>
       <width>61</width>
       <height>31</height>
@@ -610,28 +610,28 @@
      <string notr="true">co</string>
     </property>
     <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:20pt; font-weight:600; color:#73d216;&quot;&gt;True&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt; font-weight:600; color:#2e3436;&quot;&gt;NaN&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
   </widget>
   <widget class="QWidget" name="widget_21" native="true">
    <property name="geometry">
     <rect>
-     <x>290</x>
-     <y>460</y>
-     <width>191</width>
-     <height>101</height>
+     <x>210</x>
+     <y>440</y>
+     <width>161</width>
+     <height>91</height>
     </rect>
    </property>
    <property name="styleSheet">
     <string notr="true">background-color: rgb(81, 86, 90);</string>
    </property>
-   <widget class="QLabel" name="set_svr_re_connect_label_52">
+   <widget class="QLabel" name="demo_label_52">
     <property name="geometry">
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>181</width>
+      <width>161</width>
       <height>31</height>
      </rect>
     </property>
@@ -644,13 +644,13 @@
      <string notr="true">co</string>
     </property>
     <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; color:#eeeeec;&quot;&gt;Data Table Correct&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; color:#eeeeec;&quot;&gt;Data_Table_Correct&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
-   <widget class="QLabel" name="is_data_table_ok_status_label">
+   <widget class="QLabel" name="data_table_correct_status_label">
     <property name="geometry">
      <rect>
-      <x>60</x>
+      <x>50</x>
       <y>50</y>
       <width>61</width>
       <height>31</height>
@@ -665,28 +665,28 @@
      <string notr="true">co</string>
     </property>
     <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:20pt; font-weight:600; color:#73d216;&quot;&gt;True&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt; font-weight:600; color:#2e3436;&quot;&gt;NaN&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
   </widget>
   <widget class="QWidget" name="widget_22" native="true">
    <property name="geometry">
     <rect>
-     <x>500</x>
-     <y>460</y>
-     <width>191</width>
-     <height>101</height>
+     <x>390</x>
+     <y>440</y>
+     <width>161</width>
+     <height>91</height>
     </rect>
    </property>
    <property name="styleSheet">
     <string notr="true">background-color: rgb(81, 86, 90);</string>
    </property>
-   <widget class="QLabel" name="set_svr_re_connect_label_54">
+   <widget class="QLabel" name="demo_label_54">
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>40</x>
       <y>10</y>
-      <width>181</width>
+      <width>161</width>
       <height>31</height>
      </rect>
     </property>
@@ -699,13 +699,13 @@
      <string notr="true">co</string>
     </property>
     <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; color:#eeeeec;&quot;&gt;e_stop&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; color:#eeeeec;&quot;&gt;ESTOP&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
-   <widget class="QLabel" name="e_stop_status_label">
+   <widget class="QLabel" name="estop_status_label">
     <property name="geometry">
      <rect>
-      <x>60</x>
+      <x>50</x>
       <y>50</y>
       <width>61</width>
       <height>31</height>
@@ -720,28 +720,28 @@
      <string notr="true">co</string>
     </property>
     <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:20pt; font-weight:600; color:#73d216;&quot;&gt;True&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt; font-weight:600; color:#2e3436;&quot;&gt;NaN&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
   </widget>
   <widget class="QWidget" name="widget_23" native="true">
    <property name="geometry">
     <rect>
-     <x>80</x>
-     <y>570</y>
-     <width>191</width>
-     <height>101</height>
+     <x>30</x>
+     <y>540</y>
+     <width>161</width>
+     <height>91</height>
     </rect>
    </property>
    <property name="styleSheet">
     <string notr="true">background-color: rgb(81, 86, 90);</string>
    </property>
-   <widget class="QLabel" name="set_svr_re_connect_label_58">
+   <widget class="QLabel" name="demo_label_58">
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>20</x>
       <y>10</y>
-      <width>181</width>
+      <width>161</width>
       <height>31</height>
      </rect>
     </property>
@@ -754,13 +754,13 @@
      <string notr="true">co</string>
     </property>
     <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; color:#eeeeec;&quot;&gt;Error Content&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; color:#eeeeec;&quot;&gt;Error_Content&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
    <widget class="QLabel" name="error_content_status_label">
     <property name="geometry">
      <rect>
-      <x>60</x>
+      <x>50</x>
       <y>50</y>
       <width>61</width>
       <height>31</height>
@@ -775,60 +775,45 @@
      <string notr="true">co</string>
     </property>
     <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:20pt; font-weight:600; color:#73d216;&quot;&gt;True&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt; font-weight:600; color:#2e3436;&quot;&gt;NaN&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
   </widget>
-  <widget class="QWidget" name="widget" native="true">
+  <widget class="QWidget" name="widget_5" native="true">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>20</y>
-     <width>701</width>
-     <height>691</height>
+     <x>-10</x>
+     <y>10</y>
+     <width>1291</width>
+     <height>670</height>
     </rect>
    </property>
-   <property name="styleSheet">
-    <string notr="true">background-color: rgb(85, 87, 83);</string>
+   <property name="contextMenuPolicy">
+    <enum>Qt::ActionsContextMenu</enum>
    </property>
-   <widget class="QLabel" name="set_svr_re_connect_label_7">
+   <property name="layoutDirection">
+    <enum>Qt::LeftToRight</enum>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(30, 30, 30);</string>
+   </property>
+   <widget class="QWidget" name="widget_4" native="true">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>20</y>
-      <width>221</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>8</pointsize>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">co</string>
-    </property>
-    <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:18pt; color:#ffffff;&quot;&gt;Connection Status&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-    </property>
-   </widget>
-   <widget class="QWidget" name="widget_2" native="true">
-    <property name="geometry">
-     <rect>
-      <x>660</x>
-      <y>670</y>
-      <width>701</width>
-      <height>691</height>
+      <x>590</x>
+      <y>10</y>
+      <width>451</width>
+      <height>650</height>
      </rect>
     </property>
     <property name="styleSheet">
      <string notr="true">background-color: rgb(85, 87, 83);</string>
     </property>
-    <widget class="QLabel" name="set_svr_re_connect_label_10">
+    <widget class="QLabel" name="demo_label_13">
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>20</y>
+       <y>10</y>
        <width>221</width>
        <height>31</height>
       </rect>
@@ -842,206 +827,219 @@
       <string notr="true">co</string>
      </property>
      <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:18pt; color:#ffffff;&quot;&gt;Connection Status&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:18pt; font-style:italic; color:#eeeeec;&quot;&gt;Robot Response&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
     </widget>
-   </widget>
-   <widget class="QWidget" name="widget_24" native="true">
-    <property name="geometry">
-     <rect>
-      <x>270</x>
-      <y>550</y>
-      <width>191</width>
-      <height>101</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgb(81, 86, 90);</string>
-    </property>
-    <widget class="QLabel" name="set_svr_re_connect_label_59">
+    <widget class="QListView" name="robot_response_listView">
      <property name="geometry">
       <rect>
-       <x>10</x>
-       <y>10</y>
-       <width>181</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>8</pointsize>
-      </font>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">co</string>
-     </property>
-     <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; color:#eeeeec;&quot;&gt;Error Code&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="error_code_status_label">
-     <property name="geometry">
-      <rect>
-       <x>60</x>
+       <x>20</x>
        <y>50</y>
-       <width>61</width>
-       <height>31</height>
+       <width>411</width>
+       <height>541</height>
       </rect>
      </property>
-     <property name="font">
-      <font>
-       <pointsize>8</pointsize>
-      </font>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(180, 180, 180);</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="clear_response_button">
+     <property name="geometry">
+      <rect>
+       <x>170</x>
+       <y>600</y>
+       <width>121</width>
+       <height>41</height>
+      </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">co</string>
+      <string notr="true">background-color: rgb(130, 135, 139); color: white;</string>
      </property>
      <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:20pt; font-weight:600; color:#73d216;&quot;&gt;0&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string>Clear</string>
      </property>
     </widget>
    </widget>
-   <widget class="QWidget" name="widget_25" native="true">
-    <property name="geometry">
-     <rect>
-      <x>480</x>
-      <y>550</y>
-      <width>191</width>
-      <height>101</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgb(81, 86, 90);</string>
-    </property>
-    <widget class="QLabel" name="set_svr_re_connect_label_60">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>10</y>
-       <width>181</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>8</pointsize>
-      </font>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">co</string>
-     </property>
-     <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; color:#eeeeec;&quot;&gt;IO 01 status&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="control_box_io1_status_label">
-     <property name="geometry">
-      <rect>
-       <x>60</x>
-       <y>50</y>
-       <width>61</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>8</pointsize>
-      </font>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">co</string>
-     </property>
-     <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:20pt; font-weight:600; color:#73d216;&quot;&gt;True&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-    </widget>
-   </widget>
-  </widget>
-  <widget class="QWidget" name="widget_4" native="true">
-   <property name="geometry">
-    <rect>
-     <x>730</x>
-     <y>20</y>
-     <width>521</width>
-     <height>691</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">background-color: rgb(85, 87, 83);</string>
-   </property>
-   <widget class="QLabel" name="set_svr_re_connect_label_13">
+   <widget class="QWidget" name="widget" native="true">
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>20</y>
-      <width>221</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>8</pointsize>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">co</string>
-    </property>
-    <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:18pt; color:#eeeeec;&quot;&gt;Robot Response&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-    </property>
-   </widget>
-   <widget class="QListView" name="robot_response_listView">
-    <property name="geometry">
-     <rect>
-      <x>40</x>
-      <y>70</y>
-      <width>451</width>
-      <height>541</height>
+      <y>10</y>
+      <width>560</width>
+      <height>650</height>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: rgb(209, 209, 209);</string>
+     <string notr="true">background-color: rgb(85, 87, 83);</string>
     </property>
+    <widget class="QLabel" name="demo_label_7">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>10</y>
+       <width>511</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>8</pointsize>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">co</string>
+     </property>
+     <property name="text">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:18pt; font-style:italic; color:#ffffff;&quot;&gt;Connection Status&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+    </widget>
+    <widget class="QWidget" name="widget_2" native="true">
+     <property name="geometry">
+      <rect>
+       <x>660</x>
+       <y>670</y>
+       <width>701</width>
+       <height>691</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(85, 87, 83);</string>
+     </property>
+     <widget class="QLabel" name="demo_label_10">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>20</y>
+        <width>221</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>8</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">co</string>
+      </property>
+      <property name="text">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:18pt; color:#ffffff;&quot;&gt;Connection Status&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="widget_24" native="true">
+     <property name="geometry">
+      <rect>
+       <x>200</x>
+       <y>520</y>
+       <width>161</width>
+       <height>91</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(81, 86, 90);</string>
+     </property>
+     <widget class="QLabel" name="demo_label_59">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>10</y>
+        <width>161</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>8</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">co</string>
+      </property>
+      <property name="text">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; color:#eeeeec;&quot;&gt;Error_Code&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="error_code_status_label">
+      <property name="geometry">
+       <rect>
+        <x>50</x>
+        <y>50</y>
+        <width>61</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>8</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">co</string>
+      </property>
+      <property name="text">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt; font-weight:600; color:#2e3436;&quot;&gt;NaN&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="widget_25" native="true">
+     <property name="geometry">
+      <rect>
+       <x>380</x>
+       <y>520</y>
+       <width>161</width>
+       <height>91</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(81, 86, 90);</string>
+     </property>
+     <widget class="QLabel" name="demo_label_60">
+      <property name="geometry">
+       <rect>
+        <x>40</x>
+        <y>10</y>
+        <width>161</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>8</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">co</string>
+      </property>
+      <property name="text">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; color:#eeeeec;&quot;&gt;Ctrl_DO0&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="ctrl_do0_status_label">
+      <property name="geometry">
+       <rect>
+        <x>50</x>
+        <y>50</y>
+        <width>61</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>8</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">co</string>
+      </property>
+      <property name="text">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt; font-weight:600; color:#2e3436;&quot;&gt;NaN&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+     </widget>
+    </widget>
    </widget>
-   <widget class="QPushButton" name="clear_response_button">
-    <property name="geometry">
-     <rect>
-      <x>200</x>
-      <y>630</y>
-      <width>121</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgb(130, 135, 139); color: white;</string>
-    </property>
-    <property name="text">
-     <string>Clear</string>
-    </property>
-   </widget>
-  </widget>
-  <widget class="QWidget" name="widget_5" native="true">
-   <property name="geometry">
-    <rect>
-     <x>-10</x>
-     <y>10</y>
-     <width>1291</width>
-     <height>711</height>
-    </rect>
-   </property>
-   <property name="contextMenuPolicy">
-    <enum>Qt::ActionsContextMenu</enum>
-   </property>
-   <property name="layoutDirection">
-    <enum>Qt::LeftToRight</enum>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">background-color: rgb(30, 30, 30);</string>
-   </property>
   </widget>
   <zorder>widget_5</zorder>
-  <zorder>widget_4</zorder>
-  <zorder>widget</zorder>
   <zorder>widget_7</zorder>
   <zorder>widget_11</zorder>
   <zorder>widget_3</zorder>

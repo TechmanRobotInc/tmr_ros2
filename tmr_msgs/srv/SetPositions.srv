@@ -15,10 +15,9 @@ int8 PLINE_T = 8
 
 int8 motion_type
 float64[] positions
-float64 velocity
-float64 acc_time
-int32 blend_percentage
-bool fine_goal
-
+float64 velocity       # motion velocity: if expressed in Cartesian coordinate (unit: m/s) , if expressed in joint velocity (unit: rad/s, and the maximum value is limited to pi )
+float64 acc_time       # time to reach maximum speed (unit: ms)
+int32 blend_percentage # blending value: expressed as a percentage (unit: %, and the minimum value of 0 means no blending)
+bool fine_goal         # precise position mode : If activated, the amount of error in the final position will converge more.
 ---
-bool ok
+bool ok                # ok :  set motion status 

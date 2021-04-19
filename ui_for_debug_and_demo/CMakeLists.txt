@@ -19,12 +19,18 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
-find_package(Qt5Core REQUIRED)
-find_package(Qt5Quick REQUIRED)
-find_package(Qt5Widgets REQUIRED)
 find_package(rclcpp_action REQUIRED)
 find_package(ament_index_cpp REQUIRED)
 find_package(tm_msgs REQUIRED)
+
+# Qt5
+find_package(Qt5Core REQUIRED)
+find_package(Qt5Quick REQUIRED)
+find_package(Qt5Widgets REQUIRED)
+
+###########
+## Build ##
+###########
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   # the following line skips the linter which checks for copyrights
@@ -36,20 +42,22 @@ if(BUILD_TESTING)
   ament_lint_auto_find_test_dependencies()
 endif()
 
-
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
+## Specify additional locations of header files
+
 include_directories(
   ${rclcpp_INCLUDE_DIRS}
   ${rclcpp_action_INCLUDE_DIRS}
-	${std_msgs_INCLUDE_DIRS}
-	${Qt5Core_INCLUDE_DIRS}
-	${Qt5Quick_INCLUDE_DIRS}
+  ${std_msgs_INCLUDE_DIRS}
+  ${Qt5Core_INCLUDE_DIRS}
+  ${Qt5Quick_INCLUDE_DIRS}
   ${Qt5Widgets_INCLUDE_DIRS}
-	)
+)
+
 link_directories(${catkin_LIBRARY_DIRS})
 
 qt5_wrap_ui(UIC_FILES src/tm_ros_driver_windows.ui)
@@ -63,15 +71,16 @@ src/ros_page.cpp
 src/tm_ros_driver_windows.cpp
 )
 
+# Demo executable
 add_executable(robot_ui ${SRCS} ${UIC_FILES} ${HEADERS})
+
 ament_target_dependencies(robot_ui
-	rclcpp
+  rclcpp
   std_msgs
   rclcpp_action
   ament_index_cpp
   tm_msgs
 )
-
 target_link_libraries(robot_ui
   Qt5::Core
   Qt5::Quick
@@ -79,6 +88,12 @@ target_link_libraries(robot_ui
   ${catkin_LIBRARIES}
 )
 
+
+#############
+## Install ##
+#############
+
+# Install libraries
 install(TARGETS
 robot_ui
 	DESTINATION lib/${PROJECT_NAME}

@@ -3,9 +3,9 @@
 <package format="3">
   <name>tm_driver</name>
   <version>1.0.0</version>
-  <description>TODO: Package description</description>
+  <description>Driver for TMFlow</description>
   <maintainer email="ken.tsai@tm-robot.com">Ken Tsai</maintainer>
-  <license>TODO: License declaration</license>
+  <license>BSD</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
   <build_depend>rclcpp</build_depend>
