@@ -108,6 +108,7 @@ private slots:
   void click_set_svr_re_connect_button();
   void click_change_control_box_io_button();
   void click_clear_response_button();
+  void quit();  
 
 };
 #endif // MAINWINDOW_H

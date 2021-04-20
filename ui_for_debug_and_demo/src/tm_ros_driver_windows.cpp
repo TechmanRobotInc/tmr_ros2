@@ -12,6 +12,7 @@ void MainWindow::initial_ui_component(){
   connect(ui->set_svr_re_connect_button, SIGNAL(clicked()),this,SLOT(click_set_svr_re_connect_button()));
   connect(ui->change_control_box_io_button, SIGNAL(clicked()),this,SLOT(click_change_control_box_io_button()));
   connect(ui->clear_response_button, SIGNAL(clicked()),this,SLOT(click_clear_response_button()));
+  connect(ui->Close, SIGNAL(clicked()),this,SLOT(quit()));
   
   statusItemModel = std::make_unique<QStandardItemModel>();
   ui->robot_response_listView->setModel(statusItemModel.get());
@@ -151,6 +152,11 @@ void MainWindow::click_set_svr_re_connect_button(){
 void MainWindow::click_change_control_box_io_button(){
   std::cout<<"click [DO0 Ctrl] button"<<std::endl;
   change_control_box_io_button();
+}
+void MainWindow::quit()
+{
+    std::cout <<"click [Quit_GUI] button"<< std::endl;
+    QApplication::quit();
 }
 void MainWindow::initial_ui_page_to_ros_thread(){
   connect(this, SIGNAL(send_sct_as_re_connect()),rosPage.get(),SLOT(send_sct_as_re_connect()));
