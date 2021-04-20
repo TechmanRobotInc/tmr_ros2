@@ -32,15 +32,15 @@ std::string RosPage::current_time() {
   return std::string(buf) + milliseconds_str;
 }
 void RosPage::sct_response_callback(tm_msgs::msg::SctResponse::SharedPtr msg){
-  std::string re = "[sct]"+current_time()+"->"+msg->id+":"+msg->script;
+  std::string re = current_time()+" [sct]-> id:"+msg->id+", script:"+msg->script;
   send_to_ui_list(re);
 }
 void RosPage::sta_response_callback(tm_msgs::msg::StaResponse::SharedPtr msg){
-  std::string re = "[sta]"+current_time()+"->subcmd:"+msg->subcmd+",subdata:"+msg->subdata;
+  std::string re = current_time()+" [sta]-> subcmd:"+msg->subcmd+", subdata:"+msg->subdata;
   send_to_ui_list(re);
 }
 void RosPage::svr_response_callback(tm_msgs::msg::SvrResponse::SharedPtr msg){
-  std::string re = "[svr]"+current_time()+"->"+msg->id+":mode->"+std::to_string(msg->mode)+", content->"+msg->content+", error_code->"+std::to_string(msg->error_code);
+  std::string re = current_time()+" [svr]-> id:"+msg->id+", mode:"+std::to_string(msg->mode)+", content->"+msg->content+", error_code->"+std::to_string(msg->error_code);
   send_to_ui_list(re);
 }
 void RosPage::initial_subscriber(){

@@ -320,6 +320,7 @@ The GUI displays tm_driver connection status, sct, sta, svr messages and robot s
 > * The user can click "``clear``" button to clear the old response items.<br/>
 > * If "``is_srv_connect``" and "``is_sct_connect``" are true, but the "``Robot_Link``" is false or "``Robot_Error``" is true; this means the robot is working abnormally, the ESTOP button may be pressed or some protection or error <sup>2</sup>  has occurred. Therefore, when the user sends a move script command at this time, it will not work. <br/> 
 > <sup>2</sup> For more detailed information, please refer to the TM Robot User Guide. <br/> 
+> * The user can click "``Quit_GUI``" button or click the "``x``" close button in the upper right corner to close this GUI. <br/> 
 
 
 ### &sect; Usage with GUI debugging

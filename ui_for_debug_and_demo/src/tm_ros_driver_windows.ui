@@ -1037,6 +1037,22 @@
       </property>
      </widget>
     </widget>
+    <widget class="QPushButton" name="Close">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>620</y>
+       <width>89</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Quit_GUI</string>
+     </property>
+     <property name="styleSheet">
+     <string notr="true">background-color: rgb(141, 192, 53);</string>
+     </property>     
+    </widget>
    </widget>
   </widget>
   <zorder>widget_5</zorder>
