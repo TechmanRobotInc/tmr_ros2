@@ -280,8 +280,8 @@ bool TmSctRos2::ask_sta(
     sta_mtx_.lock();
     sta_updated_ = false;
     sta_mtx_.unlock();
-
-    rb = (sct_.send_script_str(req->subcmd, req->subdata) == iface_.RC_OK);
+    
+    rb = (sct_.send_sta_request(req->subcmd, req->subdata) == iface_.RC_OK);
 
     {
         std::unique_lock<std::mutex> lck(sta_mtx_);
