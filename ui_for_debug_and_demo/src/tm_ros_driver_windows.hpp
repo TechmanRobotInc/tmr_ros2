@@ -87,11 +87,12 @@ private:
   int rowIndex;
   void initial_ros_thread_to_ui_page();
   void initial_ui_page_to_ros_thread();
-  void set_text_nan_initial(QLabel* label);    
+  void set_text_nan_initial(QLabel* label);
   void set_text_true_false(bool isTrue, QLabel* label, bool isReverse);
   void set_text_on_off(bool isTrue, QLabel* label, bool isReverse);
   void set_text_high_low(bool isTrue, QLabel* label, bool isReverse);
   void set_text_null_reserve(bool isTrue, QLabel* label);
+  void error_code_format_change(tm_msgs::msg::FeedbackState::SharedPtr msg, QLabel* label, int base); 
   void initial_text_ctrl_label();      
   void initial_ui_component();
   QString format_change(std::string msg);
