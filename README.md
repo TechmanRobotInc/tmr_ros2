@@ -289,7 +289,7 @@ In this demo code, the user should set module, type, pin and state. <sup>4</sup>
 module &rarr;  MODULE_CONTROLBOX or MODULE_ENDEFFECTOR<br/>
 type &rarr;  TYPE_DIGITAL_IN, TYPE_DIGITAL_OUT, TYPE_INSTANT_DO, TYPE_ANALOG_IN, TYPE_ANALOG_OUT, TYPE_INSTANT_AO<br/>
 pin &rarr;  pin number<br/>
-state &rarr;  STATE_OFF or STATE_ON value, or other value (if type expressed in analog control module)<br/>
+state &rarr;  STATE_OFF or STATE_ON value, or other value (if type expressed in a specific control module)<br/>
 > <sup>4</sup> For more detailed information, please refer to _defined protocol_ (Chapter6.5 IO)<br/>
 >
 > * demo_set_positions:<br/>
@@ -308,7 +308,8 @@ In this demo code, the user can use this service to send TMSVR <sup>7</sup> cmd.
 > <sup>7</sup> For more detailed information, please refer to _defined protocol_ (Chapter9.3 svr_write())<br/>
 >
 > * demo_leave_listen_node:<br/>
-In this demo code, the user can use send_script service sending a script to leave the __Listen node__.
+In this demo code, the user can use send_script service sending a script to leave the __Listen node__.<br/>
+> :bulb: If the user has sent the demo_leave_listen_node script to leave the __Listen node__, and you want to run the TM Robot again, please remember that the _Listen task_ project should be resumed to run. You can press the Stop Button on the Robot Stick and then press the Play/Pause Button to resume operation. <br/>
 
 
 ### &sect; __Usage with demo code & driver__
@@ -341,15 +342,16 @@ The GUI displays tm_driver connection status, sct, sta, svr messages and robot s
 
 ### &sect; GUI Debugging description
 > * If the user forgets to run the TM ROS driver, the user will see all the controlled label items of the GUI are displayed as "``NaN``".<br/>
-> * If "``is_srv_connect``" and "``is_sct_connect``" are true, it means that ROS SvrClient and SctClient are successfully connected.<br/>
-> * If "``is_srv_connect``" is false, the user should check whether the __Data Table Setting__  is correct.<br/>
-> * If "``is_sct_connect``" is false or false/true flashing, the user should check whether the task project is running.<br/>
+> * If "``is_svr_connected``" and "``is_sct_connected``" are true, it means that ROS SvrClient and SctClient are successfully connected.<br/>
+> * If "``is_svr_connected``" is false, the user should check whether the __Data Table Setting__  is correct.<br/>
+> * If "``is_sct_connected``" is false or false/true flashing, the user should check whether the task project is running.<br/>
 > * When the user send a command or click "``H/L``" button of Control Box DO0 Ctrl <sup>1</sup> ,  the user will see a response embedded in the "``Robot Response``" item view. <br/>
 > <sup>1</sup> For details of this item, please refer to __SctResponse.msg__, __StaResponse.msg__ and __SvrResponse.msg__ of TM ROS driver code.<br/>
 > * The user can click "``clear``" button to clear the old response items.<br/>
-> * If "``is_srv_connect``" and "``is_sct_connect``" are true, but the "``Robot_Link``" is false or "``Robot_Error``" is true; this means the robot is working abnormally, the ESTOP button may be pressed or some protection or error <sup>2</sup>  has occurred. Therefore, when the user sends a move script command at this time, it will not work. <br/> 
+> * If "``is_svr_connected``" and "``is_sct_connected``" are true, but the "``Robot_Link``" is false or "``Robot_Error``" is true; this means the robot is working abnormally, the ESTOP button may be pressed or some protection or error <sup>2</sup>  has occurred. Therefore, when the user sends a move script command at this time, it will not work. <br/> 
 > <sup>2</sup> For more detailed information, please refer to the TM Robot User Guide. <br/> 
 > * The user can click "``Quit_GUI``" button or click the "``x``" close button in the upper right corner to close this GUI. <br/> 
+> :bulb: If the user sents the script to leave the __Listen node__, or the network is disconnected while the tm_driver is connected, the display of all controlled label items in the GUI will remain in the last state and become invalid. <br/> 
 
 
 ### &sect; Usage with GUI debugging

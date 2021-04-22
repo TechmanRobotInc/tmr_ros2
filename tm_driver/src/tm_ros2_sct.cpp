@@ -280,7 +280,7 @@ bool TmSctRos2::ask_sta(
     sta_mtx_.lock();
     sta_updated_ = false;
     sta_mtx_.unlock();
-    
+
     rb = (sct_.send_sta_request(req->subcmd, req->subdata) == iface_.RC_OK);
 
     {

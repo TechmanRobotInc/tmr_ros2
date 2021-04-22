@@ -28,7 +28,7 @@
    <property name="styleSheet">
     <string notr="true">background-color: rgb(81, 86, 90);</string>
    </property>
-   <widget class="QLabel" name="demo_label_11">
+   <widget class="QLabel" name="SctClient_label">
     <property name="geometry">
      <rect>
       <x>30</x>
@@ -49,7 +49,7 @@
      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt; color:#ad7fa8;&quot;&gt;SctClient&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
-   <widget class="QLabel" name="demo_label_12">
+   <widget class="QLabel" name="Sct_ReConnect_label">
     <property name="geometry">
      <rect>
       <x>30</x>
@@ -99,7 +99,7 @@
    <property name="styleSheet">
     <string notr="true">background-color: rgb(81, 86, 90);</string>
    </property>
-   <widget class="QLabel" name="demo_label_17">
+   <widget class="QLabel" name="Control_Box_label">
     <property name="geometry">
      <rect>
       <x>30</x>
@@ -120,7 +120,7 @@
      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt; color:#ad7fa8;&quot;&gt;Control Box&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
-   <widget class="QLabel" name="demo_label_18">
+   <widget class="QLabel" name="DO0_Ctrl_label">
     <property name="geometry">
      <rect>
       <x>40</x>
@@ -170,7 +170,7 @@
    <property name="styleSheet">
     <string notr="true">background-color: rgb(81, 86, 90);</string>
    </property>
-   <widget class="QLabel" name="demo_label_5">
+   <widget class="QLabel" name="SvrClient_label">
     <property name="geometry">
      <rect>
       <x>30</x>
@@ -191,7 +191,7 @@
      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt; color:#ad7fa8;&quot;&gt;SvrClient&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
-   <widget class="QLabel" name="demo_label_6">
+   <widget class="QLabel" name="Svr_ReConnect_label">
     <property name="geometry">
      <rect>
       <x>30</x>
@@ -241,7 +241,7 @@
    <property name="styleSheet">
     <string notr="true">background-color: rgb(81, 86, 90);</string>
    </property>
-   <widget class="QLabel" name="demo_label_22">
+   <widget class="QLabel" name="is_svr_connected_label">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -259,7 +259,7 @@
      <string notr="true">co</string>
     </property>
     <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; color:#eeeeec;&quot;&gt;is_svr_connect&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; color:#eeeeec;&quot;&gt;is_svr_connected&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
    <widget class="QLabel" name="svrclient_status_label">
@@ -296,7 +296,7 @@
    <property name="styleSheet">
     <string notr="true">background-color: rgb(81, 86, 90);</string>
    </property>
-   <widget class="QLabel" name="demo_label_24">
+   <widget class="QLabel" name="is_sct_connected_label">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -314,7 +314,7 @@
      <string notr="true">co</string>
     </property>
     <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; color:#eeeeec;&quot;&gt;is_sct_connect&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; color:#eeeeec;&quot;&gt;is_sct_connected&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
    <widget class="QLabel" name="sctclient_status_label">
@@ -351,7 +351,7 @@
    <property name="styleSheet">
     <string notr="true">background-color: rgb(81, 86, 90);</string>
    </property>
-   <widget class="QLabel" name="demo_label_26">
+   <widget class="QLabel" name="Safeguard_A_label">
     <property name="geometry">
      <rect>
       <x>30</x>
@@ -406,7 +406,7 @@
    <property name="styleSheet">
     <string notr="true">background-color: rgb(81, 86, 90);</string>
    </property>
-   <widget class="QLabel" name="demo_label_40">
+   <widget class="QLabel" name="Robot_Link_label">
     <property name="geometry">
      <rect>
       <x>30</x>
@@ -461,7 +461,7 @@
    <property name="styleSheet">
     <string notr="true">background-color: rgb(81, 86, 90);</string>
    </property>
-   <widget class="QLabel" name="demo_label_42">
+   <widget class="QLabel" name="Robot_Error_label">
     <property name="geometry">
      <rect>
       <x>30</x>
@@ -516,7 +516,7 @@
    <property name="styleSheet">
     <string notr="true">background-color: rgb(81, 86, 90);</string>
    </property>
-   <widget class="QLabel" name="demo_label_46">
+   <widget class="QLabel" name="Project_Run_label">
     <property name="geometry">
      <rect>
       <x>30</x>
@@ -571,7 +571,7 @@
    <property name="styleSheet">
     <string notr="true">background-color: rgb(81, 86, 90);</string>
    </property>
-   <widget class="QLabel" name="demo_label_50">
+   <widget class="QLabel" name="Project_Pause_label">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -626,7 +626,7 @@
    <property name="styleSheet">
     <string notr="true">background-color: rgb(81, 86, 90);</string>
    </property>
-   <widget class="QLabel" name="demo_label_52">
+   <widget class="QLabel" name="Data_Table_Correct_label">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -681,7 +681,7 @@
    <property name="styleSheet">
     <string notr="true">background-color: rgb(81, 86, 90);</string>
    </property>
-   <widget class="QLabel" name="demo_label_54">
+   <widget class="QLabel" name="ESTOP_label">
     <property name="geometry">
      <rect>
       <x>40</x>
@@ -736,7 +736,7 @@
    <property name="styleSheet">
     <string notr="true">background-color: rgb(81, 86, 90);</string>
    </property>
-   <widget class="QLabel" name="demo_label_58">
+   <widget class="QLabel" name="Error_Content_label">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -809,7 +809,7 @@
     <property name="styleSheet">
      <string notr="true">background-color: rgb(85, 87, 83);</string>
     </property>
-    <widget class="QLabel" name="demo_label_13">
+    <widget class="QLabel" name="Robot_Response_label">
      <property name="geometry">
       <rect>
        <x>20</x>
@@ -872,7 +872,7 @@
     <property name="styleSheet">
      <string notr="true">background-color: rgb(85, 87, 83);</string>
     </property>
-    <widget class="QLabel" name="demo_label_7">
+    <widget class="QLabel" name="Connection_Status_label">
      <property name="geometry">
       <rect>
        <x>20</x>
@@ -905,27 +905,6 @@
      <property name="styleSheet">
       <string notr="true">background-color: rgb(85, 87, 83);</string>
      </property>
-     <widget class="QLabel" name="demo_label_10">
-      <property name="geometry">
-       <rect>
-        <x>20</x>
-        <y>20</y>
-        <width>221</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-       </font>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">co</string>
-      </property>
-      <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:18pt; color:#ffffff;&quot;&gt;Connection Status&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-      </property>
-     </widget>
     </widget>
     <widget class="QWidget" name="widget_24" native="true">
      <property name="geometry">
@@ -939,7 +918,7 @@
      <property name="styleSheet">
       <string notr="true">background-color: rgb(81, 86, 90);</string>
      </property>
-     <widget class="QLabel" name="demo_label_59">
+     <widget class="QLabel" name="Error_Code_label">
       <property name="geometry">
        <rect>
         <x>30</x>
@@ -965,7 +944,7 @@
        <rect>
         <x>50</x>
         <y>50</y>
-        <width>61</width>
+        <width>101</width>
         <height>31</height>
        </rect>
       </property>
@@ -994,7 +973,7 @@
      <property name="styleSheet">
       <string notr="true">background-color: rgb(81, 86, 90);</string>
      </property>
-     <widget class="QLabel" name="demo_label_60">
+     <widget class="QLabel" name="Ctrl_DO0_label">
       <property name="geometry">
        <rect>
         <x>40</x>
@@ -1046,12 +1025,12 @@
        <height>25</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(141, 192, 53);</string>
+     </property>
      <property name="text">
       <string>Quit_GUI</string>
      </property>
-     <property name="styleSheet">
-     <string notr="true">background-color: rgb(141, 192, 53);</string>
-     </property>     
     </widget>
    </widget>
   </widget>

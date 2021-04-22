@@ -16,7 +16,7 @@ int8 STATE_ON = 1
 int8 module
 int8 type
 int8 pin
-float32 state #STATE_OFF or STATE_ON value, or other value (if type expressed in analog control module)
+float32 state #STATE_OFF or STATE_ON value, or other value (if type expressed in a specific control module)
 ---
 #ok= set function status
 bool ok
