@@ -52,6 +52,9 @@ public:
 		_item_map["TCP_Speed3D"        ] = { &rs->_tcp_speed_ };
 		_item_map["Joint_Speed"        ] = { &rs->_joint_speed_ };
 		_item_map["Joint_Torque"       ] = { &rs->_joint_torque_ };
+		_item_map["Joint_Torque_Average"] = { &rs->_joint_torque_average_ ,Item::NOT_REQUIRE};
+		_item_map["Joint_Torque_Min"   ] = { &rs->_joint_torque_min_ ,Item::NOT_REQUIRE};
+		_item_map["Joint_Torque_Max"   ] = { &rs->_joint_torque_max_ ,Item::NOT_REQUIRE};
 		_item_map["Project_Speed"      ] = { &rs->_proj_speed_ };
 		_item_map["MA_Mode"            ] = { &rs->_ma_mode_ };
 		_item_map["Robot_Light"        ] = { &rs->_robot_light_ };
@@ -122,6 +125,9 @@ TmRobotState::TmRobotState()
 	_tcp_speed_vec.assign(6, 0.0);
 	_joint_speed.assign(DOF, 0.0);
 	_joint_torque.assign(DOF, 0.0);
+	_joint_torque_average.assign(DOF, 0.0);
+	_joint_torque_min.assign(DOF, 0.0);
+	_joint_torque_max.assign(DOF, 0.0);
 	_tcp_frame.assign(6, 0.0);
 	_tcp_cog.assign(6, 0.0);
 
@@ -426,9 +432,14 @@ void TmRobotState::_deserialize_update(bool lock) {
 		si_pose(_tcp_speed_vec, _tcp_speed_vec_, 6);
 
 		_joint_speed = rads(_joint_speed_, DOF);
-
+        
 		_joint_torque = meters(_joint_torque_, DOF);
-
+		
+		_joint_torque_average = meters(_joint_torque_average_, DOF);
+		
+        _joint_torque_min = meters(_joint_torque_min_, DOF);
+		
+		_joint_torque_max = meters(_joint_torque_max_, DOF);
 		// IO
 
 		for (int i = 0; i < 8; ++i) { _ctrller_DO[i] = _ctrller_DO_[i]; }

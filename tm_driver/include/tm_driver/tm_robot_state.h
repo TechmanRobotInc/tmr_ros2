@@ -48,6 +48,9 @@ private:
 	float _tcp_speed_;
 	float _joint_speed_[DOF];
 	float _joint_torque_[DOF];
+	float _joint_torque_average_[DOF] = {0};
+	float _joint_torque_min_[DOF] = {0};
+	float _joint_torque_max_[DOF] = {0};
 
 	int _proj_speed_;
 	int _ma_mode_;
@@ -88,6 +91,9 @@ private:
 	double _tcp_speed;
 	std::vector<double> _joint_speed;
 	std::vector<double> _joint_torque;
+    std::vector<double> _joint_torque_average;
+	std::vector<double> _joint_torque_min;
+	std::vector<double> _joint_torque_max;
 
 	std::vector<double> _tcp_frame;
 	double _tcp_mass;
@@ -148,6 +154,9 @@ public:
 	double tcp_speed() { return _tcp_speed; }
 	std::vector<double> joint_speed() { return _joint_speed; }
 	std::vector<double> joint_torque() { return _joint_torque; }
+	std::vector<double> joint_torque_average() { return _joint_torque_average; }
+	std::vector<double> joint_torque_min() { return _joint_torque_min; }
+	std::vector<double> joint_torque_max() { return _joint_torque_max; }
 
 	int project_speed() { return _proj_speed; }
 	int ma_mode() { return _ma_mode; }

@@ -16,6 +16,11 @@ float64[] tool_pose
 float64[] tcp_speed
 float64[] tcp_force
 
+# Torque Data(for TM-Flow 1.84)
+float64[] joint_tor_average
+float64[] joint_tor_min
+float64[] joint_tor_max
+
 # Status
 
 bool robot_link

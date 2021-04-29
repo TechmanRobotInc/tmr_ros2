@@ -92,6 +92,11 @@ void TmSvrRos2::publish_fbs()
     pm.joint_msg.effort = pm.fbs_msg.joint_tor;
     pm.joint_pub->publish(pm.joint_msg);
 
+    // Publish torque state
+    pm.fbs_msg.joint_tor_average = state.joint_torque_average();
+    pm.fbs_msg.joint_tor_min = state.joint_torque_min();
+    pm.fbs_msg.joint_tor_max = state.joint_torque_max();
+
     // Publish tool pose
     auto &pose = pm.fbs_msg.tool_pose;
     tf2::Quaternion quat;

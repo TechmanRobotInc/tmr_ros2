@@ -225,6 +225,21 @@ install(TARGETS
 demo_get_svr_response
   DESTINATION lib/${PROJECT_NAME}
 )
+add_executable(demo_get_torque_feedback
+  get_status_demo_src/demo_get_torque_feedback.cpp
+ 
+)
+ament_target_dependencies(demo_get_torque_feedback
+  rclcpp
+  std_msgs
+  sensor_msgs
+  tm_msgs
+)
+
+install(TARGETS
+demo_get_torque_feedback
+  DESTINATION lib/${PROJECT_NAME}
+)
 add_executable(demo_leave_listen_node
   src/demo_leave_listen_node.cpp
  
