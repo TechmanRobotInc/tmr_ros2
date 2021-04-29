@@ -16,7 +16,7 @@
   <property name="styleSheet">
    <string notr="true">background-color: rgb(141, 192, 53);</string>
   </property>
-  <widget class="QWidget" name="widget_7" native="true">
+  <widget class="QWidget" name="widget_SctClient" native="true">
    <property name="geometry">
     <rect>
      <x>210</x>
@@ -87,7 +87,7 @@
     </property>
    </widget>
   </widget>
-  <widget class="QWidget" name="widget_11" native="true">
+  <widget class="QWidget" name="widget_ControlBox" native="true">
    <property name="geometry">
     <rect>
      <x>390</x>
@@ -158,7 +158,7 @@
     </property>
    </widget>
   </widget>
-  <widget class="QWidget" name="widget_3" native="true">
+  <widget class="QWidget" name="widget_SvrClient" native="true">
    <property name="geometry">
     <rect>
      <x>30</x>
@@ -229,7 +229,7 @@
     </property>
    </widget>
   </widget>
-  <widget class="QWidget" name="widget_14" native="true">
+  <widget class="QWidget" name="widget_Svr_connected" native="true">
    <property name="geometry">
     <rect>
      <x>30</x>
@@ -284,7 +284,7 @@
     </property>
    </widget>
   </widget>
-  <widget class="QWidget" name="widget_15" native="true">
+  <widget class="QWidget" name="widget_Sct_connected" native="true">
    <property name="geometry">
     <rect>
      <x>210</x>
@@ -339,7 +339,7 @@
     </property>
    </widget>
   </widget>
-  <widget class="QWidget" name="widget_16" native="true">
+  <widget class="QWidget" name="widget_Safeguard_A" native="true">
    <property name="geometry">
     <rect>
      <x>390</x>
@@ -394,7 +394,7 @@
     </property>
    </widget>
   </widget>
-  <widget class="QWidget" name="widget_17" native="true">
+  <widget class="QWidget" name="widget_Robot_Link" native="true">
    <property name="geometry">
     <rect>
      <x>30</x>
@@ -449,7 +449,7 @@
     </property>
    </widget>
   </widget>
-  <widget class="QWidget" name="widget_18" native="true">
+  <widget class="QWidget" name="widget_Robot_Error" native="true">
    <property name="geometry">
     <rect>
      <x>210</x>
@@ -504,7 +504,7 @@
     </property>
    </widget>
   </widget>
-  <widget class="QWidget" name="widget_19" native="true">
+  <widget class="QWidget" name="widget_Project_Run" native="true">
    <property name="geometry">
     <rect>
      <x>390</x>
@@ -559,7 +559,7 @@
     </property>
    </widget>
   </widget>
-  <widget class="QWidget" name="widget_20" native="true">
+  <widget class="QWidget" name="widget_Project_Pause" native="true">
    <property name="geometry">
     <rect>
      <x>30</x>
@@ -614,7 +614,7 @@
     </property>
    </widget>
   </widget>
-  <widget class="QWidget" name="widget_21" native="true">
+  <widget class="QWidget" name="widget_Data_Table_Correct" native="true">
    <property name="geometry">
     <rect>
      <x>210</x>
@@ -669,7 +669,7 @@
     </property>
    </widget>
   </widget>
-  <widget class="QWidget" name="widget_22" native="true">
+  <widget class="QWidget" name="widget_ESTOP" native="true">
    <property name="geometry">
     <rect>
      <x>390</x>
@@ -724,7 +724,7 @@
     </property>
    </widget>
   </widget>
-  <widget class="QWidget" name="widget_23" native="true">
+  <widget class="QWidget" name="widget_Error_Content" native="true">
    <property name="geometry">
     <rect>
      <x>30</x>
@@ -779,7 +779,7 @@
     </property>
    </widget>
   </widget>
-  <widget class="QWidget" name="widget_5" native="true">
+  <widget class="QWidget" name="widget_Black" native="true">
    <property name="geometry">
     <rect>
      <x>-10</x>
@@ -797,7 +797,7 @@
    <property name="styleSheet">
     <string notr="true">background-color: rgb(30, 30, 30);</string>
    </property>
-   <widget class="QWidget" name="widget_4" native="true">
+   <widget class="QWidget" name="widget_Robot_Response" native="true">
     <property name="geometry">
      <rect>
       <x>590</x>
@@ -860,7 +860,7 @@
      </property>
     </widget>
    </widget>
-   <widget class="QWidget" name="widget" native="true">
+   <widget class="QWidget" name="widget_Connection_Status" native="true">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -893,20 +893,7 @@
       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:18pt; font-style:italic; color:#ffffff;&quot;&gt;Connection Status&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
     </widget>
-    <widget class="QWidget" name="widget_2" native="true">
-     <property name="geometry">
-      <rect>
-       <x>660</x>
-       <y>670</y>
-       <width>701</width>
-       <height>691</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(85, 87, 83);</string>
-     </property>
-    </widget>
-    <widget class="QWidget" name="widget_24" native="true">
+    <widget class="QWidget" name="widget_Error_Code" native="true">
      <property name="geometry">
       <rect>
        <x>200</x>
@@ -961,7 +948,7 @@
       </property>
      </widget>
     </widget>
-    <widget class="QWidget" name="widget_25" native="true">
+    <widget class="QWidget" name="widget_Ctrl_DO0" native="true">
      <property name="geometry">
       <rect>
        <x>380</x>
@@ -1034,20 +1021,20 @@
     </widget>
    </widget>
   </widget>
-  <zorder>widget_5</zorder>
-  <zorder>widget_7</zorder>
-  <zorder>widget_11</zorder>
-  <zorder>widget_3</zorder>
-  <zorder>widget_14</zorder>
-  <zorder>widget_15</zorder>
-  <zorder>widget_16</zorder>
-  <zorder>widget_17</zorder>
-  <zorder>widget_18</zorder>
-  <zorder>widget_19</zorder>
-  <zorder>widget_20</zorder>
-  <zorder>widget_21</zorder>
-  <zorder>widget_22</zorder>
-  <zorder>widget_23</zorder>
+  <zorder>widget_Black</zorder>
+  <zorder>widget_SctClient</zorder>
+  <zorder>widget_ControlBox</zorder>
+  <zorder>widget_SvrClient</zorder>
+  <zorder>widget_Svr_connected</zorder>
+  <zorder>widget_Sct_connected</zorder>
+  <zorder>widget_Safeguard_A</zorder>
+  <zorder>widget_Robot_Link</zorder>
+  <zorder>widget_Robot_Error</zorder>
+  <zorder>widget_Project_Run</zorder>
+  <zorder>widget_Project_Pause</zorder>
+  <zorder>widget_Data_Table_Correct</zorder>
+  <zorder>widget_ESTOP</zorder>
+  <zorder>widget_Error_Content</zorder>
  </widget>
  <resources/>
  <connections/>
