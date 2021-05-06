@@ -70,6 +70,8 @@ public:
 
 	TmPacket &packet() { return _packet_list.back(); }
 
+	static uint64_t get_current_time_in_ms();
+
 private:
 	int connect_with_timeout(int sockfd, const char *ip, unsigned short port, int timeout_ms);
 

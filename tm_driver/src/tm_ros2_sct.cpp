@@ -137,6 +137,7 @@ bool TmSctRos2::sct_func()
     }
     return true;
 }
+
 void TmSctRos2::sct_responsor()
 {
     TmSctCommunication &sct = sct_;
@@ -161,13 +162,17 @@ void TmSctRos2::sct_responsor()
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
         }
         print_info("TM_ROS: (TM_SCT) reconnect in ");
-        int cnt = 0;
-        while (rclcpp::ok() && cnt < sct_reconnect_timeval_ms_) {
-            if (cnt % 1000 == 0) {
-                print_info("%.1f sec...", 0.001 * (sct_reconnect_timeval_ms_ - cnt));
+        
+        uint64_t startTimeMs = TmCommunication::get_current_time_in_ms();
+        int timeInterval = 0;
+        int lastTimeInterval=1000;
+        while (rclcpp::ok() && timeInterval < sct_reconnect_timeval_ms_) {
+            if ( lastTimeInterval/1000 != timeInterval/1000) {
+                print_info("TM_SCT reconnect remain : %.1f sec...", (0.001 * (sct_reconnect_timeval_ms_ - timeInterval)));
             }
             std::this_thread::sleep_for(std::chrono::milliseconds(1));
-            ++cnt;
+            lastTimeInterval = timeInterval;
+            timeInterval = TmCommunication::get_current_time_in_ms() - startTimeMs;
         }
         if (rclcpp::ok() && sct_reconnect_timeval_ms_ >= 0) {
             print_info("0 sec\nTM_ROS: (TM_SCT) connect(%d)...", sct_reconnect_timeout_ms_);

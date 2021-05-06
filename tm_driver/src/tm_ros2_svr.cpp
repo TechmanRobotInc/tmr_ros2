@@ -1,7 +1,5 @@
 #include "tm_driver/tm_ros2_svr.h"
 
-#include <tf2_geometry_msgs/tf2_geometry_msgs.h>
-
 
 TmSvrRos2::TmSvrRos2(const rclcpp::NodeOptions &options, TmDriver &iface, bool stick_play)
     : Node("tm_svr", options)
@@ -98,10 +96,6 @@ void TmSvrRos2::publish_fbs()
     pm.fbs_msg.joint_tor_max = state.joint_torque_max();
 
     // Publish tool pose
-    auto &pose = pm.fbs_msg.tool_pose;
-    tf2::Quaternion quat;
-    quat.setRPY(pose[3], pose[4], pose[5]);
-    tf2::Transform Tbt{ quat, tf2::Vector3(pose[0], pose[1], pose[2]) };
     pm.tool_pose_msg.header.stamp = pm.joint_msg.header.stamp;
 
     pm.tool_pose_pub->publish(pm.tool_pose_msg);
@@ -214,13 +208,16 @@ void TmSvrRos2::publisher()
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
         }
         print_info("TM_ROS: (TM_SVR): reconnect in ");
-        int cnt = 0;
-        while (rclcpp::ok() && cnt < pub_reconnect_timeval_ms_) {
-            if (cnt % 500 == 0) {
-                print_info("%.1f sec...", 0.001 * (pub_reconnect_timeval_ms_ - cnt));
+        uint64_t startTimeMs = TmCommunication::get_current_time_in_ms();
+        int timeInterval = 0;
+        int lastTimeInterval = 1000;
+        while (rclcpp::ok() && timeInterval < pub_reconnect_timeval_ms_) {
+            if ( lastTimeInterval/1000 != timeInterval/1000) {
+                print_info("TM_SVR reconnect remain : %.1f sec...", (0.001 * (pub_reconnect_timeval_ms_ - timeInterval)));
             }
             std::this_thread::sleep_for(std::chrono::milliseconds(1));
-            ++cnt;
+            lastTimeInterval = timeInterval;
+            timeInterval = TmCommunication::get_current_time_in_ms() - startTimeMs;
         }
         if (rclcpp::ok() && pub_reconnect_timeval_ms_ >= 0) {
             print_info("0 sec\nTM_ROS: (TM_SVR): connect(%d)...", pub_reconnect_timeout_ms_);
