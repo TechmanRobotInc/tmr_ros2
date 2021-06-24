@@ -1,4 +1,4 @@
-# More details please refer to the TM_Robot_Expression.pdf(1.76.6300) Chapter 6.5 IO
+# More details please refer to the TM_Robot_Expression.pdf(1.76 rev1.00) Chapter 6.5 IO
 int8 MODULE_CONTROLBOX = 0
 int8 MODULE_ENDEFFECTOR = 1
 

@@ -1,4 +1,4 @@
-# More details please refer to the tm_eos_service.cpp/set_event function.
+# More details please refer to the tm_ros2_sct.cpp/set_event function.
 int8 TAG = 1
 int8 WAIT_TAG = 2
 int8 STOP = 11

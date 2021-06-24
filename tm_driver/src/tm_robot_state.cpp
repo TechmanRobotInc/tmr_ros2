@@ -432,7 +432,7 @@ void TmRobotState::_deserialize_update(bool lock) {
 		si_pose(_tcp_speed_vec, _tcp_speed_vec_, 6);
 
 		_joint_speed = rads(_joint_speed_, DOF);
-        
+
 		_joint_torque = meters(_joint_torque_, DOF);
 		
 		_joint_torque_average = meters(_joint_torque_average_, DOF);

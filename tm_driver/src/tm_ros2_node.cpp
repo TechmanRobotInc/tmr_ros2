@@ -45,6 +45,7 @@ TmRos2Node::TmRos2Node(const std::string &host) : Node("tm_driver")
     //auto send_script_srv_ = this->create_service()
 
 }
+
 TmRos2Node::~TmRos2Node()
 {
     if (pub_thread_.joinable()) pub_thread_.join();
@@ -59,6 +60,7 @@ void TmRos2Node::publish_msg()
     pm_.joint_pub->publish(pm_.joint_msg);
 
 }
+
 void TmRos2Node::publisher()
 {
     print_info("TM_ROS: publisher thread begin");
