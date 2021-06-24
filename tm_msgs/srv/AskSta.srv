@@ -1,5 +1,5 @@
 # Ask: request 'Read' sta
-# More details please refer to the TM_Robot_Expression.pdf(1.76_6300) 7.5 TMSTA
+# More details please refer to the TM_Robot_Expression.pdf(1.76 rev1.00) Chapter 7.5 TMSTA
 # wait_time : set wait time.
 
 string subcmd

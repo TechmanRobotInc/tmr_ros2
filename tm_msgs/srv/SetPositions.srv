@@ -1,6 +1,6 @@
 #motion_type :  PTP_J , PTP_T , LINE_J , LINE_T ,
 #               CIRC_J ,CIRC_T , PLINE_J ,PLINE_T
-# More details please refer to the TM_Robot_Expression.pdf Chapter 9.6-9.9
+# More details please refer to the TM_Robot_Expression.pdf(1.76 rev1.00) Chapter 8.6-8.9
 int8 PTP_J = 1
 int8 PTP_T = 2
 #int8 LINE_J = 3
