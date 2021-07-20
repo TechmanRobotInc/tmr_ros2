@@ -36,15 +36,15 @@ int main(int argc, char **argv)
     rclcpp::executor::FutureReturnCode::SUCCESS)
   {
     if(result.get()->ok){
-      std::cout<<"OK"<<std::endl;
-      std::cout<<"subcmd is "<<result.get()->subcmd<<std::endl;
-      std::cout<<"subdata is "<<result.get()->subdata<<std::endl;
+      RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"OK");
+      RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"), result.get()->subcmd);
+      RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"), result.get()->subdata);
     } else{
-      std::cout<<"not OK"<<std::endl;
+      RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"not OK");	
     }
 
   } else {
-    std::cout<<"Failed to call service"<<std::endl;
+    RCLCPP_ERROR(rclcpp::get_logger("rclcpp"), "Failed to call service");
   }
   return true;
 

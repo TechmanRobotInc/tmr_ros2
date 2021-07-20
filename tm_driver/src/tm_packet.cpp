@@ -656,11 +656,14 @@ void TmSctData::build_TmSctData(TmSctData &data, const std::string &id, const ch
 	data._size = len + id.size() + 1;
 	data._is_valid = true;
 }
+void TmSctData::set_sct_data_has_error(bool err_status){
+	this->_sctDataHasError = err_status;
+}
 void TmSctData::build_TmSctData(TmSctData &data, const char *bytes, size_t size, SrcType type)
 {
 	data._is_copy = (type != SrcType::Shallow);
 	data._is_valid = false;
-	data._has_error = false;
+	data._sctDataHasError = false;
 	data._is_ok = false;
 	//size_t ind_b = 0;
 	size_t ind_e = 0;
@@ -694,7 +697,7 @@ void TmSctData::build_TmSctData(TmSctData &data, const char *bytes, size_t size,
 		data._is_ok = true;
 	}
 	else if (strncmp(data._script, "ERROR", 5) == 0) {
-		data._has_error = true;
+		data._sctDataHasError = true;
 	}	
 	data._is_valid = true;
 }

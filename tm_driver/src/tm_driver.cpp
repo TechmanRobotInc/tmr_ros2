@@ -37,14 +37,16 @@ bool TmDriver::start(int timeout_ms, bool stick_play)
 	halt();
 	print_info("TM_DRV: start");
 	// connect to server
-	bool rb = svr.start(timeout_ms);
+	bool rb = svr.start_tm_svr(timeout_ms);
 	if (!rb) return rb;
 	// send command to run project
+	
 	if (stick_play) {
-		svr.send_stick_play();
+		//svr.send_stick_play();
 	}
+	
 	// connect to listen node
-	rb = sct.start(timeout_ms);
+	rb = sct.start_tm_sct(timeout_ms);
 	return rb;
 }
 

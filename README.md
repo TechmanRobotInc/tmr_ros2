@@ -341,17 +341,19 @@ The GUI displays tm_driver connection status, sct, sta, svr messages and robot s
 
 
 ### &sect; GUI Debugging description
-> * If the user forgets to run the TM ROS driver, the user will see all the controlled label items of the GUI are displayed as "``NaN``".<br/>
-> * If "``is_svr_connected``" and "``is_sct_connected``" are true, it means that ROS SvrClient and SctClient are successfully connected.<br/>
-> * If "``is_svr_connected``" is false, the user should check whether the __Data Table Setting__  is correct.<br/>
-> * If "``is_sct_connected``" is false or false/true flashing, the user should check whether the task project is running.<br/>
-> * When the user send a command or click "``H/L``" button of Control Box DO0 Ctrl <sup>1</sup> ,  the user will see a response embedded in the "``Robot Response``" item view. <br/>
-> <sup>1</sup> For details of this item, please refer to __SctResponse.msg__, __StaResponse.msg__ and __SvrResponse.msg__ of TM ROS driver code.<br/>
-> * The user can click "``clear``" button to clear the old response items.<br/>
-> * If "``is_svr_connected``" and "``is_sct_connected``" are true, but the "``Robot_Link``" is false or "``Robot_Error``" is true; this means the robot is working abnormally, the ESTOP button may be pressed or some protection or error <sup>2</sup>  has occurred. Therefore, when the user sends a move script command at this time, it will not work. <br/> 
-> <sup>2</sup> For more detailed information, please refer to the TM Robot User Guide. <br/> 
-> * The user can click "``Quit_GUI``" button or click the "``x``" close button in the upper right corner to close this GUI. <br/> 
-> :bulb: If the user sents the script to leave the __Listen node__, or the network is disconnected while the tm_driver is connected, the display of all controlled label items in the GUI will remain in the last state and become invalid. <br/> 
+> * If the user forgets to run the TM ROS driver, the user will see all the controlled label items of the GUI are displayed as "NaN".<br/>
+> * The user can click "``Quit_GUI``" button or click the "``x``" close button in the upper right corner to close this GUI.<br/>
+> * If "``Ethernet``" and "``Listen Node``" connection display are "on", it means that ROS SvrClient and SctClient are successfully connected.<br/>
+> * If "``Ethernet``" connection display is is "off", the user should check whether the TM Robot has been started or whether the network settings are correct.<br/>
+> * If "``Listen Node``" connection is "off", the user should check whether the task project is running.<br/>
+> :bulb: If "``Listen Node``" connection is interrupted as "``Project_Run``" is stopped, the "``Listen Node``" connection will be "off". <br/>
+> * If both "``Ethernet``" and "``Listen Node``" connection display  are "on", but the "``Robot_Link``" is false or "``Robot_Error``" is true; this means the robot is working abnormally, or maybe the ESTOP button was pressed or or some kind of protection or error <sup>1</sup> occurred. Therefore, when the user sends a move script command at this time, it will not work.<br/> 
+> <sup>1</sup> For more detailed information, please refer to the TM Robot User Guide.<br/> 
+> * The user can use the self-developed script to read/write project data through communication protocols to control the TM Robot. If it does not work properly, the user can quickly determine whether there is a communication error code by viewing the "``Response ROS Node Status``" display.<br/>
+> * When the user sends a command or clicks DO0 Ctrl "``H/L``" button of Control_Box, the user also can see the response message <sup>2</sup> embedded in the "``Robot Response``" item view.<br/>
+> <sup>2</sup> For details of this item, please refer to __SctResponse.msg__, __StaResponse.msg__ and __SvrResponse.msg__ of TM ROS driver code.<br/>
+> * The user can click "``clear``" button to clear the old response message.<br/>
+> :bulb: If "``Ethernet``" connection is interrupted, the display of most controlled label items in the GUI will be displayed as "NaN" and the robot feedback state will remain the last state and become invalid.<br/>
 
 
 ### &sect; Usage with GUI debugging

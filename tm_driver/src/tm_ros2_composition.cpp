@@ -59,6 +59,6 @@ int main(int argc, char *argv[])
     //iface.halt();
 
     rclcpp::shutdown();
-
-    return 0;
+    std::cout<<"shut down is called"<<std::endl;
+    return 1;
 }

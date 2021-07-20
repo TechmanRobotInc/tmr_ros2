@@ -27,7 +27,7 @@ TmSctCommunication::~TmSctCommunication()
 	halt();
 }
 
-bool TmSctCommunication::start(int timeout_ms)
+bool TmSctCommunication::start_tm_sct(int timeout_ms)
 {
 	halt();
 	print_info("TM_SCT: start");
@@ -37,7 +37,7 @@ bool TmSctCommunication::start(int timeout_ms)
 
 	if (_has_thread) {
 		// start thread
-		_recv_thread = std::thread(std::bind(&TmSctCommunication::thread_function, this));
+		_recv_thread = std::thread(std::bind(&TmSctCommunication::tm_sct_thread_function, this));
 	}
 	return rb;
 }
@@ -103,7 +103,7 @@ std::string TmSctCommunication::mtx_sta_response(std::string &cmd)
 	return rs;
 }
 
-void TmSctCommunication::thread_function()
+void TmSctCommunication::tm_sct_thread_function()
 {
 	print_info("TM_SCT: thread begin");
 	_keep_thread_alive = true;
@@ -172,13 +172,13 @@ TmCommRC TmSctCommunication::tmsct_function()
 	for (auto &pack : pack_vec) {
 		switch (pack.type) {
 		case TmPacket::Header::CPERR:
-			err_data.set_CPError(pack.data.data(), pack.data.size());
-            print_error("TM_SCT: CPERR %s",err_data.error_code_str().c_str());
+			tmSctErrData.set_CPError(pack.data.data(), pack.data.size());
+            print_error("TM_SCT: CPERR %s",tmSctErrData.error_code_str().c_str());
 			break;
 
 		case TmPacket::Header::TMSCT:
 			//print_info("TM_SCT: TMSCT");
-			err_data.error_code(TmCPError::Code::Ok);
+			tmSctErrData.error_code(TmCPError::Code::Ok);
 
 			/*TmSctData::build_TmSctData(sct_data, pack.data.data(), pack.data.size(), TmSctData::SrcType::Shallow);
 			
@@ -200,7 +200,7 @@ TmCommRC TmSctCommunication::tmsct_function()
 			TmSctData::build_TmSctData(sct_data, sct_data_tmp, TmSctData::SrcType::Deep);
 			mtx_sct_unlock();
 
-			if (sct_data.has_error())
+			if (sct_data.sct_has_error())
 				print_error("TM_SCT: err: (%s): %s", sct_data.script_id().c_str(), sct_data.script());
 			else
 				print_info("TM_SCT: res: (%s): %s", sct_data.script_id().c_str(), sct_data.script());
@@ -209,7 +209,7 @@ TmCommRC TmSctCommunication::tmsct_function()
 
 		case TmPacket::Header::TMSTA:
 			//print_info("TM_SCT: TMSTA");
-			err_data.error_code(TmCPError::Code::Ok);
+			tmSctErrData.error_code(TmCPError::Code::Ok);
 
 			TmStaData::build_TmStaData(sta_data_tmp, pack.data.data(), pack.data.size(), TmStaData::SrcType::Shallow);
 

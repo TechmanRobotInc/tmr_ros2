@@ -17,7 +17,7 @@ private:
 	int _reconnect_timeval_ms = 3000;
 
 public:
-	TmCPError err_data{ TmCPError::Code::Ok };
+	TmCPError tmSvrErrData{ TmCPError::Code::Ok };
 	TmSvrData data;
 	TmRobotState state;
 
@@ -26,7 +26,7 @@ public:
 		int recv_buf_len, std::condition_variable *cv = nullptr);
 	~TmSvrCommunication();
 
-	bool start(int timeout_ms);
+	bool start_tm_svr(int timeout_ms);
 	void halt();
 
 	void set_reconnect_timeout(int timeout_ms)
@@ -52,7 +52,7 @@ public:
 		else return std::string();
 	}
 private:
-	void thread_function();
+	void tm_svr_thread_function();
 	void reconnect_function();
 public:
 	TmCommRC tmsvr_function();

@@ -6,11 +6,11 @@
   <description>
     this is techman robot python scripts
   </description>
-  <maintainer email="leowu102000@gmail.com">Jufeng wu</maintainer>
+  <maintainer email="leo.wu@tm-robot.com">Jufeng wu</maintainer>
   <license>Apache License 2.0</license>
 
   <author>Jufeng wu</author>
-  <author email="leowu102000@gmail.com">Jufeng wu</author>
+  <author email="leo.wu@tm-robot.com">Jufeng wu</author>
 
   <exec_depend>example_interfaces</exec_depend>
   <exec_depend>rclpy</exec_depend>

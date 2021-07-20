@@ -6,7 +6,7 @@ TmSctRos2::TmSctRos2(const rclcpp::NodeOptions &options, TmDriver &iface)
     , sct_(iface.sct)
     , iface_(iface)
 {
-    sct_.start(5000);
+    sct_.start_tm_sct(5000);
 
     sm_.sct_pub = create_publisher<tm_msgs::msg::SctResponse>("sct_response", 1);
     sm_.sta_pub = create_publisher<tm_msgs::msg::StaResponse>("sta_response", 1);
@@ -25,12 +25,15 @@ TmSctRos2::TmSctRos2(const rclcpp::NodeOptions &options, TmDriver &iface)
     send_script_srv_ = create_service<tm_msgs::srv::SendScript>(
         "send_script", std::bind(&TmSctRos2::send_script, this,
         std::placeholders::_1, std::placeholders::_2));
+        
     set_event_srv_ = create_service<tm_msgs::srv::SetEvent>(
         "set_event", std::bind(&TmSctRos2::set_event, this,
         std::placeholders::_1, std::placeholders::_2));
+        
     set_io_srv_ = create_service<tm_msgs::srv::SetIO>(
         "set_io", std::bind(&TmSctRos2::set_io, this,
         std::placeholders::_1, std::placeholders::_2));
+        
     set_positions_srv_ = create_service<tm_msgs::srv::SetPositions>(
         "set_positions", std::bind(&TmSctRos2::set_positions, this,
         std::placeholders::_1, std::placeholders::_2));
@@ -38,8 +41,8 @@ TmSctRos2::TmSctRos2(const rclcpp::NodeOptions &options, TmDriver &iface)
     ask_sta_srv_ = create_service<tm_msgs::srv::AskSta>(
         "ask_sta", std::bind(&TmSctRos2::ask_sta, this,
         std::placeholders::_1, std::placeholders::_2));
-
 }
+
 TmSctRos2::~TmSctRos2()
 {
     sta_updated_ = true;
@@ -49,7 +52,6 @@ TmSctRos2::~TmSctRos2()
     sct_.halt();
 }
 
-
 void TmSctRos2::sct_msg()
 {
     SctMsg &sm = sm_;
@@ -58,16 +60,18 @@ void TmSctRos2::sct_msg()
     sm.sct_msg.id = data.script_id();
     sm.sct_msg.script = std::string{ data.script(), data.script_len() };
 
-    if (data.has_error()) {
-        print_info("TM_ROS: (TM_SCT): err: (%s): %s", sm.sct_msg.id.c_str(), sm.sct_msg.script.c_str());
+    if (data.sct_has_error()) {
+        print_error("TM_ROS: (TM_SCT): MSG: (%s): %s", sm.sct_msg.id.c_str(), sm.sct_msg.script.c_str());
+        print_error("TM_ROS: (TM_SCT) ROS Node Data Error %d",(int)data.sct_has_error());
     }
     else {
-        print_info("TM_ROS: (TM_SCT): res: (%s): %s", sm.sct_msg.id.c_str(), sm.sct_msg.script.c_str());
+        print_info("TM_ROS: (TM_SCT): MSG (%s): %s", sm.sct_msg.id.c_str(), sm.sct_msg.script.c_str());
     }
 
     sm.sct_msg.header.stamp = rclcpp::Node::now();
     sm.sct_pub->publish(sm.sct_msg);
 }
+
 void TmSctRos2::sta_msg()
 {
     SctMsg &sm = sm_;
@@ -85,6 +89,7 @@ void TmSctRos2::sta_msg()
     sm.sta_msg.header.stamp = rclcpp::Node::now();
     sm.sta_pub->publish(sm.sta_msg);
 }
+
 bool TmSctRos2::sct_func()
 {
     TmSctCommunication &sct = sct_;
@@ -103,17 +108,13 @@ bool TmSctRos2::sct_func()
     for (auto &pack : pack_vec) {
         switch (pack.type) {
         case TmPacket::Header::CPERR:
-            print_info("TM_ROS: (TM_SCT): CPERR");
-            sct.err_data.set_CPError(pack.data.data(), pack.data.size());
-            print_error(sct.err_data.error_code_str().c_str());
-
-            // cpe response
-
+            sct.tmSctErrData.set_CPError(pack.data.data(), pack.data.size());
+            print_error("TM_ROS: (TM_SCT) ROS Node Header CPERR %d",(int)sct.tmSctErrData.error_code());
             break;
 
         case TmPacket::Header::TMSCT:
 
-            sct.err_data.error_code(TmCPError::Code::Ok);
+            sct.tmSctErrData.error_code(TmCPError::Code::Ok);
 
             //TODO ? lock and copy for service response
             TmSctData::build_TmSctData(sct.sct_data, pack.data.data(), pack.data.size(), TmSctData::SrcType::Shallow);
@@ -123,7 +124,7 @@ bool TmSctRos2::sct_func()
 
         case TmPacket::Header::TMSTA:
 
-            sct.err_data.error_code(TmCPError::Code::Ok);
+            sct.tmSctErrData.error_code(TmCPError::Code::Ok);
 
             TmStaData::build_TmStaData(sct.sta_data, pack.data.data(), pack.data.size(), TmStaData::SrcType::Shallow);
 
@@ -131,7 +132,7 @@ bool TmSctRos2::sct_func()
             break;
 
         default:
-            print_info("TM_ROS: (TM_SCT): invalid header");
+            print_error("TM_ROS: (TM_SCT): invalid header");
             break;
         }
     }
@@ -183,7 +184,6 @@ void TmSctRos2::sct_responsor()
     printf("TM_ROS: sct_response thread end\n");
 }
 
-
 bool TmSctRos2::connect_tmsct(
         const std::shared_ptr<tm_msgs::srv::ConnectTM::Request> req,
         std::shared_ptr<tm_msgs::srv::ConnectTM::Response> res)
@@ -194,7 +194,7 @@ bool TmSctRos2::connect_tmsct(
     if (req->connect) {
         print_info("TM_ROS: (re)connect(%d) TM_SCT", t_o);
         sct_.halt();
-        rb = sct_.start(t_o);
+        rb = sct_.start_tm_sct(t_o);
     }
     if (req->reconnect) {
         sct_reconnect_timeout_ms_ = t_o;
@@ -218,6 +218,7 @@ bool TmSctRos2::send_script(
     res->ok = rb;
     return rb;
 }
+
 bool TmSctRos2::set_event(
     const std::shared_ptr<tm_msgs::srv::SetEvent::Request> req,
     std::shared_ptr<tm_msgs::srv::SetEvent::Response> res)
@@ -247,6 +248,7 @@ bool TmSctRos2::set_event(
     res->ok = rb;
     return rb;
 }
+
 bool TmSctRos2::set_io(
     const std::shared_ptr<tm_msgs::srv::SetIO::Request> req,
     std::shared_ptr<tm_msgs::srv::SetIO::Response> res)
@@ -255,6 +257,7 @@ bool TmSctRos2::set_io(
     res->ok = rb;
     return rb;
 }
+
 bool TmSctRos2::set_positions(
     const std::shared_ptr<tm_msgs::srv::SetPositions::Request> req,
     std::shared_ptr<tm_msgs::srv::SetPositions::Response> res)
