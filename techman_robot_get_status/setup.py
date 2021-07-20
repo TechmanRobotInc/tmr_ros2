@@ -16,9 +16,9 @@ setup(
     install_requires=['setuptools'],
     zip_safe=True,
     author='leowu',
-    author_email='leowu102000@gmail.com',
+    author_email='leo.wu@tm-robot.com',
     maintainer='Jufeng Wu',
-    maintainer_email='leowu102000@gmail.com',
+    maintainer_email='leo.wu@tm-robot.com',
     keywords=['ROS'],
     classifiers=[
         'Intended Audience :: Developers',

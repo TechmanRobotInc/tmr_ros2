@@ -16,7 +16,7 @@ private:
 	int _reconnect_timeval_ms = 3000;
 
 public:
-	TmCPError err_data{ TmCPError::Code::Ok };
+	TmCPError tmSctErrData{ TmCPError::Code::Ok };
 	TmSctData sct_data;
 	TmStaData sta_data;
 
@@ -36,7 +36,7 @@ public:
 		int recv_buf_len, std::condition_variable *cv = nullptr);
 	~TmSctCommunication();
 
-	bool start(int timeout_ms = 0);
+	bool start_tm_sct(int timeout_ms = 0);
 	void halt();
 
 	void set_reconnect_timeout(int timeout_ms)
@@ -50,7 +50,7 @@ public:
 	TmCommRC send_sta_request(const std::string &subcmd, const std::string &subdata);
 
 public:
-	TmCPError::Code cperr_code() { return err_data.error_code(); }
+	TmCPError::Code cperr_code() { return tmSctErrData.error_code(); }
 	std::string sct_response(std::string &id)
 	{
 		id = sct_data.script_id();
@@ -73,7 +73,7 @@ public:
 	std::string mtx_sta_response(std::string &cmd);
 
 private:
-	void thread_function();
+	void tm_sct_thread_function();
 	void reconnect_function();
 public:
 	TmCommRC tmsct_function();

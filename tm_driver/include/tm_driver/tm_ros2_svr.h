@@ -55,7 +55,7 @@ public:
     ~TmSvrRos2();
 
 protected:
-    void publish_fbs();
+    void publish_fbs(TmCommRC rc);
     void publish_svr();
     bool publish_func();
     void publisher();

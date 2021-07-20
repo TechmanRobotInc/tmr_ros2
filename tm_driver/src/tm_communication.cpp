@@ -249,6 +249,7 @@ TmCommunication::TmCommunication(const char *ip, unsigned short port, int recv_b
 	, _port(port)
 	, _recv_buf_len(recv_buf_len)
 	, _sockfd(-1)
+	, _isConnected(false)
 	, _optflag(1)
 	, _recv_rc(TmCommRC::OK)
 	, _recv_ready(false)
@@ -362,6 +363,7 @@ int TmCommunication::connect_with_timeout(int sockfd, const char *ip, unsigned s
 
 bool TmCommunication::connect_socket(int timeout_ms)
 {
+	_isConnected = false;
 	if (_sockfd > 0) return true;
 
 	if (timeout_ms < 0) timeout_ms = 0;
@@ -404,10 +406,12 @@ bool TmCommunication::connect_socket(int timeout_ms)
 
 	if (connect_with_timeout(_sockfd, _ip, _port, timeout_ms) == 0) {
 		print_info("TM_COM: O_NONBLOCK connection is ok");
+		_isConnected = true;
 	}
 	else {
 		print_info("TM_COM: O_NONBLOCK connection is fail");
 		_sockfd = -1;
+		_isConnected = false;
 	}
 	if (_sockfd > 0) {
 		print_info("TM_COM: TM robot is connected. sockfd:=%d", _sockfd);
@@ -421,6 +425,7 @@ bool TmCommunication::connect_socket(int timeout_ms)
 
 void TmCommunication::close_socket()
 {
+	_isConnected = false;
 	// reset
 	_recv_rc = TmCommRC::OK;
 	_recv_ready = false;

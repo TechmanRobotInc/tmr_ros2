@@ -330,7 +330,7 @@ private:
 	size_t _size = 0;
 
 	bool _is_ok = false;
-	bool _has_error = false;
+	bool _sctDataHasError = false;
 
 	bool _is_valid = false;
 	bool _is_copy = false;
@@ -360,8 +360,9 @@ public:
 	size_t script_len() { return _len; }
 	size_t data_size() { return _size; }
 	bool is_ok() { return _is_ok; }
-	bool has_error() { return _has_error; }
+	bool sct_has_error() { return _sctDataHasError; }
 	bool is_valid() { return _is_valid; }
+	void set_sct_data_has_error(bool err_status);
 
 public:
 	static void clear_script(TmSctData &data);

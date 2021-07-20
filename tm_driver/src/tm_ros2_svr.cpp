@@ -2,14 +2,13 @@
 
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
 
-
 TmSvrRos2::TmSvrRos2(const rclcpp::NodeOptions &options, TmDriver &iface, bool stick_play)
     : Node("tm_svr", options)
     , svr_(iface.svr)
     , state_(iface.state)
     , sct_(iface.sct)
 {
-    bool rb = svr_.start(5000);
+    bool rb = svr_.start_tm_svr(5000);
     if (rb && stick_play) {
         svr_.send_stick_play();
     }
@@ -32,11 +31,12 @@ TmSvrRos2::TmSvrRos2(const rclcpp::NodeOptions &options, TmDriver &iface, bool s
     write_item_srv_ = create_service<tm_msgs::srv::WriteItem>(
         "write_item", std::bind(&TmSvrRos2::write_item, this,
         std::placeholders::_1, std::placeholders::_2));
+        
     ask_item_srv_ = create_service<tm_msgs::srv::AskItem>(
         "ask_item", std::bind(&TmSvrRos2::ask_item, this,
         std::placeholders::_1, std::placeholders::_2));
-
 }
+
 TmSvrRos2::~TmSvrRos2()
 {
     svr_updated_ = true;
@@ -46,19 +46,34 @@ TmSvrRos2::~TmSvrRos2()
     svr_.halt();
 }
 
-
-void TmSvrRos2::publish_fbs()
+void TmSvrRos2::publish_fbs(TmCommRC rc)
 {
     PubMsg &pm = pm_;
     TmRobotState &state = state_;
 
     // Publish feedback state
     pm.fbs_msg.header.stamp = rclcpp::Node::now();
+    if(rc != TmCommRC::TIMEOUT){
+      pm.fbs_msg.is_svr_connected = svr_.is_connected();
+      pm.fbs_msg.is_sct_connected = sct_.is_connected();
+      pm.fbs_msg.tmsrv_cperr = (int)svr_.tmSvrErrData.error_code();  //Node State Response 
+      pm.fbs_msg.tmsrv_dataerr = (int)pm.svr_msg.error_code;
+      pm.fbs_msg.tmscript_cperr = (int)sct_.tmSctErrData.error_code();
+      pm.fbs_msg.tmscript_dataerr = (int)sct_.sct_data.sct_has_error();
+    } else{
+      pm.fbs_msg.is_svr_connected = false;
+      pm.fbs_msg.is_sct_connected = false;
+      pm.fbs_msg.tmsrv_cperr = false;
+      pm.fbs_msg.tmsrv_dataerr = false;
+      pm.fbs_msg.tmscript_cperr = false;
+      pm.fbs_msg.tmscript_dataerr = false;  
+      svr_.tmSvrErrData.set_CPError(TmCPError::Code::Ok);
+      pm.svr_msg.error_code = false;
+      sct_.tmSctErrData.set_CPError(TmCPError::Code::Ok);
+      sct_.sct_data.set_sct_data_has_error(false);
+    }    
 
-    pm.fbs_msg.is_svr_connected = svr_.is_connected();
-    pm.fbs_msg.is_sct_connected = sct_.is_connected();
     pm.fbs_msg.is_data_table_correct = state.is_data_table_correct();
-
     pm.fbs_msg.joint_pos = state.joint_angle();
     pm.fbs_msg.joint_vel = state.joint_speed();
     pm.fbs_msg.joint_tor = state.joint_torque();
@@ -83,6 +98,11 @@ void TmSvrRos2::publish_fbs()
     //pm.fbs_msg.ee_analog_output = state.ee_AO();
     pm.fbs_msg.ee_analog_input = state.ee_AI();
     pm.fbs_msg.error_content = state.error_content();
+
+    // Publish torque state
+    pm.fbs_msg.joint_tor_average = state.joint_torque_average();
+    pm.fbs_msg.joint_tor_min = state.joint_torque_min();
+    pm.fbs_msg.joint_tor_max = state.joint_torque_max();
     pm.fbs_pub->publish(pm.fbs_msg);
 
     // Publish joint state
@@ -92,10 +112,7 @@ void TmSvrRos2::publish_fbs()
     pm.joint_msg.effort = pm.fbs_msg.joint_tor;
     pm.joint_pub->publish(pm.joint_msg);
 
-    // Publish torque state
-    pm.fbs_msg.joint_tor_average = state.joint_torque_average();
-    pm.fbs_msg.joint_tor_min = state.joint_torque_min();
-    pm.fbs_msg.joint_tor_max = state.joint_torque_max();
+
 
     // Publish tool pose
     auto &pose = pm.fbs_msg.tool_pose;
@@ -103,9 +120,9 @@ void TmSvrRos2::publish_fbs()
     quat.setRPY(pose[3], pose[4], pose[5]);
     tf2::Transform Tbt{ quat, tf2::Vector3(pose[0], pose[1], pose[2]) };
     pm.tool_pose_msg.header.stamp = pm.joint_msg.header.stamp;
-
     pm.tool_pose_pub->publish(pm.tool_pose_msg);
 }
+
 void TmSvrRos2::publish_svr()
 {
     PubMsg &pm = pm_;
@@ -120,45 +137,62 @@ void TmSvrRos2::publish_svr()
     }
     svr_cv_.notify_all();
 
-    print_info("TM_ROS: (TM_SVR): (%s) (%d) %s",
-        pm.svr_msg.id.c_str(), pm.svr_msg.mode, pm.svr_msg.content.c_str());
-
+    if ((int)(pm.svr_msg.error_code) != 0) {
+        print_error("TM_ROS: (TM_SVR): MSG: (%s) (%d) %s", pm.svr_msg.id.c_str(), pm.svr_msg.mode, pm.svr_msg.content.c_str());   	
+        print_error("TM_ROS: (TM_SVR) ROS Node Data Error %d",(int)(pm.svr_msg.error_code));
+    }
+    else {
+        print_info("TM_ROS: (TM_SVR): MSG: (%s) (%d) %s", pm.svr_msg.id.c_str(), pm.svr_msg.mode, pm.svr_msg.content.c_str());
+    }    
+    
     pm.svr_msg.header.stamp = rclcpp::Node::now();
     pm.svr_pub->publish(pm.svr_msg);
 }
+
 bool TmSvrRos2::publish_func()
 {
     TmSvrCommunication &svr = svr_;
     int n;
     auto rc = svr.recv_spin_once(1000, &n);
+
     if (rc == TmCommRC::ERR ||
         rc == TmCommRC::NOTREADY ||
         rc == TmCommRC::NOTCONNECT) {
         return false;
-    }
-    else if (rc != TmCommRC::OK) {
-        return true;
     }
     bool fbs = false;
     std::vector<TmPacket> &pack_vec = svr.packet_list();
 
     for (auto &pack : pack_vec) {
         if (pack.type == TmPacket::Header::CPERR) {
-            print_info("TM_ROS: (TM_SVR): CPERR");
-            svr.err_data.set_CPError(pack.data.data(), pack.data.size());
-            print_error(svr.err_data.error_code_str().c_str());
-
-            // cpe response
-
+            svr.tmSvrErrData.set_CPError(pack.data.data(), pack.data.size());
+            print_error("TM_ROS: (TM_SVR) ROS Node Header CPERR %d",(int)svr.tmSvrErrData.error_code());
         }
         else if (pack.type == TmPacket::Header::TMSVR) {
 
-            svr.err_data.error_code(TmCPError::Code::Ok);
-
+            if (svr.data.is_valid() && (svr.data.mode()== TmSvrData::Mode::BINARY))
+            {
+                if ((int)svr_.tmSvrErrData.error_code())  {} 
+                else
+                {
+                    svr.tmSvrErrData.error_code(TmCPError::Code::Ok); 
+                }
+            }
+            else if (svr.data.is_valid() && (svr.data.mode() == TmSvrData::Mode::RESPONSE))
+            {
+                if ((int)svr_.data.error_code() != 0)  {}
+                else
+                {  
+                  svr.tmSvrErrData.error_code(TmCPError::Code::Ok);
+                }
+            }            
+            else
+            {
+                svr.tmSvrErrData.error_code(TmCPError::Code::Ok); 
+            }            
             TmSvrData::build_TmSvrData(svr.data, pack.data.data(), pack.data.size(), TmSvrData::SrcType::Shallow);
-            
+
             if (svr.data.is_valid()) {
-                
                 switch (svr.data.mode()) {
                 case TmSvrData::Mode::RESPONSE:
                     //print_info("TM_ROS: (TM_SVR): (%s) RESPONSE [%d]",
@@ -174,24 +208,28 @@ bool TmSvrRos2::publish_func()
                     publish_svr();
                     break;
                 default:
-                    print_info("TM_ROS: (TM_SVR): (%s): invalid mode (%d)",
+                    print_error("TM_ROS: (TM_SVR): (%s): invalid mode (%d)",
                         svr.data.transaction_id().c_str(), (int)(svr.data.mode()));
                     break;
                 }
             }
             else {
-                print_info("TM_ROS: (TM_SVR): invalid data");
+                print_error("TM_ROS: (TM_SVR): invalid data");
             }
         }
         else {
-            print_info("TM_ROS: (TM_SVR): invalid header");
+            print_error("TM_ROS: (TM_SVR): invalid header");
         }
     }
     if (fbs) {
-        publish_fbs();
+        publish_fbs(rc);
+    }
+    if(rc == TmCommRC::TIMEOUT){
+      return false;
     }
     return true;
 }
+
 void TmSvrRos2::publisher()
 {
     TmSvrCommunication &svr = svr_;
@@ -202,6 +240,7 @@ void TmSvrRos2::publisher()
         //bool reconnect = false;
         if (!svr.recv_init()) {
             print_info("TM_ROS: (TM_SVR): is not connected");
+            publish_fbs(TmCommRC::TIMEOUT);
         }
         while (rclcpp::ok() && svr.is_connected()) {
             if (!publish_func()) break;
@@ -231,7 +270,6 @@ void TmSvrRos2::publisher()
     print_info("TM_ROS: publisher thread end\n");
 }
 
-
 bool TmSvrRos2::connect_tmsvr(
         const std::shared_ptr<tm_msgs::srv::ConnectTM::Request> req,
         std::shared_ptr<tm_msgs::srv::ConnectTM::Response> res)
@@ -242,7 +280,7 @@ bool TmSvrRos2::connect_tmsvr(
     if (req->connect) {
         print_info("TM_ROS: (re)connect(%d) TM_SVR", t_o);
         sct_.halt();
-        rb = sct_.start(t_o);
+        rb = sct_.start_tm_sct(t_o);
     }
     if (req->reconnect) {
         pub_reconnect_timeout_ms_ = t_o;
@@ -268,6 +306,7 @@ bool TmSvrRos2::write_item(
     res->ok = rb;
     return rb;
 }
+
 bool TmSvrRos2::ask_item(
     const std::shared_ptr<tm_msgs::srv::AskItem::Request> req,
     std::shared_ptr<tm_msgs::srv::AskItem::Response> res)

@@ -4,7 +4,7 @@
   <name>demo</name>
   <version>1.0.0</version>
   <description>The demo package</description>
-  <maintainer email="leowu102000@gmail.com">leowu</maintainer>
+  <maintainer email="leo.wu@tm-robot.com">leowu</maintainer>
   <maintainer email="yh.wang@tm-robot.com">Yh Wang</maintainer>
   <license>BSD</license>
   <url type="repository">https://github.com/TechmanRobotInc/tmr_ros2</url>

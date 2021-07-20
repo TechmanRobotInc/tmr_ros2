@@ -93,6 +93,15 @@ void MainWindow::set_text_null_reserve(bool isTrue, QLabel* label){
     label->setText("<html><head/><body><p><span style=\" font-size:14pt; font-weight:600; color:#8F7A66;\">RSV</span></p></body></html>");
   }
 }
+void MainWindow::set_text_manual_auto(int isValue, QLabel* label){
+  if(isValue == 2){   // 1:AUTO  2:MANUAL  0: None
+    label->setText("<html><head/><body><p><span style=\" font-size:14pt; font-weight:600; color:#73d216;\">MAN</span></p></body></html>");
+  } else if (isValue == 1) {
+    label->setText("<html><head/><body><p><span style=\" font-size:14pt; font-weight:600; color:#2a52be;\">Auto</span></p></body></html>");
+  } else{
+    label->setText("<html><head/><body><p><span style=\" font-size:14pt; font-weight:600; color:#73d216;\">None</span></p></body></html>");  
+  }    
+}
 void MainWindow::error_code_format_change(tm_msgs::msg::FeedbackState::SharedPtr msg, QLabel* label, int base){
   QFont f("Arial",14);
   f.setWeight(600);  
@@ -101,9 +110,11 @@ void MainWindow::error_code_format_change(tm_msgs::msg::FeedbackState::SharedPtr
   label->setStyleSheet("background-color:rgb(81, 86, 90)");
   label->setStyleSheet("QLabel { color:rgb(143,122,102);}");
 }
-void MainWindow::initial_text_ctrl_label(){
+void MainWindow::initial_link_ctrl_label(){
   set_text_nan_initial(ui->svrclient_status_label);
   set_text_nan_initial(ui->sctclient_status_label); 
+}
+void MainWindow::initial_status_ctrl_label(){
   set_text_nan_initial(ui->safeguard_a_status_label);
   set_text_nan_initial(ui->robot_link_status_label);
   set_text_nan_initial(ui->robot_error_status_label);
@@ -111,9 +122,13 @@ void MainWindow::initial_text_ctrl_label(){
   set_text_nan_initial(ui->project_pause_status_label);
   set_text_nan_initial(ui->data_table_correct_status_label);
   set_text_nan_initial(ui->estop_status_label);
-  set_text_nan_initial(ui->error_content_status_label);
+  set_text_nan_initial(ui->ma_mode_label);
   set_text_nan_initial(ui->error_code_status_label);
   set_text_nan_initial(ui->ctrl_do0_status_label);
+  set_text_nan_initial(ui->tmsrv_cperr_status_label);
+  set_text_nan_initial(ui->tmscript_cperr_status_label);
+  set_text_nan_initial(ui->tmsrv_dataerr_status_label);
+  set_text_nan_initial(ui->tmscript_dataerr_status_label);
 }
 QString MainWindow::format_change(std::string msg){
   std::string str;
@@ -123,38 +138,52 @@ QString MainWindow::format_change(std::string msg){
   return QString::fromStdString(str);
 }
 void MainWindow::send_ui_feed_back_status(tm_msgs::msg::FeedbackState::SharedPtr msg){
-  set_text_true_false(msg->is_svr_connected,ui->svrclient_status_label,false);
-  set_text_true_false(msg->is_sct_connected,ui->sctclient_status_label,false);
-  set_text_true_false(msg->robot_link,ui->robot_link_status_label,false);
-  set_text_true_false(msg->robot_error,ui->robot_error_status_label,true);
-  set_text_on_off(msg->project_run,ui->project_run_status_label,false);  
-  set_text_on_off(msg->project_pause,ui->project_pause_status_label,true);
-  set_text_on_off(msg->safetyguard_a,ui->safeguard_a_status_label,true);
-  set_text_on_off(msg->e_stop,ui->estop_status_label,true);
-  set_text_true_false(msg->is_data_table_correct,ui->data_table_correct_status_label,false); 
-  if(msg->error_code == 0){
-      set_text_null_reserve(true,ui->error_code_status_label);    
-      set_text_null_reserve(true,ui->error_content_status_label);
-  } else{ 
-      error_code_format_change(msg,ui->error_code_status_label,16);
-      set_text_null_reserve(false,ui->error_content_status_label);
-  }    
-  if(msg->cb_digital_output.size()>0){
-    if(msg->cb_digital_output[0] == 0){
-      set_text_high_low(false,ui->ctrl_do0_status_label,false);
-    } else{
-      set_text_high_low(true,ui->ctrl_do0_status_label,false);
+  set_text_on_off(msg->is_svr_connected,ui->svrclient_status_label,false);
+  set_text_on_off(msg->is_sct_connected,ui->sctclient_status_label,false);
+  if (msg->is_svr_connected)
+  {
+    set_text_true_false(msg->robot_link,ui->robot_link_status_label,false);
+    set_text_true_false(msg->robot_error,ui->robot_error_status_label,true);
+    set_text_on_off(msg->project_run,ui->project_run_status_label,false);  
+    set_text_on_off(msg->project_pause,ui->project_pause_status_label,true);
+    set_text_on_off(msg->safetyguard_a,ui->safeguard_a_status_label,true);
+    set_text_on_off(msg->e_stop,ui->estop_status_label,true);
+    set_text_true_false(msg->is_data_table_correct,ui->data_table_correct_status_label,false); 
+    set_text_true_false(msg->tmsrv_cperr,ui->tmsrv_cperr_status_label,true);
+    set_text_true_false(msg->tmscript_cperr,ui->tmscript_cperr_status_label,true);
+    set_text_true_false(msg->tmsrv_dataerr,ui->tmsrv_dataerr_status_label,true);
+    set_text_true_false(msg->tmscript_dataerr,ui->tmscript_dataerr_status_label,true);
+    set_text_manual_auto(msg->ma_mode,ui->ma_mode_label);
+    if(msg->error_code == 0){
+        set_text_true_false(msg->error_code,ui->error_code_status_label,true);    
+        //set_text_null_reserve(true,ui->error_content_status_label);
+    } else{ 
+        error_code_format_change(msg,ui->error_code_status_label,16);
+        //set_text_null_reserve(false,ui->error_content_status_label);
+    }
+    if(msg->cb_digital_output.size() > 0){
+      if(msg->cb_digital_output[0] == 0){
+        set_text_high_low(false,ui->ctrl_do0_status_label,true);
+      } else{
+        set_text_high_low(true,ui->ctrl_do0_status_label,true);
+      }
     }
   }
+  else
+  {
+    initial_status_ctrl_label();
+  }  
 }
 void MainWindow::click_set_sct_re_connect_button(){
   std::cout<<"click [SctClient Re-Connect] button"<<std::endl;
-  initial_text_ctrl_label();
+  initial_link_ctrl_label();
+  initial_status_ctrl_label();
   send_sct_as_re_connect();
 }
 void MainWindow::click_set_svr_re_connect_button(){
   std::cout<<"click [SvrClient Re-Connect] button"<<std::endl;
-  initial_text_ctrl_label();
+  initial_link_ctrl_label();
+  initial_status_ctrl_label();
   send_svr_as_re_connect();
 }
 void MainWindow::click_change_control_box_io_button(){
@@ -196,6 +225,7 @@ MainWindow::MainWindow(QWidget *parent)
   rosPage->start();
   initial_ros_thread_to_ui_page();
   initial_ui_page_to_ros_thread();
+  ui->log_tabWidget->removeTab(0);
 }
 MainWindow::~MainWindow(){
   delete ui;

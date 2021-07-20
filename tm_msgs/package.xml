@@ -2,11 +2,13 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>tm_msgs</name>
-  <version>1.0.0</version>
+  <version>1.1.0</version>
   <description>The tm_msgs package</description>
 
   <author email="ken.tsai@tm-robot.com">Ken Tsai</author>
   <maintainer email="ken.tsai@tm-robot.com">Ken Tsai</maintainer>
+  <maintainer email="leo.wu@tm-robot.com">leowu</maintainer>
+  <maintainer email="yh.wang@tm-robot.com">Yh Wang</maintainer>
 
   <license>BSD</license>
 
