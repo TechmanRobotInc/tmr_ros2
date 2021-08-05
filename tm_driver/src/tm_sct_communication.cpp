@@ -52,12 +52,6 @@ void TmSctCommunication::halt()
 	}
 	if (is_connected()) {
 		print_info("TM_SCT: halt");
-		//if (_has_thread) {
-		//	_keep_thread_alive = false;
-		//	if (_recv_thread.joinable()) {
-		//		_recv_thread.join();
-		//	}
-		//}
 		close_socket();
 	}
 }

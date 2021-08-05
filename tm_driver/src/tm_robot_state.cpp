@@ -204,7 +204,7 @@ std::vector<unsigned char> TmRobotState::mtx_ctrller_DI()
 }
 std::vector<float> TmRobotState::mtx_ctrller_AO()
 {
-	std::vector<float_t> rv;
+	std::vector<float> rv;
 	mtx_lock();
 	rv = _ctrller_AO;
 	mtx_unlock();
@@ -277,19 +277,19 @@ size_t TmRobotState::_deserialize_skip(void *dst, const char *data, size_t offse
 size_t TmRobotState::_deserialize_copy_wo_check(void *dst, const char *data, size_t offset)
 {
 	size_t boffset = offset;
-	size_t bsize = 2;
+	//size_t bsize = 2;
 	unsigned short uslen; // 2 bytes
 
 	// skip item name
-	memcpy(&uslen, data + boffset, bsize);
-	boffset += bsize + uslen;
+	memcpy(&uslen, data + boffset, 2);
+	boffset += 2 + uslen;
 	// item data length
-	memcpy(&uslen, data + boffset, bsize);
-	boffset += bsize;
+	memcpy(&uslen, data + boffset, 2);
+	boffset += 2;
 	// item data
-	bsize = uslen;
-	memcpy(dst, data + boffset, bsize);
-	boffset += bsize;
+	//bsize = uslen;
+	memcpy(dst, data + boffset, uslen);
+	boffset += uslen;
 	return boffset;
 }
 
@@ -387,7 +387,6 @@ size_t TmRobotState::_deserialize(const char *data, size_t size, bool use_mtx)
 		boffset = _f_deserialize_item[update.func](update.dst, data, boffset);
 	}
 
-
 	_deserialize_update(use_mtx);
 
 	if (boffset > size) {
@@ -444,12 +443,12 @@ void TmRobotState::_deserialize_update(bool lock) {
 
 		for (int i = 0; i < 8; ++i) { _ctrller_DO[i] = _ctrller_DO_[i]; }
 		for (int i = 0; i < 8; ++i) { _ctrller_DI[i] = _ctrller_DI_[i]; }
-		for (int i = 0; i < 1; ++i) { _ctrller_AO[i] = _ctrller_AO_[i]; }
+		for (int i = 0; i < 2; ++i) { _ctrller_AO[i] = _ctrller_AO_[i]; }
 		for (int i = 0; i < 2; ++i) { _ctrller_AI[i] = _ctrller_AI_[i]; }
 		for (int i = 0; i < 4; ++i) { _ee_DO[i] = _ee_DO_[i]; }
 		for (int i = 0; i < 4; ++i) { _ee_DI[i] = _ee_DI_[i]; }
-		//for (int i = 0; i < 1; ++i) { _ee_AO[i] = _ee_AO_[i]; }
-		for (int i = 0; i < 1; ++i) { _ee_AI[i] = _ee_AI_[i]; }
+		for (int i = 0; i < 2; ++i) { _ee_AO[i] = _ee_AO_[i]; }
+		for (int i = 0; i < 2; ++i) { _ee_AI[i] = _ee_AI_[i]; }
 	}
 	if (lock) mtx_unlock();
 }
@@ -457,12 +456,12 @@ void TmRobotState::_deserialize_update(bool lock) {
 void TmRobotState::print()
 {
 	mtx_lock();
-	std::cout << "Robot_Link=" << _is_linked << "\n";
-	std::cout << "Robot_Error=" << _has_error << "\n";
-	std::cout << "Project_Run=" << _is_proj_running << "\n";
-	std::cout << "Project_Pause=" << _is_proj_running << "\n";
-	std::cout << "Safetyguard_A=" << _is_safeguard_A_triggered << "\n";
-	std::cout << "ESTOP=" << _is_ESTOP_pressed << "\n";
+	std::cout << "Robot_Link=" << (int)_is_linked << "\n";
+	std::cout << "Robot_Error=" << (int)_has_error << "\n";
+	std::cout << "Project_Run=" << (int)_is_proj_running << "\n";
+	std::cout << "Project_Pause=" << (int)_is_proj_paused << "\n";
+	std::cout << "Safetyguard_A=" << (int)_is_safeguard_A_triggered << "\n";
+	std::cout << "ESTOP=" << (int)_is_ESTOP_pressed << "\n";
 
 	std::cout << "Joint_Angle={";
 	for (auto &val : _joint_angle) { std::cout << val << ", "; }

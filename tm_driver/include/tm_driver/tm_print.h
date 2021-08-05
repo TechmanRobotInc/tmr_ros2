@@ -3,6 +3,7 @@
 #ifndef TM_PRINT_H
 #define TM_PRINT_H
 #include <string>
+#include <rclcpp/rclcpp.hpp>
 
 void set_up_print_debug_function(void (*function_print)(char* fmt));
 void set_up_print_info_function(void (*function_print)(char* fmt));

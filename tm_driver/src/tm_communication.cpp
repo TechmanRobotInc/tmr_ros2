@@ -286,7 +286,11 @@ TmCommunication::~TmCommunication()
 	WSACleanup();
 #endif
 }
-
+uint64_t TmCommunication::get_current_time_in_ms(){
+	std::chrono::system_clock::time_point tp = std::chrono::system_clock::now(); 
+	std::chrono::milliseconds ms = std::chrono::duration_cast<std::chrono::milliseconds>(tp.time_since_epoch());
+    return ms.count();
+}
 int TmCommunication::connect_with_timeout(int sockfd, const char *ip, unsigned short port, int timeout_ms)
 {
 	int rv = 0;
@@ -324,16 +328,18 @@ int TmCommunication::connect_with_timeout(int sockfd, const char *ip, unsigned s
 		if (errno != EINPROGRESS) return -1;
 	}
 	if (rv == 0) {
+		timeoutcount = 0;
 		print_info("TM_COM: Connection is ok");
 		return rv;
 	}
 	else {
+		timeoutcount++; 
 		//Wait for Connect OK by checking Write buffer
 		if ((rv = select(sockfd + 1, NULL, &wset, NULL, &tv)) < 0) {
 			return rv;
 		}
 		if (rv == 0) {
-			print_warn("TM_COM: Connection timeout");
+			print_warn("TM_COM: Connection timeout count:=%d", (int)timeoutcount);
 			//errno = ETIMEDOUT;
 			return -1;
 		}
@@ -397,12 +403,10 @@ bool TmCommunication::connect_socket(int timeout_ms)
     if (setsockopt (_sockfd, SOL_SOCKET, SO_RCVTIMEO, (char *)&timeout,sizeof(timeout)) < 0){
         print_error("setsockopt failed\n");
 	}
-        
 
     if (setsockopt (_sockfd, SOL_SOCKET, SO_SNDTIMEO, (char *)&timeout,sizeof(timeout)) < 0){
 		print_error("setsockopt failed\n");
 	}
-        
 
 	if (connect_with_timeout(_sockfd, _ip, _port, timeout_ms) == 0) {
 		print_info("TM_COM: O_NONBLOCK connection is ok");

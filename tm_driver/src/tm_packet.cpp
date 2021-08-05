@@ -215,7 +215,7 @@ size_t TmPacket::build_packet_from_bytes(TmPacket &packet, const char *bytes, si
 		std::stringstream ss;
 		ss << std::hex << bytes[ind_e] << bytes[ind_e + 1];
 		ss >> val;
-		packet._cs = char(val);
+		packet._cs = (char)(val);
 		if (cs != packet._cs) {
 			packet._is_cs_failed = true;
 			is_valid = false;
@@ -295,7 +295,7 @@ TmSvrData::ErrorCode TmSvrData::_error_code(const char *buf)
 {
 	char cc[3] = { buf[0], buf[1], '\0' };
 	int ic = std::atoi(cc);
-	if (ic < int(ErrorCode::Other)) {
+	if (ic < (int)(ErrorCode::Other)) {
 		return ErrorCode(ic);
 	}
 	else {
@@ -484,7 +484,7 @@ void TmSvrData::build_bytes(std::vector<char> &bytes, const TmSvrData &data)
 	}
 	bytes.insert(bytes.end(), std::begin(data._transaction_id), std::end(data._transaction_id));
 	bytes.push_back(TmPacket::P_SEPR);
-	std::string smode = std::to_string(int(data._mode));
+	std::string smode = std::to_string((int)(data._mode));
 	bytes.insert(bytes.end(), std::begin(smode), std::end(smode));
 	bytes.push_back(TmPacket::P_SEPR);
 	size_t ind_b = bytes.size();

@@ -42,6 +42,7 @@ public:
 	explicit TmCommunication(const char *ip, unsigned short port, int recv_buf_len);
 	virtual ~TmCommunication();
 
+	int timeoutcount = 0;
 	int socket_description() { return _sockfd; }
 	int socket_description(int sockfd) { _sockfd = sockfd; return _sockfd; }
 
@@ -75,6 +76,8 @@ public:
 	std::vector<TmPacket> &packet_list() { return _packet_list; }
 
 	TmPacket &packet() { return _packet_list.back(); }
+
+	static uint64_t get_current_time_in_ms();
 
 private:
 	int connect_with_timeout(int sockfd, const char *ip, unsigned short port, int timeout_ms);

@@ -32,7 +32,6 @@ TmRos2Node::TmRos2Node(const std::string &host) : Node("tm_driver")
     , iface_(host, nullptr, &sct_cv_)
 {
     RCLCPP_INFO(this->get_logger(), "TM_ROS: hello!");
-    print_info("yoyo");
 
     iface_.start(5000);
 

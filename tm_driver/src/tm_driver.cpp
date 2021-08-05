@@ -182,5 +182,4 @@ bool TmDriver::run_pvt_traj(const TmPvtTraj &pvts)
 void TmDriver::stop_pvt_traj()
 {
 	_is_executing_traj = false;
-	//set_stop();
 }

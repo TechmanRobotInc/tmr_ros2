@@ -72,6 +72,9 @@ void TmSvrRos2::publish_fbs(TmCommRC rc)
       sct_.tmSctErrData.set_CPError(TmCPError::Code::Ok);
       sct_.sct_data.set_sct_data_has_error(false);
     }    
+   
+    pm.fbs_msg.max_not_connect_in_s = maxNotConnectTimeInS;
+    pm.fbs_msg.disconnection_times = diconnectTimes;
 
     pm.fbs_msg.is_data_table_correct = state.is_data_table_correct();
     pm.fbs_msg.joint_pos = state.joint_angle();
@@ -95,6 +98,8 @@ void TmSvrRos2::publish_fbs(TmCommRC rc)
     pm.fbs_msg.cb_digital_input = state.ctrller_DI();
     pm.fbs_msg.cb_analog_output = state.ctrller_AO();
     pm.fbs_msg.cb_analog_input = state.ctrller_AI();
+    pm.fbs_msg.ee_digital_output = state.ee_DO();
+    pm.fbs_msg.ee_digital_input = state.ee_DI();
     //pm.fbs_msg.ee_analog_output = state.ee_AO();
     pm.fbs_msg.ee_analog_input = state.ee_AI();
     pm.fbs_msg.error_content = state.error_content();
@@ -229,37 +234,73 @@ bool TmSvrRos2::publish_func()
     }
     return true;
 }
-
+void TmSvrRos2::cq_monitor(){
+    diconnectTimes ++;
+    initialNotConnectTime =  TmCommunication::get_current_time_in_ms();
+}
+void TmSvrRos2::cq_manage(){
+    
+    notConnectTimeInS = (TmCommunication::get_current_time_in_ms() - initialNotConnectTime)/1000;
+    if(diconnectTimes == 0){
+        return;
+    }
+    if(notConnectTimeInS>maxNotConnectTimeInS){
+        maxNotConnectTimeInS = notConnectTimeInS;
+    }
+}
+bool TmSvrRos2::rc_halt(){
+    if(maxTrialTimeInMinute == -1){
+        return false;
+    }
+    if((int)(notConnectTimeInS/60) >= maxTrialTimeInMinute){
+        return true;
+    }
+    return false;
+}
 void TmSvrRos2::publisher()
 {
     TmSvrCommunication &svr = svr_;
+    PubMsg &pm = pm_;
 
     print_info("TM_ROS: publisher thread begin");
-
+    initialNotConnectTime =  TmCommunication::get_current_time_in_ms();
     while (rclcpp::ok()) {
         //bool reconnect = false;
         if (!svr.recv_init()) {
             print_info("TM_ROS: (TM_SVR): is not connected");
+            cq_manage();
             publish_fbs(TmCommRC::TIMEOUT);
+            if(rc_halt()){
+                print_error("TM_ROS: (TM_SVR): Ethernet slave connection stopped");
+                print_error("TM_ROS: (TM_SVR): LinkLost =(%d), MaxLostTime(s) = (%d)",
+                        (int)pm.fbs_msg.disconnection_times, (int)pm.fbs_msg.max_not_connect_in_s);
+                break;
+            }
         }
         while (rclcpp::ok() && svr.is_connected()) {
-            if (!publish_func()) break;
+            if (!publish_func()){
+                cq_monitor();
+                break;
+            }
         }
         svr.close_socket();
 
-        // reconnect == true
         if (!rclcpp::ok()) break;
         if (pub_reconnect_timeval_ms_ <= 0) {
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
         }
         print_info("TM_ROS: (TM_SVR): reconnect in ");
-        int cnt = 0;
-        while (rclcpp::ok() && cnt < pub_reconnect_timeval_ms_) {
-            if (cnt % 500 == 0) {
-                print_info("%.1f sec...", 0.001 * (pub_reconnect_timeval_ms_ - cnt));
+		
+        uint64_t startTimeMs = TmCommunication::get_current_time_in_ms();
+        int timeInterval = 0;
+        int lastTimeInterval = 1000;
+        while (rclcpp::ok() && timeInterval < pub_reconnect_timeval_ms_) {
+            if ( lastTimeInterval/1000 != timeInterval/1000) {
+                print_info("%.1f sec...", 0.001 * (pub_reconnect_timeval_ms_ - timeInterval));
             }
             std::this_thread::sleep_for(std::chrono::milliseconds(1));
-            ++cnt;
+            lastTimeInterval = timeInterval;
+            timeInterval = TmCommunication::get_current_time_in_ms() - startTimeMs;
         }
         if (rclcpp::ok() && pub_reconnect_timeval_ms_ >= 0) {
             print_info("0 sec\nTM_ROS: (TM_SVR): connect(%d)...", pub_reconnect_timeout_ms_);
@@ -279,8 +320,8 @@ bool TmSvrRos2::connect_tmsvr(
     int t_v = (int)(1000.0 * req->timeval);
     if (req->connect) {
         print_info("TM_ROS: (re)connect(%d) TM_SVR", t_o);
-        sct_.halt();
-        rb = sct_.start_tm_sct(t_o);
+        svr_.halt();
+        rb = svr_.start_tm_svr(t_o);
     }
     if (req->reconnect) {
         pub_reconnect_timeout_ms_ = t_o;

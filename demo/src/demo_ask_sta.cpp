@@ -37,8 +37,8 @@ int main(int argc, char **argv)
   {
     if(result.get()->ok){
       RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"OK");
-      RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"), result.get()->subcmd);
-      RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"), result.get()->subdata);
+      //std::cout<<"subcmd is "<<result.get()->subcmd<<std::endl;;
+      //std::cout<<"subdata is "<<result.get()->subdata<<std::endl;
     } else{
       RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"not OK");	
     }

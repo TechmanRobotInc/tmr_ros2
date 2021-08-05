@@ -104,10 +104,10 @@ void RosPage::change_control_box_io_button(){
   request->pin = 0;
   if(!lastStatus){
     request->state = tm_msgs::srv::SetIO::Request::STATE_ON;
-    std::cout<<"set on"<<std::endl;
+    RCLCPP_DEBUG(rclcpp::get_logger("rclcpp"), "set on");
   } else{
     request->state = tm_msgs::srv::SetIO::Request::STATE_OFF;
-    std::cout<<"set off"<<std::endl;
+    RCLCPP_DEBUG(rclcpp::get_logger("rclcpp"), "set off");	
   }
   lastStatus = !lastStatus;
   
@@ -126,7 +126,7 @@ void RosPage::change_control_box_io_button(){
   } else{
     RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"not OK");
   }
-  std::cout<<"success send io"<<std::endl;
+  RCLCPP_DEBUG(rclcpp::get_logger("rclcpp"), "success send io");	
 }
 RosPage::RosPage(std::string nodeName)
  :lastStatus(false)
@@ -137,7 +137,7 @@ RosPage::RosPage(std::string nodeName)
 }
 RosPage::~RosPage(){
   rclcpp::shutdown();
-  std::cout<<"call ~RosPage"<<std::endl;
+  RCLCPP_INFO(rclcpp::get_logger("rclcpp"), "call ~RosPage");
 }
 void RosPage::run(){
   rclcpp::spin(node);

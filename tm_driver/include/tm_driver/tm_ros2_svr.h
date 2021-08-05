@@ -36,6 +36,11 @@ public:
     } pm_;
     
     int sizeErrorCount = 0;
+    int diconnectTimes = 0;
+    uint64_t initialNotConnectTime = 0;
+    uint64_t notConnectTimeInS = 0;
+    int maxTrialTimeInMinute = -1;
+    uint64_t maxNotConnectTimeInS = 0;
     bool isPrint = false;
     bool svr_updated_;
     std::mutex svr_mtx_;
@@ -59,6 +64,9 @@ protected:
     void publish_svr();
     bool publish_func();
     void publisher();
+    void cq_monitor();//Connection quality
+    void cq_manage();
+    bool rc_halt();// Stop rescue connection
 
 public:
     bool connect_tmsvr(

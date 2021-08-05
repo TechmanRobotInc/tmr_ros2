@@ -102,11 +102,18 @@ void MainWindow::set_text_manual_auto(int isValue, QLabel* label){
     label->setText("<html><head/><body><p><span style=\" font-size:14pt; font-weight:600; color:#73d216;\">None</span></p></body></html>");  
   }    
 }
-void MainWindow::error_code_format_change(tm_msgs::msg::FeedbackState::SharedPtr msg, QLabel* label, int base){
+void MainWindow::set_text_zero_false(int isZero, QLabel* label){
+  if(isZero == 0){
+    label->setText("<html><head/><body><p><span style=\" font-size:14pt; font-weight:600; color:#73d216;\">0</span></p></body></html>");
+  } else{
+    label->setText("<html><head/><body><p><span style=\" font-size:14pt; font-weight:600; color:#cc0000;\">False</span></p></body></html>");
+  }
+}
+void MainWindow::int_base_format_change(quint32 msg, QLabel* label, int base){
   QFont f("Arial",14);
   f.setWeight(600);  
   label->setFont(f);
-  label->setText(QString::number(msg->error_code,base));
+  label->setText(QString::number(msg,base));
   label->setStyleSheet("background-color:rgb(81, 86, 90)");
   label->setStyleSheet("QLabel { color:rgb(143,122,102);}");
 }
@@ -158,7 +165,7 @@ void MainWindow::send_ui_feed_back_status(tm_msgs::msg::FeedbackState::SharedPtr
         set_text_true_false(msg->error_code,ui->error_code_status_label,true);    
         //set_text_null_reserve(true,ui->error_content_status_label);
     } else{ 
-        error_code_format_change(msg,ui->error_code_status_label,16);
+        int_base_format_change(msg->error_code,ui->error_code_status_label,16);
         //set_text_null_reserve(false,ui->error_content_status_label);
     }
     if(msg->cb_digital_output.size() > 0){
@@ -168,6 +175,13 @@ void MainWindow::send_ui_feed_back_status(tm_msgs::msg::FeedbackState::SharedPtr
         set_text_high_low(true,ui->ctrl_do0_status_label,true);
       }
     }
+    if(msg->disconnection_times == 0){
+        set_text_zero_false(msg->disconnection_times,ui->linklost_status_label);    
+        set_text_zero_false(msg->max_not_connect_in_s,ui->maxlosttime_status_label);  
+    } else{ 
+        int_base_format_change(msg->disconnection_times,ui->linklost_status_label,10);
+        int_base_format_change(msg->max_not_connect_in_s,ui->maxlosttime_status_label,10);
+    }       
   }
   else
   {
@@ -175,25 +189,25 @@ void MainWindow::send_ui_feed_back_status(tm_msgs::msg::FeedbackState::SharedPtr
   }  
 }
 void MainWindow::click_set_sct_re_connect_button(){
-  std::cout<<"click [SctClient Re-Connect] button"<<std::endl;
+  RCLCPP_DEBUG(rclcpp::get_logger("rclcpp"), "click [SctClient Re-Connect] button");  
   initial_link_ctrl_label();
   initial_status_ctrl_label();
   send_sct_as_re_connect();
 }
 void MainWindow::click_set_svr_re_connect_button(){
-  std::cout<<"click [SvrClient Re-Connect] button"<<std::endl;
+  RCLCPP_DEBUG(rclcpp::get_logger("rclcpp"), "click [SvrClient Re-Connect] button");	
   initial_link_ctrl_label();
   initial_status_ctrl_label();
   send_svr_as_re_connect();
 }
 void MainWindow::click_change_control_box_io_button(){
-  std::cout<<"click [DO0 Ctrl] button"<<std::endl;
+  RCLCPP_DEBUG(rclcpp::get_logger("rclcpp"), "click [DO0 Ctrl] button");
   change_control_box_io_button();
 }
 void MainWindow::quit()
 {
-    std::cout <<"click [Quit_GUI] button"<< std::endl;
-    QApplication::quit();
+  RCLCPP_DEBUG(rclcpp::get_logger("rclcpp"), "click [Quit_GUI] button");    
+  QApplication::quit();
 }
 void MainWindow::initial_ui_page_to_ros_thread(){
   connect(this, SIGNAL(send_sct_as_re_connect()),rosPage.get(),SLOT(send_sct_as_re_connect()));
