@@ -42,6 +42,7 @@ public:
 	explicit TmCommunication(const char *ip, unsigned short port, int recv_buf_len);
 	virtual ~TmCommunication();
 
+	int timeoutcount = 0;
 	int socket_description() { return _sockfd; }
 	int socket_description(int sockfd) { _sockfd = sockfd; return _sockfd; }
 

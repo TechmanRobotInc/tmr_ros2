@@ -23,10 +23,10 @@ int main(int argc, char **argv)
 
   while (!client->wait_for_service(1s)) {
     if (!rclcpp::ok()) {
-      RCLCPP_ERROR(rclcpp::get_logger("rclcpp"), "Interrupted while waiting for the service. Exiting.");
+      RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"), "Interrupted while waiting for the service. Exiting.");
       return false;
     }
-    RCLCPP_INFO(rclcpp::get_logger("rclcpp"), "service not available, waiting again...");
+    RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"), "service not available, waiting again...");
   }
 
   auto result = client->async_send_request(request);
@@ -36,13 +36,13 @@ int main(int argc, char **argv)
   {
     //RCLCPP_INFO(rclcpp::get_logger("rclcpp"), "Sum: %ld", result.get()->ok);
     if(result.get()->ok){
-      RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"OK");
+      RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"OK");
     } else{
-      RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"not OK");
+      RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"not OK");
     }
 
   } else {
-    RCLCPP_ERROR(rclcpp::get_logger("rclcpp"), "Failed to call service");
+    RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"), "Failed to call service");
   }
   return true;
 

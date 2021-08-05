@@ -10,10 +10,10 @@ int main(int argc, char * argv[]){
 
   while(!client->wait_for_service(1s)){
     if(!rclcpp::ok()){
-      RCLCPP_ERROR(node->get_logger(), "Client interrupted while waiting for service to appear.");
+      RCLCPP_ERROR_STREAM(node->get_logger(), "Client interrupted while waiting for service to appear.");
       return 1;
     }
-    RCLCPP_INFO(node->get_logger(), "waiting for service...");
+    RCLCPP_INFO_STREAM(node->get_logger(), "waiting for service...");
   }
 
   auto request = std::make_shared<techman_robot_msgs::srv::TechmanRobotCommand::Request>();
@@ -22,12 +22,12 @@ int main(int argc, char * argv[]){
 
   auto res_future = client->async_send_request(request);
   if(rclcpp::spin_until_future_complete(node, res_future) != rclcpp::executor::FutureReturnCode::SUCCESS){
-    RCLCPP_ERROR(node->get_logger(), "Service call failed.");
+    RCLCPP_ERROR_STREAM(node->get_logger(), "Service call failed.");
     return 1;
   }
 
   auto res = res_future.get();
-  std::cout<<"is_success "<< res->is_success<<std::endl;
+  RCLCPP_INFO_STREAM(node->get_logger(), "is_success " << res->is_success);	
 
   rclcpp::shutdown();
   return 0;

@@ -16,6 +16,7 @@ TmSvrCommunication::TmSvrCommunication(const std::string &ip,
 	int recv_buf_len, std::condition_variable *cv)
 	: TmCommunication(ip.c_str(), 5891, recv_buf_len)
 {
+	RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"TM_SVR: TmSvrCommunication");
 	if (cv) {
 		_cv = cv;
 		_has_thread = true;
@@ -31,7 +32,7 @@ bool TmSvrCommunication::start_tm_svr(int timeout_ms)
 {
 	if (socket_description() == 6188)
 	{
-		print_info("TM_SVR: start (fake)");
+	    RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"), "TM_SVR: start (fake)");
 		if (_has_thread) {
 			// start thread
 			_recv_thread = std::thread(std::bind(&TmSvrCommunication::tm_svr_thread_function, this));
@@ -40,7 +41,7 @@ bool TmSvrCommunication::start_tm_svr(int timeout_ms)
 	}
 
 	halt();
-	print_info("TM_SVR: start");
+	RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"), "TM_SVR: start");
 
 	bool rb = connect_socket(timeout_ms);
 	//if (!rb) return rb; // ? start thread anyway
@@ -56,7 +57,7 @@ void TmSvrCommunication::halt()
 {
 	if (socket_description() == 6188)
 	{
-		print_info("TM_SVR: halt (fake)");
+		RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"), "TM_SVR: halt (fake)");
 		if (_has_thread) {
 			_keep_thread_alive = false;
 			if (_recv_thread.joinable()) {
@@ -72,13 +73,7 @@ void TmSvrCommunication::halt()
 		}
 	}
 	if (is_connected()) {
-		print_info("TM_SVR: halt");
-		//if (_has_thread) {
-		//	_keep_thread_alive = false;
-		//	if (_recv_thread.joinable()) {
-		//		_recv_thread.join();
-		//	}
-		//}
+		RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"), "TM_SVR: halt");
 		close_socket();
 	}
 }
@@ -106,12 +101,12 @@ TmCommRC TmSvrCommunication::send_stick_play()
 
 void TmSvrCommunication::tm_svr_thread_function()
 {
-	print_info("TM_SVR: thread begin");
+	RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"), "TM_SVR: thread begin");
 	_keep_thread_alive = true;
 	while (_keep_thread_alive) {
 		bool reconnect = false;
 		if (!recv_init()) {
-			print_info("TM_SVR: is not connected");
+			RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"), "TM_SVR: is not connected");
 		}
 		while (_keep_thread_alive && is_connected() && !reconnect) {
 			TmCommRC rc = tmsvr_function();
@@ -123,7 +118,7 @@ void TmSvrCommunication::tm_svr_thread_function()
 			case TmCommRC::NOTREADY:
 			case TmCommRC::NOTCONNECT:
 			case TmCommRC::TIMEOUT:
-				print_info("TM_SVR: rc=%d", int(rc));
+				RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"), "TM_SVR: rc=" << int(rc));
 				reconnect = true;
 				break;
 			default: break;
@@ -133,7 +128,7 @@ void TmSvrCommunication::tm_svr_thread_function()
 		reconnect_function();
 	}
 	close_socket();
-	print_info("TM_SVR: thread end");
+	RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"), "TM_SVR: thread end");
 }
 
 void TmSvrCommunication::reconnect_function()
@@ -142,17 +137,17 @@ void TmSvrCommunication::reconnect_function()
 	if (_reconnect_timeval_ms <= 0) {
 		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 	}
-	print_info("TM_SVR: reconnect in ");
+	RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"), "TM_SVR: reconnect in ");
 	int cnt = 0;
 	while (_keep_thread_alive && cnt < _reconnect_timeval_ms) {
 		if (cnt % 500 == 0) {
-			print_info("%.1f sec...", 0.001 * (_reconnect_timeval_ms - cnt));
+			RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"), 0.001 * (_reconnect_timeval_ms - cnt) << " sec...");
 		}
 		std::this_thread::sleep_for(std::chrono::milliseconds(1));
 		++cnt;
 	}
 	if (_keep_thread_alive && _reconnect_timeval_ms >= 0) {
-		print_info("0 sec\nTM_SVR: connect(%dms)...", _reconnect_timeout_ms);
+		RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"), "0 sec\nTM_SVR: connect(" << (int)_reconnect_timeout_ms << "ms)...");
 		connect_socket(_reconnect_timeout_ms);
 	}
 }
@@ -170,7 +165,7 @@ TmCommRC TmSvrCommunication::tmsvr_function()
 	for (auto &pack : pack_vec) {
 		if (pack.type == TmPacket::Header::CPERR) {
 			tmSvrErrData.set_CPError(pack.data.data(), pack.data.size());
-            print_error("TM_SVR: CPERR %s",tmSvrErrData.error_code_str().c_str());
+			RCLCPP_ERROR(rclcpp::get_logger("rclcpp"),"TM_SVR: CPERR %s",tmSvrErrData.error_code_str().c_str());
 		}
 		else if (pack.type == TmPacket::Header::TMSVR) {
 			
@@ -181,27 +176,27 @@ TmCommRC TmSvrCommunication::tmsvr_function()
 			if (data.is_valid()) {
 				switch (data.mode()) {
 				case TmSvrData::Mode::RESPONSE:
-					print_info("TM_SVR: RESPONSE (%s): [%d]: %s", data.transaction_id().c_str(),
-						(int)(data.error_code()), std::string(data.content(), data.content_len()).c_str());
+					RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"), "TM_SVR: RESPONSE (" << data.transaction_id() << "): [" <<
+					(int)(data.error_code()) << "]: " << std::string(data.content(), data.content_len()));
 					break;
 				case TmSvrData::Mode::BINARY:
 					state.mtx_deserialize(data.content(), data.content_len());
 					break;
 				case TmSvrData::Mode::READ_STRING:
-					print_info("TM_SVR: READ_STRING (%s): %s", data.transaction_id().c_str(),
-						std::string(data.content(), data.content_len()).c_str());
+					RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"), "TM_SVR: READ_STRING (" << data.transaction_id() << "): " <<
+						std::string(data.content(), data.content_len()));
 					break;
 				default:
-					print_error("TM_SVR: (%s): invalid mode (%d)", data.transaction_id().c_str(), (int)(data.mode()));
+					RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"), "TM_SVR: (" << data.transaction_id() << "): invalid mode (" << (int)(data.mode()) << ")");
 					break;
 				}
 			}
 			else {
-				print_error("TM_SVR: invalid data");
+				RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"), "TM_SVR: invalid data");
 			}
 		}
 		else {
-			print_error("TM_SVR: invalid header");
+			RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"), "TM_SVR: invalid header");
 		}
 	}
 	return rc;

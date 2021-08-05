@@ -11,6 +11,10 @@ int32 tmscript_cperr        # External Script Communication Last CPERR Error Cod
 int32 tmsrv_dataerr         # TMSVR Communication Last Data Error Code
 int32 tmscript_dataerr      # External Script Communication TMSCT (or TMSTA) Last Data Error Code
 
+# Disconnection Message
+int32 max_not_connect_in_s
+int32 disconnection_times
+
 # Movement
 float64[] joint_pos
 float64[] joint_vel

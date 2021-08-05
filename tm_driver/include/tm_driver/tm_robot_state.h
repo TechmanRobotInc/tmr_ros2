@@ -31,7 +31,7 @@ private:
 	unsigned char _is_proj_paused_;
 	unsigned char _is_safeguard_A_triggered_;
 	unsigned char _is_ESTOP_pressed_;
-	char _camera_light_;
+	unsigned char _camera_light_;
 
 	int _error_code_;
 
@@ -55,7 +55,7 @@ private:
 	int _proj_speed_;
 	int _ma_mode_;
 
-	char _stick_play_pause_;
+	unsigned char _stick_play_pause_;
 
 	int _robot_light_;
 
@@ -76,7 +76,7 @@ private:
 	unsigned char _is_proj_paused;
 	unsigned char _is_safeguard_A_triggered;
 	unsigned char _is_ESTOP_pressed;
-	char _camera_light;
+	unsigned char _camera_light;
 
 	int _error_code;
 	std::string _error_content;
@@ -139,7 +139,7 @@ public:
 	unsigned char is_safeguard_A() { return _is_safeguard_A_triggered; }
 	unsigned char is_EStop() { return _is_ESTOP_pressed; }
 
-	char camera_light() { return _camera_light; } // R/W
+	unsigned char camera_light() { return _camera_light; } // R/W
 
 	int error_code() { return _error_code; }
 	std::string error_content() { return _error_content; }

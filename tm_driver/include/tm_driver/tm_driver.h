@@ -79,27 +79,6 @@ public:
 	// PVT Trajectory
 	//
 
-	/*enum class PvtMode { Joint, Tool };
-
-	struct PvtPoint {
-		double time;
-		std::vector<double> positions;
-		std::vector<double> velocities;
-	};*/
-
-	/*struct PvtTraj {
-		PvtMode mode;
-		std::vector<double> time_vec;
-		std::vector<std::vector<double> > positions_vec;
-		std::vector<std::vector<double> > velocities_vec;
-	};*/
-
-	/*struct PvtTraj {
-		PvtMode mode;
-		std::vector<PvtPoint> points;
-		double total_time;
-	};*/
-
 	bool set_pvt_enter(TmPvtMode mode, const std::string &id = "PvtEnter");
 	bool set_pvt_exit(const std::string &id = "PvtExit");
 	bool set_pvt_point(TmPvtMode mode,

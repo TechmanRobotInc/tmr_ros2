@@ -45,6 +45,7 @@ public:
 	{ _reconnect_timeval_ms = timeval_ms; }
 
 	TmCommRC send_script_str(const std::string &id, const std::string &script);
+	
 	TmCommRC send_script_exit();
 
 	TmCommRC send_sta_request(const std::string &subcmd, const std::string &subdata);

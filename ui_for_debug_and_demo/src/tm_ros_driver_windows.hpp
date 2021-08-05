@@ -93,7 +93,8 @@ private:
   void set_text_high_low(bool isTrue, QLabel* label, bool isReverse);
   void set_text_null_reserve(bool isTrue, QLabel* label);
   void set_text_manual_auto(int isValue, QLabel* label);
-  void error_code_format_change(tm_msgs::msg::FeedbackState::SharedPtr msg, QLabel* label, int base);
+  void set_text_zero_false(int isZero, QLabel* label);
+  void int_base_format_change(quint32 msg, QLabel* label, int base); 
   void initial_link_ctrl_label();    
   void initial_status_ctrl_label();      
   void initial_ui_component();

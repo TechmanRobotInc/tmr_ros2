@@ -60,19 +60,19 @@ void RosPage::initial_client(){
 void RosPage::send_service(rclcpp::Client<tm_msgs::srv::ConnectTM>::SharedPtr client, std::shared_ptr<tm_msgs::srv::ConnectTM::Request> request){
   while (!client->wait_for_service(1s)) {
     if (!rclcpp::ok()) {
-      RCLCPP_ERROR(rclcpp::get_logger("rclcpp"), "Interrupted while waiting for the service. Exiting.");
+      RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"), "Interrupted while waiting for the service. Exiting.");
       return ;
     }
-    RCLCPP_INFO(rclcpp::get_logger("rclcpp"), "service not available");
+    RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"), "service not available");
     return;
   }
 
   auto result = client->async_send_request(request);
   
   if(result.get()->ok){
-    RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"OK");
+    RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"OK");
   } else{
-    RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"not OK");
+    RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"not OK");
   }
 
 }
@@ -104,29 +104,29 @@ void RosPage::change_control_box_io_button(){
   request->pin = 0;
   if(!lastStatus){
     request->state = tm_msgs::srv::SetIO::Request::STATE_ON;
-    std::cout<<"set on"<<std::endl;
+    RCLCPP_DEBUG_STREAM(rclcpp::get_logger("rclcpp"), "set on");
   } else{
     request->state = tm_msgs::srv::SetIO::Request::STATE_OFF;
-    std::cout<<"set off"<<std::endl;
+    RCLCPP_DEBUG_STREAM(rclcpp::get_logger("rclcpp"), "set off");	
   }
   lastStatus = !lastStatus;
   
   while (!client->wait_for_service(1s)) {
     if (!rclcpp::ok()) {
-      RCLCPP_ERROR(rclcpp::get_logger("rclcpp"), "Interrupted while waiting for the service. Exiting.");
+      RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"), "Interrupted while waiting for the service. Exiting.");
     }
-    RCLCPP_INFO(rclcpp::get_logger("rclcpp"), "service not available");
+    RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"), "service not available");
     return;
   }
 
   auto result = client->async_send_request(request);
   
   if(result.get()->ok){
-    RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"OK");
+    RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"OK");
   } else{
-    RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"not OK");
+    RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"not OK");
   }
-  std::cout<<"success send io"<<std::endl;
+  RCLCPP_DEBUG_STREAM(rclcpp::get_logger("rclcpp"), "success send io");	
 }
 RosPage::RosPage(std::string nodeName)
  :lastStatus(false)
@@ -137,7 +137,7 @@ RosPage::RosPage(std::string nodeName)
 }
 RosPage::~RosPage(){
   rclcpp::shutdown();
-  std::cout<<"call ~RosPage"<<std::endl;
+  RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"), "call ~RosPage");
 }
 void RosPage::run(){
   rclcpp::spin(node);

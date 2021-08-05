@@ -19,7 +19,7 @@ class MinimalSubscriber : public rclcpp::Node
     void topic_callback(const tm_msgs::msg::SctResponse::SharedPtr msg) const
     {
       
-      RCLCPP_INFO(this->get_logger(), "the id is %s, script is %d", msg->id, msg->script);
+      RCLCPP_INFO_STREAM(this->get_logger(),"SctResponse: id is = " << msg->id << ", script is " << msg->script);
       
     }
     rclcpp::Subscription<tm_msgs::msg::SctResponse>::SharedPtr subscription_;

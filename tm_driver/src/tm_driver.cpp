@@ -35,7 +35,7 @@ TmDriver::TmDriver(const std::string &ip,
 bool TmDriver::start(int timeout_ms, bool stick_play)
 {
 	halt();
-	print_info("TM_DRV: start");
+	RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"TM_DRV: start");
 	// connect to server
 	bool rb = svr.start_tm_svr(timeout_ms);
 	if (!rb) return rb;
@@ -52,7 +52,7 @@ bool TmDriver::start(int timeout_ms, bool stick_play)
 
 void TmDriver::halt()
 {
-	print_info("TM_DRV: halt");
+	RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"TM_DRV: halt");
 	if (sct.is_connected()) {
 		// send command to stop project
 		sct.send_script_exit();
@@ -148,8 +148,8 @@ bool TmDriver::set_pvt_point(TmPvtMode mode, const TmPvtPoint &point, const std:
 bool TmDriver::set_pvt_traj(const TmPvtTraj &pvts, const std::string &id)
 {
 	std::string script = TmCommand::set_pvt_traj(pvts);
-	print_info("TM_DRV: send script (pvt traj.):\n");
-	printf("%s\n", script.c_str());
+	RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"TM_DRV: send script (pvt traj.):\n");
+	RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),script);
 	return (sct.send_script_str(id, script) == RC_OK);
 }
 
@@ -176,11 +176,10 @@ bool TmDriver::run_pvt_traj(const TmPvtTraj &pvts)
 	else {
 		set_stop();
 	}
-	print_info("TM_DRV: traj. exec. time:= %.3f", time);
+	RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"TM_DRV: traj. exec. time:=" << time);
 	return true;
 }
 void TmDriver::stop_pvt_traj()
 {
 	_is_executing_traj = false;
-	//set_stop();
 }
