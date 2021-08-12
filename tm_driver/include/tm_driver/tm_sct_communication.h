@@ -24,6 +24,8 @@ private:
 	std::mutex mtx_cpe;
 	std::mutex mtx_sct;
 	std::mutex mtx_sta;
+    
+	bool &isOnListenNode;
 
 	//std::string _sct_res_id;
 	//std::string _sct_res_script;
@@ -33,7 +35,7 @@ private:
 
 public:
 	explicit TmSctCommunication(const std::string &ip,
-		int recv_buf_len, std::condition_variable *cv = nullptr);
+		int recv_buf_len,bool &isOnListenNode, std::condition_variable *cv = nullptr);
 	~TmSctCommunication();
 
 	bool start_tm_sct(int timeout_ms = 0);
@@ -43,7 +45,7 @@ public:
 	{ _reconnect_timeout_ms = timeout_ms; }
 	void set_reconnect_timeval(int timeval_ms)
 	{ _reconnect_timeval_ms = timeval_ms; }
-
+    void check_script_is_exit(std::string script);
 	TmCommRC send_script_str(const std::string &id, const std::string &script);
 	
 	TmCommRC send_script_exit();
