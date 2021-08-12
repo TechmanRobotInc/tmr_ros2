@@ -22,8 +22,12 @@ class TmSctRos2 : public rclcpp::Node
 public:
     TmSctCommunication &sct_;
     TmDriver &iface_;
+    std::mutex checkIsOnListenNodeMutex;
+    std::condition_variable checkIsOnListenNodeCondVar;
+    std::mutex firstCheckIsOnListenNodeMutex;
+    std::condition_variable firstCheckIsOnListenNodeCondVar;
 
-    struct SctMsg {
+    struct SctAndStaMsg {
         rclcpp::Publisher<tm_msgs::msg::SctResponse>::SharedPtr sct_pub;
         rclcpp::Publisher<tm_msgs::msg::StaResponse>::SharedPtr sta_pub;
 
@@ -38,6 +42,8 @@ public:
     int sct_reconnect_timeout_ms_;
     int sct_reconnect_timeval_ms_;
     std::thread sct_thread_;
+    std::thread checkListenNodeThread;
+    bool firstEnter = true;
 
     rclcpp::Service<tm_msgs::srv::ConnectTM>::SharedPtr connect_tm_srv_;
 
@@ -54,10 +60,13 @@ public:
 
 protected:
     void sct_msg();
+    void check_is_on_listen_node_from_script(std::string id, std::string script);
     void sta_msg();
     bool sct_func();
+    void check_is_on_listen_node();
     void sct_responsor();
-
+    void sct_connect_recover();
+    bool ask_sta_struct(std::string subcmd, std::string subdata, double waitTime,std::string &reSubcmd, std::string &reSubdata);
 public:
     bool connect_tmsct(
         const std::shared_ptr<tm_msgs::srv::ConnectTM::Request> req,

@@ -443,12 +443,12 @@ void TmRobotState::_deserialize_update(bool lock) {
 
 		for (int i = 0; i < 8; ++i) { _ctrller_DO[i] = _ctrller_DO_[i]; }
 		for (int i = 0; i < 8; ++i) { _ctrller_DI[i] = _ctrller_DI_[i]; }
-		for (int i = 0; i < 2; ++i) { _ctrller_AO[i] = _ctrller_AO_[i]; }
+		for (int i = 0; i < 1; ++i) { _ctrller_AO[i] = _ctrller_AO_[i]; }
 		for (int i = 0; i < 2; ++i) { _ctrller_AI[i] = _ctrller_AI_[i]; }
 		for (int i = 0; i < 4; ++i) { _ee_DO[i] = _ee_DO_[i]; }
 		for (int i = 0; i < 4; ++i) { _ee_DI[i] = _ee_DI_[i]; }
-		for (int i = 0; i < 2; ++i) { _ee_AO[i] = _ee_AO_[i]; }
-		for (int i = 0; i < 2; ++i) { _ee_AI[i] = _ee_AI_[i]; }
+		//for (int i = 0; i < 1; ++i) { _ee_AO[i] = _ee_AO_[i]; }
+		for (int i = 0; i < 1; ++i) { _ee_AI[i] = _ee_AI_[i]; }
 	}
 	if (lock) mtx_unlock();
 }

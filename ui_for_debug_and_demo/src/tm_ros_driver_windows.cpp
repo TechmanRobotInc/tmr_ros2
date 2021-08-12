@@ -175,18 +175,18 @@ void MainWindow::send_ui_feed_back_status(tm_msgs::msg::FeedbackState::SharedPtr
         set_text_high_low(true,ui->ctrl_do0_status_label,true);
       }
     }
-    if(msg->disconnection_times == 0){
-        set_text_zero_false(msg->disconnection_times,ui->linklost_status_label);    
-        set_text_zero_false(msg->max_not_connect_in_s,ui->maxlosttime_status_label);  
-    } else{ 
-        int_base_format_change(msg->disconnection_times,ui->linklost_status_label,10);
-        int_base_format_change(msg->max_not_connect_in_s,ui->maxlosttime_status_label,10);
-    }       
   }
   else
   {
     initial_status_ctrl_label();
-  }  
+  }
+  if(msg->disconnection_times == 0){
+    set_text_zero_false(msg->disconnection_times,ui->linklost_status_label);    
+    set_text_zero_false(msg->max_not_connect_in_s,ui->maxlosttime_status_label);  
+  } else{ 
+    int_base_format_change(msg->disconnection_times,ui->linklost_status_label,10);
+    int_base_format_change(msg->max_not_connect_in_s,ui->maxlosttime_status_label,10);
+  }   
 }
 void MainWindow::click_set_sct_re_connect_button(){
   RCLCPP_DEBUG(rclcpp::get_logger("rclcpp"), "click [SctClient Re-Connect] button");  

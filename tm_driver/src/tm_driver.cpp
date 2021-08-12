@@ -9,7 +9,7 @@
 // no thread
 TmDriver::TmDriver(const std::string &ip) 
 	: svr{ ip, 4096 }
-	, sct{ ip, 2048 }
+	, sct{ ip, 2048, isOnListenNode }
 	, state{ svr.state }
 {
 }
@@ -19,7 +19,7 @@ TmDriver::TmDriver(const std::string &ip,
 	std::condition_variable *psvr_cv,
 	std::condition_variable *psct_cv)
 	: svr{ ip, 4096, psvr_cv }
-	, sct{ ip, 2048, psct_cv }
+	, sct{ ip, 2048, isOnListenNode,psct_cv }
 	, state{ svr.state }
 {
 	if (psvr_cv) {
@@ -71,7 +71,12 @@ void TmDriver::halt()
 ////////////////////////////////
 // SCT Robot Function (set_XXX)
 ////////////////////////////////
-
+bool TmDriver::is_on_listen_node(){
+	return isOnListenNode;
+}
+void TmDriver::back_to_listen_node(){
+	isOnListenNode = true;
+}
 bool TmDriver::script_exit(const std::string &id)
 {
 	return (sct.send_script_str(id, TmCommand::script_exit()) == RC_OK);
