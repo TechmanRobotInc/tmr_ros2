@@ -1,7 +1,8 @@
 import sys
 import socket
 import rclpy
-
+import queue
+import signal
 from rclpy.node import Node
 
 from sensor_msgs.msg import Image 
@@ -12,29 +13,64 @@ import cv2
 from waitress import serve
 from datetime import datetime
 from cv_bridge import CvBridge, CvBridgeError
-
+import threading
 
 
 class ImagePub(Node):
     def __init__(self,nodeName,isTest,path):
         super().__init__(nodeName)
         self.publisher = self.create_publisher(Image, 'techman_image', 10)
+        self.con = threading.Condition()
+        self.imageQ = queue.Queue()
+        self.leaveThread = False
         if(isTest):
+            self.t = threading.Thread(target = self.pub_data_thread, args=(False,))
             timer_period = 1.0
             self.img = cv2.imread(path)
-            self.tmr = self.create_timer(timer_period, self.publish_test_image)                          
-
+            self.tmr = self.create_timer(timer_period, self.publish_test_image)
+        else:
+            self.t = threading.Thread(target = self.pub_data_thread, args=(True,))
+        self.t.start()
+                          
+    def set_image_and_notify_send(self, img):
+        self.con.acquire()
+        self.imageQ.put(img)
+        self.con.notify()
+        self.con.release()
+    def signal_handler(self,signal, frame):
+        self.close_thread()
+        sys.exit(0)
+        
     def publish_test_image(self):
         self.img = cv2.flip(self.img, 1)
-        self.image_publisher(self.img)
+        self.set_image_and_notify_send(self.img)
 
     def image_publisher(self,image):
         bridge = CvBridge()
         msg = bridge.cv2_to_imgmsg(image)
-        self.get_logger().info('Publishing something !')
+        self.get_logger().info('Publishing something !, queue size is ' + str(self.imageQ.qsize()))
         self.publisher.publish(msg)
-
-
+    
+    def close_thread(self):
+        self.leaveThread = True
+        self.con.acquire()
+        self.con.notify()
+        self.con.release()
+        
+    def pub_data_thread(self, isRequestData):
+        self.con.acquire()
+        while(True):
+            self.con.wait()
+            while(not self.imageQ.empty()):
+                if(isRequestData):
+                    file2np = np.fromstring(self.imageQ.get(), np.uint8)        
+                    img = cv2.imdecode(file2np, cv2.IMREAD_UNCHANGED)
+                    self.image_publisher(img)
+                else:
+                    self.image_publisher(self.imageQ.get())
+            if(self.leaveThread):
+                break
+        self.con.release()
 
     def fake_result(self,m_method):
         # clsssification
@@ -130,11 +166,11 @@ class ImagePub(Node):
             return jsonify(result)
 
         # convert image data        
-        file2np = np.fromstring(request.files['file'].read(), np.uint8)        
-        img = cv2.imdecode(file2np, cv2.IMREAD_UNCHANGED)
+        #file2np = np.fromstring(request.files['file'].read(), np.uint8)        
+        #img = cv2.imdecode(file2np, cv2.IMREAD_UNCHANGED)
         #cv2.imwrite('test.png',img)
 
-        self.image_publisher(img)
+        self.set_image_and_notify_send(request.files['file'].read())
 
         result = self.fake_result(m_method)    
 
@@ -163,8 +199,9 @@ def main():
         set_route(app,node)
         print("Listening on an ip port:6189 combination")
         serve(app, port=6189)
+    signal.signal(signal.SIGINT, node.signal_handler)
+    
     rclpy.spin(node)
-
     node.destroy_node()
     rclpy.shutdown()
 
