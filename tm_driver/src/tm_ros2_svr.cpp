@@ -141,7 +141,7 @@ void TmSvrRos2::publish_svr()
 
     if ((int)(pm.svr_msg.error_code) != 0) {
         RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: (TM_SVR): MSG (" << pm.svr_msg.id << ") (" << (int)(pm.svr_msg.mode) << ") " << pm.svr_msg.content);  	
-        RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: (TM_SVR) ROS Node Data Error" << (int)(pm.svr_msg.error_code));
+        RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: (TM_SVR): ROS Node Data Error" << (int)(pm.svr_msg.error_code));
     }
     else {
         RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: (TM_SVR): MSG  (" << pm.svr_msg.id << ") (" << (int)(pm.svr_msg.mode) << ") " << pm.svr_msg.content);
@@ -210,7 +210,7 @@ bool TmSvrRos2::publish_func()
                     publish_svr();
                     break;
                 default:
-                    RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: (TM_SVR): (" <<
+                    RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: (TM_SVR): (" <<
                         svr.data.transaction_id() << "): invalid mode (" << (int)(svr.data.mode()) << ")");
                     break;
                 }
@@ -227,7 +227,7 @@ bool TmSvrRos2::publish_func()
         publish_fbs(rc);
     }
     if(rc == TmCommRC::TIMEOUT){
-      RCLCPP_INFO_STREAM_ONCE(rclcpp::get_logger("rclcpp"), "TM_ROS: (TM_SVR): lINK TIMEOUT");
+      RCLCPP_INFO_STREAM_ONCE(rclcpp::get_logger("rclcpp"), "TM_ROS: (TM_SVR): LINK TIMEOUT");
       return false;
     }
     return true;
@@ -251,6 +251,7 @@ bool TmSvrRos2::rc_halt(){  //Stop rescue connection
         return false;
     }
     if((int)(notConnectTimeInS/60) >= maxTrialTimeInMinute){
+        RCLCPP_DEBUG_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: (TM_SVR): notConnectTimeInS = " << (int)notConnectTimeInS << ", maxTrialTimeInMinute = " << (int)maxTrialTimeInMinute);
         return true;
     }
     return false;
@@ -264,23 +265,23 @@ void TmSvrRos2::publisher()
     initialNotConnectTime =  TmCommunication::get_current_time_in_ms();
     while (rclcpp::ok()) {
         //bool reconnect = false;
-        if (svr_recovery_is_halt) {
+        if (iface_.get_connect_recovery_guide()) {
             std::this_thread::sleep_for(std::chrono::milliseconds(1));
         }
         else   
         {	        	
             if (!svr.recv_init()) {
-                RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: (TM_SVR): is not connected");
+                RCLCPP_DEBUG_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: (TM_SVR): is not connected");
                 cq_manage();
                 publish_fbs(TmCommRC::TIMEOUT);
                 if(rc_halt()) {
                     RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: (TM_SVR): Ethernet slave connection stopped");
                     RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: (TM_SVR): LinkLost = " << (int)pm.fbs_msg.disconnection_times << ", MaxLostTime(s) = " << (int)pm.fbs_msg.max_not_connect_in_s);
-                    svr_recovery_is_halt = true;
+                    iface_.set_connect_recovery_guide(true);
                     svr.close_socket();
                 }
             }
-            if (!svr_recovery_is_halt) {
+            if (!iface_.get_connect_recovery_guide()) {
                 while (rclcpp::ok() && svr.is_connected()) {
                     if (!publish_func()){
                         cq_monitor();
@@ -308,7 +309,7 @@ void TmSvrRos2::svr_connect_recover()
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
     
-    RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: (TM_SVR): reconnect in ");
+    RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: (TM_SVR): Reconnecting... ");
 
     uint64_t startTimeMs = TmCommunication::get_current_time_in_ms();
     while (rclcpp::ok() && timeInterval < pub_reconnect_timeval_ms_) {
@@ -338,7 +339,7 @@ bool TmSvrRos2::connect_tmsvr(
         rb = svr_.start_tm_svr(t_o);
     }
     if (req->reconnect) {
-        if (svr_recovery_is_halt)
+        if (iface_.get_connect_recovery_guide())
         {
             pub_reconnect_timeout_ms_ = 1000;
             pub_reconnect_timeval_ms_ = 3000;
@@ -346,7 +347,7 @@ bool TmSvrRos2::connect_tmsvr(
             notConnectTimeInS = 0;
             diconnectTimes = 0;
             maxNotConnectTimeInS = 0;
-            svr_recovery_is_halt = false;
+            iface_.set_connect_recovery_guide(false);
             rb = svr_.start_tm_svr(5000);
             RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: TM_SVR resume connection recovery");      	
         }

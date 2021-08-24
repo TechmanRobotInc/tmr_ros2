@@ -56,12 +56,14 @@ void TmSctCommunication::halt()
 		close_socket();
 	}
 }
+
 void TmSctCommunication::check_script_is_exit(std::string script){
   std::string compareString = "ScriptExit()";
   if(compareString.compare(script) == 0){
     isOnListenNode  = false;
   }
 }
+
 TmCommRC TmSctCommunication::send_script_str(const std::string &id, const std::string &script)
 {
 	check_script_is_exit(script);
@@ -141,11 +143,11 @@ void TmSctCommunication::reconnect_function()
 	if (_reconnect_timeval_ms <= 0) {
 		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 	}
-	RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"TM_SCT: reconnect in ");
+	RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"TM_SCT: Reconnecting.. ");
 	int cnt = 0;
 	while (_keep_thread_alive && cnt < _reconnect_timeval_ms) {
 		if (cnt % 1000 == 0) {
-			RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),0.001 * (_reconnect_timeval_ms - cnt) << " sec...");
+			RCLCPP_DEBUG_STREAM(rclcpp::get_logger("rclcpp"),0.001 * (_reconnect_timeval_ms - cnt) << " sec...");
 		}
 		std::this_thread::sleep_for(std::chrono::milliseconds(1));
 		++cnt;

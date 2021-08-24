@@ -73,7 +73,7 @@ void TmSctRos2::sct_msg()
 
     if (data.sct_has_error()) {
         RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: (TM_SCT): MSG : (" << sm.sct_msg.id << "): " << sm.sct_msg.script);
-        RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: (TM_SCT):ROS Node Data Error: (" << (int)data.sct_has_error() << "): ");
+        RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: (TM_SCT): ROS Node Data Error (" << (int)data.sct_has_error() << ")");
     }
     else {
         RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: (TM_SCT): MSG : (" << sm.sct_msg.id << "): " << sm.sct_msg.script);
@@ -151,6 +151,7 @@ bool TmSctRos2::sct_func()
     }
     return true;
 }
+
 void TmSctRos2::check_is_on_listen_node(){
     std::unique_lock<std::mutex> firstCheckIsOnListenNodeLock(firstCheckIsOnListenNodeMutex);
     std::unique_lock<std::mutex> checkIsOnListenNodeLock(checkIsOnListenNodeMutex);
@@ -167,14 +168,15 @@ void TmSctRos2::check_is_on_listen_node(){
         std::istringstream(reSubdata) >> std::boolalpha >> isInListenNode;
     
         if(isInListenNode){
-            RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"On listen node !");
+            RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: On listen node.");
             iface_.back_to_listen_node();
         } else{
-            RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"Not on listen node !");
+            RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: Not on listen node!");
         }
         checkIsOnListenNodeCondVar.wait(checkIsOnListenNodeLock);
     }
 }
+
 void TmSctRos2::sct_responsor()
 {
     TmSctCommunication &sct = sct_;
@@ -185,23 +187,32 @@ void TmSctRos2::sct_responsor()
 
     while (rclcpp::ok()) {
         //bool reconnect = false;
-        if (!sct.recv_init()) {
-            RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: (TM_SCT): is not connected");
+        if (iface_.get_connect_recovery_guide()) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(1));
         }
-        firstEnter = true;
-        while (rclcpp::ok() && sct.is_connected() && iface_.svr.is_connected()) {
-            if(firstEnter){
-                checkIsOnListenNodeCondVar.notify_one();
-                firstEnter = false;
+        else   
+        {
+            if (!sct.recv_init()) {
+                RCLCPP_DEBUG_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: (TM_SCT): is not connected");
             }
-            if (!sct_func()) break;
+            firstEnter = true;
+            while (rclcpp::ok() && sct.is_connected() && iface_.svr.is_connected()) {
+                if(firstEnter){
+                    checkIsOnListenNodeCondVar.notify_one();
+                    firstEnter = false;
+                }
+                if (!sct_func()) break;
+            }
+            sct.close_socket();
+            if (!rclcpp::ok()) break;
+            sct_connect_recover();
         }
-        sct.close_socket();
-        if (!rclcpp::ok()) break;
-        sct_connect_recover();
     }
+    checkIsOnListenNodeCondVar.notify_one();
+    firstCheckIsOnListenNodeCondVar.notify_one();
+    
     sct.close_socket();
-    RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: sct_response thread end");		
+    RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: sct_response thread end\n");		
 }
 
 void TmSctRos2::sct_connect_recover()
@@ -214,8 +225,8 @@ void TmSctRos2::sct_connect_recover()
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
     
-    RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: (TM_SCT) reconnect in ");
-        
+    RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: (TM_SCT): Reconnecting...");
+
     uint64_t startTimeMs = TmCommunication::get_current_time_in_ms();
     while (rclcpp::ok() && timeInterval < sct_reconnect_timeval_ms_) {
         if ( lastTimeInterval/1000 != timeInterval/1000) {
@@ -244,8 +255,19 @@ bool TmSctRos2::connect_tmsct(
         rb = sct_.start_tm_sct(t_o);
     }
     if (req->reconnect) {
-        sct_reconnect_timeout_ms_ = t_o;
-        sct_reconnect_timeval_ms_ = t_v;
+        if (iface_.get_connect_recovery_guide())
+        {        	
+            sct_reconnect_timeout_ms_ = 1000;
+            sct_reconnect_timeval_ms_ = 3000;
+            iface_.set_connect_recovery_guide(false);
+            rb = sct_.start_tm_sct(5000);
+            RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: TM_SCT resume connection recovery");                     	
+        }
+        else
+        {        	    	
+            sct_reconnect_timeout_ms_ = t_o;
+            sct_reconnect_timeval_ms_ = t_v;
+        }
         RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: set TM_SCT reconnect timeout " << (int)t_o << "ms, timeval " << (int)t_v << "ms");
     }
     else {
@@ -349,7 +371,7 @@ bool TmSctRos2::ask_sta_struct(std::string subcmd, std::string subdata, double w
         }
         sta_updated_ = false;
     }
-    
+
     return rb;
 }
 

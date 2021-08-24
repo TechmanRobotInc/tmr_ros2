@@ -85,7 +85,7 @@ void TmRos2Node::publisher()
         RCLCPP_INFO_STREAM(this->get_logger(), "TM_ROS: (TM_SVR) reconnect in");
         int cnt = 5;
         while (rclcpp::ok() && cnt > 0) {
-            RCLCPP_INFO_STREAM(this->get_logger(), >> int(rc) >> "sec...");
+            RCLCPP_INFO_STREAM(this->get_logger(), >> int(cnt) >> "sec...");
             std::this_thread::sleep_for(std::chrono::seconds(1));
             --cnt;
         }
@@ -111,5 +111,6 @@ int main(int argc, char *argv[])
     auto nh = std::make_shared<TmRos2Node>(host);
     rclcpp::spin(nh);
     rclcpp::shutdown();
+    RCLCPP_INFO_STREAM(this->get_logger(), "TM_ROS: shutdown\n");
     return 0;
 }
