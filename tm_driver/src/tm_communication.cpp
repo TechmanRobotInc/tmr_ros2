@@ -254,7 +254,7 @@ TmCommunication::TmCommunication(const char *ip, unsigned short port, int recv_b
 	, _recv_rc(TmCommRC::OK)
 	, _recv_ready(false)
 {
-	print_info("TmCommunication::TmCommunication");
+	print_debug("TmCommunication::TmCommunication");
 
 	_recv = new TmCommRecv(recv_buf_len);
 
@@ -276,7 +276,7 @@ TmCommunication::TmCommunication(const char *ip, unsigned short port, int recv_b
 
 TmCommunication::~TmCommunication()
 {
-	print_info("TmCommunication::~TmCommunication");
+	print_debug("TmCommunication::~TmCommunication");
 
 	delete _ip;
 	delete _recv;
@@ -322,14 +322,14 @@ int TmCommunication::connect_with_timeout(int sockfd, const char *ip, unsigned s
 #endif
 
 	rv = connect(sockfd, (sockaddr *)&addr, 16);
-	print_info("TM_COM: rv:=%d", rv);
+	print_debug("TM_COM: rv:=%d", rv);
 
 	if (rv < 0) {
 		if (errno != EINPROGRESS) return -1;
 	}
 	if (rv == 0) {
 		timeoutcount = 0;
-		print_info("TM_COM: Connection is ok");
+		print_debug("TM_COM: Connection is ok");
 		return rv;
 	}
 	else {
@@ -409,11 +409,11 @@ bool TmCommunication::connect_socket(int timeout_ms)
 	}
 
 	if (connect_with_timeout(_sockfd, _ip, _port, timeout_ms) == 0) {
-		print_info("TM_COM: O_NONBLOCK connection is ok");
+		print_debug("TM_COM: O_NONBLOCK connection is ok");
 		_isConnected = true;
 	}
 	else {
-		print_info("TM_COM: O_NONBLOCK connection is fail");
+		print_debug("TM_COM: O_NONBLOCK connection is fail");
 		_sockfd = -1;
 		_isConnected = false;
 	}

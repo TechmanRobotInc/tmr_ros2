@@ -28,6 +28,7 @@ private:
 	double _max_tcp_speed = 1.0;
 	double _max_payload = 4.0;
 	bool isOnListenNode = false;
+	bool connect_recovery_is_halt = false;
 
 public:
 	explicit TmDriver(const std::string &ip);
@@ -57,7 +58,7 @@ public:
 	////////////////////////////////
 	// SCT Robot Function (set_XXX)
 	////////////////////////////////
-    bool is_on_listen_node();
+	bool is_on_listen_node();
 	bool script_exit(const std::string &id = "Exit");
 	bool set_tag(int tag, int wait = 0, const std::string &id = "Tag");
 	bool set_wait_tag(int tag, int timeout_ms = 0, const std::string &id = "WaitTag");
@@ -91,4 +92,6 @@ public:
 	bool run_pvt_traj(const TmPvtTraj &pvts);
 	void stop_pvt_traj();
 	void back_to_listen_node();
+	bool get_connect_recovery_guide();
+	void set_connect_recovery_guide(bool is_halt);
 };

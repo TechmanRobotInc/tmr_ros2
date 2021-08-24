@@ -325,14 +325,14 @@ size_t TmRobotState::_deserialize_first_time(const char *data, size_t size, bool
 			//	std::placeholders::_2, std::placeholders::_3);
 			iter->second.checked = true;
 			std::string msg = "- " + item_name + " - checked";
-			print_info(msg.c_str());
+			print_debug(msg.c_str());
 			++check_count;
 		}
 		else {
 			//func = std::bind(&RobotState::_deserialize_skip, nullptr,
 			//	std::placeholders::_2, std::placeholders::_3);
 			std::string msg = "- " + item_name + " - skipped";
-			print_info(msg.c_str());
+			print_debug(msg.c_str());
 			++skip_count;
 		}
 		_item_updates.push_back({ update.dst, update.func });

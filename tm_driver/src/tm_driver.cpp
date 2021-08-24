@@ -64,6 +64,14 @@ void TmDriver::halt()
 	svr.halt();
 }
 
+bool TmDriver::get_connect_recovery_guide(){
+	return connect_recovery_is_halt;
+}
+
+void TmDriver::set_connect_recovery_guide(bool is_halt){
+	this->connect_recovery_is_halt = is_halt;
+}
+
 ////////////////////////////////
 // SVR Robot Function (write_XXX)
 ////////////////////////////////
@@ -74,37 +82,46 @@ void TmDriver::halt()
 bool TmDriver::is_on_listen_node(){
 	return isOnListenNode;
 }
+
 void TmDriver::back_to_listen_node(){
 	isOnListenNode = true;
 }
+
 bool TmDriver::script_exit(const std::string &id)
 {
 	return (sct.send_script_str(id, TmCommand::script_exit()) == RC_OK);
 }
+
 bool TmDriver::set_tag(int tag, int wait, const std::string &id)
 {
 	return (sct.send_script_str(id, TmCommand::set_tag(tag, wait)) == RC_OK);
 }
+
 bool TmDriver::set_wait_tag(int tag, int timeout_ms, const std::string &id)
 {
 	return (sct.send_script_str(id, TmCommand::set_tag(tag, timeout_ms)) == RC_OK);
 }
+
 bool TmDriver::set_stop(const std::string &id)
 {
 	return (sct.send_script_str(id, TmCommand::set_stop()) == RC_OK);
 }
+
 bool TmDriver::set_pause(const std::string &id)
 {
 	return (sct.send_script_str(id, TmCommand::set_pause()) == RC_OK);
 }
+
 bool TmDriver::set_resume(const std::string &id)
 {
 	return (sct.send_script_str(id, TmCommand::set_resume()) == RC_OK);
 }
+
 bool TmDriver::set_io(TmIOModule module, TmIOType type, int pin, float state, const std::string &id)
 {
 	return (sct.send_script_str(id, TmCommand::set_io(module, type, pin, state)) == RC_OK);
 }
+
 bool TmDriver::set_joint_pos_PTP(const std::vector<double> &angs,
 		double vel, double acc_time, int blend_percent, bool fine_goal, const std::string &id)
 {
@@ -114,6 +131,7 @@ bool TmDriver::set_joint_pos_PTP(const std::vector<double> &angs,
 		id, TmCommand::set_joint_pos_PTP(angs, vel_pa, acc_time, blend_percent, fine_goal)
 	) == RC_OK);
 }
+
 bool TmDriver::set_tool_pose_PTP(const std::vector<double> &pose,
 		double vel, double acc_time, int blend_percent, bool fine_goal, const std::string &id)
 {
@@ -122,6 +140,7 @@ bool TmDriver::set_tool_pose_PTP(const std::vector<double> &pose,
 		id, TmCommand::set_tool_pose_PTP(pose, vel_pa, acc_time, blend_percent, fine_goal)
 	) == RC_OK);
 }
+
 bool TmDriver::set_tool_pose_Line(const std::vector<double> &pose,
 		double vel, double acc_time, int blend_percent, bool fine_goal, const std::string &id)
 {
@@ -134,10 +153,12 @@ bool TmDriver::set_pvt_enter(TmPvtMode mode, const std::string &id)
 {
 	return (sct.send_script_str(id, TmCommand::set_pvt_enter(int(mode))) == RC_OK);
 }
+
 bool TmDriver::set_pvt_exit(const std::string &id)
 {
 	return (sct.send_script_str(id, TmCommand::set_pvt_exit()) == RC_OK);
 }
+
 bool TmDriver::set_pvt_point(TmPvtMode mode,
 	double t, const std::vector<double> &pos, const std::vector<double> &vel, const std::string &id)
 {
@@ -145,6 +166,7 @@ bool TmDriver::set_pvt_point(TmPvtMode mode,
 
 	return (sct.send_script_str(id, TmCommand::set_pvt_point(mode, t, pos, vel)) == RC_OK);
 }
+
 bool TmDriver::set_pvt_point(TmPvtMode mode, const TmPvtPoint &point, const std::string &id)
 {
 	return (sct.send_script_str(id, TmCommand::set_pvt_point(mode, point)) == RC_OK);
@@ -154,7 +176,7 @@ bool TmDriver::set_pvt_traj(const TmPvtTraj &pvts, const std::string &id)
 {
 	std::string script = TmCommand::set_pvt_traj(pvts);
 	print_info("TM_DRV: send script (pvt traj.):\n");
-	printf("%s\n", script.c_str());
+	print_info("%s\n", script.c_str());
 	return (sct.send_script_str(id, script) == RC_OK);
 }
 

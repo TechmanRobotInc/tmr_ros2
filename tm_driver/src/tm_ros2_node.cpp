@@ -111,5 +111,6 @@ int main(int argc, char *argv[])
     auto nh = std::make_shared<TmRos2Node>(host);
     rclcpp::spin(nh);
     rclcpp::shutdown();
+    print_info("TM_ROS: shutdown\n");
     return 0;
 }

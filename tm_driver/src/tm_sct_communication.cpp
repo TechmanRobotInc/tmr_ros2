@@ -16,6 +16,7 @@ TmSctCommunication::TmSctCommunication(const std::string &ip,
 	int recv_buf_len, bool &isOnListenNode, std::condition_variable *cv )
 	: TmCommunication(ip.c_str(), 5890,recv_buf_len) , isOnListenNode(isOnListenNode)
 {
+	print_info("TM_SCT: TmSctCommunication");
 	if (cv) {
 		_cv = cv;
 		_has_thread = true;
@@ -55,12 +56,14 @@ void TmSctCommunication::halt()
 		close_socket();
 	}
 }
+
 void TmSctCommunication::check_script_is_exit(std::string script){
   std::string compareString = "ScriptExit()";
   if(compareString.compare(script) == 0){
     isOnListenNode  = false;
   }
 }
+
 TmCommRC TmSctCommunication::send_script_str(const std::string &id, const std::string &script)
 {
 	check_script_is_exit(script);
@@ -140,7 +143,7 @@ void TmSctCommunication::reconnect_function()
 	if (_reconnect_timeval_ms <= 0) {
 		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 	}
-	print_info("TM_SCT: reconnect in ");
+	print_info("TM_SCT: Reconnecting.. ");
 	int cnt = 0;
 	while (_keep_thread_alive && cnt < _reconnect_timeval_ms) {
 		if (cnt % 1000 == 0) {
