@@ -119,14 +119,14 @@ Enable the `Data Table Setting` item and check the following boxes as item prede
 
 > __Usage with MoveIt2 (Tentative)__ 
 >
-> See [Moveit2 tutorial](https://moveit.ros.org/install-moveit2/source/).<br/>
+> See [MoveIt2 tutorial](https://moveit.ros.org/install-moveit2/source/).<br/>
 > 
-> Assuming that the user is ready to build Moveit2, and the user wants to apply the MoveIt by TM Robot, please do'nt forget to source the MoveIt environment, or you can add  ``source <MoveIt_WS>/install/setup.bash`` to your .bashrc.<br/>
-> The `<MoveIt_WS>` means the Moveit2 workspace, for example `COLCON_WS` .<br/>
+> Assuming that the user is ready to build MoveIt2, and the user wants to apply the MoveIt by TM Robot, please do'nt forget to source the MoveIt environment, or you can add  ``source <MoveIt_WS>/install/setup.bash`` to your `.bashrc`.<br/>
+> The `<MoveIt_WS>` means the MoveIt2 workspace, for example `COLCON_WS` .<br/>
 > The `<TMDriver_WS>` means TM driver workspace, for example `tmdriver_ws` .<br/>
 >
 >
-> Then to built the TM driver based on the <TMDriver_WS> workspace, please enter the specific workspace `tmdriver_ws` by launching the terminal, and remember to make the workspace visible to ROS..<br/>
+> Then to built the TM driver based on the <TMDriver_WS> workspace, please enter the specific workspace `tmdriver_ws` by launching the terminal, and remember to make the workspace visible to ROS.<br/>
 >
 >
 > ```bash
@@ -137,18 +137,19 @@ Enable the `Data Table Setting` item and check the following boxes as item prede
 > source ./install/setup.bash
 > ```
 >
+> :bulb: Do you prepare the __TM Robot__ ready ? Make sure that TM Robot's operating software (__TMflow__) network settings are ready and the _Listen task_ project is running.<br/>
+>
 > The demo launches the RViz GUI and demonstrates planning and execution of a simple collision-free motion plan with TM Robot.
 > To bring up MoveIt2 demo environment in simulation mode with virtual TM Robot, by typing
 >
 > ```bash
-> ros2 launch tmr_run_moveit_cpp_demo run_moveit_cpp.launch.py
+> ros2 launch tmr_moveit_cpp_demo run_moveit_cpp.launch.py
 > ```
 >
 > The user can also manipulate real TM Robot to run, by typing<br/>
-> :bulb: Do you prepare the __TM Robot__ ready ? Make sure that TM Robot's operating software (__TMflow__) network settings are ready and the _Listen task_ project is running. 
 >
 > ```bash
-> ros2 launch tmr_run_moveit_cpp_demo run_moveit_cpp.launch.py robot_ip:=<robot_ip_address>
+> ros2 launch tmr_moveit_cpp_demo run_moveit_cpp.launch.py robot_ip:=<robot_ip_address>
 > ```
 >
 > The parameter `<robot_ip_address>` means the IP address of the TM Robot.<br/>

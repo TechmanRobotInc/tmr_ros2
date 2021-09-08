@@ -187,7 +187,8 @@ bool TmDriver::run_pvt_traj(const TmPvtTraj &pvts)
 	_is_executing_traj = true;
 
 	if (!set_pvt_traj(pvts)) {
-		_is_executing_traj = false; return false;
+		_is_executing_traj = false; 
+		return false;
 	}
 
 	// wait

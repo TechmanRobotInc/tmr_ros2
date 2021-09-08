@@ -1,6 +1,5 @@
 #include "tm_driver/tm_ros2_svr.h"
 
-
 TmSvrRos2::TmSvrRos2(const rclcpp::NodeOptions &options, TmDriver &iface, bool stick_play)
     : Node("tm_svr", options)
     , svr_(iface.svr)
@@ -42,8 +41,7 @@ TmSvrRos2::~TmSvrRos2()
     RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: (TM_SVR) halt");		
     svr_updated_ = true;
     svr_cv_.notify_all();
-    if (svr_.is_connected()) {
-    }
+    if (svr_.is_connected()) {}
     svr_.halt();
 }
 
@@ -232,10 +230,12 @@ bool TmSvrRos2::publish_func()
     }
     return true;
 }
+
 void TmSvrRos2::cq_monitor(){  //Connection quality
     diconnectTimes ++;
     initialNotConnectTime =  TmCommunication::get_current_time_in_ms();
 }
+
 void TmSvrRos2::cq_manage(){
     
     notConnectTimeInS = (TmCommunication::get_current_time_in_ms() - initialNotConnectTime)/1000;
@@ -246,6 +246,7 @@ void TmSvrRos2::cq_manage(){
         maxNotConnectTimeInS = notConnectTimeInS;
     }
 }
+
 bool TmSvrRos2::rc_halt(){  //Stop rescue connection
     if(maxTrialTimeInMinute == -1){
         return false;
@@ -256,10 +257,10 @@ bool TmSvrRos2::rc_halt(){  //Stop rescue connection
     }
     return false;
 }
+
 void TmSvrRos2::publisher()
 {
     TmSvrCommunication &svr = svr_;
-    PubMsg &pm = pm_;
 
     RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: publisher thread begin");
     initialNotConnectTime =  TmCommunication::get_current_time_in_ms();
@@ -276,7 +277,14 @@ void TmSvrRos2::publisher()
                 publish_fbs(TmCommRC::TIMEOUT);
                 if(rc_halt()) {
                     RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: (TM_SVR): Ethernet slave connection stopped");
-                    RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: (TM_SVR): LinkLost = " << (int)pm.fbs_msg.disconnection_times << ", MaxLostTime(s) = " << (int)pm.fbs_msg.max_not_connect_in_s);
+                    if (diconnectTimes == 0)
+                    {
+                        RCLCPP_WARN_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: (TM_SVR): Please Check Wired Connected Settings");
+                    }
+                    else
+                    {                    
+                        RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: (TM_SVR): LinkLost = " << (int)diconnectTimes << ", MaxLostTime(s) = " << (int)maxNotConnectTimeInS);
+                    }
                     iface_.set_connect_recovery_guide(true);
                     svr.close_socket();
                 }

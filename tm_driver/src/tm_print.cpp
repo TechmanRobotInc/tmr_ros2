@@ -25,14 +25,32 @@
 
 void (*print_debug_function)(char* fmt);
 bool isSetPrintDebugFunction = false;
+void (*print_info_function)(char* fmt);
+bool isSetPrintInfoFunction = false;
+void (*print_warn_function)(char* fmt);
+bool isSetPrintWarnFunction = false;
+void (*print_error_function)(char* fmt);
+bool isSetPrintErrorFunction = false;
+void (*print_fatal_function)(char* fmt);
+bool isSetPrintFatalFunction = false;
 
 void default_debug_function_print(char* msg){
   std::cout<<PRINT_CYAN<<"[DEBUG] "<<msg<<std::endl<<PRINT_RESET;
 }
+void default_print_info_function_print(char* msg){
+  std::cout<<"[INFO] "<<msg<<std::endl;
+}
+void default_print_warn_function_print(char* msg){
+  std::cout<<PRINT_YELLOW<<"[WARN] "<<msg<<std::endl<<PRINT_RESET;
+}
+void default_print_error_function_print(char* msg){
+  std::cout<<PRINT_RED<<"[ERROR] "<<msg<<std::endl<<PRINT_RESET;
+}
+void default_print_fatal_function_print(char* msg){
+  std::cout<<PRINT_GREEN<<"[FATAL] "<<msg<<std::endl<<PRINT_RESET;
+}
 
 int print_debug(const char* fmt, ...) {
-
-	
 	char msg[MAX_MSG_SIZE];
 	int n;
 	va_list vl;
@@ -46,14 +64,6 @@ int print_debug(const char* fmt, ...) {
   }
   return n;
 }
-
-void (*print_info_function)(char* fmt);
-bool isSetPrintInfoFunction = false;
-
-void default_print_info_function_print(char* msg){
-  std::cout<<"[INFO] "<<msg<<std::endl;
-}
-
 int print_info(const char* fmt, ...) {
 	char msg[MAX_MSG_SIZE];
 	int n;
@@ -68,13 +78,6 @@ int print_info(const char* fmt, ...) {
     }
 	return n;
 }
-
-void (*print_warn_function)(char* fmt);
-bool isSetPrintWarnFunction = false;
-
-void default_print_warn_function_print(char* msg){
-  std::cout<<PRINT_YELLOW<<"[WARN] "<<msg<<std::endl<<PRINT_RESET;
-}
 int print_warn(const char* fmt, ...) {
 	char msg[MAX_MSG_SIZE];
 	int n;
@@ -87,15 +90,7 @@ int print_warn(const char* fmt, ...) {
 	} else{
 		default_print_warn_function_print(msg);
 	}
-	
 	return n;
-}
-
-void (*print_error_function)(char* fmt);
-bool isSetPrintErrorFunction = false;
-
-void default_print_error_function_print(char* msg){
-  std::cout<<PRINT_RED<<"[ERROR] "<<msg<<std::endl<<PRINT_RESET;
 }
 int print_error(const char* fmt, ...) {
 	char msg[MAX_MSG_SIZE];
@@ -111,13 +106,6 @@ int print_error(const char* fmt, ...) {
 	}
 	return n;
 }
-
-void (*print_fatal_function)(char* fmt);
-bool isSetPrintFatalFunction = false;
-
-void default_print_fatal_function_print(char* msg){
-  std::cout<<PRINT_GREEN<<"[FATAL] "<<msg<<std::endl<<PRINT_RESET;
-}
 int print_fatal(const char* fmt, ...) {
 	char msg[MAX_MSG_SIZE];
 	int n;
@@ -131,7 +119,6 @@ int print_fatal(const char* fmt, ...) {
 		default_print_fatal_function_print(msg);
 	}
 	return n;
-
 }
 
 void set_up_print_debug_function(void (*function_print)(char* fmt)){

@@ -9,15 +9,10 @@ int8 TMSVR = 0
 int8 TMSCT = 1
 
 int8 server
-
 bool connect
-
 bool reconnect
-
 float64 timeout
-
 float64 timeval
-
 ---
 #ok :   connect status
 bool ok

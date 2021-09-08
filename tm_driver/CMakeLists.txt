@@ -55,15 +55,6 @@ add_executable(tm_driver
   src/tm_packet.cpp
   src/tm_print.cpp
 )
-#add_executable(tm_driver_srv
-#  src/tm_ros2_service.cpp
-#  src/tm_command.cpp
-#  src/tm_sct_communication.cpp
-#  src/tm_communication.cpp
-#  src/tm_robot_state.cpp
-#  src/tm_packet.cpp
-#  src/tm_print.cpp
-#)
 
 ament_target_dependencies(tm_driver
   rclcpp

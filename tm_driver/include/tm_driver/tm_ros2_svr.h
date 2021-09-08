@@ -36,7 +36,6 @@ public:
         tm_msgs::msg::SvrResponse svr_msg;
     } pm_;
     
-    int sizeErrorCount = 0;
     int diconnectTimes = 0;
     uint64_t initialNotConnectTime = 0;
     uint64_t notConnectTimeInS = 0;
