@@ -38,6 +38,11 @@ int main(int argc, char *argv[])
     std::string host;
     if (argc > 1) {
         host = argv[1];
+        if (host.find("robot_ip:=") != std::string::npos) {
+            host.replace(host.begin(), host.begin() + 10, "");
+        } else if (host.find("ip:=") != std::string::npos) {
+            host.replace(host.begin(), host.begin() + 4, "");        
+        }
     }
     else {
         rclcpp::shutdown();

@@ -12,15 +12,10 @@ def generate_launch_description():
             i = i + 1
 
     return LaunchDescription([
-        '''
         Node(
-            package='robot_state_publisher',
-            node_executable='robot_state_publisher',
-        )
-        '''
-        Node(
-            package='tm_driver'
-            node_executable='tm_driver'
+            package='tm_driver',
+            executable='tm_driver',
             output='screen',
+            arguments=args,
         )
     ])
