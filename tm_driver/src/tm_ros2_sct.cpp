@@ -1,6 +1,5 @@
 #include "tm_driver/tm_ros2_sct.h"
 
-
 TmSctRos2::TmSctRos2(const rclcpp::NodeOptions &options, TmDriver &iface)
     : Node("tm_sct", options)
     , sct_(iface.sct)
@@ -49,10 +48,10 @@ TmSctRos2::~TmSctRos2()
     print_info("TM_ROS: (TM_SCT) halt");		
     sta_updated_ = true;
     sta_cv_.notify_all();
-    if (sct_.is_connected()) {
-    }
+    if (sct_.is_connected()) {}
     sct_.halt();
 }
+
 void TmSctRos2::check_is_on_listen_node_from_script(std::string id, std::string script){
     std::string idzero = "0";
     std::string ok = "OK";
@@ -61,6 +60,7 @@ void TmSctRos2::check_is_on_listen_node_from_script(std::string id, std::string 
         iface_.back_to_listen_node();
     }
 }
+
 void TmSctRos2::sct_msg()
 {
     SctAndStaMsg &sm = sm_;

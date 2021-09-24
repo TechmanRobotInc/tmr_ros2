@@ -186,7 +186,7 @@ void MainWindow::send_ui_feed_back_status(tm_msgs::msg::FeedbackState::SharedPtr
   } else{ 
     int_base_format_change(msg->disconnection_times,ui->linklost_status_label,10);
     int_base_format_change(msg->max_not_connect_in_s,ui->maxlosttime_status_label,10);
-  }   
+  }
 }
 void MainWindow::click_set_sct_re_connect_button(){
   RCLCPP_DEBUG(rclcpp::get_logger("rclcpp"), "click [SctClient Re-Connect] button");  

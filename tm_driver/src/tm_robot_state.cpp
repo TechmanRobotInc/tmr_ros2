@@ -148,6 +148,7 @@ TmRobotState::TmRobotState()
 	_f_deserialize = std::bind(&TmRobotState::_deserialize_first_time, this,
 		std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
 }
+
 TmRobotState::~TmRobotState()
 {
 	print_debug("TmRobotState::~TmRobotState");
@@ -259,6 +260,7 @@ size_t TmRobotState::_deserialize_get_name(std::string &name, const char *data, 
 	boffset += 2 + uslen;
 	return boffset;
 }
+
 size_t TmRobotState::_deserialize_skip(void *dst, const char *data, size_t offset)
 {
 	size_t boffset = offset;
@@ -274,6 +276,7 @@ size_t TmRobotState::_deserialize_skip(void *dst, const char *data, size_t offse
 	if (dst) {}
 	return boffset;
 }
+
 size_t TmRobotState::_deserialize_copy_wo_check(void *dst, const char *data, size_t offset)
 {
 	size_t boffset = offset;
@@ -379,6 +382,7 @@ size_t TmRobotState::_deserialize_first_time(const char *data, size_t size, bool
 
 	return boffset;
 }
+
 size_t TmRobotState::_deserialize(const char *data, size_t size, bool use_mtx)
 {
 	size_t boffset = 0;
@@ -393,6 +397,7 @@ size_t TmRobotState::_deserialize(const char *data, size_t size, bool use_mtx)
 	}
 	return boffset;
 }
+
 void TmRobotState::_deserialize_update(bool lock) {
 	// ---------------
 	// update together

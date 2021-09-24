@@ -1,4 +1,3 @@
-
 std_msgs/Header header
 
 # Connection Status
@@ -37,7 +36,7 @@ bool project_run             # Project Runing or not
 bool project_pause           # Project Pause or not
 bool safetyguard_a           # Safety IO(Safeguard Port A trigger) 
 bool e_stop                  # Emergency STOP
-bool camera_light            # Light
+uint8 camera_light           # Light
 int32 error_code             # Last Error Code
 int32 project_speed          # Project Running Speed
 int32 ma_mode                # M/A Mode

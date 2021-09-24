@@ -286,11 +286,13 @@ TmCommunication::~TmCommunication()
 	WSACleanup();
 #endif
 }
+
 uint64_t TmCommunication::get_current_time_in_ms(){
 	std::chrono::system_clock::time_point tp = std::chrono::system_clock::now(); 
 	std::chrono::milliseconds ms = std::chrono::duration_cast<std::chrono::milliseconds>(tp.time_since_epoch());
     return ms.count();
 }
+
 int TmCommunication::connect_with_timeout(int sockfd, const char *ip, unsigned short port, int timeout_ms)
 {
 	int rv = 0;

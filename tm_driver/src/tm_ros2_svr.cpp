@@ -43,8 +43,7 @@ TmSvrRos2::~TmSvrRos2()
     print_info("TM_ROS: (TM_SVR) halt");		
     svr_updated_ = true;
     svr_cv_.notify_all();
-    if (svr_.is_connected()) {
-    }
+    if (svr_.is_connected()) {}
     svr_.halt();
 }
 
@@ -237,10 +236,12 @@ bool TmSvrRos2::publish_func()
     }
     return true;
 }
+
 void TmSvrRos2::cq_monitor(){  //Connection quality
     diconnectTimes ++;
     initialNotConnectTime =  TmCommunication::get_current_time_in_ms();
 }
+
 void TmSvrRos2::cq_manage(){
     
     notConnectTimeInS = (TmCommunication::get_current_time_in_ms() - initialNotConnectTime)/1000;
@@ -251,6 +252,7 @@ void TmSvrRos2::cq_manage(){
         maxNotConnectTimeInS = notConnectTimeInS;
     }
 }
+
 bool TmSvrRos2::rc_halt(){  //Stop rescue connection
     if(maxTrialTimeInMinute == -1){
         return false;
@@ -261,10 +263,10 @@ bool TmSvrRos2::rc_halt(){  //Stop rescue connection
     }
     return false;
 }
+
 void TmSvrRos2::publisher()
 {
     TmSvrCommunication &svr = svr_;
-    PubMsg &pm = pm_;
 
     print_info("TM_ROS: publisher thread begin");
     initialNotConnectTime =  TmCommunication::get_current_time_in_ms();
@@ -281,7 +283,14 @@ void TmSvrRos2::publisher()
                 publish_fbs(TmCommRC::TIMEOUT);
                 if(rc_halt()) {
                     print_error("TM_ROS: (TM_SVR): Ethernet slave connection stopped");
-                    print_error("TM_ROS: (TM_SVR): LinkLost =(%d), MaxLostTime(s) = (%d)", (int)pm.fbs_msg.disconnection_times, (int)pm.fbs_msg.max_not_connect_in_s);
+                    if (diconnectTimes == 0)
+                    {
+                        print_warn("TM_ROS: (TM_SVR): Please Check Wired Connected Settings");
+                    }
+                    else
+                    {                    
+                        print_error("TM_ROS: (TM_SVR): LinkLost =(%d), MaxLostTime(s) = (%d)", (int)diconnectTimes, (int)maxNotConnectTimeInS);
+                    }
                     iface_.set_connect_recovery_guide(true);
                     svr.close_socket();
                 }
