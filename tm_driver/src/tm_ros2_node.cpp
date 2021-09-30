@@ -31,7 +31,7 @@ public:
 TmRos2Node::TmRos2Node(const std::string &host) : Node("tm_driver")
     , iface_(host, nullptr, &sct_cv_)
 {
-    RCLCPP_INFO(this->get_logger(), "TM_ROS: hello!");
+    print_info("TM_ROS: hello!");
 
     iface_.start(5000);
 
@@ -82,10 +82,10 @@ void TmRos2Node::publisher()
             }
         }
         iface_.svr.close_socket();
-        print_info("TM_ROS: (TM_SVR) reconnect in ");
+        print_info("TM_ROS: (TM_SVR) reconnect in");
         int cnt = 5;
         while (rclcpp::ok() && cnt > 0) {
-            print_info("%d sec...", cnt);
+            print_info("%d sec...", (int)cnt);
             std::this_thread::sleep_for(std::chrono::seconds(1));
             --cnt;
         }

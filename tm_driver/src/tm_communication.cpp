@@ -324,7 +324,7 @@ int TmCommunication::connect_with_timeout(int sockfd, const char *ip, unsigned s
 #endif
 
 	rv = connect(sockfd, (sockaddr *)&addr, 16);
-	print_debug("TM_COM: rv:=%d", rv);
+	print_debug("TM_COM: rv:=%d", (int)rv);
 
 	if (rv < 0) {
 		if (errno != EINPROGRESS) return -1;
@@ -407,7 +407,7 @@ bool TmCommunication::connect_socket(int timeout_ms)
 	}
 
     if (setsockopt (_sockfd, SOL_SOCKET, SO_SNDTIMEO, (char *)&timeout,sizeof(timeout)) < 0){
-		print_error("setsockopt failed\n");
+        print_error("setsockopt failed\n");
 	}
 
 	if (connect_with_timeout(_sockfd, _ip, _port, timeout_ms) == 0) {
@@ -420,7 +420,7 @@ bool TmCommunication::connect_socket(int timeout_ms)
 		_isConnected = false;
 	}
 	if (_sockfd > 0) {
-		print_info("TM_COM: TM robot is connected. sockfd:=%d", _sockfd);
+		print_info("TM_COM: TM robot is connected. sockfd:=%d", (int)_sockfd);
 		//_is_connected = true;
 		return true;
 	}

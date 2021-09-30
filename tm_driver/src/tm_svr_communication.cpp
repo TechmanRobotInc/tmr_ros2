@@ -32,7 +32,7 @@ bool TmSvrCommunication::start_tm_svr(int timeout_ms)
 {
 	if (socket_description() == 6188)
 	{
-		print_info("TM_SVR: start (fake)");
+	    print_info("TM_SVR: start (fake)");
 		if (_has_thread) {
 			// start thread
 			_recv_thread = std::thread(std::bind(&TmSvrCommunication::tm_svr_thread_function, this));
@@ -73,7 +73,7 @@ void TmSvrCommunication::halt()
 		}
 	}
 	if (is_connected()) {
-		print_debug("TM_SVR: halt");
+		print_info("TM_SVR: halt");
 		close_socket();
 	}
 }
@@ -106,7 +106,7 @@ void TmSvrCommunication::tm_svr_thread_function()
 	while (_keep_thread_alive) {
 		bool reconnect = false;
 		if (!recv_init()) {
-			print_debug("TM_SVR: is not connected");
+			print_info("TM_SVR: is not connected");
 		}
 		while (_keep_thread_alive && is_connected() && !reconnect) {
 			TmCommRC rc = tmsvr_function();
@@ -137,7 +137,7 @@ void TmSvrCommunication::reconnect_function()
 	if (_reconnect_timeval_ms <= 0) {
 		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 	}
-	print_info("TM_SVR: Reconnecting ");
+	print_info("TM_SVR: Reconnecting.. ");
 	int cnt = 0;
 	while (_keep_thread_alive && cnt < _reconnect_timeval_ms) {
 		if (cnt % 500 == 0) {
@@ -147,7 +147,7 @@ void TmSvrCommunication::reconnect_function()
 		++cnt;
 	}
 	if (_keep_thread_alive && _reconnect_timeval_ms >= 0) {
-		print_debug("0 sec\nTM_SVR: connect(%dms)...", _reconnect_timeout_ms);
+		print_debug("0 sec\nTM_SVR: connect(%dms)...", (int)_reconnect_timeout_ms);
 		connect_socket(_reconnect_timeout_ms);
 	}
 }

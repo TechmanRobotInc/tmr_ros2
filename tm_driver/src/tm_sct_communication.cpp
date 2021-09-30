@@ -147,13 +147,13 @@ void TmSctCommunication::reconnect_function()
 	int cnt = 0;
 	while (_keep_thread_alive && cnt < _reconnect_timeval_ms) {
 		if (cnt % 1000 == 0) {
-			print_info("%.1f sec...", 0.001 * (_reconnect_timeval_ms - cnt));
+			print_debug("%.1f sec...", 0.001 * (_reconnect_timeval_ms - cnt));
 		}
 		std::this_thread::sleep_for(std::chrono::milliseconds(1));
 		++cnt;
 	}
 	if (_keep_thread_alive && _reconnect_timeval_ms >= 0) {
-		print_info("0 sec\nTM_SCT: connect(%dms)...", _reconnect_timeout_ms);
+		print_info("0 sec\nTM_SCT: connect(%dms)...", (int)_reconnect_timeout_ms);
 		connect_socket(_reconnect_timeout_ms);
 	}
 }

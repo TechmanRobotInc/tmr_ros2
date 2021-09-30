@@ -365,8 +365,8 @@ size_t TmRobotState::_deserialize_first_time(const char *data, size_t size, bool
 
 	for (auto iter : _data_table->get()) {
 		if (iter.second.required && !iter.second.checked) {
-			std::string msg = "Required item" + iter.first + " is NOT checked";
 			isDataTableCorrect = false;
+			std::string msg = "Required item" + iter.first + " is NOT checked";
 			print_error(msg.c_str());
 		}
 	}
@@ -374,7 +374,7 @@ size_t TmRobotState::_deserialize_first_time(const char *data, size_t size, bool
 	if(isDataTableCorrect){
 	  print_info("data table is correct!");
 	} else{
-          print_error("data table is not correct");
+	  print_error("data table is not correct!");
 	}
 
 	_f_deserialize = std::bind(&TmRobotState::_deserialize, this,
