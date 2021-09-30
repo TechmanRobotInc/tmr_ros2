@@ -18,20 +18,36 @@ endif()
 add_definitions(-DROS2_BUILD)
 
 # Please refer to https://moveit.ros.org/install-moveit2/source
-# In addition, you can use the command ``gedit ./src/tmr_driver/CMakeLists.txt`` in the <TMDriver_WS> workspace to manually modify the "false" of "moveit2_module_install_ready" to "true" to compile.
-set(moveit2_module_install_ready false)
-#set(moveit2_module_install_ready true)
+# If the MoveIt2 module is not ready for installation, or the user wants to close the relative MoveIt2 module, the user can modify the "true" of moveit2_lib_auto_judge to "false" to compile. 
+#set(moveit2_lib_auto_judge false)
+set(moveit2_lib_auto_judge true)
+
+# If the user enable this tmr_driver_message_print to print debug messages, more information will be displayed "1 package had stderr output: tmr_driver" on the screen. 
+#set(tmr_driver_message_print true)  
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
+if (moveit2_lib_auto_judge)
+find_package(moveit_ros_planning_interface QUIET)
+endif()
+if (moveit2_lib_auto_judge) 
+if ( NOT moveit_ros_planning_interface_FOUND)
+  if (tmr_driver_message_print)
+  message("--- TMDriver build error : MoveIt2_LIB not found")
+  #do you forget to source moveit2 relative setup.bash? example: & ~/COLCON_WS/install/setup.bash
+  endif()  
+endif (NOT moveit_ros_planning_interface_FOUND)
+endif()
 # uncomment the following section in order to fill in
 # further dependencies manually.
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(trajectory_msgs REQUIRED)
-if (moveit2_module_install_ready)
+if (moveit2_lib_auto_judge) 
+if (moveit_ros_planning_interface_FOUND)
 find_package(control_msgs REQUIRED)
+endif (moveit_ros_planning_interface_FOUND)
 endif()
 find_package(rclcpp_action REQUIRED)
 find_package(tmr_msgs REQUIRED)
@@ -53,7 +69,8 @@ include_directories(include
   ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-if (moveit2_module_install_ready)
+if (moveit2_lib_auto_judge) 
+if (moveit_ros_planning_interface_FOUND)
 add_executable(tmr_driver
   src/tmr_ros2_composition.cpp
   src/tmr_ros2_sct.cpp
@@ -84,6 +101,7 @@ install(
   DIRECTORY launch
   DESTINATION share/${PROJECT_NAME}
 )
+endif (moveit_ros_planning_interface_FOUND)
 endif()
 
 ament_package()

@@ -268,7 +268,7 @@ bool TmSctRos2::connect_tmsct(
             sct_reconnect_timeout_ms_ = t_o;
             sct_reconnect_timeval_ms_ = t_v;
         }
-        RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: set TM_SCT reconnect timeout " << (int)t_o << "ms, timeval " << (int)t_v << "ms");
+        RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: set TM_SCT reconnect timeout " << (int)sct_reconnect_timeout_ms_ << "ms, timeval " << (int)sct_reconnect_timeval_ms_ << "ms");
     }
     else {
         // no reconnect
