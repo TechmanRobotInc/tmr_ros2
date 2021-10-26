@@ -1,5 +1,5 @@
 #include "tm_driver/tm_ros2_svr.h"
-
+#include <tf2_geometry_msgs/tf2_geometry_msgs.h>
 TmSvrRos2::TmSvrRos2(const rclcpp::NodeOptions &options, TmDriver &iface, bool stick_play)
     : Node("tm_svr", options)
     , svr_(iface.svr)
@@ -116,10 +116,15 @@ void TmSvrRos2::publish_fbs(TmCommRC rc)
     pm.joint_msg.effort = pm.fbs_msg.joint_tor;
     pm.joint_pub->publish(pm.joint_msg);
 
-
-
     // Publish tool pose
+    auto &pose = pm.fbs_msg.tool_pose;
+    tf2::Quaternion quat;
+    quat.setRPY(pose[3], pose[4], pose[5]);
     pm.tool_pose_msg.header.stamp = pm.joint_msg.header.stamp;
+    pm.tool_pose_msg.pose.position.x = pose[0];
+    pm.tool_pose_msg.pose.position.y = pose[1];
+    pm.tool_pose_msg.pose.position.z = pose[2];
+    pm.tool_pose_msg.pose.orientation = tf2::toMsg(quat);
     pm.tool_pose_pub->publish(pm.tool_pose_msg);
 }
 
