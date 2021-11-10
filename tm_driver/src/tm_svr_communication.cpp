@@ -16,7 +16,7 @@ TmSvrCommunication::TmSvrCommunication(const std::string &ip,
 	int recv_buf_len, std::condition_variable *cv)
 	: TmCommunication(ip.c_str(), 5891, recv_buf_len)
 {
-	RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"TM_SVR: TmSvrCommunication");
+	RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"Ethernet slave communication: TmSvrCommunication");
 	if (cv) {
 		_cv = cv;
 		_has_thread = true;
@@ -32,7 +32,7 @@ bool TmSvrCommunication::start_tm_svr(int timeout_ms)
 {
 	if (socket_description() == 6188)
 	{
-	    RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"), "TM_SVR: start (fake)");
+	    RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"), "Ethernet slave communication: start (fake)");
 		if (_has_thread) {
 			// start thread
 			_recv_thread = std::thread(std::bind(&TmSvrCommunication::tm_svr_thread_function, this));
@@ -41,9 +41,9 @@ bool TmSvrCommunication::start_tm_svr(int timeout_ms)
 	}
 
 	halt();
-	RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"), "TM_SVR: start");
+	RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"), "Ethernet slave communication: start");
 
-	bool rb = connect_socket(timeout_ms);
+	bool rb = connect_socket("ethernet slave communication",timeout_ms);
 	//if (!rb) return rb; // ? start thread anyway
 
 	if (_has_thread) {
@@ -57,7 +57,7 @@ void TmSvrCommunication::halt()
 {
 	if (socket_description() == 6188)
 	{
-		RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"), "TM_SVR: halt (fake)");
+		RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"), "Ethernet slave communication: halt (fake)");
 		if (_has_thread) {
 			_keep_thread_alive = false;
 			if (_recv_thread.joinable()) {
@@ -73,7 +73,7 @@ void TmSvrCommunication::halt()
 		}
 	}
 	if (is_connected()) {
-		RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"), "TM_SVR: halt");
+		RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"), "Ethernet slave communication: halt");
 		close_socket();
 	}
 }
@@ -101,12 +101,12 @@ TmCommRC TmSvrCommunication::send_stick_play()
 
 void TmSvrCommunication::tm_svr_thread_function()
 {
-	RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"), "TM_SVR: thread begin");
+	RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"), "Ethernet slave communication: thread begin");
 	_keep_thread_alive = true;
 	while (_keep_thread_alive) {
 		bool reconnect = false;
 		if (!recv_init()) {
-			RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"), "TM_SVR: is not connected");
+			RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"), "Ethernet slave communication: is not connected");
 		}
 		while (_keep_thread_alive && is_connected() && !reconnect) {
 			TmCommRC rc = tmsvr_function();
@@ -118,7 +118,7 @@ void TmSvrCommunication::tm_svr_thread_function()
 			case TmCommRC::NOTREADY:
 			case TmCommRC::NOTCONNECT:
 			case TmCommRC::TIMEOUT:
-				RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"), "TM_SVR: rc=" << int(rc));
+				RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"), "Ethernet slave communication: rc=" << int(rc));
 				reconnect = true;
 				break;
 			default: break;
@@ -128,7 +128,7 @@ void TmSvrCommunication::tm_svr_thread_function()
 		reconnect_function();
 	}
 	close_socket();
-	RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"), "TM_SVR: thread end");
+	RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"), "Ethernet slave communication: thread end");
 }
 
 void TmSvrCommunication::reconnect_function()
@@ -137,7 +137,7 @@ void TmSvrCommunication::reconnect_function()
 	if (_reconnect_timeval_ms <= 0) {
 		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 	}
-	RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"), "TM_SVR: Reconnecting.. ");
+	RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"), "Ethernet slave communication: Reconnecting.. ");
 	int cnt = 0;
 	while (_keep_thread_alive && cnt < _reconnect_timeval_ms) {
 		if (cnt % 500 == 0) {
@@ -147,8 +147,8 @@ void TmSvrCommunication::reconnect_function()
 		++cnt;
 	}
 	if (_keep_thread_alive && _reconnect_timeval_ms >= 0) {
-		RCLCPP_DEBUG_STREAM(rclcpp::get_logger("rclcpp"), "0 sec\nTM_SVR: connect(" << (int)_reconnect_timeout_ms << "ms)...");
-		connect_socket(_reconnect_timeout_ms);
+		RCLCPP_DEBUG_STREAM(rclcpp::get_logger("rclcpp"), "0 sec\nEthernet slave communication: connect(" << (int)_reconnect_timeout_ms << "ms)...");
+		connect_socket("ethernet slave re-connection",_reconnect_timeout_ms);
 	}
 }
 
@@ -165,7 +165,7 @@ TmCommRC TmSvrCommunication::tmsvr_function()
 	for (auto &pack : pack_vec) {
 		if (pack.type == TmPacket::Header::CPERR) {
 			tmSvrErrData.set_CPError(pack.data.data(), pack.data.size());
-			RCLCPP_ERROR(rclcpp::get_logger("rclcpp"),"TM_SVR: CPERR %s",tmSvrErrData.error_code_str().c_str());
+			RCLCPP_ERROR(rclcpp::get_logger("rclcpp"),"Ethernet slave communication: CPERR %s",tmSvrErrData.error_code_str().c_str());
 		}
 		else if (pack.type == TmPacket::Header::TMSVR) {
 			
@@ -176,27 +176,27 @@ TmCommRC TmSvrCommunication::tmsvr_function()
 			if (data.is_valid()) {
 				switch (data.mode()) {
 				case TmSvrData::Mode::RESPONSE:
-					RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"), "TM_SVR: RESPONSE (" << data.transaction_id() << "): [" <<
+					RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"), "Ethernet slave communication: RESPONSE (" << data.transaction_id() << "): [" <<
 					(int)(data.error_code()) << "]: " << std::string(data.content(), data.content_len()));
 					break;
 				case TmSvrData::Mode::BINARY:
 					state.mtx_deserialize(data.content(), data.content_len());
 					break;
 				case TmSvrData::Mode::READ_STRING:
-					RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"), "TM_SVR: READ_STRING (" << data.transaction_id() << "): " <<
+					RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"), "Ethernet slave communication: READ_STRING (" << data.transaction_id() << "): " <<
 						std::string(data.content(), data.content_len()));
 					break;
 				default:
-					RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"), "TM_SVR: (" << data.transaction_id() << "): invalid mode (" << (int)(data.mode()) << ")");
+					RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"), "Ethernet slave communication: (" << data.transaction_id() << "): invalid mode (" << (int)(data.mode()) << ")");
 					break;
 				}
 			}
 			else {
-				RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"), "TM_SVR: invalid data");
+				RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"), "Ethernet slave communication: invalid data");
 			}
 		}
 		else {
-			RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"), "TM_SVR: invalid header");
+			RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"), "Ethernet slave communication: invalid header");
 		}
 	}
 	return rc;

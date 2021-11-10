@@ -91,7 +91,7 @@ void TmRos2Node::publisher()
         }
         if (rclcpp::ok()) {
             RCLCPP_INFO_STREAM(this->get_logger(), "TM_ROS: (TM_SVR) connect...");
-            iface_.svr.connect_socket(1000);
+            iface_.svr.connect_socket("tm_ros2_node",1000);
         }
     }
     iface_.svr.close_socket();

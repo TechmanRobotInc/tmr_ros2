@@ -369,7 +369,7 @@ int TmCommunication::connect_with_timeout(int sockfd, const char *ip, unsigned s
 	return rv;
 }
 
-bool TmCommunication::connect_socket(int timeout_ms)
+bool TmCommunication::connect_socket( std::string errorName,int timeout_ms)
 {
 	_isConnected = false;
 	if (_sockfd > 0) return true;
@@ -403,24 +403,24 @@ bool TmCommunication::connect_socket(int timeout_ms)
     timeout.tv_usec = 0;
 
     if (setsockopt (_sockfd, SOL_SOCKET, SO_RCVTIMEO, (char *)&timeout,sizeof(timeout)) < 0){
-        RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"),"setsockopt failed\n");
+        RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"), errorName + "setsockopt failed\n");
 	}
 
     if (setsockopt (_sockfd, SOL_SOCKET, SO_SNDTIMEO, (char *)&timeout,sizeof(timeout)) < 0){
-        RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"),"setsockopt failed\n");
+        RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"), errorName + "setsockopt failed\n");
 	}
 
 	if (connect_with_timeout(_sockfd, _ip, _port, timeout_ms) == 0) {
-		RCLCPP_DEBUG_STREAM(rclcpp::get_logger("rclcpp"),"TM_COM: O_NONBLOCK connection is ok");
+		RCLCPP_DEBUG_STREAM(rclcpp::get_logger("rclcpp"),"TM_COM(" + errorName +"): O_NONBLOCK connection is ok");
 		_isConnected = true;
 	}
 	else {
-		RCLCPP_DEBUG_STREAM(rclcpp::get_logger("rclcpp"),"TM_COM: O_NONBLOCK connection is fail");
+		RCLCPP_DEBUG_STREAM(rclcpp::get_logger("rclcpp"),"TM_COM("+ errorName +"): O_NONBLOCK connection is fail");
 		_sockfd = -1;
 		_isConnected = false;
 	}
 	if (_sockfd > 0) {
-		RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"TM_COM: TM robot is connected. sockfd:=" << (int)_sockfd);
+		RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"TM_COM(" + errorName  +"): TM robot is connected. sockfd:=" << (int)_sockfd);
 		//_is_connected = true;
 		return true;
 	}

@@ -38,7 +38,7 @@ TmSvrRos2::TmSvrRos2(const rclcpp::NodeOptions &options, TmDriver &iface, bool s
 
 TmSvrRos2::~TmSvrRos2()
 {
-    RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: (TM_SVR) halt");		
+    RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: (Ethernet slave) halt");		
     svr_updated_ = true;
     svr_cv_.notify_all();
     if (svr_.is_connected()) {}
@@ -143,11 +143,11 @@ void TmSvrRos2::publish_svr()
     svr_cv_.notify_all();
 
     if ((int)(pm.svr_msg.error_code) != 0) {
-        RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: (TM_SVR): MSG (" << pm.svr_msg.id << ") (" << (int)(pm.svr_msg.mode) << ") " << pm.svr_msg.content);  	
-        RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: (TM_SVR): ROS Node Data Error" << (int)(pm.svr_msg.error_code));
+        RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: (Ethernet slave): MSG (" << pm.svr_msg.id << ") (" << (int)(pm.svr_msg.mode) << ") " << pm.svr_msg.content);  	
+        RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: (Ethernet slave): ROS Node Data Error" << (int)(pm.svr_msg.error_code));
     }
     else {
-        RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: (TM_SVR): MSG  (" << pm.svr_msg.id << ") (" << (int)(pm.svr_msg.mode) << ") " << pm.svr_msg.content);
+        RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: (Ethernet slave): MSG  (" << pm.svr_msg.id << ") (" << (int)(pm.svr_msg.mode) << ") " << pm.svr_msg.content);
     }    
     
     pm.svr_msg.header.stamp = rclcpp::Node::now();
@@ -171,7 +171,7 @@ bool TmSvrRos2::publish_func()
     for (auto &pack : pack_vec) {
         if (pack.type == TmPacket::Header::CPERR) {
             svr.tmSvrErrData.set_CPError(pack.data.data(), pack.data.size());
-            RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: (TM_SVR) ROS Node Header CPERR" << (int)svr.tmSvrErrData.error_code());
+            RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: (Ethernet slave) ROS Node Header CPERR" << (int)svr.tmSvrErrData.error_code());
         }
         else if (pack.type == TmPacket::Header::TMSVR) {
 
@@ -200,7 +200,7 @@ bool TmSvrRos2::publish_func()
             if (svr.data.is_valid()) {
                 switch (svr.data.mode()) {
                 case TmSvrData::Mode::RESPONSE:
-                    //print_info("TM_ROS: (TM_SVR): (%s) RESPONSE [%d]",
+                    //print_info("TM_ROS: (Ethernet slave): (%s) RESPONSE [%d]",
                     //    svr.data.transaction_id().c_str(), (int)(svr.data.error_code()));
                     publish_svr();
                     break;
@@ -213,24 +213,24 @@ bool TmSvrRos2::publish_func()
                     publish_svr();
                     break;
                 default:
-                    RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: (TM_SVR): (" <<
+                    RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: (Ethernet slave): (" <<
                         svr.data.transaction_id() << "): invalid mode (" << (int)(svr.data.mode()) << ")");
                     break;
                 }
             }
             else {
-                RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: (TM_SVR): invalid data");
+                RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: (Ethernet slave): invalid data");
             }
         }
         else {
-            RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: (TM_SVR): invalid header");
+            RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: (Ethernet slave): invalid header");
         }
     }
     if (fbs) {
         publish_fbs(rc);
     }
     if(rc == TmCommRC::TIMEOUT){
-      RCLCPP_INFO_STREAM_ONCE(rclcpp::get_logger("rclcpp"), "TM_ROS: (TM_SVR): LINK TIMEOUT");
+      RCLCPP_INFO_STREAM_ONCE(rclcpp::get_logger("rclcpp"), "TM_ROS: (Ethernet slave): LINK TIMEOUT");
       return false;
     }
     return true;
@@ -257,7 +257,7 @@ bool TmSvrRos2::rc_halt(){  //Stop rescue connection
         return false;
     }
     if((int)(notConnectTimeInS/60) >= maxTrialTimeInMinute){
-        RCLCPP_DEBUG_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: (TM_SVR): notConnectTimeInS = " << (int)notConnectTimeInS << ", maxTrialTimeInMinute = " << (int)maxTrialTimeInMinute);
+        RCLCPP_DEBUG_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: (Ethernet slave): notConnectTimeInS = " << (int)notConnectTimeInS << ", maxTrialTimeInMinute = " << (int)maxTrialTimeInMinute);
         return true;
     }
     return false;
@@ -277,18 +277,18 @@ void TmSvrRos2::publisher()
         else   
         {	        	
             if (!svr.recv_init()) {
-                RCLCPP_DEBUG_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: (TM_SVR): is not connected");
+                RCLCPP_DEBUG_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: (Ethernet slave): is not connected");
                 cq_manage();
                 publish_fbs(TmCommRC::TIMEOUT);
                 if(rc_halt()) {
-                    RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: (TM_SVR): Ethernet slave connection stopped");
+                    RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: (Ethernet slave): Ethernet slave connection stopped");
                     if (diconnectTimes == 0)
                     {
-                        RCLCPP_WARN_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: (TM_SVR): Please Check Wired Connected Settings");
+                        RCLCPP_WARN_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: (Ethernet slave): Please Check Wired Connected Settings");
                     }
                     else
                     {                    
-                        RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: (TM_SVR): LinkLost = " << (int)diconnectTimes << ", MaxLostTime(s) = " << (int)maxNotConnectTimeInS);
+                        RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: (Ethernet slave): LinkLost = " << (int)diconnectTimes << ", MaxLostTime(s) = " << (int)maxNotConnectTimeInS);
                     }
                     iface_.set_connect_recovery_guide(true);
                     svr.close_socket();
@@ -322,20 +322,20 @@ void TmSvrRos2::svr_connect_recover()
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
     
-    RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: (TM_SVR): Reconnecting... ");
+    RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: (Ethernet slave): Reconnecting... ");
 
     uint64_t startTimeMs = TmCommunication::get_current_time_in_ms();
     while (rclcpp::ok() && timeInterval < pub_reconnect_timeval_ms_) {
         if ( lastTimeInterval/1000 != timeInterval/1000) {
-            RCLCPP_DEBUG_STREAM(rclcpp::get_logger("rclcpp"),"TM_SVR reconnect remain :" << 0.001 * (pub_reconnect_timeval_ms_ - timeInterval) << " sec...");
+            RCLCPP_DEBUG_STREAM(rclcpp::get_logger("rclcpp"),"Ethernet slave reconnect remain :" << 0.001 * (pub_reconnect_timeval_ms_ - timeInterval) << " sec...");
         }
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
         lastTimeInterval = timeInterval;
         timeInterval = TmCommunication::get_current_time_in_ms() - startTimeMs;
     }    
     if (rclcpp::ok() && pub_reconnect_timeval_ms_ >= 0) {
-        RCLCPP_DEBUG_STREAM(rclcpp::get_logger("rclcpp"),"0 sec\nTM_ROS: (TM_SVR): connect" << (int)pub_reconnect_timeout_ms_ << "ms)...");
-        svr.connect_socket(pub_reconnect_timeout_ms_);
+        RCLCPP_DEBUG_STREAM(rclcpp::get_logger("rclcpp"),"0 sec\nTM_ROS: (Ethernet slave): connect" << (int)pub_reconnect_timeout_ms_ << "ms)...");
+        svr.connect_socket("ethernet slave",pub_reconnect_timeout_ms_);
     }
 }
 
@@ -347,7 +347,7 @@ bool TmSvrRos2::connect_tmsvr(
     int t_o = (int)(1000.0 * req->timeout);
     int t_v = (int)(1000.0 * req->timeval);
     if (req->connect) {
-        RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: (re)connect(" << (int)t_o << ") TM_SVR");
+        RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: (re)connect(" << (int)t_o << ") Ethernet slave");
         svr_.halt();
         rb = svr_.start_tm_svr(t_o);
     }
@@ -362,19 +362,19 @@ bool TmSvrRos2::connect_tmsvr(
             maxNotConnectTimeInS = 0;
             iface_.set_connect_recovery_guide(false);
             rb = svr_.start_tm_svr(5000);
-            RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: TM_SVR resume connection recovery");      	
+            RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: Ethernet slave resume connection recovery");      	
         }
         else
         {
             pub_reconnect_timeout_ms_ = t_o;
             pub_reconnect_timeval_ms_ = t_v;
         }	
-        RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: set TM_SVR reconnect timeout " << (int)pub_reconnect_timeout_ms_ << "ms, timeval " << (int)pub_reconnect_timeval_ms_ << "ms"); 	
+        RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: set Ethernet slave reconnect timeout " << (int)pub_reconnect_timeout_ms_ << "ms, timeval " << (int)pub_reconnect_timeval_ms_ << "ms"); 	
     }
     else {
         // no reconnect
         pub_reconnect_timeval_ms_ = -1;
-        RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: set TM_SVR NOT reconnect");
+        RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: set Ethernet slave NOT reconnect");
     }
     res->ok = rb;
     return rb;
