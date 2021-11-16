@@ -303,7 +303,7 @@ int TmCommunication::connect_with_timeout(int sockfd, const char *ip, unsigned s
 	timeval tv;
 	fd_set wset;
 
-	print_info("TM_COM: ip:=%s", ip);
+	print_once("TM_COM: ip:=%s", ip);
 
 	addr.sin_family = AF_INET;
 	addr.sin_port = htons(port);
@@ -369,7 +369,7 @@ int TmCommunication::connect_with_timeout(int sockfd, const char *ip, unsigned s
 	return rv;
 }
 
-bool TmCommunication::connect_socket(int timeout_ms)
+bool TmCommunication::connect_socket( std::string errorName,int timeout_ms)
 {
 	_isConnected = false;
 	if (_sockfd > 0) return true;
@@ -389,7 +389,8 @@ bool TmCommunication::connect_socket(int timeout_ms)
 #endif
     _sockfd = socketFile;
 	if (_sockfd < 0) {
-		print_error("TM_COM: Error socket");
+		std::string errorMsg = "TM_COM("+ errorName+"): Error socket";
+		print_error(errorMsg.c_str());
 		return false;
 	}
 
@@ -403,24 +404,29 @@ bool TmCommunication::connect_socket(int timeout_ms)
     timeout.tv_usec = 0;
 
     if (setsockopt (_sockfd, SOL_SOCKET, SO_RCVTIMEO, (char *)&timeout,sizeof(timeout)) < 0){
-        print_error("setsockopt failed\n");
+		std::string errorMsg = errorName + "setsockopt failed\n";
+        print_error(errorMsg.c_str());
 	}
 
     if (setsockopt (_sockfd, SOL_SOCKET, SO_SNDTIMEO, (char *)&timeout,sizeof(timeout)) < 0){
-        print_error("setsockopt failed\n");
+		std::string errorMsg = errorName + "setsockopt failed\n";
+        print_error(errorMsg.c_str());
 	}
 
 	if (connect_with_timeout(_sockfd, _ip, _port, timeout_ms) == 0) {
-		print_debug("TM_COM: O_NONBLOCK connection is ok");
+		std::string errorMsg = "TM_COM("+ errorName+"): O_NONBLOCK connection is ok";
+		print_debug(errorMsg.c_str());
 		_isConnected = true;
 	}
 	else {
-		print_debug("TM_COM: O_NONBLOCK connection is fail");
+		std::string errorMsg = "TM_COM("+ errorName+"): O_NONBLOCK connection is fail";
+		print_debug(errorMsg.c_str());
 		_sockfd = -1;
 		_isConnected = false;
 	}
 	if (_sockfd > 0) {
-		print_info("TM_COM: TM robot is connected. sockfd:=%d", (int)_sockfd);
+	        std::string msg = "TM_COM(" + errorName + "): TM robot is connected. sockfd:=" + std::to_string((int)_sockfd);
+		print_info(msg.c_str());
 		//_is_connected = true;
 		return true;
 	}
@@ -593,6 +599,9 @@ TmCommRC TmCommunication::recv_spin_once(int timeval_ms, int *n)
 			break;
 		}
 		++loop_cnt;
+	}
+	if(loop_cnt == 10 || pack_cnt == 10){
+		print_warn("sticky bag over 10 packages, to recevie data more fluently, please check your net!");
 	}
 	if (pack_cnt == 0) {
 		rc = TmCommRC::NOVALIDPACK;

@@ -53,7 +53,7 @@ public:
 		return _isConnected;
 	}
 
-	bool connect_socket(int timeout_ms = 0);
+	bool connect_socket(std::string errorName, int timeout_ms = 0);
 
 	void close_socket();
 

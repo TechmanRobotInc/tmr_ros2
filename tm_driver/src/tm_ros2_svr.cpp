@@ -1,7 +1,5 @@
 #include "tm_driver/tm_ros2_svr.h"
-
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
-
 TmSvrRos2::TmSvrRos2(const rclcpp::NodeOptions &options, TmDriver &iface, bool stick_play)
     : Node("tm_svr", options)
     , svr_(iface.svr)
@@ -40,7 +38,7 @@ TmSvrRos2::TmSvrRos2(const rclcpp::NodeOptions &options, TmDriver &iface, bool s
 
 TmSvrRos2::~TmSvrRos2()
 {
-    print_info("TM_ROS: (TM_SVR) halt");		
+    print_info("TM_ROS: (Ethernet slave) halt");		
     svr_updated_ = true;
     svr_cv_.notify_all();
     if (svr_.is_connected()) {}
@@ -118,8 +116,6 @@ void TmSvrRos2::publish_fbs(TmCommRC rc)
     pm.joint_msg.effort = pm.fbs_msg.joint_tor;
     pm.joint_pub->publish(pm.joint_msg);
 
-
-
     // Publish tool pose
     auto &pose = pm.fbs_msg.tool_pose;
     tf2::Quaternion quat;
@@ -147,11 +143,11 @@ void TmSvrRos2::publish_svr()
     svr_cv_.notify_all();
 
     if ((int)(pm.svr_msg.error_code) != 0) {
-        print_error("TM_ROS: (TM_SVR): MSG: (%s) (%d) %s", pm.svr_msg.id.c_str(), (int)pm.svr_msg.mode, pm.svr_msg.content.c_str());
-        print_error("TM_ROS: (TM_SVR): ROS Node Data Error %d", (int)(pm.svr_msg.error_code));
+        print_error("TM_ROS: (Ethernet slave): MSG: (%s) (%d) %s", pm.svr_msg.id.c_str(), (int)pm.svr_msg.mode, pm.svr_msg.content.c_str());
+        print_error("TM_ROS: (Ethernet slave): ROS Node Data Error %d", (int)(pm.svr_msg.error_code));
     }
     else {
-        print_info("TM_ROS: (TM_SVR): MSG: (%s) (%d) %s", pm.svr_msg.id.c_str(), (int)pm.svr_msg.mode, pm.svr_msg.content.c_str());
+        print_info("TM_ROS: (Ethernet slave): MSG: (%s) (%d) %s", pm.svr_msg.id.c_str(), (int)pm.svr_msg.mode, pm.svr_msg.content.c_str());
     }    
     
     pm.svr_msg.header.stamp = rclcpp::Node::now();
@@ -171,11 +167,11 @@ bool TmSvrRos2::publish_func()
     }
     bool fbs = false;
     std::vector<TmPacket> &pack_vec = svr.packet_list();
-
+    bool hasCompletePackage = false;
     for (auto &pack : pack_vec) {
         if (pack.type == TmPacket::Header::CPERR) {
             svr.tmSvrErrData.set_CPError(pack.data.data(), pack.data.size());
-            print_error("TM_ROS: (TM_SVR) ROS Node Header CPERR %d", (int)svr.tmSvrErrData.error_code());
+            print_error("TM_ROS: (Ethernet slave) ROS Node Header CPERR %d", (int)svr.tmSvrErrData.error_code());
         }
         else if (pack.type == TmPacket::Header::TMSVR) {
 
@@ -204,7 +200,7 @@ bool TmSvrRos2::publish_func()
             if (svr.data.is_valid()) {
                 switch (svr.data.mode()) {
                 case TmSvrData::Mode::RESPONSE:
-                    //print_info("TM_ROS: (TM_SVR): (%s) RESPONSE [%d]",
+                    //print_info("TM_ROS: (Ethernet slave): (%s) RESPONSE [%d]",
                     //    svr.data.transaction_id().c_str(), (int)(svr.data.error_code()));
                     publish_svr();
                     break;
@@ -217,24 +213,41 @@ bool TmSvrRos2::publish_func()
                     publish_svr();
                     break;
                 default:
-                    print_error("TM_ROS: (TM_SVR): (%s): invalid mode (%d)",
+                    print_error("TM_ROS: (Ethernet slave): (%s): invalid mode (%d)",
                         svr.data.transaction_id().c_str(), (int)(svr.data.mode()));
                     break;
                 }
+            }else {   
+                print_error("TM_ROS: (Ethernet slave): invalid data");
             }
-            else {
-                print_error("TM_ROS: (TM_SVR): invalid data");
+            hasCompletePackage = true;
+        } else if(pack.type == TmPacket::Header::EMPTY){
+            if(hasCompletePackage){
+                print_warn("warnning TM_ROS: (Ethernet slave): receive package header may not complete, but some data formate is correct, please check your network");
+            } else{
+                print_error("TM_ROS: (Ethernet slave): receive header EMPTY, invalid header");
             }
-        }
-        else {
-            print_error("TM_ROS: (TM_SVR): invalid header");
+        } else if(pack.type == TmPacket::Header::PACKAGE_INCOMPLETE) {
+            if(hasCompletePackage){
+                print_warn("warnning TM_ROS: (Ethernet slave): receive package is not complete, but some data formate is correct, please check your network");
+            }  else{
+                print_warn("warnning TM_ROS: (Ethernet slave): receive package is not complete, please check your network");
+            }
+        } else if(pack.type == TmPacket::Header::TMSCT){
+            print_error("TM_ROS: (Ethernet slave): receive header TMSCT, invalid header");
+        } else if(pack.type == TmPacket::Header::TMSTA){
+            print_error("TM_ROS: (Ethernet slave): receive header TMSTA, invalid header");
+        } else if(pack.type == TmPacket::Header::OTHER){
+            print_error("TM_ROS: (Ethernet slave): receive header OTHER, invalid header");
+        } else {
+            print_error("TM_ROS: (Ethernet slave): receive invalid header");
         }
     }
     if (fbs) {
         publish_fbs(rc);
     }
     if(rc == TmCommRC::TIMEOUT){
-      //print_info("TM_ROS: (TM_SVR): LINK TIMEOUT");
+      print_once("TM_ROS: (Ethernet slave): LINK TIMEOUT");
       return false;
     }
     return true;
@@ -261,7 +274,7 @@ bool TmSvrRos2::rc_halt(){  //Stop rescue connection
         return false;
     }
     if((int)(notConnectTimeInS/60) >= maxTrialTimeInMinute){
-        print_debug("TM_ROS: (TM_SVR): notConnectTimeInS = %d, maxTrialTimeInMinute = %d ", (int)notConnectTimeInS, (int)maxTrialTimeInMinute);
+        print_debug("TM_ROS: (Ethernet slave): notConnectTimeInS = %d, maxTrialTimeInMinute = %d ", (int)notConnectTimeInS, (int)maxTrialTimeInMinute);
         return true;
     }
     return false;
@@ -281,18 +294,18 @@ void TmSvrRos2::publisher()
         else   
         {	        	
             if (!svr.recv_init()) {
-                print_debug("TM_ROS: (TM_SVR): is not connected");
+                print_debug("TM_ROS: (Ethernet slave): is not connected");
                 cq_manage();
                 publish_fbs(TmCommRC::TIMEOUT);
                 if(rc_halt()) {
-                    print_fatal("TM_ROS: (TM_SVR): Ethernet slave connection stopped!");
+                    print_fatal("TM_ROS: (Ethernet slave): Ethernet slave connection stopped!");
                     if (diconnectTimes == 0)
                     {
-                        print_warn("TM_ROS: (TM_SVR): Please Check Wired Connected Settings");
+                        print_warn("TM_ROS: (Ethernet slave): Please Check Wired Connected Settings");
                     }
                     else
                     {                    
-                        print_fatal("TM_ROS: (TM_SVR): LinkLost = %d , MaxLostTime(s) = %d", (int)diconnectTimes, (int)maxNotConnectTimeInS);
+                        print_fatal("TM_ROS: (Ethernet slave): LinkLost = %d , MaxLostTime(s) = %d", (int)diconnectTimes, (int)maxNotConnectTimeInS);
                     }
                     iface_.set_connect_recovery_guide(true);
                     svr.close_socket();
@@ -326,20 +339,20 @@ void TmSvrRos2::svr_connect_recover()
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
     
-    print_info("TM_ROS: (TM_SVR): Reconnecting...");
+    print_info("TM_ROS: (Ethernet slave): Reconnecting...");
 
     uint64_t startTimeMs = TmCommunication::get_current_time_in_ms();
     while (rclcpp::ok() && timeInterval < pub_reconnect_timeval_ms_) {
         if ( lastTimeInterval/1000 != timeInterval/1000) {
-            print_debug("TM_SVR reconnect remain : %.1f sec...", 0.001 * (pub_reconnect_timeval_ms_ - timeInterval));
+            print_debug("Ethernet slave reconnect remain : %.1f sec...", 0.001 * (pub_reconnect_timeval_ms_ - timeInterval));
         }
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
         lastTimeInterval = timeInterval;
         timeInterval = TmCommunication::get_current_time_in_ms() - startTimeMs;
     }    
     if (rclcpp::ok() && pub_reconnect_timeval_ms_ >= 0) {
-        print_debug("0 sec\nTM_ROS: (TM_SVR): connect(%dms)...", (int)pub_reconnect_timeout_ms_);
-        svr.connect_socket(pub_reconnect_timeout_ms_);
+        print_debug("0 sec\nTM_ROS: (Ethernet slave): connect(%dms)...", (int)pub_reconnect_timeout_ms_);
+        svr.connect_socket("Ethernet slave",pub_reconnect_timeout_ms_);
     }
 }
 
@@ -351,7 +364,7 @@ bool TmSvrRos2::connect_tmsvr(
     int t_o = (int)(1000.0 * req->timeout);
     int t_v = (int)(1000.0 * req->timeval);
     if (req->connect) {
-        print_info("TM_ROS: (re)connect(%d) TM_SVR", (int)t_o);
+        print_info("TM_ROS: (re)connect(%d) Ethernet slave", (int)t_o);
         svr_.halt();
         rb = svr_.start_tm_svr(t_o);
     }
@@ -366,19 +379,19 @@ bool TmSvrRos2::connect_tmsvr(
             maxNotConnectTimeInS = 0;
             iface_.set_connect_recovery_guide(false);
             rb = svr_.start_tm_svr(5000);
-            print_info("TM_ROS: TM_SVR resume connection recovery");
+            print_info("TM_ROS: Ethernet slave resume connection recovery");
         }
         else
         {
             pub_reconnect_timeout_ms_ = t_o;
             pub_reconnect_timeval_ms_ = t_v;
         }	
-        print_info("TM_ROS: set TM_SVR reconnect timeout %dms, timeval %dms", (int)pub_reconnect_timeout_ms_, (int)pub_reconnect_timeval_ms_);
+        print_info("TM_ROS: set Ethernet slave reconnect timeout %dms, timeval %dms", (int)pub_reconnect_timeout_ms_, (int)pub_reconnect_timeval_ms_);
     }
     else {
         // no reconnect
         pub_reconnect_timeval_ms_ = -1;
-        print_info("TM_ROS: set TM_SVR NOT reconnect");
+        print_info("TM_ROS: set Ethernet slave NOT reconnect");
     }
     res->ok = rb;
     return rb;

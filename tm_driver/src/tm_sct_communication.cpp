@@ -16,7 +16,7 @@ TmSctCommunication::TmSctCommunication(const std::string &ip,
 	int recv_buf_len, bool &isOnListenNode, std::condition_variable *cv )
 	: TmCommunication(ip.c_str(), 5890,recv_buf_len) , isOnListenNode(isOnListenNode)
 {
-	print_info("TM_SCT: TmSctCommunication");
+	print_info("Listen node communication: TmSctCommunication");
 	if (cv) {
 		_cv = cv;
 		_has_thread = true;
@@ -31,9 +31,9 @@ TmSctCommunication::~TmSctCommunication()
 bool TmSctCommunication::start_tm_sct(int timeout_ms)
 {
 	halt();
-	print_info("TM_SCT: start");
+	print_info("Listen node communication: start");
 
-	bool rb = connect_socket(timeout_ms);
+	bool rb = connect_socket("listen node communication",timeout_ms);
 	//if (!rb) return rb; // ? start thread anyway
 
 	if (_has_thread) {
@@ -52,7 +52,7 @@ void TmSctCommunication::halt()
 		}
 	}
 	if (is_connected()) {
-		print_info("TM_SCT: halt");
+		print_info("Listen node communication: halt");
 		close_socket();
 	}
 }
@@ -108,12 +108,12 @@ std::string TmSctCommunication::mtx_sta_response(std::string &cmd)
 
 void TmSctCommunication::tm_sct_thread_function()
 {
-	print_info("TM_SCT: thread begin");
+	print_info("Listen node communication: thread begin");
 	_keep_thread_alive = true;
 	while (_keep_thread_alive) {
 		bool reconnect = false;
 		if (!recv_init()) {
-			print_info("TM_SCT: is not connected");
+			print_info("Listen node communication: is not connected");
 		}
 		while (_keep_thread_alive && is_connected() && !reconnect) {
 			TmCommRC rc = tmsct_function();
@@ -124,7 +124,7 @@ void TmSctCommunication::tm_sct_thread_function()
 			case TmCommRC::ERR:
 			case TmCommRC::NOTREADY:
 			case TmCommRC::NOTCONNECT:
-				print_info("TM_SCT: rc=%d", int(rc));
+				print_info("Listen node communication: rc=%d", int(rc));
 				reconnect = true;
 				break;
 			default: break;
@@ -134,7 +134,7 @@ void TmSctCommunication::tm_sct_thread_function()
 		reconnect_function();
 	}
 	close_socket();
-	print_info("TM_SCT: thread end");
+	print_info("TM_SCTListen node communication: thread end");
 }
 
 void TmSctCommunication::reconnect_function()
@@ -143,7 +143,7 @@ void TmSctCommunication::reconnect_function()
 	if (_reconnect_timeval_ms <= 0) {
 		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 	}
-	print_info("TM_SCT: Reconnecting.. ");
+	print_info("Listen node communication: Reconnecting.. ");
 	int cnt = 0;
 	while (_keep_thread_alive && cnt < _reconnect_timeval_ms) {
 		if (cnt % 1000 == 0) {
@@ -153,8 +153,8 @@ void TmSctCommunication::reconnect_function()
 		++cnt;
 	}
 	if (_keep_thread_alive && _reconnect_timeval_ms >= 0) {
-		print_info("0 sec\nTM_SCT: connect(%dms)...", (int)_reconnect_timeout_ms);
-		connect_socket(_reconnect_timeout_ms);
+		print_info("0 sec\n Listen node communication: connect(%dms)...", (int)_reconnect_timeout_ms);
+		connect_socket("Listen node communication",_reconnect_timeout_ms);
 	}
 }
 

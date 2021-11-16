@@ -5,6 +5,7 @@
 #include <type_traits>
 #include <sstream>
 #include <iomanip>
+#include "tm_print.h"
 //#include <unordered_map>
 
 
@@ -32,6 +33,7 @@ public:
 	static const std::string HDR_TMSCT;
 	static const std::string HDR_TMSTA;
 	static const std::string HDR_TMSVR;
+	static const std::string PACKAGE_INCOMPLETE;
 
 	enum class Header
 	{
@@ -40,6 +42,7 @@ public:
 		TMSCT,
 		TMSTA,
 		TMSVR,
+		PACKAGE_INCOMPLETE,
 		OTHER
 	};
 
@@ -115,7 +118,14 @@ public:
 		_is_cs_failed = false;
 		_is_valid = false;
 	}
-
+    void set_as_not_finish_data(){
+        setup_header(Header::PACKAGE_INCOMPLETE);
+		data.clear();
+		_size = 0;
+		_cs = 0;
+		_is_cs_failed = false;
+		_is_valid = false;
+	}
 public:
 	static std::vector<char> bytes_from_string(const std::string &s)
 	{

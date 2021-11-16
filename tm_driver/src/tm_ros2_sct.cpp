@@ -45,7 +45,7 @@ TmSctRos2::TmSctRos2(const rclcpp::NodeOptions &options, TmDriver &iface)
 
 TmSctRos2::~TmSctRos2()
 {
-    print_info("TM_ROS: (TM_SCT) halt");		
+    print_info("TM_ROS: (Listen node) halt");		
     sta_updated_ = true;
     sta_cv_.notify_all();
     if (sct_.is_connected()) {}
@@ -122,7 +122,7 @@ bool TmSctRos2::sct_func()
         switch (pack.type) {
         case TmPacket::Header::CPERR:
             sct.tmSctErrData.set_CPError(pack.data.data(), pack.data.size());
-            print_error("TM_ROS: (TM_SCT) ROS Node Header CPERR %d",(int)sct.tmSctErrData.error_code());
+            print_error("TM_ROS: (Listen node) ROS Node Header CPERR %d",(int)sct.tmSctErrData.error_code());
             break;
 
         case TmPacket::Header::TMSCT:
@@ -145,7 +145,7 @@ bool TmSctRos2::sct_func()
             break;
 
         default:
-            print_error("TM_ROS: (TM_SCT): invalid header");
+            print_error("TM_ROS: (Listen node): invalid header");
             break;
         }
     }
@@ -193,7 +193,7 @@ void TmSctRos2::sct_responsor()
         else   
         {
             if (!sct.recv_init()) {
-                print_debug("TM_ROS: (TM_SCT): is not connected");
+                print_debug("TM_ROS: (Listen node): is not connected");
             }
             firstEnter = true;
             while (rclcpp::ok() && sct.is_connected() && iface_.svr.is_connected()) {
@@ -225,20 +225,20 @@ void TmSctRos2::sct_connect_recover()
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
     
-    print_info("TM_ROS: (TM_SCT): Reconnecting...");
+    print_info("TM_ROS: (Listen node): Reconnecting...");
 
     uint64_t startTimeMs = TmCommunication::get_current_time_in_ms();
     while (rclcpp::ok() && timeInterval < sct_reconnect_timeval_ms_) {
         if ( lastTimeInterval/1000 != timeInterval/1000) {
-            print_debug("TM_SCT reconnect remain : %.1f sec...", 0.001 * (sct_reconnect_timeval_ms_ - timeInterval));
+            print_debug("Listen node reconnect remain : %.1f sec...", 0.001 * (sct_reconnect_timeval_ms_ - timeInterval));
         }
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
         lastTimeInterval = timeInterval;
         timeInterval = TmCommunication::get_current_time_in_ms() - startTimeMs;
     }
     if (rclcpp::ok() && sct_reconnect_timeval_ms_ >= 0) {
-        print_debug("0 sec\nTM_ROS: (TM_SCT) connect(%d)...", (int)sct_reconnect_timeout_ms_);
-        sct.connect_socket(sct_reconnect_timeout_ms_);
+        print_debug("0 sec\nTM_ROS: (Listen node) connect(%d)...", (int)sct_reconnect_timeout_ms_);
+        sct.connect_socket("Listen node",sct_reconnect_timeout_ms_);
     }
 }
 
@@ -250,7 +250,7 @@ bool TmSctRos2::connect_tmsct(
     int t_o = (int)(1000.0 * req->timeout);
     int t_v = (int)(1000.0 * req->timeval);
     if (req->connect) {
-        print_info("TM_ROS: (re)connect(%d) TM_SCT", (int)t_o);
+        print_info("TM_ROS: (re)connect(%d) TM_SCT Listen node", (int)t_o);
         sct_.halt();
         rb = sct_.start_tm_sct(t_o);
     }
@@ -261,19 +261,19 @@ bool TmSctRos2::connect_tmsct(
             sct_reconnect_timeval_ms_ = 3000;
             iface_.set_connect_recovery_guide(false);
             rb = sct_.start_tm_sct(5000);
-            print_info("TM_ROS: TM_SCT resume connection recovery");                     	
+            print_info("TM_ROS: Listen node resume connection recovery");                     	
         }
         else
         {        	    	
             sct_reconnect_timeout_ms_ = t_o;
             sct_reconnect_timeval_ms_ = t_v;
         }
-        print_info("TM_ROS: set TM_SCT reconnect timeout %dms, timeval %dms", (int)sct_reconnect_timeout_ms_, (int)sct_reconnect_timeval_ms_);
+        print_info("TM_ROS: set Listen node reconnect timeout %dms, timeval %dms", (int)sct_reconnect_timeout_ms_, (int)sct_reconnect_timeval_ms_);
     }
     else {
         // no reconnect
         sct_reconnect_timeval_ms_ = -1;
-        print_info("TM_ROS: set TM_SCT NOT reconnect");
+        print_info("TM_ROS: set Listen node NOT reconnect");
     }
     res->ok = rb;
     return rb;
