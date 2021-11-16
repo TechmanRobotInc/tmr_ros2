@@ -10,6 +10,9 @@ void set_up_print_info_function(void (*function_print)(char* fmt));
 void set_up_print_warn_function(void (*function_print)(char* fmt));
 void set_up_print_error_function(void (*function_print)(char* fmt));
 void set_up_print_fatal_function(void (*function_print)(char* fmt));
+void set_up_print_once_function(void (*function_print)(char* fmt));
+
+void default_print_once_function_print(char* msg);
 
 const std::string PRINT_RED("\033[0;31m");
 const std::string PRINT_GREEN("\033[1;32m");
@@ -28,7 +31,8 @@ int print_info(const char* fmt, ...);
 int print_warn(const char* fmt, ...);
 int print_error(const char* fmt, ...);
 int print_fatal(const char* fmt, ...);
+int print_once(const char* fmt, ...);
 
-
+void setup_print_debug(bool isPrintDebug);
 
 #endif

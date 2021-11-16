@@ -31,7 +31,7 @@ private:
 public:
 	TmDataTable(TmRobotState *rs)
 	{
-		RCLCPP_DEBUG_STREAM(rclcpp::get_logger("rclcpp"),"Create DataTable");
+		print_debug("Create DataTable");
 
 		_item_map.clear();
 		//_item_map[""] = { Item:, &rs- };
@@ -114,7 +114,7 @@ public:
 
 TmRobotState::TmRobotState()
 {
-	RCLCPP_DEBUG_STREAM(rclcpp::get_logger("rclcpp"),"TmRobotState::TmRobotState");
+	print_debug("TmRobotState::TmRobotState");
 
 	_data_table = new TmDataTable(this);
 
@@ -151,7 +151,7 @@ TmRobotState::TmRobotState()
 
 TmRobotState::~TmRobotState()
 {
-	RCLCPP_DEBUG_STREAM(rclcpp::get_logger("rclcpp"),"TmRobotState::~TmRobotState");
+	print_debug("TmRobotState::~TmRobotState");
 	delete _data_table;
 }
 
@@ -305,7 +305,7 @@ size_t TmRobotState::_deserialize_first_time(const char *data, size_t size, bool
 	unsigned short uslen = 0; // 2 bytes
 	std::string item_name;
 
-	RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"TM Flow DataTable Checked Item: ");
+	print_info("TM Flow DataTable Checked Item: ");
 	_item_updates.clear();
 	//_f_deserialize_item.clear();
 
@@ -327,13 +327,15 @@ size_t TmRobotState::_deserialize_first_time(const char *data, size_t size, bool
 			//func = std::bind(&RobotState::_deserialize_copy_wo_check, iter->second.dst,
 			//	std::placeholders::_2, std::placeholders::_3);
 			iter->second.checked = true;
-			RCLCPP_DEBUG_STREAM(rclcpp::get_logger("rclcpp"),"- " << item_name << " - checked");
+			std::string msg = "- " + item_name + " - checked";
+			print_debug(msg.c_str());
 			++check_count;
 		}
 		else {
 			//func = std::bind(&RobotState::_deserialize_skip, nullptr,
 			//	std::placeholders::_2, std::placeholders::_3);
-			RCLCPP_DEBUG_STREAM(rclcpp::get_logger("rclcpp"),"- " << item_name << " - skipped");
+			std::string msg = "- " + item_name + " - skipped";
+			print_debug(msg.c_str());
 			++skip_count;
 		}
 		_item_updates.push_back({ update.dst, update.func });
@@ -353,8 +355,10 @@ size_t TmRobotState::_deserialize_first_time(const char *data, size_t size, bool
 		}
 		++count;
 	}
-	RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"Total " << _item_updates.size() << " item," <<
-		check_count << " checked, " << skip_count << " skipped");
+	
+	std::string msg = "Total " + std::to_string(_item_updates.size()) + " item," +
+	std::to_string(check_count) + " checked, " + std::to_string(skip_count) + " skipped";
+	print_info(msg.c_str());
 	isDataTableCorrect = true;
 
 	_deserialize_update(lock);
@@ -362,14 +366,15 @@ size_t TmRobotState::_deserialize_first_time(const char *data, size_t size, bool
 	for (auto iter : _data_table->get()) {
 		if (iter.second.required && !iter.second.checked) {
 			isDataTableCorrect = false;
-			RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"),"Required item" << iter.first << " is NOT checked");
+			std::string msg = "Required item" + iter.first + " is NOT checked";
+			print_error(msg.c_str());
 		}
 	}
 
 	if(isDataTableCorrect){
-	  RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"data table is correct!");
+	  print_info("data table is correct!");
 	} else{
-	  RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"),"data table is not correct!");
+	  print_error("data table is not correct!");
 	}
 
 	_f_deserialize = std::bind(&TmRobotState::_deserialize, this,

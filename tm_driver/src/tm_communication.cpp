@@ -38,11 +38,11 @@ private:
 public:
 	TmSBuffer()
 	{
-		RCLCPP_DEBUG_STREAM(rclcpp::get_logger("rclcpp"),"TmSBuffer::TmSBuffer");
+		print_debug("TmSBuffer::TmSBuffer");
 	}
 	~TmSBuffer()
 	{
-		RCLCPP_DEBUG_STREAM(rclcpp::get_logger("rclcpp"),"TmSBuffer::~TmSBuffer");
+		print_debug("TmSBuffer::~TmSBuffer");
 	}
 
 	int length() const
@@ -107,7 +107,7 @@ private:
 public:
 	explicit TmCommRecv(int recv_buf_len)
 	{
-		RCLCPP_DEBUG_STREAM(rclcpp::get_logger("rclcpp"),"TmCommRecv::TmCommRecv");
+		print_debug("TmCommRecv::TmCommRecv");
 
 		if (recv_buf_len < 512) recv_buf_len = 512;
 
@@ -118,7 +118,7 @@ public:
 	}
 	~TmCommRecv()
 	{
-		RCLCPP_DEBUG_STREAM(rclcpp::get_logger("rclcpp"),"TmCommRecv::~TmCommRecv");
+		print_debug("TmCommRecv::~TmCommRecv");
 		delete _recv_buf;
 	}
 
@@ -254,7 +254,7 @@ TmCommunication::TmCommunication(const char *ip, unsigned short port, int recv_b
 	, _recv_rc(TmCommRC::OK)
 	, _recv_ready(false)
 {
-	RCLCPP_DEBUG_STREAM(rclcpp::get_logger("rclcpp"),"TmCommunication::TmCommunication");
+	print_debug("TmCommunication::TmCommunication");
 
 	_recv = new TmCommRecv(recv_buf_len);
 
@@ -276,7 +276,7 @@ TmCommunication::TmCommunication(const char *ip, unsigned short port, int recv_b
 
 TmCommunication::~TmCommunication()
 {
-	RCLCPP_DEBUG_STREAM(rclcpp::get_logger("rclcpp"),"TmCommunication::~TmCommunication");
+	print_debug("TmCommunication::~TmCommunication");
 
 	delete _ip;
 	delete _recv;
@@ -303,7 +303,7 @@ int TmCommunication::connect_with_timeout(int sockfd, const char *ip, unsigned s
 	timeval tv;
 	fd_set wset;
 
-	RCLCPP_INFO_STREAM_ONCE(rclcpp::get_logger("rclcpp"),"TM_COM: ip:=" << ip);
+	print_once("TM_COM: ip:=%s", ip);
 
 	addr.sin_family = AF_INET;
 	addr.sin_port = htons(port);
@@ -318,20 +318,20 @@ int TmCommunication::connect_with_timeout(int sockfd, const char *ip, unsigned s
 #ifndef _WIN32
 	//Get Flag of Fcntl
 	if ((flags = fcntl(sockfd, F_GETFL, 0)) < 0 ) {
-		RCLCPP_WARN_STREAM(rclcpp::get_logger("rclcpp"),"TM_COM: The flag of fcntl is not ok");
+		print_warn("TM_COM: The flag of fcntl is not ok");
 		return -1;
 	}
 #endif
 
 	rv = connect(sockfd, (sockaddr *)&addr, 16);
-	RCLCPP_DEBUG_STREAM(rclcpp::get_logger("rclcpp"),"TM_COM: rv:=" << (int)rv);
+	print_debug("TM_COM: rv:=%d", (int)rv);
 
 	if (rv < 0) {
 		if (errno != EINPROGRESS) return -1;
 	}
 	if (rv == 0) {
 		timeoutcount = 0;
-		RCLCPP_DEBUG_STREAM(rclcpp::get_logger("rclcpp"),"TM_COM: Connection is ok");
+		print_debug("TM_COM: Connection is ok");
 		return rv;
 	}
 	else {
@@ -341,7 +341,7 @@ int TmCommunication::connect_with_timeout(int sockfd, const char *ip, unsigned s
 			return rv;
 		}
 		if (rv == 0) {
-			RCLCPP_WARN_STREAM(rclcpp::get_logger("rclcpp"),"TM_COM: Connection timeout. count:=" << (int)timeoutcount);
+			print_warn("TM_COM: Connection timeout count:=%d", (int)timeoutcount);
 			//errno = ETIMEDOUT;
 			return -1;
 		}
@@ -351,18 +351,18 @@ int TmCommunication::connect_with_timeout(int sockfd, const char *ip, unsigned s
 #else
 			if (getsockopt(sockfd, SOL_SOCKET, SO_ERROR, &err, (socklen_t *)&err_len) < 0) {
 #endif
-				RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"),"TM_COM: Get socketopt SO_ERROR FAIL");
+				print_error("TM_COM: Get socketopt SO_ERROR FAIL");
 				errno = err;
 				return -1;
 			}
 		}
 		else {
-			RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"),"TM_COM: Connection is not ready");
+			print_error("TM_COM: Connection is not ready");
 			return -1;
 		}
 		if (err != 0) {
 			errno = err;
-			RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"),"TM_COM: Connection error");
+			print_error("TM_COM: Connection error");
 			return -1;
 		}
 	}
@@ -389,7 +389,8 @@ bool TmCommunication::connect_socket( std::string errorName,int timeout_ms)
 #endif
     _sockfd = socketFile;
 	if (_sockfd < 0) {
-		RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"),"TM_COM: Error socket");
+		std::string errorMsg = "TM_COM("+ errorName+"): Error socket";
+		print_error(errorMsg.c_str());
 		return false;
 	}
 
@@ -403,24 +404,29 @@ bool TmCommunication::connect_socket( std::string errorName,int timeout_ms)
     timeout.tv_usec = 0;
 
     if (setsockopt (_sockfd, SOL_SOCKET, SO_RCVTIMEO, (char *)&timeout,sizeof(timeout)) < 0){
-        RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"), errorName + "setsockopt failed\n");
+		std::string errorMsg = errorName + "setsockopt failed\n";
+        print_error(errorMsg.c_str());
 	}
 
     if (setsockopt (_sockfd, SOL_SOCKET, SO_SNDTIMEO, (char *)&timeout,sizeof(timeout)) < 0){
-        RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"), errorName + "setsockopt failed\n");
+		std::string errorMsg = errorName + "setsockopt failed\n";
+        print_error(errorMsg.c_str());
 	}
 
 	if (connect_with_timeout(_sockfd, _ip, _port, timeout_ms) == 0) {
-		RCLCPP_DEBUG_STREAM(rclcpp::get_logger("rclcpp"),"TM_COM(" + errorName +"): O_NONBLOCK connection is ok");
+		std::string errorMsg = "TM_COM("+ errorName+"): O_NONBLOCK connection is ok";
+		print_debug(errorMsg.c_str());
 		_isConnected = true;
 	}
 	else {
-		RCLCPP_DEBUG_STREAM(rclcpp::get_logger("rclcpp"),"TM_COM("+ errorName +"): O_NONBLOCK connection is fail");
+		std::string errorMsg = "TM_COM("+ errorName+"): O_NONBLOCK connection is fail";
+		print_debug(errorMsg.c_str());
 		_sockfd = -1;
 		_isConnected = false;
 	}
 	if (_sockfd > 0) {
-		RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"TM_COM(" + errorName  +"): TM robot is connected. sockfd:=" << (int)_sockfd);
+	        std::string msg = "TM_COM(" + errorName + "): TM robot is connected. sockfd:=" + std::to_string((int)_sockfd);
+		print_info(msg.c_str());
 		//_is_connected = true;
 		return true;
 	}
@@ -496,21 +502,21 @@ TmCommRC TmCommunication::send_packet(TmPacket &packet, int *n)
 {
 	std::vector<char> bytes;
 	TmPacket::build_bytes(bytes, packet);
-	RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),TmPacket::string_from_bytes(bytes));
+	print_info(TmPacket::string_from_bytes(bytes).c_str());
 	return send_bytes(bytes.data(), bytes.size(), n);
 }
 TmCommRC TmCommunication::send_packet_all(TmPacket &packet, int *n)
 {
 	std::vector<char> bytes;
 	TmPacket::build_bytes(bytes, packet);
-	RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),TmPacket::string_from_bytes(bytes));
+	print_info(TmPacket::string_from_bytes(bytes).c_str());
 	return send_bytes_all(bytes.data(), bytes.size(), n);
 }
 TmCommRC TmCommunication::send_packet_(TmPacket &packet, int *n)
 {
 	std::vector<char> bytes;
 	TmPacket::build_bytes(bytes, packet);
-	RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),TmPacket::string_from_bytes(bytes));
+	print_info(TmPacket::string_from_bytes(bytes).c_str());
 	if (bytes.size() > 0x1000)
 		return send_bytes_all(bytes.data(), bytes.size(), n);
 	else
@@ -593,6 +599,9 @@ TmCommRC TmCommunication::recv_spin_once(int timeval_ms, int *n)
 			break;
 		}
 		++loop_cnt;
+	}
+	if(loop_cnt == 10 || pack_cnt == 10){
+		print_warn("sticky bag over 10 packages, to recevie data more fluently, please check your net!");
 	}
 	if (pack_cnt == 0) {
 		rc = TmCommRC::NOVALIDPACK;

@@ -33,6 +33,16 @@ void (*print_error_function)(char* fmt);
 bool isSetPrintErrorFunction = false;
 void (*print_fatal_function)(char* fmt);
 bool isSetPrintFatalFunction = false;
+void (*print_once_function)(char* fmt);
+bool isSetPrintOnceFunction = false;
+
+
+std::set<std::string> printed_string;
+
+bool isPrintDebugOnTerminal = true;
+void setup_print_debug(bool isPrintDebug){
+  isPrintDebugOnTerminal = isPrintDebug;
+}
 
 void default_debug_function_print(char* msg){
   std::cout<<PRINT_CYAN<<"[DEBUG] "<<msg<<std::endl<<PRINT_RESET;
@@ -49,15 +59,24 @@ void default_print_error_function_print(char* msg){
 void default_print_fatal_function_print(char* msg){
   std::cout<<PRINT_GREEN<<"[FATAL] "<<msg<<std::endl<<PRINT_RESET;
 }
-
+void default_print_once_function_print(char* msg){
+  std::string str(msg);
+  if(printed_string.count(str) == 0){
+    std::cout<<"[INFO_ONCE]"<<str<<std::endl;
+	printed_string.insert(str);
+  }
+}
 int print_debug(const char* fmt, ...) {
-	char msg[MAX_MSG_SIZE];
-	int n;
-	va_list vl;
-	va_start(vl, fmt);
-	n = vsnprintf_s(msg, MAX_MSG_SIZE, fmt, vl);
-	va_end(vl);
-  if(isSetPrintDebugFunction){
+  char msg[MAX_MSG_SIZE];
+  int n;
+  va_list vl;
+  va_start(vl, fmt);
+  n = vsnprintf_s(msg, MAX_MSG_SIZE, fmt, vl);
+  va_end(vl);
+  
+  if(!isPrintDebugOnTerminal){
+    return n;
+  } else if(isSetPrintDebugFunction){
     print_debug_function(msg);
   } else{
     default_debug_function_print(msg);
@@ -113,13 +132,28 @@ int print_fatal(const char* fmt, ...) {
 	va_start(vl, fmt);
 	n = vsnprintf_s(msg, MAX_MSG_SIZE, fmt, vl);
 	va_end(vl);
-    if(isSetPrintErrorFunction){
+    if(isSetPrintFatalFunction){
 		print_fatal_function(msg);
 	} else{
 		default_print_fatal_function_print(msg);
 	}
 	return n;
 }
+int print_once(const char* fmt, ...){
+	char msg[MAX_MSG_SIZE];
+	int n;
+	va_list vl;
+	va_start(vl, fmt);
+	n = vsnprintf_s(msg, MAX_MSG_SIZE, fmt, vl);
+	va_end(vl);
+    if(isSetPrintOnceFunction){
+		print_once_function(msg);
+	} else{
+		default_print_once_function_print(msg);
+	}
+	return n;
+}
+
 
 void set_up_print_debug_function(void (*function_print)(char* fmt)){
   print_debug_function = function_print;
@@ -140,4 +174,8 @@ void set_up_print_error_function(void (*function_print)(char* fmt)){
 void set_up_print_fatal_function(void (*function_print)(char* fmt)){
   print_fatal_function = function_print;
   isSetPrintFatalFunction = true;
+}
+void set_up_print_once_function(void (*function_print)(char* fmt)){
+  print_once_function = function_print;
+  isSetPrintOnceFunction = true;
 }

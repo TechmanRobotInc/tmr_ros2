@@ -18,20 +18,49 @@ void error_function_print(char* msg){
 void fatal_function_print(char* msg){
   printf("%s[TM_FATAL] %s\n%s", PRINT_GREEN.c_str(), msg, PRINT_RESET.c_str());
 }
+
+void ros_debug_print(char* msg){
+  RCLCPP_DEBUG_STREAM(rclcpp::get_logger("rclcpp"),msg);
+}
+void ros_info_print(char* msg){
+  RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),msg);
+}
+void ros_warn_function_print(char* msg){
+  RCLCPP_WARN_STREAM(rclcpp::get_logger("rclcpp"),msg);
+}
+void ros_error_print(char* msg){
+  RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"),msg);
+}
+void ros_fatal_print(char* msg){
+  std::string str = msg;
+  str = "[TM_FATAL]" + str;
+  RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"),str.c_str());
+}
+void ros_once_print(char* msg){
+  RCLCPP_INFO_STREAM_ONCE(rclcpp::get_logger("rclcpp"),msg);
+}
 void set_up_print_fuction(){
   set_up_print_debug_function(debug_function_print);
   set_up_print_info_function(info_function_print);
   set_up_print_warn_function(warn_function_print);
   set_up_print_error_function(error_function_print);
   set_up_print_fatal_function(fatal_function_print);
+  set_up_print_once_function(default_print_once_function_print);
 }
-
+void set_up_ros_print_fuction(){
+  set_up_print_debug_function(ros_debug_print);
+  set_up_print_info_function(ros_info_print);
+  set_up_print_warn_function(ros_warn_function_print);
+  set_up_print_error_function(ros_error_print);
+  set_up_print_fatal_function(ros_fatal_print);
+  set_up_print_once_function(ros_once_print);
+}
 int main(int argc, char *argv[])
 {
     // Force flush of the stdout buffer.
     setvbuf(stdout, NULL, _IONBF, BUFSIZ);
     
-    set_up_print_fuction();
+    set_up_ros_print_fuction();
 
     rclcpp::init(argc, argv);
     
@@ -46,6 +75,14 @@ int main(int argc, char *argv[])
     }
     else {
         rclcpp::shutdown();
+    }
+
+    if(argc == 3){
+      bool isSetNoLogPrint;
+      std::istringstream(argv[2]) >> std::boolalpha >> isSetNoLogPrint;
+      if(isSetNoLogPrint){
+        set_up_print_fuction();
+      }
     }
 
     rclcpp::executors::SingleThreadedExecutor exec;

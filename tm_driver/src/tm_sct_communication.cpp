@@ -16,7 +16,7 @@ TmSctCommunication::TmSctCommunication(const std::string &ip,
 	int recv_buf_len, bool &isOnListenNode, std::condition_variable *cv )
 	: TmCommunication(ip.c_str(), 5890,recv_buf_len) , isOnListenNode(isOnListenNode)
 {
-	RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"Listen node communication: TmSctCommunication");
+	print_info("Listen node communication: TmSctCommunication");
 	if (cv) {
 		_cv = cv;
 		_has_thread = true;
@@ -31,7 +31,7 @@ TmSctCommunication::~TmSctCommunication()
 bool TmSctCommunication::start_tm_sct(int timeout_ms)
 {
 	halt();
-	RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"Listen node communication: start");
+	print_info("Listen node communication: start");
 
 	bool rb = connect_socket("listen node communication",timeout_ms);
 	//if (!rb) return rb; // ? start thread anyway
@@ -52,7 +52,7 @@ void TmSctCommunication::halt()
 		}
 	}
 	if (is_connected()) {
-		RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"Listen node communication: halt");
+		print_info("Listen node communication: halt");
 		close_socket();
 	}
 }
@@ -108,12 +108,12 @@ std::string TmSctCommunication::mtx_sta_response(std::string &cmd)
 
 void TmSctCommunication::tm_sct_thread_function()
 {
-	RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"Listen node communication: thread begin");
+	print_info("Listen node communication: thread begin");
 	_keep_thread_alive = true;
 	while (_keep_thread_alive) {
 		bool reconnect = false;
 		if (!recv_init()) {
-			RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"Listen node communication: is not connected");
+			print_info("Listen node communication: is not connected");
 		}
 		while (_keep_thread_alive && is_connected() && !reconnect) {
 			TmCommRC rc = tmsct_function();
@@ -124,7 +124,7 @@ void TmSctCommunication::tm_sct_thread_function()
 			case TmCommRC::ERR:
 			case TmCommRC::NOTREADY:
 			case TmCommRC::NOTCONNECT:
-				RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"Listen node communication: rc=" << int(rc));
+				print_info("Listen node communication: rc=%d", int(rc));
 				reconnect = true;
 				break;
 			default: break;
@@ -134,7 +134,7 @@ void TmSctCommunication::tm_sct_thread_function()
 		reconnect_function();
 	}
 	close_socket();
-	RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"Listen node communication: thread end");
+	print_info("TM_SCTListen node communication: thread end");
 }
 
 void TmSctCommunication::reconnect_function()
@@ -143,18 +143,18 @@ void TmSctCommunication::reconnect_function()
 	if (_reconnect_timeval_ms <= 0) {
 		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 	}
-	RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"Listen node communication: Reconnecting.. ");
+	print_info("Listen node communication: Reconnecting.. ");
 	int cnt = 0;
 	while (_keep_thread_alive && cnt < _reconnect_timeval_ms) {
 		if (cnt % 1000 == 0) {
-			RCLCPP_DEBUG_STREAM(rclcpp::get_logger("rclcpp"),0.001 * (_reconnect_timeval_ms - cnt) << " sec...");
+			print_debug("%.1f sec...", 0.001 * (_reconnect_timeval_ms - cnt));
 		}
 		std::this_thread::sleep_for(std::chrono::milliseconds(1));
 		++cnt;
 	}
 	if (_keep_thread_alive && _reconnect_timeval_ms >= 0) {
-		RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"0 sec\nListen node communication: connect(" << (int)_reconnect_timeout_ms << "ms)...");
-		connect_socket("listen node re-connection",_reconnect_timeout_ms);
+		print_info("0 sec\n Listen node communication: connect(%dms)...", (int)_reconnect_timeout_ms);
+		connect_socket("Listen node communication",_reconnect_timeout_ms);
 	}
 }
 
@@ -176,7 +176,7 @@ TmCommRC TmSctCommunication::tmsct_function()
 		switch (pack.type) {
 		case TmPacket::Header::CPERR:
 			tmSctErrData.set_CPError(pack.data.data(), pack.data.size());
-			RCLCPP_ERROR(rclcpp::get_logger("rclcpp"),"TM_SCT: CPERR %s",tmSctErrData.error_code_str().c_str());		
+            print_error("TM_SCT: CPERR %s",tmSctErrData.error_code_str().c_str());
 			break;
 
 		case TmPacket::Header::TMSCT:
@@ -204,9 +204,9 @@ TmCommRC TmSctCommunication::tmsct_function()
 			mtx_sct_unlock();
 
 			if (sct_data.sct_has_error())
-				RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"),"TM_SCT: err: (" << sct_data.script_id() << "): " << sct_data.script());
+				print_error("TM_SCT: err: (%s): %s", sct_data.script_id().c_str(), sct_data.script());
 			else
-				RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"TM_SCT: res: (" << sct_data.script_id()<< "): " << sct_data.script());
+				print_info("TM_SCT: res: (%s): %s", sct_data.script_id().c_str(), sct_data.script());
 
 			break;
 
@@ -220,13 +220,13 @@ TmCommRC TmSctCommunication::tmsct_function()
 			TmStaData::build_TmStaData(sta_data, sta_data_tmp, TmStaData::SrcType::Deep);
 			mtx_sta_unlock();
 
-			RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"TM_STA: res: (" << sta_data.subcmd() << "): " << sta_data.subdata());
+			print_info("TM_STA: res: (%s): %s", sta_data.subcmd_str().c_str(), sta_data.subdata());
 
 			tmsta_function();
 			break;
 
 		default:
-			RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"),"TM_SCT: invalid header");
+			print_error("TM_SCT: invalid header");
 			break;
 		}
 	}
