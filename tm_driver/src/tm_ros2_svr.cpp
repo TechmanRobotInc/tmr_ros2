@@ -21,7 +21,10 @@ TmSvrRos2::TmSvrRos2(const rclcpp::NodeOptions &options, TmDriver &iface, bool s
 
     pub_reconnect_timeout_ms_ = 1000;
     pub_reconnect_timeval_ms_ = 3000;
-    pub_thread_ = std::thread(std::bind(&TmSvrRos2::publisher, this));
+
+    getDataThread = std::thread(std::bind(&TmSvrRos2::get_data_thread, this));
+    pubDataTimer = this->create_wall_timer(
+      std::chrono::milliseconds(publishTimeMs), std::bind(&TmSvrRos2::pub_data, this));
 
     connect_tm_srv_ = create_service<tm_msgs::srv::ConnectTM>(
         "connect_tmsvr", std::bind(&TmSvrRos2::connect_tmsvr, this,
@@ -45,14 +48,14 @@ TmSvrRos2::~TmSvrRos2()
     svr_.halt();
 }
 
-void TmSvrRos2::publish_fbs(TmCommRC rc)
+void TmSvrRos2::publish_fbs()
 {
     PubMsg &pm = pm_;
     TmRobotState &state = state_;
 
     // Publish feedback state
     pm.fbs_msg.header.stamp = rclcpp::Node::now();
-    if(rc != TmCommRC::TIMEOUT){
+    if(state.get_receive_state() != TmCommRC::TIMEOUT){
       pm.fbs_msg.is_svr_connected = svr_.is_connected();
       pm.fbs_msg.is_sct_connected = sct_.is_connected() & iface_.is_on_listen_node();
       pm.fbs_msg.tmsrv_cperr = (int)svr_.tmSvrErrData.error_code();  //Node State Response 
@@ -128,6 +131,11 @@ void TmSvrRos2::publish_fbs(TmCommRC rc)
     pm.tool_pose_pub->publish(pm.tool_pose_msg);
 }
 
+void TmSvrRos2::pub_data(){
+  state_.update_tm_robot_publish_state();
+  publish_fbs();
+}
+
 void TmSvrRos2::publish_svr()
 {
     PubMsg &pm = pm_;
@@ -154,7 +162,7 @@ void TmSvrRos2::publish_svr()
     pm.svr_pub->publish(pm.svr_msg);
 }
 
-bool TmSvrRos2::publish_func()
+bool TmSvrRos2::get_data_function()
 {
     TmSvrCommunication &svr = svr_;
     int n;
@@ -244,7 +252,7 @@ bool TmSvrRos2::publish_func()
         }
     }
     if (fbs) {
-        publish_fbs(rc);
+        state_.set_receive_state(rc);
     }
     if(rc == TmCommRC::TIMEOUT){
       print_once("TM_ROS: (Ethernet slave): LINK TIMEOUT");
@@ -280,11 +288,11 @@ bool TmSvrRos2::rc_halt(){  //Stop rescue connection
     return false;
 }
 
-void TmSvrRos2::publisher()
+void TmSvrRos2::get_data_thread()
 {
     TmSvrCommunication &svr = svr_;
 
-    print_info("TM_ROS: publisher thread begin");
+    print_info("TM_ROS: get data thread begin");
     initialNotConnectTime =  TmCommunication::get_current_time_in_ms();
     while (rclcpp::ok()) {
         //bool reconnect = false;
@@ -296,7 +304,6 @@ void TmSvrRos2::publisher()
             if (!svr.recv_init()) {
                 print_debug("TM_ROS: (Ethernet slave): is not connected");
                 cq_manage();
-                publish_fbs(TmCommRC::TIMEOUT);
                 if(rc_halt()) {
                     print_fatal("TM_ROS: (Ethernet slave): Ethernet slave connection stopped!");
                     if (diconnectTimes == 0)
@@ -313,7 +320,7 @@ void TmSvrRos2::publisher()
             }
             if (!iface_.get_connect_recovery_guide()) {
                 while (rclcpp::ok() && svr.is_connected()) {
-                    if (!publish_func()){
+                    if (!get_data_function()){
                         cq_monitor();
                         break;
                     }

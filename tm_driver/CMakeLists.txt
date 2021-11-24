@@ -54,6 +54,7 @@ add_executable(tm_driver
   src/tm_robot_state.cpp
   src/tm_packet.cpp
   src/tm_print.cpp
+  src/tm_driver_utilities.cpp
 )
 
 ament_target_dependencies(tm_driver
