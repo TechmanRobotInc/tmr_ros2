@@ -7,7 +7,46 @@
 #include <string>
 #include <mutex>
 #include <functional>
+#include "tm_driver_utilities.h"
 
+struct TmRobotStateData
+{
+	unsigned char is_linked;
+	unsigned char has_error;
+	unsigned char is_proj_running;
+	unsigned char is_proj_paused;
+	unsigned char is_safeguard_A_triggered;
+	unsigned char is_ESTOP_pressed;
+	unsigned char camera_light;
+	int error_code;
+	float joint_angle[6];
+	float flange_pose[6];
+	float tool_pose[6];
+	float tcp_frame[6];
+	float tcp_mass;
+	float tcp_cog[6];
+	float tcp_force_vec[3];
+	float tcp_force;
+	float tcp_speed_vec[6];
+	float tcp_speed;
+	float joint_speed[6];
+	float joint_torque[6];
+	float joint_torque_average[6] = {0};
+	float joint_torque_min[6] = {0};
+	float joint_torque_max[6] = {0};
+	int proj_speed;
+	int ma_mode;
+	char stick_play_pause;
+	int robot_light;
+	unsigned char ctrller_DO[16];
+	unsigned char ctrller_DI[16];
+	float ctrller_AO[2];
+	float ctrller_AI[2];
+	unsigned char ee_DO[4];
+	unsigned char ee_DI[4];
+	float ee_AO[2];
+	float ee_AI[2];
+};
 
 class TmDataTable;
 
@@ -22,98 +61,17 @@ public:
 
 private:
 	std::mutex mtx;
+	MultiThreadCache<TmRobotStateData> multiThreadCache;
 
 private:
 	char _buf_[256];
-	unsigned char _is_linked_;
-	unsigned char _has_error_;
-	unsigned char _is_proj_running_;
-	unsigned char _is_proj_paused_;
-	unsigned char _is_safeguard_A_triggered_;
-	unsigned char _is_ESTOP_pressed_;
-	unsigned char _camera_light_;
-
-	int _error_code_;
-
-	float _joint_angle_[DOF];
-	float _flange_pose_[6];
-	float _tool_pose_[6];
-	float _tcp_frame_[6];
-	float _tcp_mass_;
-	float _tcp_cog_[6];
-
-	float _tcp_force_vec_[3];
-	float _tcp_force_;
-	float _tcp_speed_vec_[6];
-	float _tcp_speed_;
-	float _joint_speed_[DOF];
-	float _joint_torque_[DOF];
-	float _joint_torque_average_[DOF] = {0};
-	float _joint_torque_min_[DOF] = {0};
-	float _joint_torque_max_[DOF] = {0};
-
-	int _proj_speed_;
-	int _ma_mode_;
-
-	unsigned char _stick_play_pause_;
-
-	int _robot_light_;
-
-	unsigned char _ctrller_DO_[16];
-	unsigned char _ctrller_DI_[16];
-	float _ctrller_AO_[2];
-	float _ctrller_AI_[2];
-	unsigned char _ee_DO_[4];
-	unsigned char _ee_DI_[4];
-	float _ee_AO_[2];
-	float _ee_AI_[2];
+	TmRobotStateData tmRobotStateDataFromEthernet;
 	bool isDataTableCorrect = false; 
 
 private:
-	unsigned char _is_linked;
-	unsigned char _has_error;
-	unsigned char _is_proj_running;
-	unsigned char _is_proj_paused;
-	unsigned char _is_safeguard_A_triggered;
-	unsigned char _is_ESTOP_pressed;
-	unsigned char _camera_light;
-
-	int _error_code;
-	std::string _error_content;
-
-	std::vector<double> _joint_angle;	
-	std::vector<double> _flange_pose;
-	std::vector<double> _tool_pose;
+    TmRobotStateData tmRobotStateDataToPublish;
 	
-	std::vector<double> _tcp_force_vec;
-	double _tcp_force;
-	std::vector<double> _tcp_speed_vec;
-	double _tcp_speed;
-	std::vector<double> _joint_speed;
-	std::vector<double> _joint_torque;
-    std::vector<double> _joint_torque_average;
-	std::vector<double> _joint_torque_min;
-	std::vector<double> _joint_torque_max;
-
-	std::vector<double> _tcp_frame;
-	double _tcp_mass;
-	std::vector<double> _tcp_cog;
-
-	int _proj_speed;
-	int _ma_mode;
-
-	unsigned char _stick_play_pause;
-
-	int _robot_light;
-
-	std::vector<unsigned char> _ctrller_DO;
-	std::vector<unsigned char> _ctrller_DI;
-	std::vector<float> _ctrller_AO;
-	std::vector<float> _ctrller_AI;
-	std::vector<unsigned char> _ee_DO;
-	std::vector<unsigned char> _ee_DI;
-	std::vector<float> _ee_AO;
-	std::vector<float> _ee_AI;
+    TmCommRC _receive_state;
 
 private:
 	std::function<size_t (void *, const char *, size_t)> _f_deserialize_item[2];
@@ -130,70 +88,135 @@ public:
 	~TmRobotState();
 
 public:
-	unsigned char is_linked() { return _is_linked; }
-	unsigned char has_error() { return _has_error; }
-    bool is_data_table_correct(){return isDataTableCorrect;}
-	unsigned char is_project_running() { return _is_proj_running; }
-	unsigned char is_project_paused() { return _is_proj_paused; }
+	unsigned char is_linked() { return tmRobotStateDataToPublish.is_linked; }
+	unsigned char has_error() { return tmRobotStateDataToPublish.has_error; }
+	bool is_data_table_correct() { return isDataTableCorrect; }
+	unsigned char is_project_running() { return tmRobotStateDataToPublish.is_proj_running; }
+	unsigned char is_project_paused() { return tmRobotStateDataToPublish.is_proj_paused; }
+	unsigned char is_safeguard_A() { return tmRobotStateDataToPublish.is_safeguard_A_triggered; }
+	unsigned char is_EStop() { return tmRobotStateDataToPublish.is_ESTOP_pressed; }
+	unsigned char camera_light() { return tmRobotStateDataToPublish.camera_light; } // R/W
+	int error_code() { return tmRobotStateDataToPublish.error_code; }
+	std::string error_content() { return ""; }
 
-	unsigned char is_safeguard_A() { return _is_safeguard_A_triggered; }
-	unsigned char is_EStop() { return _is_ESTOP_pressed; }
+	std::vector<double> flange_pose() { 
+		std::vector<double>  flangePose;
+		flangePose.assign(6, 0.0);
+		si_pose(flangePose, tmRobotStateDataToPublish.flange_pose, 6);
+		return flangePose;
+	}
+	std::vector<double> joint_angle(){
+		std::vector<double>  jointAngle;
+		jointAngle.assign(6, 0.0);
+		jointAngle = rads(tmRobotStateDataToPublish.joint_angle, 6);
+		return jointAngle;
+	}
+	std::vector<double> tool_pose(){
+		std::vector<double>  toolPose;
+		toolPose.assign(6, 0.0);
+		si_pose(toolPose, tmRobotStateDataToPublish.tool_pose, 6);
+		return toolPose;
+	}
+	std::vector<double> tcp_force_vec(){
+		std::vector<double>  tcpForceVec;
+		tcpForceVec.assign(3, 0.0);
+		for (int i = 0; i < 3; ++i) { tcpForceVec[i] = double(tmRobotStateDataToPublish.tcp_force_vec[i]); }
+		return tcpForceVec;
+	}
+	double tcp_force() { 
+		return tmRobotStateDataToPublish.tcp_force; 
+	}
+	std::vector<double> tcp_speed_vec(){
+		std::vector<double>  tcpSpeedVec;
+		tcpSpeedVec.assign(6, 0.0);
+		si_pose(tcpSpeedVec, tmRobotStateDataToPublish.tcp_speed_vec, 6);
+		return tcpSpeedVec;
+	}
+	double tcp_speed() { return tmRobotStateDataToPublish.tcp_speed; }
+	std::vector<double> joint_speed(){
+		std::vector<double>  jointSpeed;
+		jointSpeed.assign(6, 0.0);
+		jointSpeed = rads( tmRobotStateDataToPublish.joint_speed, 6);
+		return jointSpeed;
+	} 
+	std::vector<double> joint_torque(){
+		std::vector<double>  jointTorque;
+		jointTorque.assign(6, 0.0);
+		jointTorque = meters( tmRobotStateDataToPublish.joint_torque, 6);
+		return jointTorque;
+	}
+	std::vector<double> joint_torque_average(){
+		std::vector<double>  jointTorqueAverage;
+		jointTorqueAverage.assign(6, 0.0);
+		jointTorqueAverage = meters( tmRobotStateDataToPublish.joint_torque_average, 6);
+		return jointTorqueAverage;
+	}
+	std::vector<double> joint_torque_min() {
+		std::vector<double>  jointTorqueMin;
+		jointTorqueMin.assign(6, 0.0);
+		jointTorqueMin = meters( tmRobotStateDataToPublish.joint_torque_min, 6);
+		return jointTorqueMin;
+	}
+	std::vector<double> joint_torque_max() {
+		std::vector<double>  jointTorqueMax;
+		jointTorqueMax.assign(6, 0.0);
+		jointTorqueMax = meters( tmRobotStateDataToPublish.joint_torque_max, 6);
+		return jointTorqueMax;
+	}
 
-	unsigned char camera_light() { return _camera_light; } // R/W
+	int project_speed() { return tmRobotStateDataToPublish.proj_speed; }
+	int ma_mode() { return tmRobotStateDataToPublish.ma_mode; }
+	unsigned char stick_play_pause() { return tmRobotStateDataToPublish.stick_play_pause; } // R/W
+	int robot_light() { return tmRobotStateDataToPublish.robot_light; }
 
-	int error_code() { return _error_code; }
-	std::string error_content() { return _error_content; }
-
-	std::vector<double> flange_pose() { return _flange_pose; }
-	std::vector<double> joint_angle() { return _joint_angle; }
-	std::vector<double> tool_pose() { return _tool_pose; }
-
-	std::vector<double> tcp_force_vec() { return _tcp_force_vec; }
-	double tcp_force() { return _tcp_force; }
-	std::vector<double> tcp_speed_vec() { return _tcp_speed_vec; }
-	double tcp_speed() { return _tcp_speed; }
-	std::vector<double> joint_speed() { return _joint_speed; }
-	std::vector<double> joint_torque() { return _joint_torque; }
-	std::vector<double> joint_torque_average() { return _joint_torque_average; }
-	std::vector<double> joint_torque_min() { return _joint_torque_min; }
-	std::vector<double> joint_torque_max() { return _joint_torque_max; }
-
-	int project_speed() { return _proj_speed; }
-	int ma_mode() { return _ma_mode; }
-
-	unsigned char stick_play_pause() { return _stick_play_pause; } // R/W
-
-	int robot_light() { return _robot_light; }
-
-	std::vector<unsigned char> ctrller_DO() { return _ctrller_DO; }
-	std::vector<unsigned char> ctrller_DI() { return _ctrller_DI; }
-	std::vector<float> ctrller_AO() { return _ctrller_AO; }
-	std::vector<float> ctrller_AI() { return _ctrller_AI; }
-
-	std::vector<unsigned char> ee_DO() { return _ee_DO; }
-	std::vector<unsigned char> ee_DI() { return _ee_DI; }
-	//std::vector<float> ee_AO() { return _ee_AO; }
-	std::vector<float> ee_AI() { return _ee_AI; }
+	std::vector<unsigned char> ctrller_DO(){
+		std::vector<unsigned char>  ctrllerDO;
+		ctrllerDO.assign(8, 0.0);
+		for (int i = 0; i < 8; ++i) { ctrllerDO[i] = tmRobotStateDataToPublish.ctrller_DO[i]; }
+		return ctrllerDO;
+	}
+	std::vector<unsigned char> ctrller_DI() {
+		std::vector<unsigned char>  ctrllerDI;
+		ctrllerDI.assign(8, 0.0);
+		for (int i = 0; i < 8; ++i) { ctrllerDI[i] = tmRobotStateDataToPublish.ctrller_DI[i]; }
+	    return ctrllerDI; 
+	}
+	std::vector<float> ctrller_AO(){
+		std::vector<float>  ctrllerAO;
+		ctrllerAO.assign(1, 0.0);
+		for (int i = 0; i < 1; ++i) { ctrllerAO[i] = tmRobotStateDataToPublish.ctrller_AO[i]; }
+	    return ctrllerAO; 
+	}
+	std::vector<float> ctrller_AI(){
+        std::vector<float>  ctrllerAI;
+		ctrllerAI.assign(2, 0.0);
+		for (int i = 0; i < 2; ++i) { ctrllerAI[i] = tmRobotStateDataToPublish.ctrller_AI[i]; }
+	    return ctrllerAI; 
+	}
+	std::vector<unsigned char> ee_DO(){
+		std::vector<unsigned char>  eeDO;
+		eeDO.assign(4, 0.0);
+		for (int i = 0; i < 4; ++i) { eeDO[i] = tmRobotStateDataToPublish.ee_DO[i]; }
+	    return eeDO; 
+	}
+	std::vector<unsigned char> ee_DI(){
+		std::vector<unsigned char>  eeDI;
+		eeDI.assign(4, 0.0);
+		for (int i = 0; i < 4; ++i) { eeDI[i] = tmRobotStateDataToPublish.ee_DI[i]; }
+	    return eeDI; 
+	}	
+	std::vector<float> ee_AI(){
+        std::vector<float>  eeAI;
+		eeAI.assign(1, 0.0);
+		for (int i = 0; i < 1; ++i) { eeAI[i] = tmRobotStateDataToPublish.ee_AI[i]; }
+	    return eeAI; 
+	}
+	
+    TmCommRC get_receive_state(){return _receive_state;}
 
 public:
 	void mtx_lock() { mtx.lock(); }
 	void mtx_unlock() { mtx.unlock(); }
-
-	std::vector<double> mtx_flange_pose();
-	std::vector<double> mtx_joint_angle();
-	std::vector<double> mtx_tool_pose();
-
-	std::string mtx_error_content();
-
-	std::vector<unsigned char> mtx_ctrller_DO();
-	std::vector<unsigned char> mtx_ctrller_DI();
-	std::vector<float> mtx_ctrller_AO();
-	std::vector<float> mtx_ctrller_AI();
-
-	std::vector<unsigned char> mtx_ee_DO();
-	std::vector<unsigned char> mtx_ee_DI();
-	//std::vector<float> mtx_ee_AO();
-	std::vector<float> mtx_ee_AI();
 
 private:
 	static double meter(double mm)
@@ -230,12 +253,10 @@ private:
 	}
 
 private:
-	static size_t _deserialize_get_name(std::string &name, const char *data, size_t offset);
 	static size_t _deserialize_skip(void *dst, const char *data, size_t offset);
 	static size_t _deserialize_copy_wo_check(void *dst, const char *data, size_t offset);
-	size_t _deserialize_first_time(const char *data, size_t size, bool lock);
-	size_t _deserialize(const char *data, size_t size, bool use_mtx);
-	void _deserialize_update(bool lock);
+	size_t _deserialize_first_time(const char *data, size_t size);
+	size_t _deserialize(const char *data, size_t size);
 
 public:
 	size_t deserialize(const char *data, size_t size)
@@ -246,6 +267,7 @@ public:
 	{
 		return _f_deserialize(data, size, true);
 	}
-
+	void set_receive_state(TmCommRC state);
+	void update_tm_robot_publish_state();
 	void print();
 };

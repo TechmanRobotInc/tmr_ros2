@@ -13,7 +13,7 @@
 #include "tm_msgs/srv/write_item.hpp"
 #include "tm_msgs/srv/ask_item.hpp"
 
-
+using namespace std::chrono_literals;
 
 class TmSvrRos2 : public rclcpp::Node
 {
@@ -41,6 +41,7 @@ public:
     uint64_t notConnectTimeInS = 0;
     int maxTrialTimeInMinute = -1;
     uint64_t maxNotConnectTimeInS = 0;
+    int publishTimeMs = 15;
     bool svr_updated_;
     std::mutex svr_mtx_;
     std::condition_variable svr_cv_;
@@ -48,6 +49,8 @@ public:
     int pub_reconnect_timeout_ms_;
     int pub_reconnect_timeval_ms_;
     std::thread pub_thread_;
+    std::thread getDataThread;
+    rclcpp::TimerBase::SharedPtr pubDataTimer;
 
     rclcpp::Service<tm_msgs::srv::ConnectTM>::SharedPtr connect_tm_srv_;
 
@@ -59,10 +62,12 @@ public:
     ~TmSvrRos2();
 
 protected:
-    void publish_fbs(TmCommRC rc);
+    void publish_fbs();
     void publish_svr();
-    bool publish_func();
+    bool get_data_function();
+    void get_data_thread();
     void publisher();
+    void pub_data();
     void svr_connect_recover();
     void cq_monitor();//Connection quality
     void cq_manage();

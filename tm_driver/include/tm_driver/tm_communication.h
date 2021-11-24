@@ -5,17 +5,7 @@
 #include <chrono>
 #include <thread>
 #include <condition_variable>
-
-
-enum class TmCommRC {
-	ERR = -1,
-	OK = 0,
-	TIMEOUT,
-	NOTREADY,
-	NOTCONNECT,
-	NOTSENDALL,
-	NOVALIDPACK,
-};
+#include "tm_driver_utilities.h"
 
 class TmCommRecv;
 
