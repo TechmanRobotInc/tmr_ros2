@@ -139,6 +139,17 @@ Enable the `Data Table Setting` item and check the following boxes as item prede
 > source ./install/setup.bash
 > ```
 >
+> :bulb: If you have built the TM driver before, you must use `colcon build --cmake-clean-cache` or `colcon build --cmake-force-configure` instead of `colcon build` in the previous step to force execution CMake configuration step, for example<br/>
+>
+>
+> ```bash
+> source /opt/ros/foxy/setup.bash
+> source ~/COLCON_WS/install/setup.bash
+> cd ~/tmdriver_ws 
+> colcon build --cmake-clean-cache
+> source ./install/setup.bash
+> ```
+>
 > :bulb: Do you prepare the __TM Robot__ ready ? Make sure that TM Robot's operating software (__TMflow__) network settings are ready and the _Listen task_ project is running.<br/>
 >
 > The demo launches the RViz GUI and demonstrates planning and execution of a simple collision-free motion plan with TM Robot.
