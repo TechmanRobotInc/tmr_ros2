@@ -19,7 +19,8 @@ More information: TM ROS driver support list
 |[**<font color=#808080>ROS 2 Foxy Fitzroy**](https://index.ros.org/doc/ros2/Releases/Release-Foxy-Fitzroy/)|[**<font color=#800000>TM ROS2 Foxy driver**](https://github.com/TechmanRobotInc/tmr_ros2)|supported|master|
 |[**<font color=#808080>ROS 2 Dashing Diademata**](https://index.ros.org/doc/ros2/Releases/Release-Dashing-Diademata/)|[**<font color=#800000>TM ROS2 Dashing driver**](https://github.com/TechmanRobotInc/tmr_ros2/tree/dashing-devel)|supported|dashing-devel|
 
-Note: The two current master branches are ROS1 Melodic and ROS2 Foxy.<br/>
+Note1: The two current master branches are ROS1 Melodic and ROS2 Foxy.<br/>
+Note2: The tutorial that follows mentioned how to build a ROS environment on Ubuntu by sourcing is to take the ROS installed through the Debian packages as an example.<br/>
 
 
 ### __ROS2 Driver__
@@ -100,7 +101,7 @@ Enable the `Data Table Setting` item and check the following boxes as item prede
 
 > __ROS2 driver usage__
 > 
-> After the user has set up the ROS2 environment and built the TM driver based on the specific workspace, please enter your workspace `<workspace>` by launching the terminal, and remember to make the workspace visible to ROS. 
+> After the user has set up the ROS2 environment (example : [Debian packages for ROS 2 Foxy](https://docs.ros.org/en/foxy/Installation/Ubuntu-Install-Debians.html)) and built the TM driver based on the specific workspace, please enter your workspace `<workspace>` by launching the terminal, and remember to make the workspace visible to ROS. 
 >
 >
 > ```bash
