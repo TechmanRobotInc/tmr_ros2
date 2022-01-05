@@ -22,7 +22,7 @@ setup(
     keywords=['ROS'],
     classifiers=[
         'Intended Audience :: Developers',
-        'License :: OSI Approved :: Apache Software License',
+        'License :: OSI Approved :: BSD License',
         'Programming Language :: Python',
         'Topic :: Software Development',
     ],
@@ -30,7 +30,7 @@ setup(
         'Python nodes which were previously in the ros2/examples repository '
         'but are now just used for demo purposes.'
     ),
-    license='Apache License, Version 2.0',
+    license='BSD License',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [

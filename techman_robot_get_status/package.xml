@@ -2,12 +2,12 @@
 <?xml-model href="http://download.ros.org/schema/package_format2.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="2">
   <name>tm_get_status</name>
-  <version>0.7.6</version>
+  <version>1.0.0</version>
   <description>
     this is techman robot python scripts
   </description>
   <maintainer email="leo.wu@tm-robot.com">Jufeng wu</maintainer>
-  <license>Apache License 2.0</license>
+  <license>BSD</license>
 
   <author>Jufeng wu</author>
   <author email="leo.wu@tm-robot.com">Jufeng wu</author>
