@@ -3,19 +3,12 @@
 <package format="2">
   <name>tm_get_status</name>
   <version>1.0.0</version>
-  <description>
-    this is techman robot python scripts
-  </description>
-  <maintainer email="leo.wu@tm-robot.com">Jufeng wu</maintainer>
+  <description>techman robot get status python scripts</description>
+  <maintainer email="leo.wu@tm-robot.com">leo wu</maintainer>
   <license>BSD</license>
 
-  <author>Jufeng wu</author>
-  <author email="leo.wu@tm-robot.com">Jufeng wu</author>
-
-  <exec_depend>example_interfaces</exec_depend>
   <exec_depend>rclpy</exec_depend>
   <exec_depend>std_msgs</exec_depend>
-  <exec_depend>my_msgs</exec_depend>
 
   <test_depend>ament_copyright</test_depend>
   <test_depend>ament_flake8</test_depend>
