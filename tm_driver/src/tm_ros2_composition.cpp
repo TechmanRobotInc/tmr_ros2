@@ -85,18 +85,23 @@ int main(int argc, char *argv[])
       }
     }
 
-    rclcpp::executors::SingleThreadedExecutor exec;
+    //rclcpp::executors::SingleThreadedExecutor exec;
     rclcpp::NodeOptions options;
 
     //std::condition_variable sct_cv;
     TmDriver iface(host, nullptr, nullptr);
 
-    auto tm_svr = std::make_shared<TmSvrRos2>(options, iface);
+    /*auto tm_svr = std::make_shared<TmSvrRos2>(options, iface);
     exec.add_node(tm_svr);
     auto tm_sct = std::make_shared<TmSctRos2>(options, iface);
-    exec.add_node(tm_sct);
+    exec.add_node(tm_sct);*/
 
-    exec.spin();
+    rclcpp::Node::SharedPtr node = rclcpp::Node::make_shared("tm_driver_node");
+
+    //exec.spin();
+    auto tm_svr = std::make_shared<TmSvrRos2>(node, iface);
+    auto tm_sct = std::make_shared<TmSctRos2>(node, iface);
+    rclcpp::spin(node);
 
     //iface.halt();
 

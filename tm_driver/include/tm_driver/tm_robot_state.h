@@ -214,9 +214,29 @@ public:
 	
     TmCommRC get_receive_state(){return _receive_state;}
 
+	void set_joint_states(
+		const std::vector<double> &pos,
+		const std::vector<double> &vel,
+		const std::vector<double> &tor);
+
 public:
 	void mtx_lock() { mtx.lock(); }
 	void mtx_unlock() { mtx.unlock(); }
+
+	std::vector<double> mtx_tcp_force_vec();
+	std::vector<double> mtx_tcp_speed_vec();
+
+	std::vector<double> mtx_joint_speed();
+	std::vector<double> mtx_joint_torque();
+
+	void mtx_set_joint_states(
+		const std::vector<double> &pos,
+		const std::vector<double> &vel,
+		const std::vector<double> &tor)
+	{
+		std::lock_guard<std::mutex> lck(mtx);
+		set_joint_states(pos, vel, tor);
+	}
 
 private:
 	static double meter(double mm)

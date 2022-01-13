@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>tm_moveit_cpp_demo</name>
+  <version>1.0.0</version>
+  <description>techman robot vs moveit demo</description>
+  <maintainer email="ken.tsai@tm-robot.com">Ken Tsai</maintainer>
+  <maintainer email="leo.wu@tm-robot.com">leowu</maintainer>
+  <maintainer email="yh.wang@tm-robot.com">Yh Wang</maintainer>
+  <license>BSD</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <depend>moveit_ros_planning_interface</depend>
+
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

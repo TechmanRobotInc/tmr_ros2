@@ -94,4 +94,11 @@ public:
 	void back_to_listen_node();
 	bool get_connect_recovery_guide();
 	void set_connect_recovery_guide(bool is_halt);
+
+	void cubic_interp(TmPvtPoint &p, const TmPvtPoint &p0, const TmPvtPoint &p1, double t);
+	bool fake_run_pvt_traj(const TmPvtTraj &pvts);
+
+	bool set_vel_mode_start(VelMode mode, double timeout_zero_vel, double timeout_stop, const std::string &id = "VModeStart");
+	bool set_vel_mode_stop(const std::string &id = "VModeStop");
+	bool set_vel_mode_target(VelMode mode, const std::vector<double> &vel, const std::string &id = "VModeTrgt");
 };

@@ -157,13 +157,13 @@ Enable the `Data Table Setting` item and check the following boxes as item prede
 > To bring up MoveIt2 demo environment in simulation mode with virtual TM Robot, by typing
 >
 > ```bash
-> ros2 launch tmr_moveit_cpp_demo run_moveit_cpp.launch.py
+> ros2 launch tm_moveit_cpp_demo run_moveit_cpp.launch.py
 > ```
 >
 > The user can also manipulate real TM Robot to run, by typing<br/>
 >
 > ```bash
-> ros2 launch tmr_moveit_cpp_demo run_moveit_cpp.launch.py robot_ip:=<robot_ip_address>
+> ros2 launch tm_moveit_cpp_demo run_moveit_cpp.launch.py robot_ip:=<robot_ip_address>
 > ```
 >
 > The parameter `<robot_ip_address>` means the IP address of the TM Robot.<br/>

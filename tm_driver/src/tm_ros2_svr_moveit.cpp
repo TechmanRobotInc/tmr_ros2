@@ -1,51 +1,114 @@
-#include "tm_driver/tm_ros2_svr.h"
+#include "tm_driver/tm_ros2_svr_moveit.h"
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
-TmSvrRos2::TmSvrRos2(rclcpp::Node::SharedPtr node, TmDriver &iface, bool stick_play)
+TmSvrRos2::TmSvrRos2(rclcpp::Node::SharedPtr node, TmDriver &iface, bool is_fake, bool stick_play)
     : node(node)
     , svr_(iface.svr)
     , state_(iface.state)
     , sct_(iface.sct)
     , iface_(iface)
+    , is_fake_(is_fake)
 {
-    bool rb = svr_.start_tm_svr(5000);
-    if (rb && stick_play) {
-        svr_.send_stick_play();
+    if (!is_fake_) {
+      bool rb = svr_.start_tm_svr(5000);
+      if (rb && stick_play) {
+          svr_.send_stick_play();
+      }
     }
+    else {
+      std::vector<double> zeros(state_.DOF);
+      state_.set_joint_states(zeros, zeros, zeros);
+    }
+
+    jns_.clear();
+    jns_.push_back("joint_1");
+    jns_.push_back("joint_2");
+    jns_.push_back("joint_3");
+    jns_.push_back("joint_4");
+    jns_.push_back("joint_5");
+    jns_.push_back("joint_6");
 
     pm_.fbs_pub = node->create_publisher<tm_msgs::msg::FeedbackState>("feedback_states", 1);
     pm_.joint_pub = node->create_publisher<sensor_msgs::msg::JointState>("joint_states", 1);
     pm_.tool_pose_pub = node->create_publisher<geometry_msgs::msg::PoseStamped>("tool_pose", 1);
-    pm_.svr_pub = node->create_publisher<tm_msgs::msg::SvrResponse>("svr_response", 1);
+    if (!is_fake_) {
+      pm_.svr_pub = node->create_publisher<tm_msgs::msg::SvrResponse>("svr_response", 1);
+    }
+    pm_.joint_msg.name = jns_;
+    pm_.joint_msg.position.assign(6, 0.0);
+    pm_.joint_msg.velocity.assign(6, 0.0);
+    pm_.joint_msg.effort.assign(6, 0.0);
 
     svr_updated_ = false;
 
     pub_reconnect_timeout_ms_ = 1000;
     pub_reconnect_timeval_ms_ = 3000;
+    if (!is_fake_) {
+      getDataThread = std::thread(std::bind(&TmSvrRos2::get_data_thread, this));
+      pubDataTimer = node->create_wall_timer(
+        std::chrono::milliseconds(publishTimeMs), std::bind(&TmSvrRos2::pub_data, this));
 
-    getDataThread = std::thread(std::bind(&TmSvrRos2::get_data_thread, this));
-    pubDataTimer = node->create_wall_timer(
-      std::chrono::milliseconds(publishTimeMs), std::bind(&TmSvrRos2::pub_data, this));
+      connect_tm_srv_ = node->create_service<tm_msgs::srv::ConnectTM>(
+          "connect_tmsvr", std::bind(&TmSvrRos2::connect_tmsvr, this,
+          std::placeholders::_1, std::placeholders::_2));
 
-    connect_tm_srv_ = node->create_service<tm_msgs::srv::ConnectTM>(
-        "connect_tmsvr", std::bind(&TmSvrRos2::connect_tmsvr, this,
-        std::placeholders::_1, std::placeholders::_2));
-
-    write_item_srv_ = node->create_service<tm_msgs::srv::WriteItem>(
-        "write_item", std::bind(&TmSvrRos2::write_item, this,
-        std::placeholders::_1, std::placeholders::_2));
+      write_item_srv_ = node->create_service<tm_msgs::srv::WriteItem>(
+          "write_item", std::bind(&TmSvrRos2::write_item, this,
+          std::placeholders::_1, std::placeholders::_2));
         
-    ask_item_srv_ = node->create_service<tm_msgs::srv::AskItem>(
-        "ask_item", std::bind(&TmSvrRos2::ask_item, this,
-        std::placeholders::_1, std::placeholders::_2));
+      ask_item_srv_ = node->create_service<tm_msgs::srv::AskItem>(
+          "ask_item", std::bind(&TmSvrRos2::ask_item, this,
+          std::placeholders::_1, std::placeholders::_2));
+    }
+    else {
+      getDataThread = std::thread(std::bind(&TmSvrRos2::fake_publisher, this));
+      pubDataTimer = node->create_wall_timer(
+        std::chrono::milliseconds(publishTimeMs), std::bind(&TmSvrRos2::pub_data, this));
+    }
 }
 
 TmSvrRos2::~TmSvrRos2()
 {
     print_info("TM_ROS: (Ethernet slave) halt");		
+
+    if (getDataThread.joinable()) {
+      getDataThread.join();
+    }
+
+    if (is_fake_) return;
+
     svr_updated_ = true;
     svr_cv_.notify_all();
     if (svr_.is_connected()) {}
     svr_.halt();
+}
+
+void TmSvrRos2::fake_publisher()
+{
+    PubMsg &pm = pm_;
+    TmRobotState &state = state_;
+
+    print_once("TM_ROS: fake publisher thread begin");		
+
+    while (rclcpp::ok()) {
+      // Publish feedback state
+      pm.fbs_msg.header.stamp = node->rclcpp::Node::now();
+      {
+        pm.fbs_msg.joint_pos = state.joint_angle();
+        pm.fbs_msg.joint_vel = state.joint_speed();
+        pm.fbs_msg.joint_tor = state.joint_torque();
+      }
+      pm.fbs_pub->publish(pm.fbs_msg);
+
+      // Publish joint state
+      pm.joint_msg.header.stamp = pm.fbs_msg.header.stamp;
+      pm.joint_msg.position = pm.fbs_msg.joint_pos;
+      pm.joint_msg.velocity = pm.fbs_msg.joint_vel;
+      pm.joint_msg.effort = pm.fbs_msg.joint_tor;
+      pm.joint_pub->publish(pm.joint_msg);
+
+      std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    }
+    print_once("TM_ROS: fake publisher thread end\n");	
 }
 
 void TmSvrRos2::publish_fbs()
@@ -123,6 +186,7 @@ void TmSvrRos2::publish_fbs()
     auto &pose = pm.fbs_msg.tool_pose;
     tf2::Quaternion quat;
     quat.setRPY(pose[3], pose[4], pose[5]);
+    // tf2::Transform Tbt{ quat, tf2::Vector3(pose[0], pose[1], pose[2]) };
     pm.tool_pose_msg.header.stamp = pm.joint_msg.header.stamp;
     pm.tool_pose_msg.pose.position.x = pose[0];
     pm.tool_pose_msg.pose.position.y = pose[1];

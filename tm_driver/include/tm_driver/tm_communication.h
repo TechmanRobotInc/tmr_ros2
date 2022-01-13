@@ -57,6 +57,12 @@ public:
 
 	TmCommRC send_packet_(TmPacket &packet, int *n = nullptr);
 
+	TmCommRC send_packet_silent(TmPacket &packet, int *n = nullptr);
+	
+	TmCommRC send_packet_silent_all(TmPacket &packet, int *n = nullptr);
+	
+	TmCommRC send_packet_silent_(TmPacket &packet, int *n = nullptr);
+
 	bool recv_init();
 
 	TmCommRC recv_spin_once(int timeval_ms, int *n = NULL);

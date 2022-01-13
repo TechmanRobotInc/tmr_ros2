@@ -3,6 +3,10 @@
 
 #include <rclcpp/rclcpp.hpp>
 
+#include <trajectory_msgs/msg/joint_trajectory.hpp>
+#include <control_msgs/action/follow_joint_trajectory.hpp>
+#include <rclcpp_action/rclcpp_action.hpp>
+
 #include "tm_msgs/msg/sct_response.hpp"
 #include "tm_msgs/msg/sta_response.hpp"
 
@@ -22,7 +26,16 @@ class TmSctRos2
 public:
     rclcpp::Node::SharedPtr node;
     TmSctCommunication &sct_;
+    TmSvrCommunication &svr_;
     TmDriver &iface_;
+    TmRobotState &state_;
+
+protected:
+  bool is_fake_;
+
+public:
+    std::vector<std::string> jns_;
+
     std::mutex checkIsOnListenNodeMutex;
     std::condition_variable checkIsOnListenNodeCondVar;
     std::mutex firstCheckIsOnListenNodeMutex;
@@ -55,8 +68,13 @@ public:
 
     rclcpp::Service<tm_msgs::srv::AskSta>::SharedPtr ask_sta_srv_;
 
+    rclcpp_action::Server<control_msgs::action::FollowJointTrajectory>::SharedPtr as_;
+    std::mutex as_mtx_;
+    std::string goal_id_;
+    bool has_goal_;
+
 public:
-    explicit TmSctRos2(rclcpp::Node::SharedPtr node, TmDriver &iface);
+    explicit TmSctRos2(rclcpp::Node::SharedPtr node, TmDriver &iface, bool is_fake);
     ~TmSctRos2();
 
 protected:
@@ -90,4 +108,29 @@ public:
         const std::shared_ptr<tm_msgs::srv::AskSta::Request> req,
         std::shared_ptr<tm_msgs::srv::AskSta::Response> res);
 
+protected:
+  rclcpp_action::GoalResponse handle_goal(const rclcpp_action::GoalUUID & uuid,
+    std::shared_ptr<const control_msgs::action::FollowJointTrajectory::Goal> goal
+  );
+  rclcpp_action::CancelResponse handle_cancel(
+    const std::shared_ptr<rclcpp_action::ServerGoalHandle<control_msgs::action::FollowJointTrajectory>> goal_handle
+  );
+  void handle_accepted(
+    std::shared_ptr<rclcpp_action::ServerGoalHandle<control_msgs::action::FollowJointTrajectory>> goal_handle
+  );
+  void execute_traj(
+    const std::shared_ptr<rclcpp_action::ServerGoalHandle<control_msgs::action::FollowJointTrajectory>> goal_handle
+  );
+
+  void reorder_traj_joints(
+    std::vector<trajectory_msgs::msg::JointTrajectoryPoint> &new_traj_points,
+    const trajectory_msgs::msg::JointTrajectory &traj
+  );
+  bool has_points(const trajectory_msgs::msg::JointTrajectory &traj);
+  bool is_traj_finite(const trajectory_msgs::msg::JointTrajectory &traj);
+  bool is_positions_match(const trajectory_msgs::msg::JointTrajectoryPoint &point, double eps = 0.01);
+  void set_pvt_traj(TmPvtTraj &pvts, const std::vector<trajectory_msgs::msg::JointTrajectoryPoint> &traj_points, double Tmin = 0.1);
+  std::shared_ptr<TmPvtTraj> get_pvt_traj(
+    const std::vector<trajectory_msgs::msg::JointTrajectoryPoint> &traj_points, double Tmin = 0.1
+  );
 };

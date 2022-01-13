@@ -2,20 +2,13 @@
 <?xml-model href="http://download.ros.org/schema/package_format2.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="2">
   <name>tm_get_status</name>
-  <version>0.7.6</version>
-  <description>
-    this is techman robot python scripts
-  </description>
-  <maintainer email="leo.wu@tm-robot.com">Jufeng wu</maintainer>
-  <license>Apache License 2.0</license>
+  <version>1.0.0</version>
+  <description>techman robot get status python scripts</description>
+  <maintainer email="leo.wu@tm-robot.com">leo wu</maintainer>
+  <license>BSD</license>
 
-  <author>Jufeng wu</author>
-  <author email="leo.wu@tm-robot.com">Jufeng wu</author>
-
-  <exec_depend>example_interfaces</exec_depend>
   <exec_depend>rclpy</exec_depend>
   <exec_depend>std_msgs</exec_depend>
-  <exec_depend>my_msgs</exec_depend>
 
   <test_depend>ament_copyright</test_depend>
   <test_depend>ament_flake8</test_depend>

@@ -5,9 +5,8 @@ package_name = 'tm_get_status'
 
 setup(
     name=package_name,
-    version='0.0.1',
+    version='1.0.0',
     packages=find_packages(exclude=['test']),
-#    packages=find_packages(exclude=['my_msgs']),
     data_files=[
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
@@ -15,22 +14,10 @@ setup(
     ],
     install_requires=['setuptools'],
     zip_safe=True,
-    author='leowu',
-    author_email='leo.wu@tm-robot.com',
-    maintainer='Jufeng Wu',
+    maintainer='leowu',
     maintainer_email='leo.wu@tm-robot.com',
-    keywords=['ROS'],
-    classifiers=[
-        'Intended Audience :: Developers',
-        'License :: OSI Approved :: Apache Software License',
-        'Programming Language :: Python',
-        'Topic :: Software Development',
-    ],
-    description=(
-        'Python nodes which were previously in the ros2/examples repository '
-        'but are now just used for demo purposes.'
-    ),
-    license='Apache License, Version 2.0',
+    description='techman robot get status python scripts',
+    license='BSD',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [

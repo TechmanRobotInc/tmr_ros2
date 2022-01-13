@@ -20,6 +20,8 @@ struct TmPvtTraj {
 	double total_time;
 };
 
+enum class VelMode { Joint, Tool };
+
 class TmCommand
 {
 public:
@@ -143,4 +145,8 @@ public:
 	total_time	: total time
 	More details please refer to the TM_Robot_Expression.pdf Chapter 9.18 */
 	static std::string set_pvt_traj(const TmPvtTraj &pvts, int precision = 5);
+
+	static std::string set_vel_mode_start(VelMode mode, double timeout_zero_vel, double timeout_stop);
+	static std::string set_vel_mode_stop() { return "StopContinueVmode()"; }
+	static std::string set_vel_mode_target(VelMode mode, const std::vector<double> &vel, int precision = 5);
 };

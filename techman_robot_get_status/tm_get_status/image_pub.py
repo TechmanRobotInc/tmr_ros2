@@ -202,6 +202,7 @@ def main():
     signal.signal(signal.SIGINT, node.signal_handler)
     
     rclpy.spin(node)
+
     node.destroy_node()
     rclpy.shutdown()
 

@@ -21,6 +21,9 @@ public:
 	TmSvrData data;
 	TmRobotState state;
 
+private:
+	std::mutex _mtx;
+
 public:
 	explicit TmSvrCommunication(const std::string &ip,
 		int recv_buf_len, std::condition_variable *cv = nullptr);

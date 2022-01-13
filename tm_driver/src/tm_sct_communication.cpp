@@ -50,6 +50,8 @@ void TmSctCommunication::halt()
 		if (_recv_thread.joinable()) {
 			_recv_thread.join();
 		}
+		_updated = true;
+		_cv->notify_all();
 	}
 	if (is_connected()) {
 		print_info("Listen node communication: halt");
@@ -73,6 +75,14 @@ TmCommRC TmSctCommunication::send_script_str(const std::string &id, const std::s
 	return send_packet_all(pack);
 }
 
+TmCommRC TmSctCommunication::send_script_str_silent(const std::string &id, const std::string &script)
+{
+	std::string sct = script;
+	TmSctData cmd{ id, sct.data(), sct.size(), TmSctData::SrcType::Shallow };
+	TmPacket pack{ cmd };
+	return send_packet_silent_all(pack);
+}
+
 TmCommRC TmSctCommunication::send_script_exit()
 {
 	return send_script_str("Exit", "ScriptExit()");
@@ -89,20 +99,22 @@ TmCommRC TmSctCommunication::send_sta_request(const std::string &subcmd, const s
 std::string TmSctCommunication::mtx_sct_response(std::string &id)
 {
 	std::string rs;
-	mtx_sct_lock();
-	id = sct_data.script_id();
-	rs = std::string{ sct_data.script(), sct_data.script_len() };
-	mtx_sct_unlock();
+	{
+		std::lock_guard<std::mutex> lck(mtx_sct);
+		id = sct_data.script_id();
+		rs = std::string{ sct_data.script(), sct_data.script_len() };
+	}
 	return rs;
 }
 
 std::string TmSctCommunication::mtx_sta_response(std::string &cmd)
 {
 	std::string rs;
-	mtx_sta_lock();
-	cmd = sta_data.subcmd_str();
-	rs = std::string{ sta_data.subdata(), sta_data.subdata_len() };
-	mtx_sta_unlock();
+	{
+		std::lock_guard<std::mutex> lck(mtx_sta);
+		cmd = sta_data.subcmd_str();
+		rs = std::string{ sta_data.subdata(), sta_data.subdata_len() };
+	}
 	return rs;
 }
 
@@ -117,7 +129,10 @@ void TmSctCommunication::tm_sct_thread_function()
 		}
 		while (_keep_thread_alive && is_connected() && !reconnect) {
 			TmCommRC rc = tmsct_function();
-			_updated = true;
+			{
+				std::lock_guard<std::mutex> lck(_mtx);
+				_updated = true;
+			}
 			_cv->notify_all();
 
 			switch (rc) {
@@ -184,12 +199,11 @@ TmCommRC TmSctCommunication::tmsct_function()
 			tmSctErrData.error_code(TmCPError::Code::Ok);
 
 			/*TmSctData::build_TmSctData(sct_data, pack.data.data(), pack.data.size(), TmSctData::SrcType::Shallow);
-			
-			mtx_sct_lock();
-			_sct_res_id = sct_data.script_id();
-			_sct_res_script = std::string{ sct_data.script(), sct_data.script_len() };
-			mtx_sct_unlock();
-
+			{
+				std::lock_guard<std::mutex> lck(mtx_sct);
+				_sct_res_id = sct_data.script_id();
+				_sct_res_script = std::string{ sct_data.script(), sct_data.script_len() };
+			}
 			if (sct_data.has_error()) {
 				print_error("TM_SCT: err: (%s) %s", _sct_res_id.c_str(), _sct_res_script.c_str());
 			}
@@ -198,11 +212,10 @@ TmCommRC TmSctCommunication::tmsct_function()
 			}*/
 
 			TmSctData::build_TmSctData(sct_data_tmp, pack.data.data(), pack.data.size(), TmSctData::SrcType::Shallow);
-
-			mtx_sct_lock();
-			TmSctData::build_TmSctData(sct_data, sct_data_tmp, TmSctData::SrcType::Deep);
-			mtx_sct_unlock();
-
+			{
+				std::lock_guard<std::mutex> lck(mtx_sct);
+				TmSctData::build_TmSctData(sct_data, sct_data_tmp, TmSctData::SrcType::Deep);
+			}
 			if (sct_data.sct_has_error())
 				print_error("TM_SCT: err: (%s): %s", sct_data.script_id().c_str(), sct_data.script());
 			else
@@ -215,11 +228,10 @@ TmCommRC TmSctCommunication::tmsct_function()
 			tmSctErrData.error_code(TmCPError::Code::Ok);
 
 			TmStaData::build_TmStaData(sta_data_tmp, pack.data.data(), pack.data.size(), TmStaData::SrcType::Shallow);
-
-			mtx_sta_lock();
-			TmStaData::build_TmStaData(sta_data, sta_data_tmp, TmStaData::SrcType::Deep);
-			mtx_sta_unlock();
-
+			{
+				std::lock_guard<std::mutex> lck(mtx_sta);
+				TmStaData::build_TmStaData(sta_data, sta_data_tmp, TmStaData::SrcType::Deep);
+			}
 			print_info("TM_STA: res: (%s): %s", sta_data.subcmd_str().c_str(), sta_data.subdata());
 
 			tmsta_function();

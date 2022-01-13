@@ -25,6 +25,12 @@ public:
     TmSctCommunication &sct_;
     TmDriver &iface_;
 
+protected:
+    const bool is_fake_;
+
+public:
+    std::vector<std::string> jns_;
+
     struct PubMsg {
         rclcpp::Publisher<tm_msgs::msg::FeedbackState>::SharedPtr fbs_pub;
         rclcpp::Publisher<sensor_msgs::msg::JointState>::SharedPtr joint_pub;
@@ -59,10 +65,11 @@ public:
     rclcpp::Service<tm_msgs::srv::AskItem>::SharedPtr ask_item_srv_;
 
 public:
-    explicit TmSvrRos2(rclcpp::Node::SharedPtr node, TmDriver &iface, bool stick_play = false);
+    explicit TmSvrRos2(rclcpp::Node::SharedPtr node, TmDriver &iface, bool is_fake, bool stick_play = false);
     ~TmSvrRos2();
 
 protected:
+    void fake_publisher();
     void publish_fbs();
     void publish_svr();
     bool get_data_function();
