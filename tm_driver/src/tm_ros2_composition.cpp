@@ -107,5 +107,5 @@ int main(int argc, char *argv[])
 
     rclcpp::shutdown();
     std::cout<<"shut down is called"<<std::endl;
-    return 1;
+    return 0;
 }

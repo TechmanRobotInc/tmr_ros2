@@ -19,7 +19,7 @@ struct TmRobotStateData
 	unsigned char is_ESTOP_pressed;
 	unsigned char camera_light;
 	int error_code;
-	float joint_angle[6];
+	float joint_angle[6] = {0};
 	float flange_pose[6];
 	float tool_pose[6];
 	float tcp_frame[6];
