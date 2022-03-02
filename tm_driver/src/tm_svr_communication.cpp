@@ -78,6 +78,9 @@ void TmSvrCommunication::halt()
 		print_info("Ethernet slave communication: halt");
 		close_socket();
 	}
+
+	//_cv->notify_all();
+	
 }
 
 TmCommRC TmSvrCommunication::send_content(const std::string &id, TmSvrData::Mode mode, const std::string &content)

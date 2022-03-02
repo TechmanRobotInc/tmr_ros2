@@ -22,7 +22,6 @@ public:
 
 private:
 	std::mutex _mtx;
-	std::mutex mtx_cpe;
 	std::mutex mtx_sct;
 	std::mutex mtx_sta;
     

@@ -1,6 +1,5 @@
-#include "tm_driver/tm_ros2_svr_moveit.h"
-#include "tm_driver/tm_ros2_sct_moveit.h"
-
+#include "tm_driver/tm_ros2_svr.h"
+#include "tm_driver/tm_ros2_movit_sct.h"
 #include "rclcpp/rclcpp.hpp"
 
 void debug_function_print(char* msg){
@@ -68,26 +67,22 @@ int main(int argc, char *argv[])
     std::string host;
     if (argc > 1) {
         host = argv[1];
-        //std::cout<<"host is "<<host<<std::endl;
         if (host.find("robot_ip:=") != std::string::npos) {
-          //std::cout<<"robot_ip is work"<<std::endl;
           host.replace(host.begin(), host.begin() + 10, "");
           is_fake = false;
         } else if (host.find("ip:=") != std::string::npos) {
-          //std::cout<<"ip is work"<<std::endl;
           host.replace(host.begin(), host.begin() + 4, "");
           is_fake = false;
         } else{
-          //std::cout<<"ip is not found, use fake robot"<<std::endl;
+          std::cout<<"ip is not found, use fake robot"<<std::endl;
         }    
-    }
-    else {
+    } else {
         rclcpp::shutdown();
     }
     if (is_fake) {
-        std::cout << "only ip or robot_ip support, but your type is "<<host<<std::endl;
+        std::cout<<"only ip or robot_ip support, but your type is "<<host<<std::endl;
     }
-
+    
     if(argc == 3){
       bool isSetNoLogPrint;
       std::istringstream(argv[2]) >> std::boolalpha >> isSetNoLogPrint;
@@ -96,25 +91,11 @@ int main(int argc, char *argv[])
       }
     }
 
-    //rclcpp::executors::SingleThreadedExecutor exec;
-    rclcpp::NodeOptions options;
-
-    //std::condition_variable sct_cv;
     TmDriver iface(host, nullptr, nullptr);
-
-    /*auto tm_svr = std::make_shared<TmSvrRos2>(options, iface, is_fake);
-    exec.add_node(tm_svr);
-    auto tm_sct = std::make_shared<TmSctRos2>(options, iface, is_fake);
-    exec.add_node(tm_sct);*/
-
     rclcpp::Node::SharedPtr node = rclcpp::Node::make_shared("tm_driver_node");
-
-    //exec.spin();
     auto tm_svr = std::make_shared<TmSvrRos2>(node, iface, is_fake);
-    auto tm_sct = std::make_shared<TmSctRos2>(node, iface, is_fake);
+    auto tm_sct = std::make_shared<TmRos2SctMoveit>(node, iface, is_fake);
     rclcpp::spin(node);
-
     rclcpp::shutdown();
-    std::cout<<"shut down is called"<<std::endl;
-    return 0;
+    return 1;//return 0;
 }

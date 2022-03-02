@@ -1,5 +1,6 @@
 #include "tm_driver.h"
 #include "tm_print.h"
+#include "tm_listen_node_connect.h"
 
 #include <rclcpp/rclcpp.hpp>
 
@@ -21,12 +22,7 @@ class TmSctRos2
 {
 public:
     rclcpp::Node::SharedPtr node;
-    TmSctCommunication &sct_;
     TmDriver &iface_;
-    std::mutex checkIsOnListenNodeMutex;
-    std::condition_variable checkIsOnListenNodeCondVar;
-    std::mutex firstCheckIsOnListenNodeMutex;
-    std::condition_variable firstCheckIsOnListenNodeCondVar;
 
     struct SctAndStaMsg {
         rclcpp::Publisher<tm_msgs::msg::SctResponse>::SharedPtr sct_pub;
@@ -37,12 +33,10 @@ public:
     } sm_;
 
     bool sta_updated_;
-    std::mutex sta_mtx_;
-    std::condition_variable sta_cv_;
 
     int sct_reconnect_timeout_ms_;
     int sct_reconnect_timeval_ms_;
-    std::thread sct_thread_;
+
     std::thread checkListenNodeThread;
     bool firstEnter = true;
 
@@ -54,20 +48,17 @@ public:
     rclcpp::Service<tm_msgs::srv::SetPositions>::SharedPtr set_positions_srv_;
 
     rclcpp::Service<tm_msgs::srv::AskSta>::SharedPtr ask_sta_srv_;
-
+    std::unique_ptr<ListenNodeConnection> listenNodeConnection;
+    bool is_fake_;
+    std::vector<std::string> jns_;
 public:
-    explicit TmSctRos2(rclcpp::Node::SharedPtr node, TmDriver &iface);
+    explicit TmSctRos2(rclcpp::Node::SharedPtr node, TmDriver &iface, bool is_fake);
     ~TmSctRos2();
 
 protected:
-    void sct_msg();
-    void check_is_on_listen_node_from_script(std::string id, std::string script);
-    void sta_msg();
-    bool sct_func();
-    void check_is_on_listen_node();
-    void sct_responsor();
-    void sct_connect_recover();
-    bool ask_sta_struct(std::string subcmd, std::string subdata, double waitTime,std::string &reSubcmd, std::string &reSubdata);
+    void sct_msg(TmSctData data);
+    void sta_msg(std::string subcmd, std::string subdata);
+
 public:
     bool connect_tmsct(
         const std::shared_ptr<tm_msgs::srv::ConnectTM::Request> req,

@@ -1,22 +1,27 @@
 #include "tm_driver/tm_ros2_sct.h"
 
-TmSctRos2::TmSctRos2(rclcpp::Node::SharedPtr node, TmDriver &iface)
+TmSctRos2::TmSctRos2(rclcpp::Node::SharedPtr node, TmDriver &iface, bool is_fake)
     : node(node)
-    , sct_(iface.sct)
-    ,iface_(iface)
+    , iface_(iface)
+    , is_fake_(is_fake)
 {
-    sct_.start_tm_sct(5000);
 
-    sm_.sct_pub = node->create_publisher<tm_msgs::msg::SctResponse>("sct_response", 1);
-    sm_.sta_pub = node->create_publisher<tm_msgs::msg::StaResponse>("sta_response", 1);
-
-    sta_updated_ = false;
-
-    sct_reconnect_timeout_ms_ = 1000;
-    sct_reconnect_timeval_ms_ = 3000;
-    checkListenNodeThread = std::thread(std::bind(&TmSctRos2::check_is_on_listen_node, this));
-    sct_thread_ = std::thread(std::bind(&TmSctRos2::sct_responsor, this));
-
+    jns_.clear();
+    jns_.push_back("joint_1");
+    jns_.push_back("joint_2");
+    jns_.push_back("joint_3");
+    jns_.push_back("joint_4");
+    jns_.push_back("joint_5");
+    jns_.push_back("joint_6");
+    
+    if (!is_fake_) {
+        listenNodeConnection = std::make_unique<ListenNodeConnection>(iface_,
+      std::bind(&TmSctRos2::sct_msg,this,std::placeholders::_1),
+      std::bind(&TmSctRos2::sta_msg,this,std::placeholders::_1,std::placeholders::_2),
+      is_fake_);
+        sm_.sct_pub = node->create_publisher<tm_msgs::msg::SctResponse>("sct_response", 1);
+        sm_.sta_pub = node->create_publisher<tm_msgs::msg::StaResponse>("sta_response", 1);
+    }
 
     connect_tm_srv_ = node->create_service<tm_msgs::srv::ConnectTM>(
         "connect_tmsct", std::bind(&TmSctRos2::connect_tmsct, this,
@@ -43,33 +48,19 @@ TmSctRos2::TmSctRos2(rclcpp::Node::SharedPtr node, TmDriver &iface)
         std::placeholders::_1, std::placeholders::_2));
 }
 
-TmSctRos2::~TmSctRos2()
-{
+TmSctRos2::~TmSctRos2(){
     print_info("TM_ROS: (Listen node) halt");		
+
     sta_updated_ = true;
-    sta_cv_.notify_all();
-    if (sct_.is_connected()) {}
-    sct_.halt();
+        
 }
-
-void TmSctRos2::check_is_on_listen_node_from_script(std::string id, std::string script){
-    std::string idzero = "0";
-    std::string ok = "OK";
-    std::string errorString = "ERROR";
-    if(idzero.compare(id)==0 && errorString.compare(script)!=0 &&  ok.compare(script)!=0){
-        iface_.back_to_listen_node();
-    }
-}
-
-void TmSctRos2::sct_msg()
+void TmSctRos2::sct_msg(TmSctData data)
 {
     SctAndStaMsg &sm = sm_;
-    TmSctData &data = sct_.sct_data;
-
+    
     sm.sct_msg.id = data.script_id();
     sm.sct_msg.script = std::string{ data.script(), data.script_len() };
 
-    check_is_on_listen_node_from_script(sm.sct_msg.id, sm.sct_msg.script);
 
     if (data.sct_has_error()) {
         print_error("TM_ROS: (TM_SCT): MSG: (%s): %s", sm.sct_msg.id.c_str(), sm.sct_msg.script.c_str());
@@ -83,207 +74,29 @@ void TmSctRos2::sct_msg()
     sm.sct_pub->publish(sm.sct_msg);
 }
 
-void TmSctRos2::sta_msg()
+void TmSctRos2::sta_msg(std::string subcmd, std::string subdata)
 {
     SctAndStaMsg &sm = sm_;
-    TmStaData &data = sct_.sta_data;
-    {
-        std::lock_guard<std::mutex> lck(sta_mtx_);
-        sm.sta_msg.subcmd = data.subcmd_str();
-        sm.sta_msg.subdata = std::string{ data.subdata(), data.subdata_len() };
-        sta_updated_ = true;
-    }
-    sta_cv_.notify_all();
-
-    print_info("TM_ROS: (TM_STA): res: (%s): %s", sm.sta_msg.subcmd.c_str(), sm.sta_msg.subdata.c_str());
+    
+    sm.sta_msg.subcmd = subcmd;
+    sm.sta_msg.subdata = subdata;
 
     sm.sta_msg.header.stamp = node->rclcpp::Node::now();
     sm.sta_pub->publish(sm.sta_msg);
 }
-
-bool TmSctRos2::sct_func()
-{
-    TmSctCommunication &sct = sct_;
-    int n;
-    firstCheckIsOnListenNodeCondVar.notify_one();
-    
-    auto rc = sct.recv_spin_once(1000, &n);
-    if (rc == TmCommRC::ERR ||
-        rc == TmCommRC::NOTREADY ||
-        rc == TmCommRC::NOTCONNECT) {
-        return false;
-    }
-    else if (rc != TmCommRC::OK) {
-        return true;
-    }
-    std::vector<TmPacket> &pack_vec = sct.packet_list();
-
-    for (auto &pack : pack_vec) {
-        switch (pack.type) {
-        case TmPacket::Header::CPERR:
-            sct.tmSctErrData.set_CPError(pack.data.data(), pack.data.size());
-            print_error("TM_ROS: (Listen node) ROS Node Header CPERR %d",(int)sct.tmSctErrData.error_code());
-            break;
-
-        case TmPacket::Header::TMSCT:
-
-            sct.tmSctErrData.error_code(TmCPError::Code::Ok);
-
-            //TODO ? lock and copy for service response
-            TmSctData::build_TmSctData(sct.sct_data, pack.data.data(), pack.data.size(), TmSctData::SrcType::Shallow);
-
-            sct_msg();
-            break;
-
-        case TmPacket::Header::TMSTA:
-
-            sct.tmSctErrData.error_code(TmCPError::Code::Ok);
-
-            TmStaData::build_TmStaData(sct.sta_data, pack.data.data(), pack.data.size(), TmStaData::SrcType::Shallow);
-
-            sta_msg();
-            break;
-
-        default:
-            print_error("TM_ROS: (Listen node): invalid header");
-            break;
-        }
-    }
-    return true;
-}
-
-void TmSctRos2::check_is_on_listen_node(){
-    std::unique_lock<std::mutex> firstCheckIsOnListenNodeLock(firstCheckIsOnListenNodeMutex);
-    std::unique_lock<std::mutex> checkIsOnListenNodeLock(checkIsOnListenNodeMutex);
-    
-    firstCheckIsOnListenNodeCondVar.wait(firstCheckIsOnListenNodeLock);
-    std::this_thread::sleep_for(std::chrono::milliseconds(2));
-
-    while (rclcpp::ok()){
-        std::string reSubcmd;
-        std::string reSubdata;
-        ask_sta_struct("00","",1,reSubcmd,reSubdata);
-        bool isInListenNode = false;
-
-        std::istringstream(reSubdata) >> std::boolalpha >> isInListenNode;
-    
-        if(isInListenNode){
-            print_info("TM_ROS: On listen node.");
-            iface_.back_to_listen_node();
-        } else{
-            print_info("TM_ROS: Not on listen node!");
-        }
-        checkIsOnListenNodeCondVar.wait(checkIsOnListenNodeLock);
-    }
-}
-
-void TmSctRos2::sct_responsor()
-{
-    TmSctCommunication &sct = sct_;
-
-    std::this_thread::sleep_for(std::chrono::milliseconds(50));
-
-    print_info("TM_ROS: sct_response thread begin");
-
-    while (rclcpp::ok()) {
-        //bool reconnect = false;
-        if (iface_.get_connect_recovery_guide()) {
-            std::this_thread::sleep_for(std::chrono::milliseconds(1));
-        }
-        else   
-        {
-            if (!sct.recv_init()) {
-                print_debug("TM_ROS: (Listen node): is not connected");
-            }
-            firstEnter = true;
-            while (rclcpp::ok() && sct.is_connected() && iface_.svr.is_connected()) {
-                if(firstEnter){
-                    checkIsOnListenNodeCondVar.notify_one();
-                    firstEnter = false;
-                }
-                if (!sct_func()) break;
-            }
-            sct.close_socket();
-            if (!rclcpp::ok()) break;
-            sct_connect_recover();
-        }
-    }
-    checkIsOnListenNodeCondVar.notify_one();
-    firstCheckIsOnListenNodeCondVar.notify_one();
-    
-    sct.close_socket();
-    print_info("TM_ROS: sct_response thread end\n");
-}
-
-void TmSctRos2::sct_connect_recover()
-{
-    TmSctCommunication &sct = sct_;
-    int timeInterval = 0;
-    int lastTimeInterval=1000;
-            	
-    if (sct_reconnect_timeval_ms_ <= 0) {
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
-    }
-    
-    print_info("TM_ROS: (Listen node): Reconnecting...");
-
-    uint64_t startTimeMs = TmCommunication::get_current_time_in_ms();
-    while (rclcpp::ok() && timeInterval < sct_reconnect_timeval_ms_) {
-        if ( lastTimeInterval/1000 != timeInterval/1000) {
-            print_debug("Listen node reconnect remain : %.1f sec...", 0.001 * (sct_reconnect_timeval_ms_ - timeInterval));
-        }
-        std::this_thread::sleep_for(std::chrono::milliseconds(1));
-        lastTimeInterval = timeInterval;
-        timeInterval = TmCommunication::get_current_time_in_ms() - startTimeMs;
-    }
-    if (rclcpp::ok() && sct_reconnect_timeval_ms_ >= 0) {
-        print_debug("0 sec\nTM_ROS: (Listen node) connect(%d)...", (int)sct_reconnect_timeout_ms_);
-        sct.connect_socket("Listen node",sct_reconnect_timeout_ms_);
-    }
-}
-
 bool TmSctRos2::connect_tmsct(
         const std::shared_ptr<tm_msgs::srv::ConnectTM::Request> req,
         std::shared_ptr<tm_msgs::srv::ConnectTM::Response> res)
 {
-    bool rb = true;
-    int t_o = (int)(1000.0 * req->timeout);
-    int t_v = (int)(1000.0 * req->timeval);
-    if (req->connect) {
-        print_info("TM_ROS: (re)connect(%d) TM_SCT Listen node", (int)t_o);
-        sct_.halt();
-        rb = sct_.start_tm_sct(t_o);
-    }
-    if (req->reconnect) {
-        if (iface_.get_connect_recovery_guide())
-        {        	
-            sct_reconnect_timeout_ms_ = 1000;
-            sct_reconnect_timeval_ms_ = 3000;
-            iface_.set_connect_recovery_guide(false);
-            rb = sct_.start_tm_sct(5000);
-            print_info("TM_ROS: Listen node resume connection recovery");                     	
-        }
-        else
-        {        	    	
-            sct_reconnect_timeout_ms_ = t_o;
-            sct_reconnect_timeval_ms_ = t_v;
-        }
-        print_info("TM_ROS: set Listen node reconnect timeout %dms, timeval %dms", (int)sct_reconnect_timeout_ms_, (int)sct_reconnect_timeval_ms_);
-    }
-    else {
-        // no reconnect
-        sct_reconnect_timeval_ms_ = -1;
-        print_info("TM_ROS: set Listen node NOT reconnect");
-    }
-    res->ok = rb;
-    return rb;
+    res->ok = listenNodeConnection->connect_tmsct(req->timeout, req->timeval, req->connect, req->reconnect);
+    return res->ok;
 }
 
 bool TmSctRos2::send_script(
     const std::shared_ptr<tm_msgs::srv::SendScript::Request> req,
     std::shared_ptr<tm_msgs::srv::SendScript::Response> res)
 {
-    bool rb = (sct_.send_script_str(req->id, req->script) == iface_.RC_OK);
+    bool rb = listenNodeConnection->send_listen_node_script(req->id, req->script);
     res->ok = rb;
     return rb;
 }
@@ -346,38 +159,9 @@ bool TmSctRos2::set_positions(
     res->ok = rb;
     return rb;
 }
-
-bool TmSctRos2::ask_sta_struct(std::string subcmd, std::string subdata, double waitTime,std::string &reSubcmd, std::string &reSubdata){
-    SctAndStaMsg &sm = sm_;
-    bool rb = false;
-
-    sta_mtx_.lock();
-    sta_updated_ = false;
-    sta_mtx_.unlock();
-
-    rb = (sct_.send_sta_request(subcmd, subdata) == iface_.RC_OK);
-
-    {
-        std::unique_lock<std::mutex> lck(sta_mtx_);
-        if (rb && waitTime > 0.0) {
-            if (!sta_updated_) {
-                sta_cv_.wait_for(lck, std::chrono::duration<double>(waitTime));
-            }
-            if (!sta_updated_) {
-                rb = false;
-            }
-            reSubcmd = sm.sta_msg.subcmd;
-            reSubdata = sm.sta_msg.subdata;
-        }
-        sta_updated_ = false;
-    }
-
-    return rb;
-}
-
 bool TmSctRos2::ask_sta(
         const std::shared_ptr<tm_msgs::srv::AskSta::Request> req,
         std::shared_ptr<tm_msgs::srv::AskSta::Response> res){
-    res->ok = ask_sta_struct(req->subcmd, req->subdata, req->wait_time, res->subcmd, res->subdata);
+    res->ok = listenNodeConnection->ask_sta_struct(req->subcmd, req->subdata, req->wait_time, res->subcmd, res->subdata);
     return res->ok;
 }

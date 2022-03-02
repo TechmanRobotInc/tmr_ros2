@@ -19,7 +19,7 @@ struct TmRobotStateData
 	unsigned char is_ESTOP_pressed;
 	unsigned char camera_light;
 	int error_code;
-	float joint_angle[6] = {0};
+	float joint_angle[6]={0};
 	float flange_pose[6];
 	float tool_pose[6];
 	float tcp_frame[6];
@@ -214,7 +214,7 @@ public:
 	
     TmCommRC get_receive_state(){return _receive_state;}
 
-	void set_joint_states(
+	void set_fake_joint_states(
 		const std::vector<double> &pos,
 		const std::vector<double> &vel,
 		const std::vector<double> &tor);
@@ -235,7 +235,7 @@ public:
 		const std::vector<double> &tor)
 	{
 		std::lock_guard<std::mutex> lck(mtx);
-		set_joint_states(pos, vel, tor);
+		set_fake_joint_states(pos, vel, tor);
 	}
 
 private:

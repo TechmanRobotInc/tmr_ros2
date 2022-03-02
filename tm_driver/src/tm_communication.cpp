@@ -486,7 +486,7 @@ TmCommRC TmCommunication::send_bytes_all(const char *bytes, int len, int *n)
 	int nleft = len;
 
 	while (ntotal < len) {
-		nb = send(_sockfd, bytes, nleft, 0);
+		nb = send(_sockfd, bytes + ntotal, nleft, 0);
 		if (nb < 0) {
 			rc = TmCommRC::ERR;
 			break;

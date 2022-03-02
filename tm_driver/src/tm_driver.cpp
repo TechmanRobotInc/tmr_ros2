@@ -247,7 +247,6 @@ bool TmDriver::fake_run_pvt_traj(const TmPvtTraj &pvts)
 
 	if (pvts.mode != TmPvtMode::Joint || pvts.points.size() < 2) return false;
 
-	//for (auto &p : pvts.points) RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),TmCommand::set_pvt_point(pvts.mode, p));
 
 	_is_executing_traj = true;
 
@@ -263,8 +262,8 @@ bool TmDriver::fake_run_pvt_traj(const TmPvtTraj &pvts)
 	// first point
 	//print_info(TmCommand::set_pvt_point(pvts.mode, p0));
 	//print_info(TmCommand::set_pvt_point(pvts.mode, pvts.points[idx]));
-	RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),TmCommand::set_pvt_point(pvts.mode, p0));
-	RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),TmCommand::set_pvt_point(pvts.mode, pvts.points[idx]));
+	print_info(TmCommand::set_pvt_point(pvts.mode, p0).c_str());
+	print_info(TmCommand::set_pvt_point(pvts.mode, pvts.points[idx]).c_str());
 	point.time = pvts.points[0].time;
 
 	while (_is_executing_traj) {
@@ -282,8 +281,7 @@ bool TmDriver::fake_run_pvt_traj(const TmPvtTraj &pvts)
 			++idx;
 			if (idx == pvts.points.size()) break;
 
-			//print_info(TmCommand::set_pvt_point(pvts.mode, pvts.points[idx]));
-			RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),TmCommand::set_pvt_point(pvts.mode, pvts.points[idx]));
+			print_info(TmCommand::set_pvt_point(pvts.mode, pvts.points[idx]).c_str());
 		}
 	}
 	// last point
@@ -295,8 +293,8 @@ bool TmDriver::fake_run_pvt_traj(const TmPvtTraj &pvts)
 
 	time_now = std::chrono::steady_clock::now();
 	point.time = std::chrono::duration_cast<std::chrono::duration<double>>(time_now - time_init).count();
-	//print_info("TM_DRV: traj. exec. time:=" << point.time);
-	RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"TM_DRV: traj. exec. time:=" << point.time);
+	print_info("TM_DRV: traj. exec. time:= %f", point.time);
+	//RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"TM_DRV: traj. exec. time:=" << point.time);
 
 	_is_executing_traj = false;
 	return true;
