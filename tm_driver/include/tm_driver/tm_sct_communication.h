@@ -21,7 +21,7 @@ public:
 	TmStaData sta_data;
 
 private:
-	std::mutex mtx_cpe;
+	std::mutex _mtx;
 	std::mutex mtx_sct;
 	std::mutex mtx_sta;
     
@@ -47,7 +47,7 @@ public:
 	{ _reconnect_timeval_ms = timeval_ms; }
     void check_script_is_exit(std::string script);
 	TmCommRC send_script_str(const std::string &id, const std::string &script);
-	
+	TmCommRC send_script_str_silent(const std::string &id, const std::string &script);
 	TmCommRC send_script_exit();
 
 	TmCommRC send_sta_request(const std::string &subcmd, const std::string &subdata);

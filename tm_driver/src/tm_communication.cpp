@@ -425,7 +425,7 @@ bool TmCommunication::connect_socket( std::string errorName,int timeout_ms)
 		_isConnected = false;
 	}
 	if (_sockfd > 0) {
-	        std::string msg = "TM_COM(" + errorName + "): TM robot is connected. sockfd:=" + std::to_string((int)_sockfd);
+		std::string msg = "TM_COM(" + errorName + "): TM robot is connected. sockfd:=" + std::to_string((int)_sockfd);
 		print_info(msg.c_str());
 		//_is_connected = true;
 		return true;
@@ -486,7 +486,7 @@ TmCommRC TmCommunication::send_bytes_all(const char *bytes, int len, int *n)
 	int nleft = len;
 
 	while (ntotal < len) {
-		nb = send(_sockfd, bytes, nleft, 0);
+		nb = send(_sockfd, bytes + ntotal, nleft, 0);
 		if (nb < 0) {
 			rc = TmCommRC::ERR;
 			break;
@@ -517,6 +517,30 @@ TmCommRC TmCommunication::send_packet_(TmPacket &packet, int *n)
 	std::vector<char> bytes;
 	TmPacket::build_bytes(bytes, packet);
 	print_info(TmPacket::string_from_bytes(bytes).c_str());
+	if (bytes.size() > 0x1000)
+		return send_bytes_all(bytes.data(), bytes.size(), n);
+	else
+		return send_bytes(bytes.data(), bytes.size(), n);
+}
+
+TmCommRC TmCommunication::send_packet_silent(TmPacket &packet, int *n)
+{
+	std::vector<char> bytes;
+	TmPacket::build_bytes(bytes, packet);
+	return send_bytes(bytes.data(), bytes.size(), n);
+}
+
+TmCommRC TmCommunication::send_packet_silent_all(TmPacket &packet, int *n)
+{
+	std::vector<char> bytes;
+	TmPacket::build_bytes(bytes, packet);
+	return send_bytes_all(bytes.data(), bytes.size(), n);
+}
+
+TmCommRC TmCommunication::send_packet_silent_(TmPacket &packet, int *n)
+{
+	std::vector<char> bytes;
+	TmPacket::build_bytes(bytes, packet);
 	if (bytes.size() > 0x1000)
 		return send_bytes_all(bytes.data(), bytes.size(), n);
 	else

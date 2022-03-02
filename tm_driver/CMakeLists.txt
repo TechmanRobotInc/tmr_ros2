@@ -55,6 +55,8 @@ add_executable(tm_driver
   src/tm_packet.cpp
   src/tm_print.cpp
   src/tm_driver_utilities.cpp
+  src/tm_ethernet_slave_connect.cpp
+  src/tm_listen_node_connect.cpp
 )
 
 ament_target_dependencies(tm_driver

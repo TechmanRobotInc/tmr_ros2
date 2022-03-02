@@ -1,6 +1,5 @@
 #include "tm_driver/tm_ros2_svr.h"
-#include "tm_driver/tm_ros2_sct.h"
-
+#include "tm_driver/tm_ros2_movit_sct.h"
 #include "rclcpp/rclcpp.hpp"
 
 void debug_function_print(char* msg){
@@ -36,7 +35,6 @@ void ros_fatal_print(char* msg){
   str = "[TM_FATAL]" + str;
   RCLCPP_ERROR(rclcpp::get_logger("rclcpp"),str.c_str());
 }
-
 void set_up_print_fuction(){
   set_up_print_debug_function(debug_function_print);
   set_up_print_info_function(info_function_print);
@@ -61,20 +59,27 @@ int main(int argc, char *argv[])
     set_up_ros_print_fuction();
 
     rclcpp::init(argc, argv);
-    
+
+    bool is_fake = true;
     std::string host;
     if (argc > 1) {
         host = argv[1];
         if (host.find("robot_ip:=") != std::string::npos) {
-            host.replace(host.begin(), host.begin() + 10, "");
+          host.replace(host.begin(), host.begin() + 10, "");
+          is_fake = false;
         } else if (host.find("ip:=") != std::string::npos) {
-            host.replace(host.begin(), host.begin() + 4, "");        
-        }
-    }
-    else {
+          host.replace(host.begin(), host.begin() + 4, "");
+          is_fake = false;
+        } else{
+          std::cout<<"ip is not found, use fake robot"<<std::endl;
+        }    
+    } else {
         rclcpp::shutdown();
     }
-
+    if (is_fake) {
+        std::cout<<"only ip or robot_ip support, but your type is "<<host<<std::endl;
+    }
+    
     if(argc == 3){
       bool isSetNoLogPrint;
       std::istringstream(argv[2]) >> std::boolalpha >> isSetNoLogPrint;
@@ -83,20 +88,11 @@ int main(int argc, char *argv[])
       }
     }
 
-
-
-    //std::condition_variable sct_cv;
     TmDriver iface(host, nullptr, nullptr);
-
     rclcpp::Node::SharedPtr node = rclcpp::Node::make_shared("tm_driver_node");
-
-    auto tm_svr = std::make_shared<TmSvrRos2>(node, iface, false);
-    auto tm_sct = std::make_shared<TmSctRos2>(node, iface, false);
+    auto tm_svr = std::make_shared<TmSvrRos2>(node, iface, is_fake);
+    auto tm_sct = std::make_shared<TmRos2SctMoveit>(node, iface, is_fake);
     rclcpp::spin(node);
-
-
-    //iface.halt();
-
     rclcpp::shutdown();
-    return 1;
+    return 1;//return 0;
 }

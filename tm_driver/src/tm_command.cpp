@@ -126,3 +126,47 @@ std::string TmCommand::set_pvt_traj(const TmPvtTraj &pvts, int precision)
 	ss << "PVTExit()";
 	return ss.str();
 }
+
+std::string TmCommand::set_vel_mode_start(VelMode mode, double timeout_zero_vel, double timeout_stop)
+{
+	if (mode == VelMode::Joint) {
+		return "ContinueVJog()";
+	}
+	else {
+		return "ContinueVLine(" +
+			std::to_string((int)(1000.0 * timeout_zero_vel)) + ", " +
+			std::to_string((int)(1000.0 * timeout_stop)) + ")";
+	}
+}
+
+std::string TmCommand::set_vel_mode_target(VelMode mode, const std::vector<double> &vel, int precision)
+{
+	std::stringstream ss;
+	ss << std::fixed << std::setprecision(precision);
+	if (mode == VelMode::Joint) {
+		ss << "SetContinueVJog(";
+		if (vel.size() > 0) {
+			size_t i = 0;
+			for (; i < vel.size() - 1; ++i) {
+				ss << deg(vel[i]) << ",";
+			}
+			ss << deg(vel[i]);
+		}
+		ss << ")";
+	}
+	else {
+		ss << "SetContinueVLine(";
+		if (vel.size() >= 3) {
+			size_t i = 0;
+			for (; i < 3; ++i) {
+				ss << (1000.0 * vel[i]) << ",";
+			}
+			for (; i < vel.size() - 1; ++i) {
+				ss << deg(vel[i]) << ",";
+			}
+			ss << deg(vel[i]);
+		}
+		ss << ")";
+	}
+	return ss.str();
+}

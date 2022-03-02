@@ -14,7 +14,7 @@ def generate_launch_description():
     return LaunchDescription([
         Node(
             package='tm_driver',
-            node_executable='tm_driver',
+            executable='tm_driver',
             output='screen',
             arguments=args,
         )

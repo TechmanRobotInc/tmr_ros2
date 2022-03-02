@@ -1,6 +1,6 @@
 #include "tm_driver.h"
 #include "tm_print.h"
-
+#include "tm_ethernet_slave_connect.h"
 #include <rclcpp/rclcpp.hpp>
 
 #include "tm_msgs/msg/feedback_state.hpp"
@@ -15,9 +15,10 @@
 
 using namespace std::chrono_literals;
 
-class TmSvrRos2 : public rclcpp::Node
+class TmSvrRos2
 {
 public:
+    rclcpp::Node::SharedPtr node;
     TmSvrCommunication &svr_;
     TmRobotState &state_;
 
@@ -50,23 +51,27 @@ public:
     int pub_reconnect_timeval_ms_;
     std::thread pub_thread_;
     std::thread getDataThread;
+
+    std::unique_ptr<EthernetSlaveConnection> ethernetSlaveConnection;
+
     rclcpp::TimerBase::SharedPtr pubDataTimer;
 
     rclcpp::Service<tm_msgs::srv::ConnectTM>::SharedPtr connect_tm_srv_;
 
     rclcpp::Service<tm_msgs::srv::WriteItem>::SharedPtr write_item_srv_;
     rclcpp::Service<tm_msgs::srv::AskItem>::SharedPtr ask_item_srv_;
-
+    std::vector<std::string> jns_;
+    bool is_fake;
 public:
-    explicit TmSvrRos2(const rclcpp::NodeOptions &options, TmDriver &iface, bool stick_play = false);
+    explicit TmSvrRos2(rclcpp::Node::SharedPtr node, TmDriver &iface, bool is_fake, bool stick_play = false);
     ~TmSvrRos2();
 
 protected:
     void publish_fbs();
     void publish_svr();
     bool get_data_function();
-    void get_data_thread();
     void publisher();
+    void fake_publisher();
     void pub_data();
     void svr_connect_recover();
     void cq_monitor();//Connection quality

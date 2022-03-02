@@ -71,11 +71,16 @@ void TmSvrCommunication::halt()
 		if (_recv_thread.joinable()) {
 			_recv_thread.join();
 		}
+		_updated = true;
+		_cv->notify_all();
 	}
 	if (is_connected()) {
 		print_info("Ethernet slave communication: halt");
 		close_socket();
 	}
+
+	//_cv->notify_all();
+	
 }
 
 TmCommRC TmSvrCommunication::send_content(const std::string &id, TmSvrData::Mode mode, const std::string &content)
@@ -110,7 +115,10 @@ void TmSvrCommunication::tm_svr_thread_function()
 		}
 		while (_keep_thread_alive && is_connected() && !reconnect) {
 			TmCommRC rc = tmsvr_function();
-			_updated = true;
+			{
+				std::lock_guard<std::mutex> lck(_mtx);
+				_updated = true;
+			}
 			_cv->notify_all();
 
 			switch (rc) {
@@ -128,6 +136,7 @@ void TmSvrCommunication::tm_svr_thread_function()
 		reconnect_function();
 	}
 	close_socket();
+	_cv->notify_all();
 	print_info("Ethernet slave communication: thread end");
 }
 
