@@ -49,6 +49,8 @@ TmSvrRos2::TmSvrRos2(rclcpp::Node::SharedPtr node, TmDriver &iface, bool is_fake
       state_.set_fake_joint_states(zeros, zeros, zeros);
       pubDataTimer = node->create_wall_timer(
         std::chrono::milliseconds(publishTimeMs), std::bind(&TmSvrRos2::pub_data, this));
+      
+      getDataThread = std::thread(std::bind(&TmSvrRos2::fake_publisher, this));
     }
 }
 
@@ -176,14 +178,8 @@ void TmSvrRos2::fake_publisher()
     print_info("TM_ROS: fake publisher thread end\n");	
 }
 void TmSvrRos2::pub_data(){
-  
-  if(!is_fake){
-    ethernetSlaveConnection->renew_all_data();
+    iface_.state.update_tm_robot_publish_state();
     publish_fbs();
-  } else{
-    fake_publisher();
-  }
-  
 }
 void TmSvrRos2::publish_svr()
 {

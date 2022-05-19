@@ -228,7 +228,7 @@ Enable the `Data Table Setting` item and check the following boxes as item prede
 ## __5. Program script demonstration__
 
 ### &sect; __Demo package description__
-> There are some demo codes showing  how to use TM ROS driver.<br/>
+> There are some demo codes showing how to use TM ROS driver.<br/>
 >
 > * demo_send_script:<br/>
 In this demo code, it shows how to send a __Listen node__ script to control the TM Robot. <br/>
@@ -331,7 +331,7 @@ The GUI displays tm_driver connection status, sct, sta, svr messages and robot s
 
 
 ### &sect; Usage with GUI debugging
-> Note: If the user have even successfully built a specific code(tmr_ros2), the user only need to change to the TM driver workspace path  ``cd ~/tmdriver_ws`` , and then directly refer to steps 5~6 below. <br/>
+> Note: If the user have even successfully built a specific code(tmr_ros2), the user only need to change to the TM driver workspace path  ``cd ~/tmdriver_ws`` , and then directly refer to steps 5~6 below.<br/>
 > 1. Type to create a root workspace directory by starting a terminal: For example,  ``tmdriver_ws`` or ``catkin_ws``, then type to change current directory into the workspace directory path.<br/>
 ``mkdir ~/tmdriver_ws``<br/>
 ``cd ~/tmdriver_ws``<br/>
@@ -351,3 +351,6 @@ The <robot_ip_address> is the IP address of the TM Robot, the user can get it th
 ``source ./install/setup.bash``<br/>
 ``ros2 run ui_for_debug_and_demo robot_ui``<br/>
 
+
+## __7. Contact Us__
+More Support & Service, please contact us. [@TECHMAN ROBOT](https://www.tm-robot.com/zh-hant/contact-us/)``[https://www.tm-robot.com/zh-hant/contact-us/] ``<br/>
