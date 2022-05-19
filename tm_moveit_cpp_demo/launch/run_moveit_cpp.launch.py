@@ -4,6 +4,8 @@ import yaml
 from launch import LaunchDescription
 from launch_ros.actions import Node
 from ament_index_python.packages import get_package_share_directory
+import xacro
+
 
 def load_file(package_name, file_path):
     package_path = get_package_share_directory(package_name)
@@ -39,7 +41,9 @@ def generate_launch_description():
     moveit_cpp_yaml_file_name = get_package_share_directory('tm_moveit_cpp_demo') + "/config/moveit_cpp.yaml"
 
     # Component yaml files are grouped in separate namespaces
-    robot_description_config = load_file('tm_description', 'urdf/tm5-900.urdf')
+    # Use URDF file: tm5-900-nominal.urdf to do moveit demo
+    # robot_description_config = load_file('tm_description', 'urdf/tm5-900.urdf')
+    robot_description_config = load_file('tm_description', 'urdf/tm5-900-nominal.urdf')
     robot_description = {'robot_description' : robot_description_config}
 
     robot_description_semantic_config = load_file('tm_moveit_config_tm5-900', 'config/tm5-900.srdf')

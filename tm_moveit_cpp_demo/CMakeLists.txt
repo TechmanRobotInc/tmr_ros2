@@ -48,7 +48,7 @@ if (moveit_ros_planning_interface_FOUND)
     moveit_ros_planning_interface
     Boost
   )
-  install(TARGETS run_moveit_cpp run_moveit_cpp
+  install(TARGETS run_moveit_cpp
     EXPORT export_${PROJECT_NAME}
     DESTINATION lib/${PROJECT_NAME}
   )

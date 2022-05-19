@@ -1,15 +1,16 @@
 <?xml version="1.0" ?>
+<!-- TM5-900 URDF Example -->
 <robot name="tm5-900">
 
   <link name="link_0">
     <visual>
       <geometry>
-        <mesh filename="package://tm_description/meshes/tm5-900/visual/tm5_base.obj"/>
+        <mesh filename="package://tm_description/meshes/tm5-900/visual/tm5-base.obj"/>
       </geometry>
     </visual>
     <collision>
       <geometry>
-        <mesh filename="package://tm_description/meshes/tm5-900/collision/tm5_base_c.stl"/>
+        <mesh filename="package://tm_description/meshes/tm5-900/collision/tm5-base_c.stl"/>
       </geometry>
     </collision>
   </link>
@@ -17,9 +18,9 @@
   <joint name="joint_1" type="revolute">
     <parent link="link_0"/>
     <child link="link_1"/>
-    <origin xyz="0 0 0.1452" rpy="0 0 0"/>
+    <origin rpy="0.000000 -0.000000 0.000000" xyz="0.000000 0.000000 0.145100"/>
     <axis xyz="0 0 1"/>
-    <limit effort="100.0" lower="-3.14" upper="3.14" velocity="1.0"/>
+    <limit effort="157" lower="-4.71238898038469" upper="4.71238898038469" velocity="3.141592653589793"/>
   </joint>
 
   <link name="link_1">
@@ -38,9 +39,9 @@
   <joint name="joint_2" type="revolute">
     <parent link="link_1"/>
     <child link="link_2"/>
-    <origin xyz="0 0 0" rpy="-1.570796327 -1.570796327 0"/>
+    <origin rpy="-1.570796 -1.570796 0.000000" xyz="0.000000 0.000000 0.000000"/>
     <axis xyz="0 0 1"/>
-    <limit effort="100.0" lower="-3.14" upper="3.14" velocity="1.0"/>
+    <limit effort="157" lower="-3.141592653589793" upper="3.141592653589793" velocity="3.141592653589793"/>
   </joint>
 
   <link name="link_2">
@@ -59,9 +60,9 @@
   <joint name="joint_3" type="revolute">
     <parent link="link_2"/>
     <child link="link_3"/>
-    <origin  xyz="0.429 0 0" rpy="0 0 0"/>
+    <origin rpy="0.000000 -0.000000 0.000000" xyz="0.429000 0.000000 0.000000"/>
     <axis xyz="0 0 1"/>
-    <limit effort="100.0" lower="-3.14" upper="3.14" velocity="1.0"/>
+    <limit effort="157" lower="-2.705260340591211" upper="2.705260340591211" velocity="3.141592653589793"/>
   </joint>
 
   <link name="link_3">
@@ -80,9 +81,9 @@
   <joint name="joint_4" type="revolute">
     <parent link="link_3"/>
     <child link="link_4"/>
-    <origin xyz="0.4115 0 -0.1223" rpy="0 0 1.570796327"/>
+    <origin rpy="0.000000 -0.000000 1.570796" xyz="0.411500 0.000000 -0.122200"/>
     <axis xyz="0 0 1"/>
-    <limit effort="10.0" lower="-3.14" upper="3.14" velocity="1.0"/>
+    <limit effort="43" lower="-3.141592653589793" upper="3.141592653589793" velocity="3.9269908169872414"/>
   </joint>
 
   <link name="link_4">
@@ -101,9 +102,9 @@
   <joint name="joint_5" type="revolute">
     <parent link="link_4"/>
     <child link="link_5"/>
-    <origin xyz="0 -0.106 0" rpy="1.570796327 0 0"/>
+    <origin rpy="1.570796 -0.000000 0.000000" xyz="0.000000 -0.106000 0.000000"/>
     <axis xyz="0 0 1"/>
-    <limit effort="10.0" lower="-3.14" upper="3.14" velocity="1.0"/>
+    <limit effort="43" lower="-3.141592653589793" upper="3.141592653589793" velocity="3.9269908169872414"/>
   </joint>
 
   <link name="link_5">
@@ -122,9 +123,9 @@
   <joint name="joint_6" type="revolute">
     <parent link="link_5"/>
     <child link="link_6"/>
-    <origin xyz="0 -0.11315 0" rpy="1.570796327 0 0"/>
+    <origin rpy="1.570796 -0.000000 0.000000" xyz="0.000000 -0.114400 0.000000"/>
     <axis xyz="0 0 1"/>
-    <limit effort="10.0" lower="-3.14" upper="3.14" velocity="1.0"/>
+    <limit effort="43" lower="-4.71238898038469" upper="4.71238898038469" velocity="3.9269908169872414"/>
   </joint>
 
   <link name="link_6">
@@ -140,18 +141,18 @@
     </collision>
   </link>
 
-  <link name="base" />
+  <link name="base"/>
   <joint name="base_fixed_joint" type="fixed">
     <parent link="base"/>
     <child link="link_0"/>
-    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <origin rpy="0.000000 0.000000 0.000000" xyz="0.000000 0.000000 0.000000"/>
   </joint>
 
   <link name="flange"/>
   <joint name="flange_fixed_joint" type="fixed">
     <parent link="link_6"/>
     <child link="flange"/>
-    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <origin rpy="0.000000 0.000000 0.000000" xyz="0.000000 0.000000 0.000000"/>
   </joint>
 
 </robot>

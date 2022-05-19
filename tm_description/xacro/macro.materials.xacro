@@ -1,8 +1,11 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 	<xacro:macro name="tmr_materials">
-    <material name="grey">
+		<material name="lightgrey">
 			<color rgba="0.5 0.5 0.5 1.0" />
+		</material>
+		<material name="grey">
+			<color rgba="0.75 0.75 0.75 1.0" />
 		</material>
 		<material name="white">
 			<color rgba="0.95 0.95 0.95 1.0" />
@@ -30,6 +33,9 @@
 		</material>
 		<material name="black">
 			<color rgba="0.0 0.0 0.0 1.0" />
+		</material>
+		<material name="darkolive">
+			<color rgba="0.3 0.3 0.25 1.0" />
 		</material>
 	</xacro:macro>
 </robot>

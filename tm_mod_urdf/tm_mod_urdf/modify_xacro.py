@@ -1,35 +1,84 @@
 
-import rclpy
-from tm_msgs.srv import AskItem
-
 import os
 import shutil
 import sys
 
-from tm_mod_urdf._modify_urdf import *
+import xml.etree.cElementTree as ET
 
-def _gen_urdf(args=None):
+import rclpy
+
+# from tm_mod_urdf._modify_urdf import *
+from tm_mod_urdf._modify_urdf import modify_urdf
+from tm_mod_urdf._modify_urdf import urdf_DH_from_tm_DH
+from tm_mod_urdf._modify_urdf import xyzrpys_from_urdf_DH
+from tm_msgs.srv import AskItem
+
+
+def _gen_xacro(args=None):
     rclpy.init(args=args)
-    node = rclpy.create_node('modify_urdf')
+    node = rclpy.create_node('modify_xacro')
+
+    ###############################################################################################
+    # example: generate a new_model file (macro.xxxooo.urdf.xacro), base on tm5-900-norminal model
+    # syntax : python3 modify_xacro.py original_model new_model
+    # [key-in] original_model: tm5-900  , [key-in] new_model: xxxooo
+    # [key-in] shell cmd $ python3 modify_xacro.py tm5-900 xxxooo
+    ###############################################################################################
 
     if len(sys.argv) < 3:
-        node.get_logger().warn('usage: modify_urdf_node model new_model replace')
+        print('Incorrect syntax! at least 2 parameters are required')
+        print('You can try: python3 modify_xacro.py tm5-900 test')
         return
 
-    model = sys.argv[1]
+    original_model = sys.argv[1]
     new_model = sys.argv[2]
-    replace = False
+    specific_w = ''
+    # specific keyword default
+    overwrite = False
+    nominal_model_restore = False
+    tm5_900_nominal_restore = False
+    tm5_700_nominal_restore = False
+    tm12_nominal_restore = False
+    tm14_nominal_restore = False
+    tm_model = 'reference'
+    ###############################################################################################
+    # You can restore some nominal kinematic parameters by using specific keyword settings
     if len(sys.argv) == 4:
-        if sys.argv[3].upper() == 'REPLACE':
-            replace = True
-            node.get_logger().warn('origin urdf file will be replaced')
+        specific_w = sys.argv[3].upper()
+    if new_model == 'tm5-900-nominal' or specific_w == '-K59':
+        tm_model = 'tm5-900-nominal'
+        nominal_model_restore = True
+        tm5_900_nominal_restore = True
+    elif new_model == 'tm5-700-nominal' or specific_w == '-K57':
+        tm_model = 'tm5-700-nominal'
+        nominal_model_restore = True
+        tm5_700_nominal_restore = True
+    elif new_model == 'tm12-nominal' or specific_w == '-K12':
+        tm_model = 'tm12-nominal'
+        nominal_model_restore = True
+        tm12_nominal_restore = True
+    elif new_model == 'tm14-nominal' or specific_w == '-K14':
+        tm_model = 'tm14-nominal'
+        nominal_model_restore = True
+        tm14_nominal_restore = True        
+    else:
+        nominal_model_restore = False
+    if nominal_model_restore is True:
+        message_s0 = 'Notice! You have chosen to restore a ' + tm_model + ' xacro model file'
+        node.get_logger().info('%s!' % message_s0)
+    if specific_w == '-OW':
+        overwrite = True
+        message_s1 = 'Notice!!! You have chosen to overwrite the original ' + tm_model + ' file'
+        node.get_logger().info('%s!' % message_s1)
+    ###############################################################################################
 
-
-    ask_item = node.create_client(AskItem, 'tmr/ask_item')
+    ask_item = node.create_client(AskItem, 'ask_item')
     if not ask_item.wait_for_service(3.0):
-        node.get_logger().error('No AskItem service')
+        node.get_logger().error('stop service, No AskItem service')
         return
 
+    # Notice !!! You must have finished to run the driver to connect to youur TM Robot before.
+    # [svr] (ask_item) -> id:dh (DHTable),id:dd (DeltaDH)
     req = AskItem.Request()
     req.wait_time = 1.0
 
@@ -44,33 +93,56 @@ def _gen_urdf(args=None):
     future = ask_item.call_async(req)
     rclpy.spin_until_future_complete(node, future)
     res_dd = future.result()
-
     if not res_dh.value.startswith('DHTable={') or not res_dh.value.endswith('}'):
-        node.get_logger().error('invalid dh')
+        node.get_logger().error('stop service, invalid parameters dh')
         return
     if not res_dd.value.startswith('DeltaDH={') or not res_dd.value.endswith('}'):
-        node.get_logger().error('invalid delta_dh')
+        node.get_logger().error('stop service, invalid parameters delta_dh')
         return
 
-    node.get_logger().info(res_dh.value)
-    node.get_logger().info(res_dd.value)
+    if not nominal_model_restore or overwrite:
+        node.get_logger().info('loading the correction kinematics parameters from your TM Robot')
+        node.get_logger().info(res_dh.value)
+        node.get_logger().info(res_dd.value)
 
     dh_strs = res_dh.value[9:-1].split(',')
     dd_strs = res_dd.value[9:-1].split(',')
-    '''
-    res_dh = 'DHTable={0,-90,0,145.1,0,-277,277,-90,0,429,0,0,-187,187,0,0,411.5,0,0,-162,162,90,90,0,-122.2,0,-187,187,0,90,0,106,0,-187,187,0,0,0,114.4,0,-277,277}'
-    res_dd = 'DeltaDH={-0.001059821,0.02508766,0.009534874,0,0.001116668,0.06614932,0.308224,0.0287381,0.06797475,-0.0319523,0.3752921,0.06614756,-0.006998898,0.06792655,-0.06083903,0.02092069,0.02965812,-0.1331249,0.06793034,0.02077797,0.08265772,0.03200645,0.01835932,0.06145732,0.08273286,0.6686108,0.6972408,-0.1793097,-0.0794057,1.425708}'
-    node.get_logger().info(res_dh)
-    node.get_logger().info(res_dd)
-    dh_strs = res_dh[9:-1].split(',')
-    dd_strs = res_dd[9:-1].split(',')
-    '''
+
+    ###############################################################################################
+    # You can restore some nominal kinematic parameters by using specific keyword settings
+    if nominal_model_restore is True:
+        if tm5_900_nominal_restore is True:
+            node.get_logger().info('Restore with TM5-900 nominal kinematics parameters')
+            res_dh = 'DHTable={0,-90,0,145.1,0,-270,270,-90,0,429,0,0,-180,180,0,0,411.5,0,0,-155,155,90,90,0,-122.2,0,-180,180,0,90,0,106,0,-180,180,0,0,0,114.4,0,-270,270}'
+            res_dd = 'DeltaDH={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}'
+        elif tm5_700_nominal_restore is True:
+            node.get_logger().info('Restore with TM5-700 nominal kinematics parameters')
+            res_dh = 'DHTable={0,-90,0,145.1,0,-270,270,-90,0,329,0,0,-180,180,0,0,311.5,0,0,-155,155,90,90,0,-122.2,0,-180,180,0,90,0,106,0,-180,180,0,0,0,114.4,0,-270,270}'
+            res_dd = 'DeltaDH={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}'
+        elif tm12_nominal_restore is True:
+            node.get_logger().info('Restore with TM12 nominal kinematics parameters')
+            res_dh = 'DHTable={0,-90,0,165.2,0,-270,270,-90,0,636.1,0,0,-180,180,0,0,557.9,0,0,-166,166,90,90,0,-156.3,0,-180,180,0,90,0,106,0,-180,180,0,0,0,113.15,0,-270,270}'
+            res_dd = 'DeltaDH={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}'
+        elif tm14_nominal_restore is True:
+            node.get_logger().info('Restore with TM14 nominal kinematics parameters')
+            res_dh = 'DHTable={0,-90,0,165.2,0,-270,270,-90,0,536.1,0,0,-180,180,0,0,457.9,0,0,-166,166,90,90,0,-156.3,0,-180,180,0,90,0,106,0,-180,180,0,0,0,113.15,0,-270,270}'
+            res_dd = 'DeltaDH={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}'
+        else:
+            # Example: TM5-900 nominal kinematics parameters
+            node.get_logger().info('Restore with TM5-900 nominal kinematics parameters')
+            res_dh = 'DHTable={0,-90,0,145.1,0,-270,270,-90,0,429,0,0,-180,180,0,0,411.5,0,0,-155,155,90,90,0,-122.2,0,-180,180,0,90,0,106,0,-180,180,0,0,0,114.4,0,-270,270}'
+            res_dd = 'DeltaDH={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}'
+        node.get_logger().info(res_dh)
+        node.get_logger().info(res_dd)
+        dh_strs = res_dh[9:-1].split(',')
+        dd_strs = res_dd[9:-1].split(',')
+    ###############################################################################################
 
     if len(dh_strs) != 42:
-        node.get_logger().error('invalid dh')
+        node.get_logger().error('stop service, invalid dh parameters')
         return
     if len(dd_strs) != 30:
-        node.get_logger().error('invalid delta_dh')
+        node.get_logger().error('stop service, invalid delta_dh parameters')
         return
 
     dh = [float(i) for i in dh_strs]
@@ -78,9 +150,14 @@ def _gen_urdf(args=None):
 
     # find xacro path
     curr_path = os.path.dirname(os.path.abspath(__file__))
-    ind = curr_path.find('install')
-    if (ind == -1) :
-        node.get_logger().error('can not find workspace directory')
+    dirs = ['src', 'install']
+    ind = -1
+    for d in dirs:
+        ind = curr_path.find(d)
+        if (ind != -1):
+            break
+    if (ind == -1):
+        node.get_logger().error('workspace directory not find')
         return
     src_path = curr_path[:ind] + 'src'
     xacro_path = ''
@@ -89,21 +166,23 @@ def _gen_urdf(args=None):
             xacro_path = dirpath + '/xacro'
             break
     if (xacro_path == ''):
-        node.get_logger().error('can not find xacro directory')
+        node.get_logger().error('xacro directory not found')
         return
 
-    xacro_name = '/macro.' + model + '.urdf.xacro'
-    new_xacro_name = '/macro.' + new_model + '.urdf.xacro'
+    xacro_name = '/macro.' + original_model + '-nominal.urdf.xacro'
+    new_xacro_name = '/' + new_model + '.urdf.xacro'
+    if specific_w == '+M':
+        new_xacro_name = '/macro.' + new_model + '.urdf.xacro'
 
     file_in = xacro_path + xacro_name
     file_out = xacro_path + new_xacro_name
 
     link_tag = '<!--LinkDescription-->'
-    link_head = '<?xml version=\'1.0\' encoding=\'UTF-8\'?>\n'
-    link_start = '<data xmlns:xacro="http://wiki.ros.org/xacro">'
+    link_head = "<?xml version=\'1.0\' encoding=\'UTF-8\'?>\n"
+    link_start = '<data xmlns:xacro="http://www.ros.org/wiki/xacro">'
     link_end = '</data>'
 
-    node.get_logger().info(file_in)
+    node.get_logger().info('[reference file path:] %s' % file_in)
 
     fr = open(file_in, 'r')
     data_in = fr.read()
@@ -111,7 +190,7 @@ def _gen_urdf(args=None):
     datas = data_in.split(link_tag)
 
     if len(datas) < 3:
-        node.get_logger().info('invalid tmr...xacro')
+        node.get_logger().error('stop service, incorrect reference xacro file')
         return
 
     link_data = link_start + datas[1] + link_end
@@ -130,24 +209,34 @@ def _gen_urdf(args=None):
     data_out = datas[0] + link_data + datas[2]
 
     file_save = ''
-    if replace:
+    if overwrite:
         file_save = file_in
-        node.get_logger().info('copy and rename origin xacro file')
         shutil.copyfile(file_in, file_out)
     else:
         file_save = file_out
 
-    node.get_logger().info(file_save)
-
     fw = open(file_save, 'w')
     fw.write(data_out)
+
+    if overwrite:
+        node.get_logger().info('File saved with new kinematic values')
+        node.get_logger().info('[overwrite reference file path:] ' + str(file_in))
+        node.get_logger().info('[new save file path:] ' + str(file_out))
+    elif nominal_model_restore:
+        node.get_logger().info('File restored with the nominal kinematic values')
+        node.get_logger().info('[new save file path:] ' + str(file_save))
+    else:
+        node.get_logger().info('File saved with new kinematic values')
+        node.get_logger().info('[new save file path:] ' + str(file_save))
     fw.close()
+
 
 def main(args=None):
     try:
-        _gen_urdf(args)
+        _gen_xacro(args)
     except rclpy.exceptions.ROSInterruptException:
         pass
+
 
 if __name__ == '__main__':
     main()
