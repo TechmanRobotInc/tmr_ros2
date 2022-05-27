@@ -153,21 +153,23 @@ Enable the `Data Table Setting` item and check the following boxes as item prede
 >
 > :bulb: Do you prepare the __TM Robot__ ready ? Make sure that TM Robot's operating software (__TMflow__) network settings are ready and the _Listen task_ project is running.<br/>
 >
-> The demo launches the RViz GUI and demonstrates planning and execution of a simple collision-free motion plan with TM Robot.
-> To bring up MoveIt2 demo environment in simulation mode with virtual TM Robot, by typing
+> The demo launches the RViz GUI and demonstrates planning and execution of a simple collision-free motion plan with TM Robot.<br/> 
+> To bring up MoveIt2 demo environment in simulation mode with virtual TM Robot, by typing<br/>
 >
 > ```bash
-> ros2 launch tm_moveit_cpp_demo run_moveit_cpp.launch.py
+> ros2 launch tm_moveit_cpp_demo tm5-900_run_moveit_cpp.launch.py
 > ```
+> :bookmark_tabs: Note1: There are several built-in TM Robot nominal robot model settings, available for tm5-900, tm5-700, tm12 and tm14 models, as well as the eyeless models tm5x-900, tm5x-700, tm12x and tm14x models.<br/>
+> <br/>
 >
-> The user can also manipulate real TM Robot to run, by typing<br/>
->
+> The user can also manipulate real TM5-900 Robot to run, by typing<br/>
+>> :warning:[CAUTION] This demo will let the real TM Robot move, please be careful.<br/>
 > ```bash
-> ros2 launch tm_moveit_cpp_demo run_moveit_cpp.launch.py robot_ip:=<robot_ip_address>
+> ros2 launch tm_moveit_cpp_demo tm5-900_run_moveit_cpp.launch.py robot_ip:=<robot_ip_address>
 > ```
 >
 > The parameter `<robot_ip_address>` means the IP address of the TM Robot.<br/>
->:warning:[CAUTION] This demo will let the real TM Robot move, please be careful.<br/>
+> :bookmark_tabs: Note2: If your real Robot is a TM14x, in the above example, you should type "tm14x_run_moveit_cpp.launch.py" to instead of "tm5-900_run_moveit_cpp.launch.py".<br/>
 
 
 ## __4. Vision__

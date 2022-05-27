@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="tm5x-900">
+
+  <xacro:arg name="ns" default="" />
+  <xacro:arg name="prefix" default="" />
+  <xacro:arg name="color" default="none" />
+  <xacro:arg name="trans_hw_iface" default="hardware_interface/PositionJointInterface" />
+
+  <xacro:include filename="$(find tm_description)/xacro/macro.gazebo.xacro" />
+  <xacro:include filename="$(find tm_description)/xacro/macro.transmission.xacro" />
+  <xacro:include filename="$(find tm_description)/xacro/macro.materials.xacro" />
+
+
+  <!-- tm5x-900 -->
+  <!-- If the user want to use newly generated named robot description file as user_defined.urdf.xacro, -->
+  <!-- you must modify 'macro.tm5x-900-nominal.urdf.xacro' to 'user_defined.urdf.xacro'  -->
+  <xacro:include filename="$(find tm_description)/xacro/macro.tm5x-900-nominal.urdf.xacro" />
+
+
+  <!--  -->
+  <xacro:tmr_gazebo ns="$(arg ns)" prefix="$(arg prefix)" />
+  <xacro:tmr_transmission prefix="$(arg prefix)" hw_iface="$(arg trans_hw_iface)" />
+  <xacro:tmr_materials/>
+
+
+  <!-- Arm -->
+  <xacro:property name="color" value="$(arg color)"/>
+  <xacro:if value="${color == 'none'}">
+    <xacro:tm5x-900 ns="$(arg ns)" prefix="$(arg prefix)" />
+  </xacro:if>
+
+
+  <!-- Arm.color.stl -->
+  <xacro:unless value="${color == 'none'}">
+    <xacro:tm5x-900 ns="$(arg ns)" prefix="$(arg prefix)" color="${color}" format="stl" />
+  </xacro:unless>
+
+
+</robot>

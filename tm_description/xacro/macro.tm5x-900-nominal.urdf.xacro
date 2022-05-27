@@ -1,0 +1,289 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:include filename="$(find tm_description)/xacro/macro.inertial.xacro" />
+
+  <xacro:macro name="tm5x-900" params="ns prefix color:=none format:=obj
+    joint_1_lower_limit:=${radians(-270)}    joint_1_upper_limit:=${radians(270)}
+    joint_2_lower_limit:=${radians(-180)}    joint_2_upper_limit:=${radians(180)}
+    joint_3_lower_limit:=${radians(-155)}    joint_3_upper_limit:=${radians(155)}
+    joint_4_lower_limit:=${radians(-180)}    joint_4_upper_limit:=${radians(180)}
+    joint_5_lower_limit:=${radians(-180)}    joint_5_upper_limit:=${radians(180)}
+    joint_6_lower_limit:=${radians(-270)}    joint_6_upper_limit:=${radians(270)}
+    joint_1_velocity_limit:=${radians(180)}    
+    joint_2_velocity_limit:=${radians(180)}
+    joint_3_velocity_limit:=${radians(180)}    
+    joint_4_velocity_limit:=${radians(225)}
+    joint_5_velocity_limit:=${radians(225)}    
+    joint_6_velocity_limit:=${radians(225)}
+    joint_1_effort_limit:=${157}    
+    joint_2_effort_limit:=${157}
+    joint_3_effort_limit:=${157}    
+    joint_4_effort_limit:=${43}
+    joint_5_effort_limit:=${43}    
+    joint_6_effort_limit:=${43}   
+    safety_limits:=false safety_pos_margin:=0.15
+    safety_k_position:=20">
+
+   <xacro:property name="damping_factor" value="0.000"/>
+   <xacro:property name="d1" value="${damping_factor*0.1}"/>
+   <xacro:property name="d2" value="${damping_factor*0.1}"/>
+   <xacro:property name="d3" value="${damping_factor*0.1}"/>
+   <xacro:property name="d4" value="${damping_factor*0.1}"/>
+   <xacro:property name="d5" value="${damping_factor*0.1}"/>
+   <xacro:property name="d6" value="${damping_factor*0.1}"/>
+
+   <xacro:property name="friction_factor" value="0.000"/>
+   <xacro:property name="f1" value="${friction_factor*0.1}"/>
+   <xacro:property name="f2" value="${friction_factor*0.1}"/>
+   <xacro:property name="f3" value="${friction_factor*0.1}"/>
+   <xacro:property name="f4" value="${friction_factor*0.1}"/>
+   <xacro:property name="f5" value="${friction_factor*0.1}"/>
+   <xacro:property name="f6" value="${friction_factor*0.1}"/>
+      
+    <!-- Inertia parameters -->
+    <xacro:property name="mass_0" value="1.000" />
+    <xacro:property name="mass_1" value="4.032" />
+    <xacro:property name="mass_2" value="8.567" />
+    <xacro:property name="mass_3" value="2.273" />
+    <xacro:property name="mass_4" value="1.576" />
+    <xacro:property name="mass_5" value="1.576" />
+    <xacro:property name="mass_6" value="0.4" />
+
+    <xacro:property name="unit_factor" value="0.000001"/>
+    <xacro:property name="ixx_1" value="${8800.119*unit_factor}" />
+    <xacro:property name="ixx_2" value="${23552.072*unit_factor}" />
+    <xacro:property name="ixx_3" value="${3380.181*unit_factor}" />
+    <xacro:property name="ixx_4" value="${2058.405*unit_factor}" />
+    <xacro:property name="ixx_5" value="${2058.405*unit_factor}" />
+    <xacro:property name="ixx_6" value="${476.643*unit_factor}" />
+
+    <xacro:property name="iyy_1" value="${11548.982*unit_factor}" />
+    <xacro:property name="iyy_2" value="${198251.97*unit_factor}" />
+    <xacro:property name="iyy_3" value="${33829.144*unit_factor}" />
+    <xacro:property name="iyy_4" value="${2563.079*unit_factor}" />
+    <xacro:property name="iyy_5" value="${2563.079*unit_factor}" />
+    <xacro:property name="iyy_6" value="${851.576*unit_factor}" />
+    
+    <xacro:property name="izz_1" value="${11970.081*unit_factor}" />
+    <xacro:property name="izz_2" value="${204592.54*unit_factor}" />
+    <xacro:property name="izz_3" value="${34328.203*unit_factor}" />
+    <xacro:property name="izz_4" value="${2643.21*unit_factor}" />
+    <xacro:property name="izz_5" value="${2643.21*unit_factor}" />
+    <xacro:property name="izz_6" value="${959.69*unit_factor}" />
+
+<!--LinkDescription-->
+  <link name="${prefix}link_0">
+    <visual>
+      <geometry>
+        <mesh filename="package://tm_description/meshes/tm5-900/visual/tm5-base.${format}" />
+      </geometry>
+      <material name="${color}" />
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://tm_description/meshes/tm5-900/collision/tm5-base_c.stl" />
+      </geometry>
+    </collision>
+<!--inertial-->
+    <xacro:cylinder_inertial_z radius="0.06" length="0.05" mass="${mass_0}">
+      <origin rpy="0.000000 0.000000 0.000000" xyz="0.000000 0.000000 0.000000" />
+    </xacro:cylinder_inertial_z>
+  </link>
+  <joint name="${prefix}joint_1" type="revolute">
+    <parent link="${prefix}link_0" />
+    <child link="${prefix}link_1" />
+    <origin rpy="0.000000 -0.000000 0.000000" xyz="0.000000 0.000000 0.145100" />
+    <axis xyz="0 0 1" />
+<!--limit-->
+    <limit lower="${joint_1_lower_limit}" upper="${joint_1_upper_limit}" velocity="${joint_1_velocity_limit}" effort="${joint_1_effort_limit}" />
+    <xacro:if value="${safety_limits}">
+      <safety_controller soft_lower_limit="${joint_1_lower_limit + safety_pos_margin}" soft_upper_limit="${joint_1_upper_limit - safety_pos_margin}" k_position="${safety_k_position}" k_velocity="0.0" />
+    </xacro:if>
+    <dynamics damping="${d1}" friction="${f1}" />
+  </joint>
+  <link name="${prefix}link_1">
+    <visual>
+      <geometry>
+        <mesh filename="package://tm_description/meshes/tm5-900/visual/tmr_400w_01.${format}" />
+      </geometry>
+      <material name="${color}" />
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://tm_description/meshes/tm5-900/collision/tmr_400w_01_c.stl" />
+      </geometry>
+    </collision>
+    <inertial>
+      <origin rpy="0.000000 0.000000 0.000000" xyz="0.000000 0.000000 0.000000" />
+      <mass value="${mass_1}" />
+      <inertia ixx="${ixx_1}" ixy="0.000000" ixz="0.000000" iyy="${iyy_1}" iyz="0.000000" izz="${izz_1}" />
+    </inertial>
+  </link>
+  <joint name="${prefix}joint_2" type="revolute">
+    <parent link="${prefix}link_1" />
+    <child link="${prefix}link_2" />
+    <origin rpy="-1.570796 -1.570796 0.000000" xyz="0.000000 0.000000 0.000000" />
+    <axis xyz="0 0 1" />
+<!--limit-->
+    <limit lower="${joint_2_lower_limit}" upper="${joint_2_upper_limit}" velocity="${joint_2_velocity_limit}" effort="${joint_2_effort_limit}" />
+    <xacro:if value="${safety_limits}">
+      <safety_controller soft_lower_limit="${joint_2_lower_limit + safety_pos_margin}" soft_upper_limit="${joint_2_upper_limit - safety_pos_margin}" k_position="${safety_k_position}" k_velocity="0.0" />
+    </xacro:if>
+    <dynamics damping="${d2}" friction="${f2}" />
+  </joint>
+  <link name="${prefix}link_2">
+    <visual>
+      <geometry>
+        <mesh filename="package://tm_description/meshes/tm5-900/visual/tm5-900_arm1.${format}" />
+      </geometry>
+      <material name="${color}" />
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://tm_description/meshes/tm5-900/collision/tm5-900_arm1_c.stl" />
+      </geometry>
+    </collision>
+    <inertial>
+      <origin rpy="0.000000 0.000000 0.000000" xyz="0.000000 0.000000 0.000000" />
+      <mass value="${mass_2}" />
+      <inertia ixx="${ixx_2}" ixy="0.000000" ixz="0.000000" iyy="${iyy_2}" iyz="0.000000" izz="${izz_2}" />
+    </inertial>
+  </link>
+  <joint name="${prefix}joint_3" type="revolute">
+    <parent link="${prefix}link_2" />
+    <child link="${prefix}link_3" />
+    <origin rpy="0.000000 -0.000000 0.000000" xyz="0.429000 0.000000 0.000000" />
+    <axis xyz="0 0 1" />
+<!--limit-->
+    <limit lower="${joint_3_lower_limit}" upper="${joint_3_upper_limit}" velocity="${joint_3_velocity_limit}" effort="${joint_3_effort_limit}" />
+    <xacro:if value="${safety_limits}">
+      <safety_controller soft_lower_limit="${joint_3_lower_limit + safety_pos_margin}" soft_upper_limit="${joint_3_upper_limit - safety_pos_margin}" k_position="${safety_k_position}" k_velocity="0.0" />
+    </xacro:if>
+    <dynamics damping="${d3}" friction="${f3}" />
+  </joint>
+  <link name="${prefix}link_3">
+    <visual>
+      <geometry>
+        <mesh filename="package://tm_description/meshes/tm5-900/visual/tm5-900_arm2.${format}" />
+      </geometry>
+      <material name="${color}" />
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://tm_description/meshes/tm5-900/collision/tm5-900_arm2_c.stl" />
+      </geometry>
+    </collision>
+    <inertial>
+      <origin rpy="0.000000 0.000000 0.000000" xyz="0.000000 0.000000 0.000000" />
+      <mass value="${mass_3}" />
+      <inertia ixx="${ixx_3}" ixy="0.000000" ixz="0.000000" iyy="${iyy_3}" iyz="0.000000" izz="${izz_3}" />
+    </inertial>
+  </link>
+  <joint name="${prefix}joint_4" type="revolute">
+    <parent link="${prefix}link_3" />
+    <child link="${prefix}link_4" />
+    <origin rpy="0.000000 -0.000000 1.570796" xyz="0.411500 0.000000 -0.122200" />
+    <axis xyz="0 0 1" />
+<!--limit-->
+    <limit lower="${joint_4_lower_limit}" upper="${joint_4_upper_limit}" velocity="${joint_4_velocity_limit}" effort="${joint_4_effort_limit}" />
+    <xacro:if value="${safety_limits}">
+      <safety_controller soft_lower_limit="${joint_4_lower_limit + safety_pos_margin}" soft_upper_limit="${joint_4_upper_limit - safety_pos_margin}" k_position="${safety_k_position}" k_velocity="0.0" />
+    </xacro:if>
+    <dynamics damping="${d4}" friction="${f4}" />
+  </joint>
+  <link name="${prefix}link_4">
+    <visual>
+      <geometry>
+        <mesh filename="package://tm_description/meshes/tm5-900/visual/tmr_100w_01.${format}" />
+      </geometry>
+      <material name="${color}" />
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://tm_description/meshes/tm5-900/collision/tmr_100w_01_c.stl" />
+      </geometry>
+    </collision>
+    <inertial>
+      <origin rpy="0.000000 0.000000 0.000000" xyz="0.000000 0.000000 0.000000" />
+      <mass value="${mass_4}" />
+      <inertia ixx="${ixx_4}" ixy="0.000000" ixz="0.000000" iyy="${iyy_4}" iyz="0.000000" izz="${izz_4}" />
+    </inertial>
+  </link>
+  <joint name="${prefix}joint_5" type="revolute">
+    <parent link="${prefix}link_4" />
+    <child link="${prefix}link_5" />
+    <origin rpy="1.570796 -0.000000 0.000000" xyz="0.000000 -0.106000 0.000000" />
+    <axis xyz="0 0 1" />
+<!--limit-->
+    <limit lower="${joint_5_lower_limit}" upper="${joint_5_upper_limit}" velocity="${joint_5_velocity_limit}" effort="${joint_5_effort_limit}" />
+    <xacro:if value="${safety_limits}">
+      <safety_controller soft_lower_limit="${joint_5_lower_limit + safety_pos_margin}" soft_upper_limit="${joint_5_upper_limit - safety_pos_margin}" k_position="${safety_k_position}" k_velocity="0.0" />
+    </xacro:if>
+    <dynamics damping="${d5}" friction="${f5}" />
+  </joint>
+  <link name="${prefix}link_5">
+    <visual>
+      <geometry>
+        <mesh filename="package://tm_description/meshes/tm5-900/visual/tmr_100w_02.${format}" />
+      </geometry>
+      <material name="${color}" />
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://tm_description/meshes/tm5-900/collision/tmr_100w_02_c.stl" />
+      </geometry>
+    </collision>
+    <inertial>
+      <origin rpy="0.000000 0.000000 0.000000" xyz="0.000000 0.000000 0.000000" />
+      <mass value="${mass_5}" />
+      <inertia ixx="${ixx_5}" ixy="0.000000" ixz="0.000000" iyy="${iyy_5}" iyz="0.000000" izz="${izz_5}" />
+    </inertial>
+  </link>
+  <joint name="${prefix}joint_6" type="revolute">
+    <parent link="${prefix}link_5" />
+    <child link="${prefix}link_6" />
+    <origin rpy="1.570796 -0.000000 0.000000" xyz="0.000000 -0.114400 0.000000" />
+    <axis xyz="0 0 1" />
+<!--limit-->
+    <limit lower="${joint_6_lower_limit}" upper="${joint_6_upper_limit}" velocity="${joint_6_velocity_limit}" effort="${joint_6_effort_limit}" />
+    <xacro:if value="${safety_limits}">
+      <safety_controller soft_lower_limit="${joint_6_lower_limit + safety_pos_margin}" soft_upper_limit="${joint_6_upper_limit - safety_pos_margin}" k_position="${safety_k_position}" k_velocity="0.0" />
+    </xacro:if>
+    <dynamics damping="${d6}" friction="${f6}" />
+  </joint>
+  <link name="${prefix}link_6">
+    <visual>
+      <geometry>
+        <mesh filename="package://tm_description/meshes/tm5-900/visual/tmr_iox.${format}" />
+      </geometry>
+      <material name="${color}" />
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://tm_description/meshes/tm5-900/collision/tmr_iox_c.stl" />
+      </geometry>
+    </collision>
+    <inertial>
+      <origin rpy="0.000000 0.000000 0.000000" xyz="0.000000 0.000000 0.000000" />
+      <mass value="${mass_6}" />
+      <inertia ixx="${ixx_6}" ixy="0.000000" ixz="0.000000" iyy="${iyy_6}" iyz="0.000000" izz="${izz_6}" />
+    </inertial>
+  </link>
+  <link name="${prefix}base" />
+  <joint name="${prefix}base_fixed_joint" type="fixed">
+    <parent link="${prefix}base" />
+    <child link="${prefix}link_0" />
+    <origin rpy="0.000000 0.000000 0.000000" xyz="0.000000 0.000000 0.000000" />
+  </joint>
+  <link name="${prefix}flange" />
+  <joint name="${prefix}flange_fixed_joint" type="fixed">
+    <parent link="${prefix}link_6" />
+    <child link="${prefix}flange" />
+    <origin rpy="0.000000 0.000000 0.000000" xyz="0.000000 0.000000 0.000000" />
+  </joint>
+<!--LinkDescription-->
+
+  </xacro:macro>
+
+</robot>
