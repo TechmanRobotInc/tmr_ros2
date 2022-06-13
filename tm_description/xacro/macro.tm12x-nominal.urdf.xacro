@@ -48,7 +48,7 @@
     <xacro:property name="mass_3" value="3.3577" />
     <xacro:property name="mass_4" value="1.576" />
     <xacro:property name="mass_5" value="1.576" />
-    <xacro:property name="mass_6" value="0.4" />
+    <xacro:property name="mass_6" value="0.31" />
 
     <xacro:property name="unit_factor" value="0.000001"/>
     <xacro:property name="ixx_1" value="${20289.334*unit_factor}" />
@@ -56,21 +56,21 @@
     <xacro:property name="ixx_3" value="${9755.469*unit_factor}" />
     <xacro:property name="ixx_4" value="${2058.405*unit_factor}" />
     <xacro:property name="ixx_5" value="${2058.405*unit_factor}" />
-    <xacro:property name="ixx_6" value="${476.643*unit_factor}" />
+    <xacro:property name="ixx_6" value="${226.642*unit_factor}" />
 
     <xacro:property name="iyy_1" value="${20289.334*unit_factor}" />
     <xacro:property name="iyy_2" value="${1175878.900*unit_factor}" />
     <xacro:property name="iyy_3" value="${163347.190*unit_factor}" />
     <xacro:property name="iyy_4" value="${2563.079*unit_factor}" />
     <xacro:property name="iyy_5" value="${2563.079*unit_factor}" />
-    <xacro:property name="iyy_6" value="${851.576*unit_factor}" />
+    <xacro:property name="iyy_6" value="${226.642*unit_factor}" />
     
     <xacro:property name="izz_1" value="${21396.271*unit_factor}" />
     <xacro:property name="izz_2" value="${1203393.300*unit_factor}" />
     <xacro:property name="izz_3" value="${166566.78*unit_factor}" />
     <xacro:property name="izz_4" value="${2643.21*unit_factor}" />
     <xacro:property name="izz_5" value="${2643.21*unit_factor}" />
-    <xacro:property name="izz_6" value="${959.69*unit_factor}" />
+    <xacro:property name="izz_6" value="${286.595*unit_factor}" />
 
 <!--LinkDescription-->
   <link name="${prefix}link_0">
