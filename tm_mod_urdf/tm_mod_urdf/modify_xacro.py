@@ -113,11 +113,11 @@ def _gen_xacro(args=None):
     if nominal_model_restore is True:
         if tm5_900_nominal_restore is True:
             node.get_logger().info('Restore with TM5-900 nominal kinematics parameters')
-            res_dh = 'DHTable={0,-90,0,145.1,0,-270,270,-90,0,429,0,0,-180,180,0,0,411.5,0,0,-155,155,90,90,0,-122.2,0,-180,180,0,90,0,106,0,-180,180,0,0,0,114.4,0,-270,270}'
+            res_dh = 'DHTable={0,-90,0,145.2,0,-270,270,-90,0,429,0,0,-180,180,0,0,411.5,0,0,-155,155,90,90,0,-122.3,0,-180,180,0,90,0,106,0,-180,180,0,0,0,113.15,0,-270,270}'
             res_dd = 'DeltaDH={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}'
         elif tm5_700_nominal_restore is True:
             node.get_logger().info('Restore with TM5-700 nominal kinematics parameters')
-            res_dh = 'DHTable={0,-90,0,145.1,0,-270,270,-90,0,329,0,0,-180,180,0,0,311.5,0,0,-155,155,90,90,0,-122.2,0,-180,180,0,90,0,106,0,-180,180,0,0,0,114.4,0,-270,270}'
+            res_dh = 'DHTable={0,-90,0,145.2,0,-270,270,-90,0,329,0,0,-180,180,0,0,311.5,0,0,-155,155,90,90,0,-122.3,0,-180,180,0,90,0,106,0,-180,180,0,0,0,113.15,0,-270,270}'
             res_dd = 'DeltaDH={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}'
         elif tm12_nominal_restore is True:
             node.get_logger().info('Restore with TM12 nominal kinematics parameters')
@@ -130,7 +130,7 @@ def _gen_xacro(args=None):
         else:
             # Example: TM5-900 nominal kinematics parameters
             node.get_logger().info('Restore with TM5-900 nominal kinematics parameters')
-            res_dh = 'DHTable={0,-90,0,145.1,0,-270,270,-90,0,429,0,0,-180,180,0,0,411.5,0,0,-155,155,90,90,0,-122.2,0,-180,180,0,90,0,106,0,-180,180,0,0,0,114.4,0,-270,270}'
+            res_dh = 'DHTable={0,-90,0,145.2,0,-270,270,-90,0,429,0,0,-180,180,0,0,411.5,0,0,-155,155,90,90,0,-122.3,0,-180,180,0,90,0,106,0,-180,180,0,0,0,113.15,0,-270,270}'
             res_dd = 'DeltaDH={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}'
         node.get_logger().info(res_dh)
         node.get_logger().info(res_dd)
