@@ -102,8 +102,9 @@ def _gen_urdf(args=None):
 
     if not nominal_model_restore or overwrite:
         node.get_logger().info('loading the correction kinematics parameters from your TM Robot')
-        node.get_logger().info(res_dh.value)
-        node.get_logger().info(res_dd.value)
+        if specific_w == '-VAL':
+            node.get_logger().info(res_dh.value)
+            node.get_logger().info(res_dd.value)
 
     dh_strs = res_dh.value[9:-1].split(',')
     dd_strs = res_dd.value[9:-1].split(',')
