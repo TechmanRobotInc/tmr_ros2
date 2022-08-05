@@ -6,9 +6,9 @@ Techman Robot is a state-of-the-art production tool that is highly compatible an
 
 ## __2. Feature__
 
-This driver is for <u>**ROS2 Foxy**</u> version. <br/>
-For using the driver, please make sure your ROS PC is installed correct.<br/>
-If the user want to know how to use ROS1 driver, please go to [TM ROS1 driver](https://github.com/TechmanRobotInc/tmr_ros1).<br/>
+This driver is for <u>**ROS2 Foxy**</u> version.<br/>
+To use the driver, make sure your ROS PC is installed correctly.<br/>
+If the user want to know how to use the ROS1 driver, please visit the [TM ROS1 driver](https://github.com/TechmanRobotInc/tmr_ros1) website or directly click the __TM ROS driver version__ listed in the table below.<br/>
 
 
 More information: TM ROS driver support list
@@ -35,6 +35,7 @@ The user can directly refer to the chapters introduced in the following text: st
 
 
 ## __3. Usage__
+After installing the correct ROS2 version of the computer, the next step is to ensure that your hardware, control computer, and TM Robot are all properly configured to communicate with each other. See below to make sure the network settings on your computer are correct, the TM Robot's operating software (__TMflow__) network settings are ready and the __Listen node__ is running.<br/>
 
 ### &sect; __TMflow Listen node setup__
 > The __Listen node__: a socket server can be established and be connected with ROS by an external device to communicate according to the [defined protocol](https://assets.omron.eu/downloads/manual/en/v1/i848_tm_expression_editor_and_listen_node_reference_manual_en.pdf). The user can make the robot communicate with the user's ROS (remote) computer equipment through a wired network, when all the network parameters in the _Network setting_ are set.<br/>
@@ -47,8 +48,11 @@ Example: Set the Subnet mask: 255.255.255.0 and IP address 192.168.10.2
 Note: Set the network mask, and the communication with the TM Robot must be in the set domain.  
 > ![2](figures/2.png)
 >
-> 3. Set the __Ethernet Slave Data Table__ settings: mouse-click to enter the page of __Setting &rArr; Connection &rArr; Ethernet Slave__ in order.   
-Enable the `Data Table Setting` item and check the following boxes as item predefined to receive/send specific data:
+> 3. Set the __Ethernet Slave__ `Data Table Setting` item: mouse-click to enter the page of __Setting &rArr; Connection &rArr; Ethernet Slave__ in order.  
+We recommend _one easy method_ <sup>1</sup> to set the __Ethernet Slave__ `Data Table setting` is to directly import the software package.  
+ <sup>1</sup> See [TM ROS Driver vs TMflow software Usage : Import Data Table Setting](https://github.com/TechmanRobotInc/TM_Export).  
+Or the previously provided method as follows: (Note: TMflow software version changes may have slightly different settings.)  
+The user can manually click the `Data Table Setting` <sup>2</sup> item and check the following boxes as item _predefined_ <sup>3</sup> to receive/send specific data: 
 >
 >       - [x] Robot_Error
 >       - [x] Project_Run
@@ -77,28 +81,44 @@ Enable the `Data Table Setting` item and check the following boxes as item prede
 >       - [x] END_DI0~DI2
 >       - [x] END_AI0
 >
+>    <sup>2</sup> <u>Turn off</u> Ethernet Slave. Let "STATUS:   __Disable__" displayed on Ethernet Slave setting page, then click `Data Table Setting` to enter the next page for related settings.
+>    <sup>3</sup> The checked items listed above must <u>all</u> be selected for TM ROS setting.
+>
+>    When you need to check more about the maximum, minimum, average calculation properties of joint torque, the _three checked items_ <sup>4</sup> listed below can be checked individually or all of them, please leave them unchecked when not in use.
+>
+>       - [ ] Joint_Torque_Average
+>       - [ ] Joint_Torque_Min
+>       - [ ] Joint_Torque_Max
+>
+>    <sup>4</sup> This function requires <u>TMflow 1.84 or later</u> versions to support.
+>
+
+> 4. Enable the __Ethernet Slave__ settings: mouse-click to enable or disable TM Ethernet Slave. Once enabled, the robot establish a Socket server to send the robot status and data to the connected clients and permissions to access specific robot data.
+Mouse-click to enable the `Ethernet Slave` setting:
+Note: STATUS: &rArr; __Enable__. 
 >       ![2](figures/3.png)
 >
->    Another way to set the __Ethernet Slave Data Table__ settings is to directly import the software package , see [TM ROS Driver vs TMflow software Usage : Import Data Table Setting](https://github.com/TechmanRobotInc/TM_Export).
->  
-> 4. Press the Play/Pause Button on the Robot Stick to start running this _Listen task_ project.
+> 5. Press the Play/Pause Button on the Robot Stick to start running this _Listen task_ project.
 >
 
 
 ###  &sect; __Remote connection to TM ROBOT__
-> Static IP of remote connection network settings through the wired network .<br/> 
+> Static IP of remote connection network settings through the wired network.<br/> 
 >
-> 1. Set the wired network of the user's (remote) Ubuntu computer by mouse-click on the top right of the desktop &rArr; Click on "Wired Settings" &rArr; Click on the gear icon &rArr; In the IPv4 feature options, click on "Manual" in order.<br/> 
+> 1. Set the wired network of the user's (remote) Ubuntu computer by mouse-click on the top right of the desktop &rArr; Click on "__Wired Settings__" &rArr; Click on the gear icon &rArr; In the IPv4 feature options, click on "Manual" in order.<br/> 
 > ![user_remote_network_settings](figures/user_remote_network_settings.png)
-> 2. Set the Static IP settings: where the IP address is fixed for the first three yards same as the previous setting 192.168.10, last yards 3-254 machine numbers are available. (Because _TM ROBOT_, you have been set to 192.168.10.2 )<br/> 
-> Example: Set the Netmask: 255.255.255.0 and IP address 192.168.10.30  <br/> 
+> 2. Set the Static IP settings: where the IP address is fixed for the first three yards same as the previous setting 192.168.10, last yards 3-254 machine numbers are available. (Because _TM ROBOT_, you have been set to 192.168.10.2)<br/> 
+> Example: Set the Netmask: 255.255.255.0 and IP address 192.168.10.30 <br/> 
 > ![user_remote_IP_example](figures/user_remote_IP_example.png)
 > 3. Check Internet connection: start a terminal to test the connectivity with the target host _TM ROBOT_, by typing ping 192.168.10.2
 > ![ping_target_host.png](figures/ping_target_host.png)
+>> :bulb: Tip: Remember to reconfigure the network settings due to <u>static IP changes</u> or <u>replacement of the ROS control PC</u>.<br/>
+>> As mentioned above, a valuable debugging tool is your operating system's <u>ping</u> command. If nothing appears to happen or an error is thrown, the robot cannot be accessed from your computer. Please go back to the top of this chapter and re-operate in the order of instructions.<br/>
+>> If you are an experienced user, you may just need to <u>turn off</u> &rArr; <u>turn on</u> the gear icon of "__Wired Settings__" on your computer or to <u>turn off</u> &rArr; <u>turn on</u> the "__Ethernet Slave Data Table__" setting of the robot to reconfigure the hardware settings.<br/>
+>
 
 
 ###  &sect; __TM ROS driver usage__
-
 > __ROS2 driver usage__
 > 
 > After the user has set up the ROS2 environment (example : [Debian packages for ROS 2 Foxy](https://docs.ros.org/en/foxy/Installation/Ubuntu-Install-Debians.html)) and built the TM driver based on the specific workspace, please enter your workspace `<workspace>` by launching the terminal, and remember to make the workspace visible to ROS. 
@@ -123,7 +143,7 @@ Enable the `Data Table Setting` item and check the following boxes as item prede
 > __Usage with MoveIt2 (Tentative)__ 
 >
 > See [MoveIt2 tutorial](https://moveit.ros.org/install-moveit2/source/).<br/>
-> 
+>
 > Assuming that the user is ready to build MoveIt2, and the user wants to apply the MoveIt by TM Robot, please do'nt forget to source the MoveIt environment, or you can add  ``source <MoveIt_WS>/install/setup.bash`` to your `.bashrc`.<br/>
 > The `<MoveIt_WS>` means the MoveIt2 workspace, for example `COLCON_WS` .<br/>
 > The `<TMDriver_WS>` means TM driver workspace, for example `tmdriver_ws` .<br/>
@@ -151,10 +171,11 @@ Enable the `Data Table Setting` item and check the following boxes as item prede
 > source ./install/setup.bash
 > ```
 >
-> :bulb: Do you prepare the __TM Robot__ ready ? Make sure that TM Robot's operating software (__TMflow__) network settings are ready and the _Listen task_ project is running.<br/>
->
 > The demo launches the RViz GUI and demonstrates planning and execution of a simple collision-free motion plan with TM Robot.<br/> 
-> To bring up MoveIt2 demo environment in simulation mode with virtual TM Robot, by typing<br/>
+> :bulb: Do you prepare the __TM Robot__ ready ? Make sure that TM Robot's operating software (__TMflow__) network settings are ready and the __Listen node__ is running.<br/>
+>
+> To bring up MoveIt2 demo environment in simulation mode with virtual TM Robot (Example: TM5-900), by typing<br/>
+>
 >
 > ```bash
 > ros2 launch tm_moveit_cpp_demo tm5-900_run_moveit_cpp.launch.py
@@ -162,14 +183,16 @@ Enable the `Data Table Setting` item and check the following boxes as item prede
 > :bookmark_tabs: Note1: There are several built-in TM Robot nominal robot model settings, available for tm5-900, tm5-700, tm12 and tm14 models, as well as the eyeless models tm5x-900, tm5x-700, tm12x and tm14x models.<br/>
 > <br/>
 >
-> The user can also manipulate real TM5-900 Robot to run, by typing<br/>
->> :warning:[CAUTION] This demo will let the real TM Robot move, please be careful.<br/>
+> The user can also manipulate real TM5-900 Robot (Example: TM5-900) to run, by typing<br/>
+>> :warning:[CAUTION] This demo will let the real TM Robot move, please be careful. If the user are a beginner or unfamiliar with the arm movement path, it is recommended that the user place his hand on the big red emergency _Stick Stop Button_ at any time, and press the button appropriately in the event of any accident that may occur.<br/>
+>
 > ```bash
 > ros2 launch tm_moveit_cpp_demo tm5-900_run_moveit_cpp.launch.py robot_ip:=<robot_ip_address>
 > ```
 >
 > The parameter `<robot_ip_address>` means the IP address of the TM Robot.<br/>
-> :bookmark_tabs: Note2: If your real Robot is a TM14x, in the above example, you should type "tm14x_run_moveit_cpp.launch.py" to instead of "tm5-900_run_moveit_cpp.launch.py".<br/>
+> :bookmark_tabs: Note2: If your real Robot is a TM12, in the above example, you should type "tm12_run_moveit_cpp.launch.py" to instead of "tm5-900_run_moveit_cpp.launch.py".<br/>
+> :bookmark_tabs: Note3: If your real Robot is the eyeless model as a TM12x, in the above example, you should type "tm12x_run_moveit_cpp.launch.py" to instead of "tm5-900_run_moveit_cpp.launch.py".<br/>
 
 
 ## __4. Vision__
@@ -281,7 +304,7 @@ The user can use service named "send_script" to send script.<br/>
 "id" &rarr; The transaction number expressed in any <u>alphanumeric</u> <sup>1</sup> characters.<br/> 
 "script" &rarr; the script which the user want to send.<br/>
 "ok" &rarr; the correctness of the script.<br/>
- ><sup>1</sup> If a non-alphanumeric byte is encountered, a CPERR 04 error is reported. When used as a communication packet response, it is a transaction number and identifies which group of commands to respond.<br/>
+> <sup>1</sup> If a non-alphanumeric byte is encountered, a CPERR 04 error is reported. When used as a communication packet response, it is a transaction number and identifies which group of commands to respond.<br/>
 >
 > * demo_ask_item:<br/>
 In this demo code, the user can use this service to send TMSCT <sup>2</sup> cmd.<br/> 
@@ -456,11 +479,11 @@ The user can use the tm_mod_urdf package to extract specific kinematic values fr
 > 3. Next, the user must modify the filename part of the default pre-built nominal robot model in tm5-900.urdf.xacro to a newly generated robot model description naming file.<br/>
 > ```bash
 > cd src\tm_description\xacro\
-> vim tm5-900.urdf.xacro
+> sudo vim tm5-900.urdf.xacro
 > ```
 >>  or use ``gedit`` text editor instead of ``vim`` to edit the file contents, by typing<br/>
 > ```bash
-> gedit tm5-900.urdf.xacro
+> sudo gedit tm5-900.urdf.xacro
 > ```
 >
 > :bookmark_tabs: Note1: If your real Robot is a TM5-700, in the above example, you should type tm5-700 as an example for <urdf_from> and modify the tm5-700.urdf.xacro file.<br/>
@@ -517,5 +540,5 @@ The user can use the tm_mod_urdf package to extract specific kinematic values fr
 > Ans: The user can first find the displayed string "``[new save file path:] ``" on the screen, and the following string is the file save location.<br/>
 
 
-## __8. Contact Us__
+## __8. Contact us/Technical support__
 More Support & Service, please contact us. [@TECHMAN ROBOT](https://www.tm-robot.com/zh-hant/contact-us/)``[https://www.tm-robot.com/zh-hant/contact-us/] ``<br/>
