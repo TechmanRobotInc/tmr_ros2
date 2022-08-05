@@ -81,7 +81,7 @@ The user can manually click the `Data Table Setting` <sup>2</sup> item and check
 >       - [x] END_DI0~DI2
 >       - [x] END_AI0
 >
->    <sup>2</sup> <u>Turn off</u> Ethernet Slave. Let "STATUS:   __Disable__" displayed on Ethernet Slave setting page, then click `Data Table Setting` to enter the next page for related settings.
+>    <sup>2</sup> <u>Turn off</u> Ethernet Slave. Let "STATUS:   __Disable__" displayed on Ethernet Slave setting page, then click `Data Table Setting` to enter the next page for related settings.  
 >    <sup>3</sup> The checked items listed above must <u>all</u> be selected for TM ROS setting.
 >
 >    When you need to check more about the maximum, minimum, average calculation properties of joint torque, the _three checked items_ <sup>4</sup> listed below can be checked individually or all of them, please leave them unchecked when not in use.
@@ -92,7 +92,6 @@ The user can manually click the `Data Table Setting` <sup>2</sup> item and check
 >
 >    <sup>4</sup> This function requires <u>TMflow 1.84 or later</u> versions to support.
 >
-
 > 4. Enable the __Ethernet Slave__ settings: mouse-click to enable or disable TM Ethernet Slave. Once enabled, the robot establish a Socket server to send the robot status and data to the connected clients and permissions to access specific robot data.
 Mouse-click to enable the `Ethernet Slave` setting:
 Note: STATUS: &rArr; __Enable__. 
