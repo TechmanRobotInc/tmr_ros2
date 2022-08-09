@@ -141,7 +141,7 @@ Note: STATUS: &rArr; __Enable__.
 
 > __Usage with MoveIt2 (Tentative)__ 
 >
-> See [MoveIt2 tutorial](https://moveit.ros.org/install-moveit2/source/).<br/>
+> See [MoveIt2 tutorial](https://moveit.ros.org/install-moveit2/source/) to install the MoveIt2 packages.<br/>
 >
 > Assuming that the user is ready to build MoveIt2, and the user wants to apply the MoveIt by TM Robot, please do'nt forget to source the MoveIt environment, or you can add  ``source <MoveIt_WS>/install/setup.bash`` to your `.bashrc`.<br/>
 > The `<MoveIt_WS>` means the MoveIt2 workspace, for example `COLCON_WS` .<br/>
