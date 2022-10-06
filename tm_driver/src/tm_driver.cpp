@@ -58,7 +58,7 @@ void TmDriver::halt()
 
 	if (sct.is_connected()) {
 		// send command to stop project
-		sct.send_script_exit();
+		// sct.send_script_exit();
 	}
 	sct.halt();
 	if (svr.is_connected()) {

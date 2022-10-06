@@ -81,7 +81,7 @@ public:
 
     shape_msgs::msg::SolidPrimitive box;
     box.type = box.BOX;
-    box.dimensions = { 0.1, 0.3, 0.1 };
+    box.dimensions = { 0.1, 0.2, 0.1 };
 
     geometry_msgs::msg::Pose box_pose;
     box_pose.position.x = 0.7;
