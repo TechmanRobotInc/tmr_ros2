@@ -14,7 +14,7 @@ If the user want to know how to use the ROS1 driver, please visit the [TM ROS1 d
 More information: TM ROS driver support list
 |ROS Distribution (ROS Environment Setup)|TM ROS driver version|TM ROS Vision|Remark: switch GitHub branches|
 |:---|:---|:---:|:---:|
-|[**<font color=#808080>ROS Noetic Ninjemys**](http://wiki.ros.org/noetic)|[**<font color=#0000FF>TM ROS1 Noetic driver**](https://github.com/TechmanRobotInc/tmr_ros1/tree/noetic)|x|noetic|
+|[**<font color=#808080>ROS Noetic Ninjemys**](http://wiki.ros.org/noetic)|[**<font color=#0000FF>TM ROS1 Noetic driver**](https://github.com/TechmanRobotInc/tmr_ros1/tree/noetic)|supported|noetic|
 |[**<font color=#808080>ROS Melodic Morenia**](http://wiki.ros.org/melodic)|[**<font color=#0000FF>TM ROS1 Melodic driver**](https://github.com/TechmanRobotInc/tmr_ros1/)|x|master|
 |[**<font color=#808080>ROS 2 Foxy Fitzroy**](https://index.ros.org/doc/ros2/Releases/Release-Foxy-Fitzroy/)|[**<font color=#800000>TM ROS2 Foxy driver**](https://github.com/TechmanRobotInc/tmr_ros2)|supported|master|
 |[**<font color=#808080>ROS 2 Dashing Diademata**](https://index.ros.org/doc/ros2/Releases/Release-Dashing-Diademata/)|[**<font color=#800000>TM ROS2 Dashing driver**](https://github.com/TechmanRobotInc/tmr_ros2/tree/dashing-devel)|supported|dashing-devel|
@@ -45,13 +45,13 @@ After installing the correct ROS2 version of the computer, the next step is to e
 >
 > 2. Set the `Network` settings: mouse-click to enter the page of __System &rArr; Network__ in order.  
 Example: Set the Subnet mask: 255.255.255.0 and IP address 192.168.10.2  
-Note: Set the network mask, and the communication with the TM Robot must be in the set domain.  
+**Note**: Set the network mask, and the communication with the TM Robot must be in the set domain.  
 > ![2](figures/2.png)
 >
 > 3. Set the __Ethernet Slave__ `Data Table Setting` item: mouse-click to enter the page of __Setting &rArr; Connection &rArr; Ethernet Slave__ in order.  
 We recommend _one easy method_ <sup>1</sup> to set the __Ethernet Slave__ `Data Table setting` is to directly import the software package.  
  <sup>1</sup> See [TM ROS Driver vs TMflow software Usage : Import Data Table Setting](https://github.com/TechmanRobotInc/TM_Export).  
-Or the previously provided method as follows: (Note: TMflow software version changes may have slightly different settings.)  
+ Or the previously provided method as follows:  (Note: TMflow software version changes may have slightly different settings.)  
 The user can manually click the `Data Table Setting` <sup>2</sup> item and check the following boxes as item _predefined_ <sup>3</sup> to receive/send specific data: 
 >
 >       - [x] Robot_Error
@@ -92,9 +92,8 @@ The user can manually click the `Data Table Setting` <sup>2</sup> item and check
 >
 >    <sup>4</sup> This function requires <u>TMflow 1.84 or later</u> versions to support.
 >
-> 4. Enable the __Ethernet Slave__ settings: mouse-click to enable or disable TM Ethernet Slave. Once enabled, the robot establish a Socket server to send the robot status and data to the connected clients and permissions to access specific robot data.
-Mouse-click to enable the `Ethernet Slave` setting:
-Note: STATUS: &rArr; __Enable__. 
+> 4. Enable the __Ethernet Slave__ settings: mouse-click to enable or disable TM Ethernet Slave. Once enabled, the robot establish a Socket server to send the robot status and data to the connected clients and permissions to access specific robot data.<br/>
+> Mouse-click to enable the `Ethernet Slave` setting and let `STATUS:` &rArr; __`Enable`__. 
 >       ![2](figures/3.png)
 >
 > 5. Press the Play/Pause Button on the Robot Stick to start running this _Listen task_ project.
@@ -111,7 +110,7 @@ Note: STATUS: &rArr; __Enable__.
 > ![user_remote_IP_example](figures/user_remote_IP_example.png)
 > 3. Check Internet connection: start a terminal to test the connectivity with the target host _TM ROBOT_, by typing ping 192.168.10.2
 > ![ping_target_host.png](figures/ping_target_host.png)
->> :bulb: Tip: Remember to reconfigure the network settings due to <u>static IP changes</u> or <u>replacement of the ROS control PC</u>.<br/>
+>> :bulb: **Tip**: Remember to reconfigure the network settings due to <u>static IP changes</u> or <u>replacement of the ROS control PC</u>.<br/>
 >> As mentioned above, a valuable debugging tool is your operating system's <u>ping</u> command. If nothing appears to happen or an error is thrown, the robot cannot be accessed from your computer. Please go back to the top of this chapter and re-operate in the order of instructions.<br/>
 >> If you are an experienced user, you may just need to <u>turn off</u> &rArr; <u>turn on</u> the gear icon of "__Wired Settings__" on your computer or to <u>turn off</u> &rArr; <u>turn on</u> the "__Ethernet Slave Data Table__" setting of the robot to reconfigure the hardware settings.<br/>
 >
@@ -361,7 +360,7 @@ In this demo code, the user can use send_script service sending a script to leav
 > 3. After the download done, rename the download folder ``tmr_ros2``(or ``tmr_ros2-master``) to ``src`` by typing<br/>
 ``mv tmr_ros2 src``<br/>  (or right-click on the download folder, select "Rename...")<br/>
 > 4. At the workspace directory to build the download packages and source 'setup.bash' in this workspace to make the worksapce visible to ROS.<br/>
-Note: Do you set ``source /opt/ros/foxy/setup.bash`` ready? Make sure to obtain the correct setup file according to your workspace hierarchy, and then type the following below to compile.<br/>
+**Note**: Do you set ``source /opt/ros/foxy/setup.bash`` ready? Make sure to obtain the correct setup file according to your workspace hierarchy, and then type the following below to compile.<br/>
 ``colcon build``<br/>
 ``source ./install/setup.bash``<br/>
 > 5. In a new terminal: Source setup.bash in the workspace path and run the driver to connect to TM Robot by typing<br/>
@@ -405,7 +404,7 @@ The GUI displays tm_driver connection status, sct, sta, svr messages and robot s
 > 3. After the download done, rename the download folder ``tmr_ros2``(or ``tmr_ros2-master``) to ``src`` by typing<br/>
 ``mv tmr_ros2 src``<br/>  (or right-click on the download folder, select "Rename...")<br/>
 > 4. At the workspace directory to build the download packages and source 'setup.bash' in this workspace to make the worksapce visible to ROS.<br/>
-Note: Do you set ``source /opt/ros/foxy/setup.bash`` ready? Make sure to obtain the correct setup file according to your workspace hierarchy, and then type the following below to compile.<br/>
+**Note**: Do you set ``source /opt/ros/foxy/setup.bash`` ready? Make sure to obtain the correct setup file according to your workspace hierarchy, and then type the following below to compile.<br/>
 ``colcon build``<br/>
 ``source ./install/setup.bash``<br/>
 > 5. In a new terminal: Source setup.bash in the workspace path and run the driver to connect to TM Robot by typing<br/>
@@ -496,7 +495,7 @@ The user can use the tm_mod_urdf package to extract specific kinematic values fr
 >   <xacro:include filename="$(find tm_description)/xacro/user_defined.urdf.xacro" />
 > ```
 > Finally, the user can launch the modified robot file "``tm5-900.urdf.xacro``" to run your TM Robot or simulate the robot more accurately.<br/>
->> :bulb: Tip: Remember to recompile since the code has been changed.<br/>
+>> :bulb: **Tip**: Remember to recompile since the code has been changed.<br/>
 >> Please go back to your specific workspace. Then you can choose `colcon build --cmake-clean-cache` to rebuild, or you can clean the build, install and log directories with `rm -r build install log` before executing `colcon build`.<br/>
 >
 >
@@ -528,7 +527,7 @@ The user can use the tm_mod_urdf package to extract specific kinematic values fr
 > :bookmark_tabs: Note2: If your real Robot is the eyeless model as a TM12X, in the above example, you should type tm12x as an example for <urdf_from>.<br/>
 >
 > Finally, the user can use the new robot file, such as "``user_defined.urdf``", instead of the default nominal URDF model to run your TM Robot or simulate the robot more accurately.<br/>
->> :bulb: Tip: Remember to recompile since the code has been changed.<br/>
+>> :bulb: **Tip**: Remember to recompile since the code has been changed.<br/>
 >> Please go back to your specific workspace. Then you can choose `colcon build --cmake-clean-cache` to rebuild, or you can clean the build, install and log directories with `rm -r build install log` before executing `colcon build`.<br/>
 >
 >
