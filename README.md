@@ -12,7 +12,7 @@ If the user want to know how to use the ROS1 driver, please visit the [TM ROS1 d
 
 
 More information: TM ROS driver support list
-|ROS Distribution (ROS Environment Setup)|TM ROS driver version|TM ROS Vision|Remark: switch GitHub branches|
+|ROS Distro (ROS Environment Setup)|TM ROS driver version|TM ROS Vision|Remark: switch GitHub branches|
 |:---|:---|:---:|:---:|
 |[**<font color=#808080>ROS Noetic Ninjemys**](http://wiki.ros.org/noetic)|[**<font color=#0000FF>TM ROS1 Noetic driver**](https://github.com/TechmanRobotInc/tmr_ros1/tree/noetic)|supported|noetic|
 |[**<font color=#808080>ROS Melodic Morenia**](http://wiki.ros.org/melodic)|[**<font color=#0000FF>TM ROS1 Melodic driver**](https://github.com/TechmanRobotInc/tmr_ros1/)|x|master|
@@ -35,6 +35,8 @@ The user can directly refer to the chapters introduced in the following text: st
 
 
 ## __3. Usage__
+The TM ROS driver is designed to interface the TM Robot's operating software (__TMflow__) with the Robot Operating System (ROS) so that program developers and researchers can build and reuse their own programs to control the TM robot externally.
+
 After installing the correct ROS2 version of the computer, the next step is to ensure that your hardware, control computer, and TM Robot are all properly configured to communicate with each other. See below to make sure the network settings on your computer are correct, the TM Robot's operating software (__TMflow__) network settings are ready and the __Listen node__ is running.<br/>
 
 ### &sect; __TMflow Listen node setup__
@@ -196,7 +198,7 @@ The user can manually click the `Data Table Setting` <sup>2</sup> item and check
 ## __4. Vision__
 
 ### &sect; __TM ROS Vision usage__
-> Get image data through TMvision&trade; of TM Robot **(Built-in Vision System)**  
+> This chapter describes that the user can get image data through TMvision&trade; of TM Robot. **(Built-in Vision System)**  
 >
 > __Dependencies__
 >
@@ -294,7 +296,7 @@ The user can manually click the `Data Table Setting` <sup>2</sup> item and check
 ## __5. Program script demonstration__
 
 ### &sect; __Demo package description__
-> There are some demo codes showing how to use TM ROS driver.<br/>
+> This chapter describes the _demo_ package and the code used as a c++ programming example, showing how to program robot scripts (TM Robot Expressions) through the TM ROS driver connection. <br/>
 >
 > * demo_send_script:<br/>
 In this demo code, it shows how to send a __Listen node__ script to control the TM Robot. <br/>
@@ -375,7 +377,7 @@ The <robot_ip_address> is the IP address of the TM Robot, the user can get it th
 
 
 ## __6. TM GUI debugging and demonstration__
-The GUI displays tm_driver connection status, sct, sta, svr messages and robot status. Easily judge the message between the driver and the robot through the GUI display. If the connection fails, the user can also try to send a reconnect command on this GUI for debugging.
+This chapter describes a simplified GUI for displaying tm_driver connection status, sct, sta, svr messages, and robot status. The user can optionally install the _ui_for_debug_and_demo_ package to aid in viewing messages between the driver and the robot through the GUI display. If the driver connection fails, the user can also try to send a reconnect command on this GUI for debugging.
 
 
 ### &sect; GUI Debugging description
