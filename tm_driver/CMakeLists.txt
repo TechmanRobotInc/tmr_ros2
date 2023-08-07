@@ -32,6 +32,7 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
+find_package(tf2_geometry_msgs REQUIRED)
 find_package(tm_msgs REQUIRED)
 set(moveit2_lib_auto_judge true)
 if (moveit2_lib_auto_judge)
@@ -93,6 +94,7 @@ if (moveit2_lib_auto_judge)
       rclcpp
       std_msgs
       sensor_msgs
+      tf2_geometry_msgs
       tm_msgs
 
       trajectory_msgs
@@ -120,6 +122,7 @@ if (moveit2_lib_auto_judge)
       rclcpp
       std_msgs
       sensor_msgs
+      tf2_geometry_msgs
       tm_msgs
     )
   endif (moveit_ros_planning_interface_FOUND)
@@ -144,6 +147,7 @@ else()
     rclcpp
     std_msgs
     sensor_msgs
+    tf2_geometry_msgs
     tm_msgs
   )
 endif()
