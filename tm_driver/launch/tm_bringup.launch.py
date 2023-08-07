@@ -14,3 +14,10 @@ def generate_launch_description():
             arguments=args,
         )
     ])
+
+
+if __name__ == "__main__":
+    from launch import LaunchService
+    ls = LaunchService(debug=True)
+    ls.include_launch_description(generate_launch_description())
+    sys.exit(ls.run())
