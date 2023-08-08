@@ -41,7 +41,6 @@ int main(int argc, char **argv)
 {
   rclcpp::init(argc, argv);
 
-
   std::shared_ptr<rclcpp::Node> node = rclcpp::Node::make_shared("demo_send_script");
   rclcpp::Client<tm_msgs::srv::SendScript>::SharedPtr client =
     node->create_client<tm_msgs::srv::SendScript>("send_script");

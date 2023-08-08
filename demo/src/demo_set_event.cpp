@@ -11,7 +11,6 @@ int main(int argc, char **argv)
 {
   rclcpp::init(argc, argv);
 
-
   std::shared_ptr<rclcpp::Node> node = rclcpp::Node::make_shared("demo_set_event");
   rclcpp::Client<tm_msgs::srv::SetEvent>::SharedPtr client =
     node->create_client<tm_msgs::srv::SetEvent>("set_event");
@@ -24,7 +23,7 @@ int main(int argc, char **argv)
   while (!client->wait_for_service(1s)) {
     if (!rclcpp::ok()) {
       RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"), "Interrupted while waiting for the service. Exiting.");
-      return false;
+      return 1;
     }
     RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"), "service not available, waiting again...");
   }
@@ -43,7 +42,6 @@ int main(int argc, char **argv)
   } else {
     RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"), "Failed to call service");
   }
-  return true;
 
   rclcpp::shutdown();
   return 0;
