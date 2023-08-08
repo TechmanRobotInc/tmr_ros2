@@ -15,7 +15,7 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
-add_definitions(-DROS2_BUILD)
+add_compile_definitions(ROS2_BUILD=1)
 
 # Please refer to https://moveit.ros.org/install-moveit2/source
 # If the MoveIt2 module is not ready for installation, or the user wants to close the relative MoveIt2 module, the user can modify the "TRUE" of 'TM_DRIVER_MOVEIT_AUTO_DETECT' to "FALSE" to compile.
