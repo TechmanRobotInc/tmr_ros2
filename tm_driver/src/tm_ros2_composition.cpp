@@ -32,7 +32,7 @@ void ros_error_print(char* msg){
 }
 void ros_fatal_print(char* msg){
   std::string str = msg;
-  str = "[TM_FATAL]" + str;
+  str = "[TM_FATAL] " + str;
   RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"),str.c_str());
 }
 void ros_once_print(char* msg){
