@@ -1,0 +1,35 @@
+name: Industrial CI
+
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: '0 0 * * 2'
+  workflow_dispatch:
+
+env:
+  CCACHE_DIR: ${{ github.workspace }}/.ccache # Directory for ccache (and how we enable ccache in industrial_ci)
+
+jobs:
+  industrial_ci:
+    name: ROS ${{ matrix.ROS_DISTRO }} (${{ matrix.ROS_REPO }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        ROS_DISTRO: [humble]
+        ROS_REPO: [main]
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/cache@v3
+        with:
+          path: ${{ env.CCACHE_DIR }}
+          key: ccache-${{ matrix.ROS_DISTRO }}-${{ matrix.ROS_REPO }}-${{github.run_id}}
+          restore-keys: |
+            ccache-${{ matrix.ROS_DISTRO }}-${{ matrix.ROS_REPO }}-
+            ccache-${{ matrix.ROS_DISTRO }}-
+      - uses: 'ros-industrial/industrial_ci@master'
+        env:
+          ROS_DISTRO: ${{ matrix.ROS_DISTRO }}
+          ROS_REPO: ${{ matrix.ROS_REPO }}
