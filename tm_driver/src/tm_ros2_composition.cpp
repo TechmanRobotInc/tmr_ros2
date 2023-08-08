@@ -66,17 +66,14 @@ int main(int argc, char *argv[])
 
     std::vector<std::string> args = rclcpp::init_and_remove_ros_arguments(argc, argv);
     
-    std::string host;
-    if (args.size() > 1) {
-        host = args[1];
-        if (host.find("robot_ip:=") != std::string::npos) {
-          host.replace(host.begin(), host.begin() + 10, "");
-        } else if (host.find("ip:=") != std::string::npos) {
-          host.replace(host.begin(), host.begin() + 4, "");
-        }
-    } else {
+    if (args.size() < 2)
+    {
+        ros_fatal_print("Please provide the 'robot_ip_address'");
         rclcpp::shutdown();
+        return 1;
     }
+
+    const std::string& host = args[1];
 
     if (args.size() == 3){
       bool isSetNoLogPrint;
