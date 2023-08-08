@@ -2,40 +2,40 @@
 #include "tm_driver/tm_ros2_sct.h"
 #include <rclcpp/rclcpp.hpp>
 
-void debug_function_print(char* msg){
+void debug_function_print(const char* msg){
   printf("%s[TM_DEBUG] %s\n%s", PRINT_CYAN.c_str(), msg, PRINT_RESET.c_str());
 }
-void info_function_print(char* msg){
+void info_function_print(const char* msg){
   printf("[TM_INFO] %s\n", msg);
 }
-void warn_function_print(char* msg){
+void warn_function_print(const char* msg){
   printf("%s[TM_WARN] %s\n%s", PRINT_YELLOW.c_str(), msg, PRINT_RESET.c_str());
 }
-void error_function_print(char* msg){
+void error_function_print(const char* msg){
   printf("%s[TM_ERROR] %s\n%s", PRINT_RED.c_str(), msg, PRINT_RESET.c_str());
 }
-void fatal_function_print(char* msg){
+void fatal_function_print(const char* msg){
   printf("%s[TM_FATAL] %s\n%s", PRINT_GREEN.c_str(), msg, PRINT_RESET.c_str());
 }
 
-void ros_debug_print(char* msg){
+void ros_debug_print(const char* msg){
   RCLCPP_DEBUG_STREAM(rclcpp::get_logger("rclcpp"),msg);
 }
-void ros_info_print(char* msg){
+void ros_info_print(const char* msg){
   RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),msg);
 }
-void ros_warn_function_print(char* msg){
+void ros_warn_function_print(const char* msg){
   RCLCPP_WARN_STREAM(rclcpp::get_logger("rclcpp"),msg);
 }
-void ros_error_print(char* msg){
+void ros_error_print(const char* msg){
   RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"),msg);
 }
-void ros_fatal_print(char* msg){
+void ros_fatal_print(const char* msg){
   std::string str = msg;
   str = "[TM_FATAL] " + str;
   RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"),str.c_str());
 }
-void ros_once_print(char* msg){
+void ros_once_print(const char* msg){
   RCLCPP_INFO_STREAM_ONCE(rclcpp::get_logger("rclcpp"),msg);
 }
 void set_up_print_fuction(){

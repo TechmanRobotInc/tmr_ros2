@@ -23,17 +23,17 @@
 
 #define MAX_MSG_SIZE 256
 
-void (*print_debug_function)(char* fmt);
+void (*print_debug_function)(const char* fmt);
 bool isSetPrintDebugFunction = false;
-void (*print_info_function)(char* fmt);
+void (*print_info_function)(const char* fmt);
 bool isSetPrintInfoFunction = false;
-void (*print_warn_function)(char* fmt);
+void (*print_warn_function)(const char* fmt);
 bool isSetPrintWarnFunction = false;
-void (*print_error_function)(char* fmt);
+void (*print_error_function)(const char* fmt);
 bool isSetPrintErrorFunction = false;
-void (*print_fatal_function)(char* fmt);
+void (*print_fatal_function)(const char* fmt);
 bool isSetPrintFatalFunction = false;
-void (*print_once_function)(char* fmt);
+void (*print_once_function)(const char* fmt);
 bool isSetPrintOnceFunction = false;
 
 
@@ -44,25 +44,25 @@ void setup_print_debug(bool isPrintDebug){
   isPrintDebugOnTerminal = isPrintDebug;
 }
 
-void default_debug_function_print(char* msg){
+void default_debug_function_print(const char* msg){
   std::cout<<PRINT_CYAN<<"[DEBUG] "<<msg<<std::endl<<PRINT_RESET;
 }
-void default_print_info_function_print(char* msg){
+void default_print_info_function_print(const char* msg){
   std::cout<<"[INFO] "<<msg<<std::endl;
 }
-void default_print_warn_function_print(char* msg){
+void default_print_warn_function_print(const char* msg){
   std::cout<<PRINT_YELLOW<<"[WARN] "<<msg<<std::endl<<PRINT_RESET;
 }
-void default_print_error_function_print(char* msg){
+void default_print_error_function_print(const char* msg){
   std::cout<<PRINT_RED<<"[ERROR] "<<msg<<std::endl<<PRINT_RESET;
 }
-void default_print_fatal_function_print(char* msg){
+void default_print_fatal_function_print(const char* msg){
   std::cout<<PRINT_GREEN<<"[FATAL] "<<msg<<std::endl<<PRINT_RESET;
 }
-void default_print_once_function_print(char* msg){
+void default_print_once_function_print(const char* msg){
   std::string str(msg);
-  if(printed_string.count(str) == 0){
-    std::cout<<"[INFO_ONCE]"<<str<<std::endl;
+  if (printed_string.count(str) == 0) {
+    std::cout<<"[INFO_ONCE] "<< str << std::endl;
 	printed_string.insert(str);
   }
 }
@@ -155,27 +155,27 @@ int print_once(const char* fmt, ...){
 }
 
 
-void set_up_print_debug_function(void (*function_print)(char* fmt)){
+void set_up_print_debug_function(void (*function_print)(const char* fmt)){
   print_debug_function = function_print;
   isSetPrintDebugFunction = true;
 }
-void set_up_print_info_function(void (*function_print)(char* fmt)){
+void set_up_print_info_function(void (*function_print)(const char* fmt)){
   print_info_function = function_print;
   isSetPrintInfoFunction = true;
 }
-void set_up_print_warn_function(void (*function_print)(char* fmt)){
+void set_up_print_warn_function(void (*function_print)(const char* fmt)){
   print_warn_function = function_print;
   isSetPrintWarnFunction = true;
 }
-void set_up_print_error_function(void (*function_print)(char* fmt)){
+void set_up_print_error_function(void (*function_print)(const char* fmt)){
   print_error_function = function_print;
   isSetPrintErrorFunction = true;
 }
-void set_up_print_fatal_function(void (*function_print)(char* fmt)){
+void set_up_print_fatal_function(void (*function_print)(const char* fmt)){
   print_fatal_function = function_print;
   isSetPrintFatalFunction = true;
 }
-void set_up_print_once_function(void (*function_print)(char* fmt)){
+void set_up_print_once_function(void (*function_print)(const char* fmt)){
   print_once_function = function_print;
   isSetPrintOnceFunction = true;
 }
