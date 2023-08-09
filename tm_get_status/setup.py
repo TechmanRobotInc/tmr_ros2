@@ -12,7 +12,7 @@ setup(
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
     ],
-    install_requires=['setuptools'],
+    install_requires=['flask', 'numpy', 'opencv-python', 'setuptools', 'waitress'],
     zip_safe=True,
     maintainer='leowu',
     maintainer_email='leo.wu@tm-robot.com',
