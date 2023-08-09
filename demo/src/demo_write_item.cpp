@@ -34,7 +34,6 @@ int main(int argc, char **argv)
   if (rclcpp::spin_until_future_complete(node, result) ==
     rclcpp::executor::FutureReturnCode::SUCCESS)
   {
-    //RCLCPP_INFO(rclcpp::get_logger("rclcpp"), "Sum: %ld", result.get()->ok);
     if(result.get()->ok){
       RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"OK");
     } else{

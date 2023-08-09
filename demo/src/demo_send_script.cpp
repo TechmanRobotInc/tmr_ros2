@@ -25,7 +25,6 @@ bool send_cmd(std::string cmd, std::shared_ptr<rclcpp::Node> node, rclcpp::Clien
   if (rclcpp::spin_until_future_complete(node, result) ==
     rclcpp::executor::FutureReturnCode::SUCCESS)
   {
-    //RCLCPP_INFO(rclcpp::get_logger("rclcpp"), "Sum: %ld", result.get()->ok);
     if(result.get()->ok){
       RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"OK");
     } else{

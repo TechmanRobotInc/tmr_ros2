@@ -54,11 +54,12 @@ void set_up_ros_print_fuction(){
   set_up_print_fatal_function(ros_fatal_print);
   set_up_print_once_function(ros_once_print);
 }
+
 int main(int argc, char *argv[])
 {
     // Force flush of the stdout buffer.
     setvbuf(stdout, NULL, _IONBF, BUFSIZ);
-    
+
     set_up_ros_print_fuction();
 
     rclcpp::init(argc, argv);
@@ -75,14 +76,14 @@ int main(int argc, char *argv[])
           is_fake = false;
         } else{
           std::cout<<"ip is not found, use fake robot"<<std::endl;
-        }    
+        }
     } else {
         rclcpp::shutdown();
     }
     if (is_fake) {
         std::cout<<"only ip or robot_ip support, but your type is "<<host<<std::endl;
     }
-    
+
     if(argc == 3){
       bool isSetNoLogPrint;
       std::istringstream(argv[2]) >> std::boolalpha >> isSetNoLogPrint;
@@ -92,7 +93,9 @@ int main(int argc, char *argv[])
     }
 
     TmDriver iface(host, nullptr, nullptr);
+
     rclcpp::Node::SharedPtr node = rclcpp::Node::make_shared("tm_driver_node");
+
     auto tm_svr = std::make_shared<TmSvrRos2>(node, iface, is_fake);
     auto tm_sct = std::make_shared<TmRos2SctMoveit>(node, iface, is_fake);
     rclcpp::spin(node);

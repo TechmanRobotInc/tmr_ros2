@@ -171,13 +171,13 @@ public:
 
 	std::vector<unsigned char> ctrller_DO(){
 		std::vector<unsigned char>  ctrllerDO;
-		ctrllerDO.assign(8, 0.0);
+		ctrllerDO.assign(8, 0); 
 		for (int i = 0; i < 8; ++i) { ctrllerDO[i] = tmRobotStateDataToPublish.ctrller_DO[i]; }
 		return ctrllerDO;
 	}
 	std::vector<unsigned char> ctrller_DI() {
 		std::vector<unsigned char>  ctrllerDI;
-		ctrllerDI.assign(8, 0.0);
+		ctrllerDI.assign(8, 0);
 		for (int i = 0; i < 8; ++i) { ctrllerDI[i] = tmRobotStateDataToPublish.ctrller_DI[i]; }
 	    return ctrllerDI; 
 	}
@@ -195,13 +195,13 @@ public:
 	}
 	std::vector<unsigned char> ee_DO(){
 		std::vector<unsigned char>  eeDO;
-		eeDO.assign(4, 0.0);
+		eeDO.assign(4, 0);
 		for (int i = 0; i < 4; ++i) { eeDO[i] = tmRobotStateDataToPublish.ee_DO[i]; }
 	    return eeDO; 
 	}
 	std::vector<unsigned char> ee_DI(){
 		std::vector<unsigned char>  eeDI;
-		eeDI.assign(4, 0.0);
+		eeDI.assign(4, 0);
 		for (int i = 0; i < 4; ++i) { eeDI[i] = tmRobotStateDataToPublish.ee_DI[i]; }
 	    return eeDI; 
 	}	

@@ -102,7 +102,7 @@ bool TmDriver::set_tag(int tag, int wait, const std::string &id)
 
 bool TmDriver::set_wait_tag(int tag, int timeout_ms, const std::string &id)
 {
-	return (sct.send_script_str(id, TmCommand::set_tag(tag, timeout_ms)) == RC_OK);
+	return (sct.send_script_str(id, TmCommand::set_wait_tag(tag, timeout_ms)) == RC_OK);
 }
 
 bool TmDriver::set_stop(const std::string &id)

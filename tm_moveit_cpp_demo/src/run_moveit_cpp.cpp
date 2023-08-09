@@ -111,7 +111,8 @@ public:
       arm.execute();
     }
 
-    /*rclcpp::sleep_for(std::chrono::seconds(3));
+    //Below, we simply use a long delay to wait for the previous motion to complete.
+    /*rclcpp::sleep_for(std::chrono::seconds(10));   
 
     // Set joint state goal
     RCLCPP_INFO(LOGGER, "Set goal (home)");

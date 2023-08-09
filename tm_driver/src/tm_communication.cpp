@@ -389,7 +389,7 @@ bool TmCommunication::connect_socket( std::string errorName,int timeout_ms)
 #endif
     _sockfd = socketFile;
 	if (_sockfd < 0) {
-		std::string errorMsg = "TM_COM("+ errorName+"): Error socket";
+		std::string errorMsg = "TM_COM ("+ errorName+"): Error socket";
 		print_error(errorMsg.c_str());
 		return false;
 	}
@@ -414,18 +414,18 @@ bool TmCommunication::connect_socket( std::string errorName,int timeout_ms)
 	}
 
 	if (connect_with_timeout(_sockfd, _ip, _port, timeout_ms) == 0) {
-		std::string errorMsg = "TM_COM("+ errorName+"): O_NONBLOCK connection is ok";
+		std::string errorMsg = "TM_COM ("+ errorName+"): O_NONBLOCK connection is ok";
 		print_debug(errorMsg.c_str());
 		_isConnected = true;
 	}
 	else {
-		std::string errorMsg = "TM_COM("+ errorName+"): O_NONBLOCK connection is fail";
+		std::string errorMsg = "TM_COM ("+ errorName+"): O_NONBLOCK connection is fail";
 		print_debug(errorMsg.c_str());
 		_sockfd = -1;
 		_isConnected = false;
 	}
 	if (_sockfd > 0) {
-		std::string msg = "TM_COM(" + errorName + "): TM robot is connected. sockfd:=" + std::to_string((int)_sockfd);
+		std::string msg = "TM_COM (" + errorName + "): TM robot is connected. sockfd:=" + std::to_string((int)_sockfd);
 		print_info(msg.c_str());
 		//_is_connected = true;
 		return true;

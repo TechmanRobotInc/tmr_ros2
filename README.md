@@ -30,7 +30,7 @@ This driver uses _ROS2 composition_, there are two nodes in the identical proces
 one node publishes topics while the other node sets up service servers.
 
 ### __Installation__
-Just clone the TM ROS driver of git repository into your working directory and then built it.<br/>
+Just clone the TM ROS driver of the git repository into your working directory and then build it.<br/>
 The user can directly refer to the chapters introduced in the following text: steps 1 to 4 of __&sect; Usage with demo code & driver__.<br/>
 
 
@@ -111,7 +111,7 @@ The user can manually click the `Data Table Setting` <sup>2</sup> item and check
 > Example: Set the Netmask: 255.255.255.0 and IP address 192.168.10.30 <br/> 
 > ![user_remote_IP_example](figures/user_remote_IP_example.png)
 > 3. Check Internet connection: start a terminal to test the connectivity with the target host _TM ROBOT_, by typing ping 192.168.10.2
-> ![ping_target_host.png](figures/ping_target_host.png)
+> ![ping_target_host](figures/ping_target_host.png)
 >> :bulb: **Tip**: Remember to reconfigure the network settings due to <u>static IP changes</u> or <u>replacement of the ROS control PC</u>.<br/>
 >> As mentioned above, a valuable debugging tool is your operating system's <u>ping</u> command. If nothing appears to happen or an error is thrown, the robot cannot be accessed from your computer. Please go back to the top of this chapter and re-operate in the order of instructions.<br/>
 >> If you are an experienced user, you may just need to <u>turn off</u> &rArr; <u>turn on</u> the gear icon of "__Wired Settings__" on your computer or to <u>turn off</u> &rArr; <u>turn on</u> the "__Ethernet Slave Data Table__" setting of the robot to reconfigure the hardware settings.<br/>
@@ -226,7 +226,7 @@ The user can manually click the `Data Table Setting` <sup>2</sup> item and check
 > Under the environment settings have been finished with your workspace`<workspace>`, then type
 >
 > ```bash
-> cd ~/<workspace> && source install/setup.bash
+> cd ~/<workspace> && source ./install/setup.bash
 > ros2 run tm_get_status image_talker
 > ```
 >
@@ -307,8 +307,8 @@ The user can use service named "send_script" to send script.<br/>
 > <sup>1</sup> If a non-alphanumeric byte is encountered, a CPERR 04 error is reported. When used as a communication packet response, it is a transaction number and identifies which group of commands to respond.<br/>
 >
 > * demo_ask_item:<br/>
-In this demo code, the user can use this service to send TMSCT <sup>2</sup> cmd.<br/> 
-> <sup>2</sup> For more detailed information, please refer to _defined protocol_: Expression Editor and Listen Node.pdf (Chapter7.4 TMSCT)<br/>
+In this demo code, the user can use this service to send TMSVR <sup>2</sup> cmd.<br/> 
+> <sup>2</sup> For more detailed information, please refer to _defined protocol_: Expression Editor and Listen Node.pdf (Chapter 9.6 TMSVR)<br/>
 >
 > * demo_ask_sta:<br/>
 In this demo code, the user can use this service to send TMSTA <sup>3</sup> cmd.<br/>
@@ -321,8 +321,8 @@ There are two kind connection settings the user can select, one is "connect_tmsv
 > * demo_set_event:<br/>
 In this demo code, six event types can be selected.<br/> 
 func &rarr;  TAG, WAIT_TAG, STOP, PAUSE, RESUME and EXIT<br/>
-arg0 &rarr;  if func is TAG or WAIT_TAG, arg0 is timeout in ms<br/>
-arg1 &rarr;  if func is TAG or WAIT_TAG, arg1 is id<br/>
+arg0 &rarr;  if func is TAG or WAIT_TAG, arg0 is the tag number<br/>
+arg1 &rarr;  if func is TAG or WAIT_TAG, arg1 is timeout in ms<br/>
 >
 > * demo_set_io:<br/>
 In this demo code, the user should set module, type, pin and state. <sup>4</sup> <br/>
