@@ -90,10 +90,8 @@ int main(int argc, char *argv[])
 
     auto tm_svr = std::make_shared<TmSvrRos2>(node, iface, false);
     auto tm_sct = std::make_shared<TmSctRos2>(node, iface, false);
+
     rclcpp::spin(node);
-
-
-    //iface.halt();
 
     rclcpp::shutdown();
     return 1;
