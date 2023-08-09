@@ -5,6 +5,9 @@
 #include "rclcpp/rclcpp.hpp"
 #include "sensor_msgs/msg/joint_state.hpp"
 
+#include <string>
+#include <vector>
+
 
 class TmRos2Node : public rclcpp::Node
 {
@@ -101,9 +104,11 @@ void TmRos2Node::publisher()
 int main(int argc, char *argv[])
 {
     rclcpp::init(argc, argv);
+    std::vector<std::string> args = rclcpp::remove_ros_arguments(argc, argv);
+
     std::string host;
-    if (argc > 1) {
-        host = argv[1];
+    if (args.size() > 1) {
+        host = args[1];
         if (host.find("robot_ip:=") != std::string::npos) {
             host.replace(host.begin(), host.begin() + 10, "");
         } else if (host.find("ip:=") != std::string::npos) {
