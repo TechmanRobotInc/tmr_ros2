@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
     
     if (args.size() < 2)
     {
-        ros_fatal_print("Please provide the 'robot_ip_address'");
+        print_fatal("Please provide the 'robot_ip_address'");
         rclcpp::shutdown();
         return 1;
     }
