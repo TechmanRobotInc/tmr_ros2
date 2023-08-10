@@ -188,18 +188,18 @@ def set_route(app, node):
 
 def main():
     rclpy.init(args=None)
-    test = False
+    is_test = False
     app = Flask(__name__)
-    if test:
+    if is_test:
         try:
             print(sys.argv[1:])
         except IndexError:
             print("arg is not correct!")
             return 1
         
-        node = ImagePub('image_pub', test, sys.argv[1])
+        node = ImagePub('image_pub', is_test, sys.argv[1])
     else:
-        node = ImagePub('image_pub', test, None)
+        node = ImagePub('image_pub', is_test, None)
 
         set_route(app, node)
         print("Listening on an ip port:6189 combination")
