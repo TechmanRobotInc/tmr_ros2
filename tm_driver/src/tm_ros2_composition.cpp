@@ -62,8 +62,6 @@ int main(int argc, char *argv[])
 
     set_up_ros_print_fuction();
 
-    rclcpp::init(argc, argv);
-
     std::vector<std::string> args = rclcpp::init_and_remove_ros_arguments(argc, argv);
     
     if (args.size() < 2)
