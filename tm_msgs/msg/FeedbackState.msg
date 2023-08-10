@@ -18,7 +18,7 @@ int32 disconnection_times
 float64[] joint_pos
 float64[] joint_vel
 float64[] joint_tor
-float64[] tool0_pose
+float64[] tool0_pose         # flange_pose
 float64[] tool_pose
 float64[] tcp_speed
 float64[] tcp_force

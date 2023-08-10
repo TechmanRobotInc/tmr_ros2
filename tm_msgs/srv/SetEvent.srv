@@ -8,8 +8,8 @@ int8 RESUME = 13
 int8 EXIT = -1
 
 int8 func
-int8 arg0 # if fun is TAG or WAIT_TAG, arg0 is timeout in ms
-int8 arg1 # if fun is TAG or WAIT_TAG, arg1 is id
+int8 arg0 # if fun is TAG or WAIT_TAG, arg0 is the tag number.
+int8 arg1 # if fun is TAG or WAIT_TAG, arg1 is timeout in ms.
 ---
 #ok == complete status
 bool ok

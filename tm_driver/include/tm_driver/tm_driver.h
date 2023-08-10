@@ -28,7 +28,7 @@ private:
 	double _max_tcp_speed = 1.0;
 	double _max_payload = 4.0;
 	bool isOnListenNode = false;
-	bool connect_recovery_is_halt = false;
+	bool connect_recovery_is_halt = false; //false: do the recovery; true: stop the recovery
 
 public:
 	explicit TmDriver(const std::string &ip);

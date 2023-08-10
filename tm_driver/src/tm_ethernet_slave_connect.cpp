@@ -195,7 +195,7 @@ void EthernetSlaveConnection::get_data_thread()
                     {                    
                         print_fatal("TM_ROS: (Ethernet slave): LinkLost = %d , MaxLostTime(s) = %d", (int)diconnectTimes, (int)maxNotConnectTimeInS);
                     }
-                    iface_.set_connect_recovery_guide(true);
+                    iface_.set_connect_recovery_guide(true);//only rc_halt happens, to enable recovery
                     svr.close_socket();
                 }
             }

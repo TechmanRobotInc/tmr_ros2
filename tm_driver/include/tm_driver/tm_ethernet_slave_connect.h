@@ -15,7 +15,7 @@ class EthernetSlaveConnection{
   int diconnectTimes = 0;
   uint64_t initialNotConnectTime = 0;
   uint64_t notConnectTimeInS = 0;
-  int maxTrialTimeInMinute = -1;
+  int maxTrialTimeInMinute = -1; //If value not -1, set TimeInMinute to check Wired Connected Settings
   uint64_t maxNotConnectTimeInS = 0;
 
   bool get_data_function();

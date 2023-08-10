@@ -149,7 +149,7 @@ void TmSctCommunication::tm_sct_thread_function()
 		reconnect_function();
 	}
 	close_socket();
-	print_info("TM_SCTListen node communication: thread end");
+	print_info("TM_SCT Listen node communication: thread end");
 }
 
 void TmSctCommunication::reconnect_function()
@@ -217,9 +217,13 @@ TmCommRC TmSctCommunication::tmsct_function()
 				TmSctData::build_TmSctData(sct_data, sct_data_tmp, TmSctData::SrcType::Deep);
 			}
 			if (sct_data.sct_has_error())
+			{				
 				print_error("TM_SCT: err: (%s): %s", sct_data.script_id().c_str(), sct_data.script());
+			}				
 			else
+			{				
 				print_info("TM_SCT: res: (%s): %s", sct_data.script_id().c_str(), sct_data.script());
+			}				
 
 			break;
 

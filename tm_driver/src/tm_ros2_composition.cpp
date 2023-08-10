@@ -1,6 +1,5 @@
 #include "tm_driver/tm_ros2_svr.h"
 #include "tm_driver/tm_ros2_sct.h"
-
 #include "rclcpp/rclcpp.hpp"
 
 void debug_function_print(char* msg){
@@ -53,25 +52,25 @@ void set_up_ros_print_fuction(){
   set_up_print_fatal_function(ros_fatal_print);
   set_up_print_once_function(default_print_once_function_print);
 }
+
 int main(int argc, char *argv[])
 {
     // Force flush of the stdout buffer.
     setvbuf(stdout, NULL, _IONBF, BUFSIZ);
-    
+
     set_up_ros_print_fuction();
 
     rclcpp::init(argc, argv);
-    
+
     std::string host;
     if (argc > 1) {
         host = argv[1];
         if (host.find("robot_ip:=") != std::string::npos) {
-            host.replace(host.begin(), host.begin() + 10, "");
+          host.replace(host.begin(), host.begin() + 10, "");
         } else if (host.find("ip:=") != std::string::npos) {
-            host.replace(host.begin(), host.begin() + 4, "");        
+          host.replace(host.begin(), host.begin() + 4, "");
         }
-    }
-    else {
+    } else {
         rclcpp::shutdown();
     }
 
