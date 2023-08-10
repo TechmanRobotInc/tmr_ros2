@@ -73,18 +73,29 @@ int main(int argc, char *argv[])
       return 1;
     }
 
-    const std::string& host = args[1];
+    bool is_fake = true;
+    std::string host;
+    if (argc > 1) {
+      host = args[1];
+      if (host.find("robot_ip:=") != std::string::npos) {
+        host.replace(host.begin(), host.begin() + 10, "");
+        is_fake = false;
+      } else if (host.find("ip:=") != std::string::npos) {
+        host.replace(host.begin(), host.begin() + 4, "");
+        is_fake = false;
+      } else{
+        print_info("ip is not found, using a fake robot");
+      }
+    } else {
+      print_fatal("Please provide the 'robot_ip_address'");
+      rclcpp::shutdown();
+      return 1;
+    }
 
-    bool is_fake = false;
-    // Regex logic taken from https://www.geeksforgeeks.org/how-to-validate-an-ip-address-using-regex/
-    std::regex ipv4("(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])");
-    std::regex ipv6("((([0-9a-fA-F]){1,4})\\:){7}([0-9a-fA-F]){1,4}");
-
-    if (!std::regex_match(host, ipv4) && !std::regex_match(host, ipv6)) {
+    if (is_fake) {
       std::stringstream ss;
-      ss << "ip '" << host << "' is not a valid ip-address, using a fake robot";
+      ss << "Only ip or robot_ip support, but your type is '" << host << "', using a fake robot";
       print_info(ss.str().c_str());
-      is_fake = true;
     }
 
     if (args.size() == 3){
