@@ -47,7 +47,7 @@ class ImagePub(Node):
 
     def image_publisher(self, image):
         bridge = CvBridge()
-        msg = bridge.cv2_to_imgmsg(image)
+        msg = bridge.cv2_to_imgmsg(image, 'bgr8')
         self.get_logger().info('Publishing something!, queue size is ' + str(self.image_q.qsize()))
         self.publisher.publish(msg)
     
