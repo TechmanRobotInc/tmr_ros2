@@ -34,10 +34,11 @@ int main(int argc, char **argv)
   if (rclcpp::spin_until_future_complete(node, result) ==
     rclcpp::FutureReturnCode::SUCCESS)
   {
-    if(result.get()->ok){
+    auto res = result.get();
+    if(res->ok){
       RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"OK");
-      RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"), result.get()->subcmd);
-      RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"), result.get()->subdata);
+      RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"), res->subcmd);
+      RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"), res->subdata);
     } else{
       RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"not OK");	
     }
