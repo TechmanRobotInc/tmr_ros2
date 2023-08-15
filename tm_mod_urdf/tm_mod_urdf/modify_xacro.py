@@ -7,7 +7,6 @@ import xml.etree.cElementTree as ET
 
 import rclpy
 
-# from tm_mod_urdf._modify_urdf import *
 from tm_mod_urdf._modify_urdf import modify_urdf
 from tm_mod_urdf._modify_urdf import urdf_DH_from_tm_DH
 from tm_mod_urdf._modify_urdf import xyzrpys_from_urdf_DH
