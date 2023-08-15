@@ -184,9 +184,9 @@ def _gen_xacro(args=None):
 
     node.get_logger().info('[reference file path:] %s' % file_in)
 
-    fr = open(file_in, 'r')
-    data_in = fr.read()
-    fr.close()
+    with open(file_in, 'r') as fr:
+        data_in = fr.read()
+
     datas = data_in.split(link_tag)
 
     if len(datas) < 3:
@@ -215,8 +215,8 @@ def _gen_xacro(args=None):
     else:
         file_save = file_out
 
-    fw = open(file_save, 'w')
-    fw.write(data_out)
+    with open(file_save, 'w') as fw:
+        fw.write(data_out)
 
     if overwrite:
         node.get_logger().info('File saved with new kinematic values')
@@ -228,7 +228,6 @@ def _gen_xacro(args=None):
     else:
         node.get_logger().info('File saved with new kinematic values')
         node.get_logger().info('[new save file path:] ' + str(file_save))
-    fw.close()
 
 
 def main(args=None):

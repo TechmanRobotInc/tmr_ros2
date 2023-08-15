@@ -179,9 +179,8 @@ def _gen_urdf(args=None):
 
     node.get_logger().info('[reference file path:] %s' % file_in)
 
-    fr = open(file_in, 'r')
-    link_data = fr.read()
-    fr.close()
+    with open(file_in, 'r') as fr:
+        link_data = fr.read()
 
     root = ET.fromstring(link_data)
 
@@ -198,8 +197,8 @@ def _gen_urdf(args=None):
     else:
         file_save = file_out
 
-    fw = open(file_save, 'w')
-    fw.write(link_data)
+    with open(file_save, 'w') as fw:
+        fw.write(link_data)
 
     if overwrite:
         node.get_logger().info('File saved with new kinematic values')
@@ -211,7 +210,6 @@ def _gen_urdf(args=None):
     else:
         node.get_logger().info('File saved with new kinematic values')
         node.get_logger().info('[new save file path:] ' + str(file_save))
-    fw.close()
 
 
 def main(args=None):
