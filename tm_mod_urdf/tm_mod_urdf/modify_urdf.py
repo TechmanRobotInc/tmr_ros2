@@ -188,7 +188,7 @@ def _gen_urdf(args=None):
     xyzs, rpys = xyzrpys_from_urdf_DH(udh)
     modify_urdf(root, xyzs, rpys, udh)
 
-    link_data = ET.tostring(root, encoding='UTF-8').decode('UTF-8')
+    link_data = ET.tostring(root, encoding='UTF-8', xml_declaration=True).decode('UTF-8')
 
     file_save = ''
     if overwrite:

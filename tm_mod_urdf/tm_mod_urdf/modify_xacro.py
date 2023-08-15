@@ -200,7 +200,7 @@ def _gen_xacro(args=None):
     xyzs, rpys = xyzrpys_from_urdf_DH(udh)
     modify_urdf(root, xyzs, rpys, udh, '${prefix}')
 
-    link_data = ET.tostring(root, encoding='UTF-8').decode('UTF-8')
+    link_data = ET.tostring(root, encoding='UTF-8', xml_declaration=True).decode('UTF-8')
     link_data = link_data.replace('ns0', 'xacro')
     link_data = link_data.replace(link_head, '', 1)
     link_data = link_data.replace(link_start, link_tag, 1)
