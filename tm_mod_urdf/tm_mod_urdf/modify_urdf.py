@@ -146,8 +146,8 @@ def _gen_urdf(args=None):
         node.get_logger().error('stop service, invalid delta_dh parameters')
         return
 
-    dh = [float(i) for i in dh_strs]
-    dd = [float(i) for i in dd_strs]
+    dh = list(map(float, dh_strs))
+    dd = list(map(float, dd_strs))
 
     # find urdf path
     curr_path = os.path.dirname(os.path.abspath(__file__))
