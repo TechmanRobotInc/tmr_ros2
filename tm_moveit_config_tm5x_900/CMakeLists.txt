@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10.2)
-project(tm_moveit_config_tm5-900)
+project(tm_moveit_config_tm5x_900)
 
 #find_package(catkin REQUIRED)
 find_package(ament_cmake REQUIRED)

@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <package format="3">
 
-  <name>tm_moveit_config_tm5x-900</name>
+  <name>tm_moveit_config_tm5x_700</name>
   <version>0.3.0</version>
   <description>
-     An automatically generated package with all the configuration and launch files for using the tm5x-900 with the MoveIt! Motion Planning Framework
+     An automatically generated package with all the configuration and launch files for using the tm5x-700 with the MoveIt! Motion Planning Framework
   </description>
   <author email="yh.wang@tm-robot.com">YH Wang</author>
   <maintainer email="yh.wang@tm-robot.com">YH Wang</maintainer>
