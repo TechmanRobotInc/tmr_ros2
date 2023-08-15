@@ -162,7 +162,7 @@ def _gen_urdf(args=None):
         return
     src_path = curr_path[:ind] + 'src'
     urdf_path = ''
-    for dirpath, dirnames, filenames in os.walk(src_path):
+    for dirpath, dirnames, filenames in os.walk(src_path, followlinks=True):
         if dirpath.endswith('tm_description'):
             urdf_path = dirpath + '/urdf'
             break

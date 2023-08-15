@@ -162,7 +162,7 @@ def _gen_xacro(args=None):
         return
     src_path = curr_path[:ind] + 'src'
     xacro_path = ''
-    for dirpath, dirnames, filenames in os.walk(src_path):
+    for dirpath, dirnames, filenames in os.walk(src_path, followlinks=True):
         if dirpath.endswith('tm_description'):
             xacro_path = dirpath + '/xacro'
             break
