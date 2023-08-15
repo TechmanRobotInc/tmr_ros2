@@ -190,7 +190,6 @@ def _gen_urdf(args=None):
 
     link_data = ET.tostring(root, encoding='UTF-8', xml_declaration=True).decode('UTF-8')
 
-    file_save = ''
     if overwrite:
         file_save = file_in
         shutil.copyfile(file_in, file_out)

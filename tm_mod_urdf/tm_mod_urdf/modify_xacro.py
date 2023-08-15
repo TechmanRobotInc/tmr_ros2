@@ -208,7 +208,6 @@ def _gen_xacro(args=None):
 
     data_out = datas[0] + link_data + datas[2]
 
-    file_save = ''
     if overwrite:
         file_save = file_in
         shutil.copyfile(file_in, file_out)
