@@ -1,13 +1,20 @@
 cmake_minimum_required(VERSION 3.5)
 project(tm_moveit_cpp_demo)
 
-# Default to C++14
+# Default to C17
+if(NOT CMAKE_C_STANDARD)
+  set(CMAKE_C_STANDARD 17)
+endif()
+
+# Default to C++17
 if(NOT CMAKE_CXX_STANDARD)
-  set(CMAKE_CXX_STANDARD 14)
+  set(CMAKE_CXX_STANDARD 17)
 endif()
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-  add_compile_options(-Wall -Wextra -Wpedantic)
+  add_compile_options(-Wall -Werror=all)
+  add_compile_options(-Wextra -Werror=extra)
+  add_compile_options(-Wpedantic -Werror=pedantic)
 endif()
 
 # Please refer to https://moveit.ros.org/install-moveit2/source
