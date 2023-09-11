@@ -18,9 +18,9 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 endif()
 
 # Please refer to https://moveit.ros.org/install-moveit2/source
-# If the MoveIt2 module is not ready for installation, or the user wants to close the relative MoveIt2 module, the user can modify the "TRUE" of 'TM_DRIVER_MOVEIT_AUTO_DETECT' to "FALSE" to compile.
-option(TM_DRIVER_MOVEIT_AUTO_DETECT "Try to detect moveit2" TRUE)
-set(TM_DRIVER_INCLUDE_MOVEIT ${TM_DRIVER_MOVEIT_AUTO_DETECT})
+# If the MoveIt2 module is not ready for installation, or the user wants to close the relative MoveIt2 module, the user can modify the "TRUE" of 'TM_MOVEIT_AUTO_DETECT' to "FALSE" to compile.
+option(TM_MOVEIT_AUTO_DETECT "Try to detect moveit2" TRUE)
+set(TM_DRIVER_INCLUDE_MOVEIT ${TM_MOVEIT_AUTO_DETECT})
 
 # If the user enable this 'TM_DRIVER_MESSAGE_PRINT' to print debug messages, more information will be displayed "1 package had stderr output: tm_driver" on the screen.
 option(TM_DRIVER_MESSAGE_PRINT "More debug messages are printed" TRUE)
@@ -34,7 +34,7 @@ find_package(sensor_msgs REQUIRED)
 find_package(tf2_geometry_msgs REQUIRED)
 find_package(tm_msgs REQUIRED)
 
-if (TM_DRIVER_MOVEIT_AUTO_DETECT)
+if (TM_MOVEIT_AUTO_DETECT)
   find_package(moveit_ros_planning_interface QUIET)
   if (NOT moveit_ros_planning_interface_FOUND)
     set(TM_DRIVER_INCLUDE_MOVEIT FALSE)
@@ -43,7 +43,7 @@ if (TM_DRIVER_MOVEIT_AUTO_DETECT)
       #do you forget to source moveit2 relative setup.bash? example: & ~/COLCON_WS/install/setup.bash
     endif()  
   endif (NOT moveit_ros_planning_interface_FOUND)
-endif(TM_DRIVER_MOVEIT_AUTO_DETECT)
+endif(TM_MOVEIT_AUTO_DETECT)
 
 if (TM_DRIVER_INCLUDE_MOVEIT)
   find_package(trajectory_msgs REQUIRED)
