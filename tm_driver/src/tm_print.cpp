@@ -14,13 +14,6 @@
 #define vsnprintf_s vsnprintf
 #endif
 
-#ifdef ROS_BUILD
-#include <ros/ros.h>
-#endif
-#ifdef ROS2_BUILD
-//#include "rclcpp/rclcpp.hpp"
-#endif
-
 #define MAX_MSG_SIZE 256
 
 void (*print_debug_function)(const char* fmt);
