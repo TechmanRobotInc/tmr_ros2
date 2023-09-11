@@ -143,7 +143,7 @@
     <origin rpy="0.000000 -0.000000 0.000000" xyz="0.000000 0.000000 0.165200"/>
     <axis xyz="0 0 1"/>
     <!--limit-->
-    <limit effort="353" lower="-4.71238898038469" upper="4.71238898038469" velocity="2.0943951023931953"/>
+    <limit effort="353" lower="-6.283185307179586" upper="6.283185307179586" velocity="2.0943951023931953"/>
     <dynamics damping="0.0" friction="0.0"/>
   </joint>
   <link name="link_1">
@@ -170,7 +170,7 @@
     <origin rpy="-1.570796 -1.570796 0.000000" xyz="0.000000 0.000000 0.000000"/>
     <axis xyz="0 0 1"/>
     <!--limit-->
-    <limit effort="353" lower="-3.141592653589793" upper="3.141592653589793" velocity="2.0943951023931953"/>
+    <limit effort="353" lower="-6.283185307179586" upper="6.283185307179586" velocity="2.0943951023931953"/>
     <dynamics damping="0.0" friction="0.0"/>
   </joint>
   <link name="link_2">
@@ -224,7 +224,7 @@
     <origin rpy="0.000000 -0.000000 1.570796" xyz="0.557900 0.000000 -0.156300"/>
     <axis xyz="0 0 1"/>
     <!--limit-->
-    <limit effort="54" lower="-3.141592653589793" upper="3.141592653589793" velocity="3.141592653589793"/>
+    <limit effort="54" lower="-6.283185307179586" upper="6.283185307179586" velocity="3.141592653589793"/>
     <dynamics damping="0.0" friction="0.0"/>
   </joint>
   <link name="link_4">
@@ -251,7 +251,7 @@
     <origin rpy="1.570796 -0.000000 0.000000" xyz="0.000000 -0.106000 0.000000"/>
     <axis xyz="0 0 1"/>
     <!--limit-->
-    <limit effort="54" lower="-3.141592653589793" upper="3.141592653589793" velocity="3.141592653589793"/>
+    <limit effort="54" lower="-6.283185307179586" upper="6.283185307179586" velocity="3.141592653589793"/>
     <dynamics damping="0.0" friction="0.0"/>
   </joint>
   <link name="link_5">
@@ -278,7 +278,7 @@
     <origin rpy="1.570796 -0.000000 0.000000" xyz="0.000000 -0.113150 0.000000"/>
     <axis xyz="0 0 1"/>
     <!--limit-->
-    <limit effort="54" lower="-4.71238898038469" upper="4.71238898038469" velocity="3.141592653589793"/>
+    <limit effort="54" lower="-6.283185307179586" upper="6.283185307179586" velocity="3.141592653589793"/>
     <dynamics damping="0.0" friction="0.0"/>
   </joint>
   <link name="link_6">

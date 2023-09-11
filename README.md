@@ -134,9 +134,9 @@ The user can manually click the `Data Table Setting` <sup>2</sup> item and check
 > Then, run the driver to maintain the connection with TM Robot by typing 
 >
 >```bash
-> ros2 run tm_driver tm_driver <robot_ip_address>
+> ros2 run tm_driver tm_driver robot_ip:=<robot_ip_address>
 >```
-> Example :``ros2 run tm_driver tm_driver 192.168.10.2``, if the <robot_ip_address> is 192.168.10.2
+> Example :``ros2 run tm_driver tm_driver robot_ip:=192.168.10.2``, if the <robot_ip_address> is 192.168.10.2
 >
 > Now, the user can use a new terminal to run each ROS node or command, but don't forget to source the correct setup shell files as starting a new terminal.
 
@@ -367,7 +367,7 @@ In this demo code, the user can use send_script service sending a script to leav
 ``source ./install/setup.bash``<br/>
 > 5. In a new terminal: Source setup.bash in the workspace path and run the driver to connect to TM Robot by typing<br/>
 ``source ./install/setup.bash``<br/>
-``ros2 run tm_driver tm_driver <robot_ip_address>``<br/>
+``ros2 run tm_driver tm_driver robot_ip:=<robot_ip_address>``<br/>
 The <robot_ip_address> is the IP address of the TM Robot, the user can get it through TM Flow, for example 192.168.10.2<br/>
 > 6. In another new terminal: Source setup.bash in the workspace path and type specific demo node function which the user want to study for applications. For example: the user select to run demo_set_io, the user can type<br/>
 ``source ./install/setup.bash``<br/>
@@ -411,7 +411,7 @@ This chapter describes a simplified GUI for displaying tm_driver connection stat
 ``source ./install/setup.bash``<br/>
 > 5. In a new terminal: Source setup.bash in the workspace path and run the driver to connect to TM Robot by typing<br/>
 ``source ./install/setup.bash``<br/>
-``ros2 run tm_driver tm_driver <robot_ip_address>``<br/>
+``ros2 run tm_driver tm_driver robot_ip:=<robot_ip_address>``<br/>
 The <robot_ip_address> is the IP address of the TM Robot, the user can get it through TM Flow, for example 192.168.10.2<br/>
 > 6. In another new terminal: Source setup.bash in the workspace path and start GUI debug by typing<br/>
 ``source ./install/setup.bash``<br/>
@@ -461,7 +461,7 @@ The user can use the tm_mod_urdf package to extract specific kinematic values fr
 > source /opt/ros/foxy/setup.bash
 > cd <workspace>
 > source ./install/setup.bash
-> ros2 run tm_driver tm_driver <robot_ip_address>
+> ros2 run tm_driver tm_driver robot_ip:=<robot_ip_address>
 > ```
 > The parameter `<robot_ip_address>` means the IP address of your TM Robot, the user can get it through TM Flow.<br/>
 > 
@@ -510,7 +510,7 @@ The user can use the tm_mod_urdf package to extract specific kinematic values fr
 > source /opt/ros/foxy/setup.bash
 > cd <workspace>
 > source ./install/setup.bash
-> ros2 run tm_driver tm_driver <robot_ip_address>
+> ros2 run tm_driver tm_driver robot_ip:=<robot_ip_address>
 > ```
 > The parameter `<robot_ip_address>` means the IP address of your TM Robot, the user can get it through TM Flow.<br/>
 > 
