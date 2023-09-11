@@ -57,11 +57,11 @@ if (TM_MOVEIT_CPP_DEMO_INCLUDE_MOVEIT)
   )
 endif (TM_MOVEIT_CPP_DEMO_INCLUDE_MOVEIT)
 
-  install(DIRECTORY launch
-    DESTINATION share/${PROJECT_NAME}
-  )
-  install(DIRECTORY config
-    DESTINATION share/${PROJECT_NAME}
-  )
+install(DIRECTORY launch
+  DESTINATION share/${PROJECT_NAME}
+)
+install(DIRECTORY config
+  DESTINATION share/${PROJECT_NAME}
+)
 
 ament_package()
