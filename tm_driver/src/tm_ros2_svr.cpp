@@ -11,6 +11,7 @@ TmSvrRos2::TmSvrRos2(rclcpp::Node::SharedPtr node, TmDriver &iface, bool is_fake
     , is_fake(is_fake)
 {
     jns_.clear();
+    jns_.reserve(6);
     jns_.push_back("joint_1");
     jns_.push_back("joint_2");
     jns_.push_back("joint_3");
