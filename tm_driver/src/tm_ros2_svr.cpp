@@ -103,6 +103,7 @@ void TmSvrRos2::publish_fbs()
     pm.fbs_msg.joint_pos = state.joint_angle();
     pm.fbs_msg.joint_vel = state.joint_speed();
     pm.fbs_msg.joint_tor = state.joint_torque();
+    pm.fbs_msg.tool0_pose = state.flange_pose();
     pm.fbs_msg.tool_pose = state.tool_pose();
     pm.fbs_msg.tcp_speed = state.tcp_speed_vec();
     pm.fbs_msg.tcp_force = state.tcp_force_vec();
