@@ -108,7 +108,11 @@ public:
     if (plan_solution)
     {
       RCLCPP_INFO(LOGGER, "moveit_cpp_->execute(plan_solution.trajectory)");
+#if ROS_HUMBLE
+      moveit_cpp_->execute(arm.getPlanningGroupName(), plan_solution.trajectory);
+#else
       moveit_cpp_->execute(plan_solution.trajectory);
+#endif
     }
 
     //Below, we simply use a long delay to wait for the previous motion to complete.

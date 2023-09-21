@@ -17,6 +17,13 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wpedantic -Werror=pedantic)
 endif()
 
+### Compile flag to support different versions of ROS
+if($ENV{ROS_DISTRO} STREQUAL "humble")
+  set(ROS_HUMBLE 1)
+else()
+  set(ROS_HUMBLE 0)
+endif()
+
 # Please refer to https://moveit.ros.org/install-moveit2/source
 # If the MoveIt2 module is not ready for installation, or the user wants to close the relative MoveIt2 module, the user can modify the "TRUE" of 'TM_MOVEIT_AUTO_DETECT' to "FALSE" to compile.
 option(TM_MOVEIT_AUTO_DETECT "Try to detect moveit2" TRUE)
@@ -51,6 +58,11 @@ if (TM_MOVEIT_CPP_DEMO_INCLUDE_MOVEIT)
     moveit_ros_planning_interface
     Boost
   )
+  target_compile_definitions(run_moveit_cpp
+    PRIVATE
+    ROS_HUMBLE=${ROS_HUMBLE}
+  )
+
   install(TARGETS run_moveit_cpp
     EXPORT export_${PROJECT_NAME}
     DESTINATION lib/${PROJECT_NAME}
