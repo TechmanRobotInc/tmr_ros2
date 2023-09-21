@@ -29,13 +29,7 @@ def load_yaml(package_name, file_path):
 
 
 def generate_launch_description():
-    args = []
-    length = len(sys.argv)
-    if (len(sys.argv) >= 5):
-        i = 4
-        while i < len(sys.argv):
-            args.append(sys.argv[i])
-            i = i + 1
+    args = sys.argv[4:]
 
     # moveit_cpp.yaml is passed by filename for now since it's node specific
     moveit_cpp_yaml_file_name = get_package_share_directory('tm_moveit_cpp_demo') + "/config/moveit_cpp.yaml"
