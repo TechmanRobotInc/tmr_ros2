@@ -98,6 +98,10 @@ public:
       scene->processCollisionObjectMsg(collision_object);
     }  // Unlock PlanningScene
 
+    // Set joint start state to current
+    RCLCPP_INFO(LOGGER, "Set start state current");
+    arm.setStartStateToCurrentState();
+
     // Set joint state goal
     RCLCPP_INFO(LOGGER, "Set goal");
     arm.setGoal("ready1");
@@ -116,7 +120,11 @@ public:
     }
 
     //Below, we simply use a long delay to wait for the previous motion to complete.
-    /*rclcpp::sleep_for(std::chrono::seconds(10));   
+    rclcpp::sleep_for(std::chrono::seconds(10));
+
+    // Set joint start state to current
+    RCLCPP_INFO(LOGGER, "Set start state current");
+    arm.setStartStateToCurrentState();
 
     // Set joint state goal
     RCLCPP_INFO(LOGGER, "Set goal (home)");
@@ -127,9 +135,13 @@ public:
     plan_solution = arm.plan();
     if (plan_solution)
     {
-      RCLCPP_INFO(LOGGER, "arm.execute()");
-      arm.execute();
-    }*/
+      RCLCPP_INFO(LOGGER, "moveit_cpp_->execute(plan_solution.trajectory)");
+#if ROS_HUMBLE
+      moveit_cpp_->execute(arm.getPlanningGroupName(), plan_solution.trajectory);
+#else
+      moveit_cpp_->execute(plan_solution.trajectory);
+#endif
+    }
   }
 
 private:
