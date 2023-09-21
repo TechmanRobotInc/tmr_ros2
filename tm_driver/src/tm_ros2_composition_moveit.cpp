@@ -75,7 +75,7 @@ int main(int argc, char *argv[])
 
     bool is_fake = true;
     std::string host;
-    if (argc > 1) {
+    if (args.size() > 1) {
       host = args[1];
       if (host.find("robot_ip:=") != std::string::npos) {
         host.replace(host.begin(), host.begin() + 10, "");
