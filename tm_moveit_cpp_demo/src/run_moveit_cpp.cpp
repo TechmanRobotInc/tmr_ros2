@@ -64,12 +64,12 @@ public:
   void run()
   {
     RCLCPP_INFO(LOGGER, "Initialize MoveItCpp");
-    moveit_cpp_ = std::make_shared<moveit::planning_interface::MoveItCpp>(node_);
-    moveit_cpp_->getPlanningSceneMonitor()->providePlanningSceneService();  // let RViz display query PlanningScene
-    moveit_cpp_->getPlanningSceneMonitor()->setPlanningScenePublishingFrequency(100);
+    moveit_cpp_ = std::make_shared<moveit_cpp::MoveItCpp>(node_);
+    moveit_cpp_->getPlanningSceneMonitorNonConst()->providePlanningSceneService();  // let RViz display query PlanningScene
+    moveit_cpp_->getPlanningSceneMonitorNonConst()->setPlanningScenePublishingFrequency(100);
 
     RCLCPP_INFO(LOGGER, "Initialize PlanningComponent");
-    moveit::planning_interface::PlanningComponent arm("tmr_arm", moveit_cpp_);
+    moveit_cpp::PlanningComponent arm("tmr_arm", moveit_cpp_);
 
     // A little delay before running the plan
     rclcpp::sleep_for(std::chrono::seconds(3));
@@ -94,7 +94,7 @@ public:
 
     // Add object to planning scene
     {  // Lock PlanningScene
-      planning_scene_monitor::LockedPlanningSceneRW scene(moveit_cpp_->getPlanningSceneMonitor());
+      planning_scene_monitor::LockedPlanningSceneRW scene(moveit_cpp_->getPlanningSceneMonitorNonConst());
       scene->processCollisionObjectMsg(collision_object);
     }  // Unlock PlanningScene
 
@@ -107,8 +107,8 @@ public:
     auto plan_solution = arm.plan();
     if (plan_solution)
     {
-      RCLCPP_INFO(LOGGER, "arm.execute()");
-      arm.execute();
+      RCLCPP_INFO(LOGGER, "moveit_cpp_->execute(plan_solution.trajectory)");
+      moveit_cpp_->execute(plan_solution.trajectory);
     }
 
     //Below, we simply use a long delay to wait for the previous motion to complete.
@@ -131,7 +131,7 @@ public:
 private:
   rclcpp::Node::SharedPtr node_;
   rclcpp::Publisher<moveit_msgs::msg::DisplayRobotState>::SharedPtr robot_state_publisher_;
-  moveit::planning_interface::MoveItCppPtr moveit_cpp_;
+  moveit_cpp::MoveItCppPtr moveit_cpp_;
 };
 
 int main(int argc, char** argv)
