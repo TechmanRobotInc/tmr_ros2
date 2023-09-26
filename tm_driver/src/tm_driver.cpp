@@ -177,9 +177,20 @@ bool TmDriver::set_pvt_point(TmPvtMode mode, const TmPvtPoint &point, const std:
 
 bool TmDriver::set_pvt_traj(const TmPvtTraj &pvts, const std::string &id)
 {
-	std::string script = TmCommand::set_pvt_traj(pvts);
-	print_info("TM_DRV: send script (pvt traj.):\n");
-	print_info("%s\n", script.c_str());
+    const std::string script = TmCommand::set_pvt_traj(pvts);
+    print_info("TM_DRV: send script (pvt traj.):");
+    print_info("%s\n", script.c_str());
+
+    std::string script_copy = script;
+    const std::string delimiter = "\n";
+    size_t pos = 0;
+    std::string token;
+    while ((pos = script_copy.find(delimiter)) != std::string::npos) {
+        token = script_copy.substr(0, pos);
+        print_debug(token.c_str());
+        script_copy.erase(0, pos + delimiter.length());
+    }
+
 	return (sct.send_script_str(id, script) == RC_OK);
 }
 

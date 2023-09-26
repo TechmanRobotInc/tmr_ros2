@@ -19,7 +19,6 @@ rclcpp_action::GoalResponse TmRos2SctMoveit::handle_goal(const rclcpp_action::Go
 {
   auto goal_id = rclcpp_action::to_string(uuid);
   print_info("Received new action goal %s", goal_id.c_str());
-  //RCLCPP_INFO_STREAM(node->get_logger(), "Received new action goal " << goal_id);
 
   if (has_goal_) {
     return rclcpp_action::GoalResponse::ACCEPT_AND_DEFER;
@@ -27,21 +26,35 @@ rclcpp_action::GoalResponse TmRos2SctMoveit::handle_goal(const rclcpp_action::Go
 
   if (!is_fake_) {
     if (!svr_.is_connected()) {
+      print_error("Goal: %s, got rejected because of SVR not being connected", goal_id.c_str());
       return rclcpp_action::GoalResponse::REJECT;
     }
     if (!sct_.is_connected()) {
+      print_error("Goal: %s, got rejected because of SCT not being connected", goal_id.c_str());
       return rclcpp_action::GoalResponse::REJECT;
     }
     if (state_.has_error()) {
+      print_error("Goal: %s, got rejected because STATE has an error", goal_id.c_str());
       return rclcpp_action::GoalResponse::REJECT;
     }
   }
 
   if (!has_points(goal->trajectory)) {
+    std::string msg = control_msgs::action::to_yaml(*goal);
+    const std::string delimiter = "\n";
+    size_t pos = 0;
+    std::string token;
+    while ((pos = msg.find(delimiter)) != std::string::npos) {
+      token = msg.substr(0, pos);
+      print_error(token.c_str());
+      msg.erase(0, pos + delimiter.length());
+    }
+
+    print_error("Goal: %s, got rejected because of no trajectory points", goal_id.c_str());
     return rclcpp_action::GoalResponse::REJECT;
   }
-  //for (auto &jn : goal->trajectory.joint_names) { tmr_DEBUG_STREAM(jn); }
 
+  print_info("Goal: %s, got accepted", goal_id.c_str());
   return rclcpp_action::GoalResponse::ACCEPT_AND_EXECUTE;
 }
 rclcpp_action::CancelResponse TmRos2SctMoveit::handle_cancel(
