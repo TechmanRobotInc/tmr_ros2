@@ -58,8 +58,8 @@ rclcpp_action::CancelResponse TmRos2SctMoveit::handle_cancel(
   }
   return rclcpp_action::CancelResponse::ACCEPT;
 }
-void TmRos2SctMoveit::handle_accepted(
-  std::shared_ptr<rclcpp_action::ServerGoalHandle<control_msgs::action::FollowJointTrajectory>> goal_handle)
+void
+TmRos2SctMoveit::handle_accepted(std::shared_ptr<rclcpp_action::ServerGoalHandle<control_msgs::action::FollowJointTrajectory>> goal_handle)
 {
   {
     std::unique_lock<std::mutex> lck(as_mtx_);
@@ -68,11 +68,10 @@ void TmRos2SctMoveit::handle_accepted(
   }
   // this needs to return quickly to avoid blocking the executor, so spin up a new thread
   std::thread{std::bind(&TmRos2SctMoveit::execute_traj, this, std::placeholders::_1), goal_handle}.detach();
-
 }
 
-void TmRos2SctMoveit::execute_traj(
-  const std::shared_ptr<rclcpp_action::ServerGoalHandle<control_msgs::action::FollowJointTrajectory>> goal_handle)
+void
+TmRos2SctMoveit::execute_traj(const std::shared_ptr<rclcpp_action::ServerGoalHandle<control_msgs::action::FollowJointTrajectory>> goal_handle)
 {
   print_info("TM_ROS: trajectory thread begin");
 
@@ -129,7 +128,8 @@ void TmRos2SctMoveit::execute_traj(
   print_info("TM_ROS: trajectory thread end");
 }
 
-void TmRos2SctMoveit::reorder_traj_joints(
+void
+TmRos2SctMoveit::reorder_traj_joints(
   std::vector<trajectory_msgs::msg::JointTrajectoryPoint> &new_traj_points,
   const trajectory_msgs::msg::JointTrajectory& traj)
 {
@@ -186,8 +186,8 @@ bool TmRos2SctMoveit::is_positions_match(
   }
   return true;
 }
-void TmRos2SctMoveit::set_pvt_traj(
-  TmPvtTraj &pvts, const std::vector<trajectory_msgs::msg::JointTrajectoryPoint> &traj_points, double Tmin)
+void
+TmRos2SctMoveit::set_pvt_traj(TmPvtTraj &pvts, const std::vector<trajectory_msgs::msg::JointTrajectoryPoint> &traj_points, double Tmin)
 {
   size_t i = 0, i_1 = 0, i_2 = 0;
   int skip_count = 0;
@@ -244,8 +244,9 @@ void TmRos2SctMoveit::set_pvt_traj(
   }
   pvts.total_time = sec(traj_points.back().time_from_start);
 }
-std::shared_ptr<TmPvtTraj> TmRos2SctMoveit::get_pvt_traj(
-    const std::vector<trajectory_msgs::msg::JointTrajectoryPoint> &traj_points, double Tmin)
+
+std::shared_ptr<TmPvtTraj>
+TmRos2SctMoveit::get_pvt_traj(const std::vector<trajectory_msgs::msg::JointTrajectoryPoint> &traj_points, double Tmin)
 {
   std::shared_ptr<TmPvtTraj> pvts = std::make_shared<TmPvtTraj>();
   set_pvt_traj(*pvts, traj_points, Tmin);
