@@ -49,7 +49,6 @@ rclcpp_action::CancelResponse TmRos2SctMoveit::handle_cancel(
 {
   auto goal_id = rclcpp_action::to_string(goal_handle->get_goal_id());
   print_info("Got request to cancel goal %s", goal_id.c_str());
-  //RCLCPP_INFO_STREAM(node->get_logger(), "Got request to cancel goal " << goal_id);
   {
     std::lock_guard<std::mutex> lck(as_mtx_);
     if (goal_id_.compare(goal_id) == 0 && has_goal_) {
@@ -94,8 +93,7 @@ void TmRos2SctMoveit::execute_traj(
   }
 
   auto pvts = get_pvt_traj(traj_points, 0.025);
-  print_info("TM_ROS: traj. total time:= %d", (int)pvts->total_time);
-  //RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: traj. total time:=" << pvts->total_time);
+  print_info("TM_ROS: traj. total time:= %d", static_cast<int>(pvts->total_time));
 
   if (!goal_handle->is_executing()) {
     goal_handle->execute();
@@ -221,12 +219,12 @@ void TmRos2SctMoveit::set_pvt_traj(
       pvts.points.push_back(point);
     }
     else {
+      print_debug("Skipping index: %d", i);
       ++skip_count;
     }
   }
   if (skip_count > 0) {
     print_warn("TM_ROS: Traj.: skip %d points", (int)skip_count);	
-    //RCLCPP_WARN_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: Traj.: skip " << (int)skip_count << " points");
   }
   // last point
   if (traj_points.size() > 1) {

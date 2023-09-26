@@ -205,7 +205,6 @@ bool TmDriver::run_pvt_traj(const TmPvtTraj &pvts)
 		std::this_thread::sleep_for(std::chrono::milliseconds(1));
 		time_now = std::chrono::steady_clock::now();
 		time = std::chrono::duration_cast<std::chrono::duration<double>>(time_now - time_start).count();
-		//time += 0.001;
 	}
 
 	if (_is_executing_traj) {
@@ -294,7 +293,6 @@ bool TmDriver::fake_run_pvt_traj(const TmPvtTraj &pvts)
 	time_now = std::chrono::steady_clock::now();
 	point.time = std::chrono::duration_cast<std::chrono::duration<double>>(time_now - time_init).count();
 	print_info("TM_DRV: traj. exec. time:= %f", point.time);
-	//RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"TM_DRV: traj. exec. time:=" << point.time);
 
 	_is_executing_traj = false;
 	return true;
