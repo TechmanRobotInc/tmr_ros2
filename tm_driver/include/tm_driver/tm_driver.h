@@ -89,7 +89,7 @@ public:
 
 	bool set_pvt_traj(const TmPvtTraj &pvts, const std::string &id = "PvtTraj");
 
-	bool run_pvt_traj(const TmPvtTraj &pvts);
+    bool run_pvt_traj(const TmPvtTraj &pvts, double goal_time_tolerance = 0.0);
 	void stop_pvt_traj();
 	void back_to_listen_node();
 	bool get_connect_recovery_guide();
