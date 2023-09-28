@@ -1,4 +1,9 @@
 #include "tm_driver/tm_ros2_movit_sct.h"
+
+auto sec = [](const builtin_interfaces::msg::Duration& t) {
+    return static_cast<double>(t.sec) + 1e-9 * static_cast<double>(t.nanosec);
+};
+
 void TmRos2SctMoveit::intial_action(){
     as_ = rclcpp_action::create_server<control_msgs::action::FollowJointTrajectory>(
      node->get_node_base_interface(),
@@ -99,17 +104,15 @@ TmRos2SctMoveit::execute_traj(const std::shared_ptr<rclcpp_action::ServerGoalHan
     result->error_code = result->PATH_TOLERANCE_VIOLATED;
     result->error_string = "Start point doesn't match current pose";
     print_warn(result->error_string.c_str());
-    //RCLCPP_WARN_STREAM(node->get_logger(), result->error_string);
-
-    //goal_handle->abort(result);
+    goal_handle->abort(result);
   }
 
   auto pvts = get_pvt_traj(traj_points, 0.025);
   print_info("TM_ROS: traj. total time:= %d", static_cast<int>(pvts->total_time));
 
   if (!goal_handle->is_executing()) {
-    goal_handle->execute();
     print_info("goal_handle->execute()");
+    goal_handle->execute();
   }
 
   if (!is_fake_) {
@@ -123,15 +126,14 @@ TmRos2SctMoveit::execute_traj(const std::shared_ptr<rclcpp_action::ServerGoalHan
       result->error_code = result->GOAL_TOLERANCE_VIOLATED;
       result->error_string = "Current pose doesn't match Goal point";
       print_warn(result->error_string.c_str());
-      //RCLCPP_WARN_STREAM(node->get_logger(), result->error_string);
+      goal_handle->abort(result);
     }
     else {
       result->error_code = result->SUCCESSFUL;
       result->error_string = "Goal reached, success!";
       print_info(result->error_string.c_str());
-      //RCLCPP_INFO_STREAM(node->get_logger(), result->error_string);
+      goal_handle->succeed(result);
     }
-    goal_handle->succeed(result);
   }
   {
     std::lock_guard<std::mutex> lck(as_mtx_);
@@ -202,26 +204,43 @@ bool TmRos2SctMoveit::is_positions_match(
 void
 TmRos2SctMoveit::set_pvt_traj(TmPvtTraj &pvts, const std::vector<trajectory_msgs::msg::JointTrajectoryPoint> &traj_points, double Tmin)
 {
+  print_debug("TM_ROS: Traj size: %d", static_cast<int>(traj_points.size()));
+  if (traj_points.size() < 2)
+  {
+    print_warn("TM_ROS: Traj rejected because size<2: %d", static_cast<int>(traj_points.size()));
+    return;
+  }
+
+  double total_time = sec(traj_points[traj_points.size()-1].time_from_start);
+  if (total_time < Tmin)
+  {
+    print_warn("TM_ROS: Traj rejected because total time<Tmin(%f): %f", Tmin, total_time);
+    return;
+  }
+
+  std::stringstream ss;
+  ss << "msg:\n";
+  for (const auto& point : traj_points)
+  {
+    ss << trajectory_msgs::msg::to_yaml(point) << "\n";
+  }
+  RCLCPP_DEBUG_STREAM(node->get_logger(), ss.str());
+
+  pvts.mode = TmPvtMode::Joint;
+
   size_t i = 0, i_1 = 0, i_2 = 0;
   int skip_count = 0;
   TmPvtPoint point;
 
-  if (traj_points.size() == 0) return;
-
-  pvts.mode = TmPvtMode::Joint;
-
-  auto sec = [](const builtin_interfaces::msg::Duration& t) {
-    return static_cast<double>(t.sec) + 1e-9 * static_cast<double>(t.nanosec);
-  };
-
   // first point
-  if (sec(traj_points[i].time_from_start) != 0.0) {
+  if (sec(traj_points[i].time_from_start) >= 1e-6) {
     print_warn("TM_ROS: Traj.: first point should be the current position, with time_from_start set to 0.0");
-    point.time = sec(traj_points[i].time_from_start);
-    point.positions = traj_points[i].positions;
-    point.velocities = traj_points[i].velocities;
-    pvts.points.push_back(point);
   }
+  point.time = sec(traj_points[i].time_from_start);
+  point.positions = traj_points[i].positions;
+  point.velocities = traj_points[i].velocities;
+  pvts.points.push_back(point);
+
   for (i = 1; i < traj_points.size() - 1; ++i) {
     point.time = sec(traj_points[i].time_from_start) - sec(traj_points[i_1].time_from_start);
     if (point.time >= Tmin) {
@@ -250,7 +269,7 @@ TmRos2SctMoveit::set_pvt_traj(TmPvtTraj &pvts, const std::vector<trajectory_msgs
     }
     else {
       point.time = sec(traj_points[i].time_from_start) - sec(traj_points[i_2].time_from_start);
-      pvts.points.back() = point;
+      pvts.points.back() = point; // This is safe because the starting point is always added.
       ++skip_count;
       print_warn("TM_ROS: Traj.: skip 1 more last point");
     }
