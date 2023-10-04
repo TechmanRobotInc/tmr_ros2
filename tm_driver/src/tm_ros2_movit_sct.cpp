@@ -118,7 +118,7 @@ TmRos2SctMoveit::execute_traj(const std::shared_ptr<rclcpp_action::ServerGoalHan
   if (!is_fake_) {
 //    print_info("TM_ROS: traj. goal_time_tolerance:= %.3f", sec(goal_handle->get_goal()->goal_time_tolerance));
 //    iface_.run_pvt_traj(*pvts, sec(goal_handle->get_goal()->goal_time_tolerance));
-    iface_.run_pvt_traj(*pvts, 0.5*pvts->total_time);
+    iface_.run_pvt_traj(*pvts, 19*pvts->total_time);
   }
   else {
     iface_.fake_run_pvt_traj(*pvts);
