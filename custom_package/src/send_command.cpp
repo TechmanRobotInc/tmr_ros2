@@ -21,7 +21,7 @@ int main(int argc, char * argv[]){
   request->command_parameter_string = "0,0,90,0,90,0";
 
   auto res_future = client->async_send_request(request);
-  if(rclcpp::spin_until_future_complete(node, res_future) != rclcpp::executor::FutureReturnCode::SUCCESS){
+  if(rclcpp::spin_until_future_complete(node, res_future) != rclcpp::FutureReturnCode::SUCCESS){
     RCLCPP_ERROR_STREAM(node->get_logger(), "Service call failed.");
     return 1;
   }

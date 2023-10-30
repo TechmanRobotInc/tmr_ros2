@@ -135,10 +135,10 @@ TmRobotState::~TmRobotState()
 
 void TmRobotState::set_fake_joint_states(const std::vector<double> &pos, const std::vector<double> &vel, const std::vector<double> &tor)
 {
-	for (size_t i = 0; i < 6; ++i) {
-		tmRobotStateDataFromEthernet.joint_angle[i] = pos[i] * (180.0 / M_PI);
-		tmRobotStateDataFromEthernet.joint_speed[i] = vel[i];
-		tmRobotStateDataFromEthernet.joint_torque[i] = tor[i];
+	for (int i = 0; i < 6; ++i) {
+		tmRobotStateDataFromEthernet.joint_angle[i] = static_cast<float>(pos[i] * (180.0 / M_PI));
+		tmRobotStateDataFromEthernet.joint_speed[i] = static_cast<float>(vel[i]);
+		tmRobotStateDataFromEthernet.joint_torque[i] = static_cast<float>(tor[i]);
 	}
 	multiThreadCache.set_catch_data(tmRobotStateDataFromEthernet);
 }

@@ -6,21 +6,81 @@ Techman Robot is a state-of-the-art production tool that is highly compatible an
 
 ## __2. Feature__
 
-This driver is for <u>**ROS2 Foxy**</u> version.<br/>
+This driver is for <u>**ROS2 Humble**</u> version.<br/>
 To use the driver, make sure your ROS PC is installed correctly.<br/>
-If the user wants to know how to use the ROS1 driver, please visit the [TM ROS1 driver](https://github.com/TechmanRobotInc/tmr_ros1) website or directly click the __TM ROS driver version__ listed in the table below.<br/>
+If the user wants to know how to use the ROS1 driver, please visit the [TM ROS1 driver](https://github.com/TechmanRobotInc/tmr_ros1/tree/noetic) website or directly click on the listed `Github repo: TM App Release` below ROS1 projects in the table.<br/>
 
 
 More information: TM ROS driver support list
-|ROS Distro (ROS Environment Setup)|TM ROS driver version|TM ROS Vision|Remark: switch GitHub branches|
-|:---|:---|:---:|:---:|
-|[**<font color=#808080>ROS Noetic Ninjemys**](http://wiki.ros.org/noetic)|[**<font color=#0000FF>TM ROS1 Noetic driver**](https://github.com/TechmanRobotInc/tmr_ros1/tree/noetic)|supported|noetic|
-|[**<font color=#808080>ROS Melodic Morenia**](http://wiki.ros.org/melodic)|[**<font color=#0000FF>TM ROS1 Melodic driver**](https://github.com/TechmanRobotInc/tmr_ros1/)|x|master|
-|[**<font color=#808080>ROS 2 Foxy Fitzroy**](https://index.ros.org/doc/ros2/Releases/Release-Foxy-Fitzroy/)|[**<font color=#800000>TM ROS2 Foxy driver**](https://github.com/TechmanRobotInc/tmr_ros2)|supported|master|
-|[**<font color=#808080>ROS 2 Dashing Diademata**](https://index.ros.org/doc/ros2/Releases/Release-Dashing-Diademata/)|[**<font color=#800000>TM ROS2 Dashing driver**](https://github.com/TechmanRobotInc/tmr_ros2/tree/dashing-devel)|supported|dashing-devel|
+<table>
+<head>
+</head>
+    <tr>
+        <th colspan="5">TMflow + TM Robot Series </th>
+    </tr>
+    <tr>
+        <th>ROS Distro</th>
+        <th>GitHub repo: TM App Release</th>
+        <th>TM ROS Driver</th>
+        <th>TMvision Support</th>
+        <th>GitHub Branch</th>
+    </tr>
+    <tr>
+        <td><a href="http://wiki.ros.org/melodic">ROS Melodic Morenia</a></td>
+        <td><a href="https://github.com/TechmanRobotInc/tmr_ros1/">TM ROS1 Melodic</a></td>
+        <th>&#9711;</th>
+        <th>&#10005;&nbsp</th>
+        <th>master</th>
+    </tr>
+    <tr>
+        <td><a href="http://wiki.ros.org/noetic">ROS Noetic Ninjemys</a></td>
+        <td><a href="https://github.com/TechmanRobotInc/tmr_ros1/tree/noetic">TM ROS1 Noetic</a></td>
+        <th>&#9711;</th>
+        <th>&#9711;</th>
+        <th>noetic</th>
+    </tr>
+    <tr>
+        <td><a href="https://index.ros.org/doc/ros2/Releases/Release-Dashing-Diademata/">ROS 2 Dashing Diademata</a></td>
+        <td><a href="https://github.com/TechmanRobotInc/tmr_ros2/tree/dashing">TM ROS2 Dashing</a></td>
+        <th>&#9711;</th>
+        <th>&#9711;</th>
+        <th>dashing</th>
+    </tr>
+    <tr>
+        <td><a href="https://index.ros.org/doc/ros2/Releases/Release-Foxy-Fitzroy/">ROS 2 Foxy Fitzroy</a></td>
+        <td><a href="https://github.com/TechmanRobotInc/tmr_ros2">TM ROS2 Foxy</a></td>
+        <th>&#9711;</th>
+        <th>&#9711;</th>
+        <th>master</th>
+    </tr>
+    <tr>
+        <td><a href="https://docs.ros.org/en/humble/index.html">ROS 2 Humble Hawksbill</a></td>
+        <td><a href="https://github.com/TechmanRobotInc/tmr_ros2/tree/humble">TM ROS2 Humble</a></td>
+        <th>&#9711;</th>
+        <th>&#9711;</th>
+        <th>humble</th>
+    </tr>
+    <tr>
+        <th colspan="5">TMflow 2 + TM AI Cobot S-Series </th>
+    </tr>
+    <tr>
+        <th>ROS Distro</th>
+        <th>GitHub repo: TM 2 App Release</th>
+        <th>TM ROS Driver</th>
+        <th>TMvision Support</th>
+        <th>GitHub Branch</th>
+    </tr>
+    <tr>
+        <td><a href="https://index.ros.org/doc/ros2/Releases/Release-Foxy-Fitzroy/">ROS 2 Foxy Fitzroy</a></td>
+        <td><a href="https://github.com/TechmanRobotInc/tm2_ros2">TM2 ROS2 Foxy</a></td>
+        <th>&#9711;</th>
+        <th>&#9711;</th>
+        <th>master</th>
+    </tr>
+</table>
 
-Note1: The two current master branches are ROS1 Melodic and ROS2 Foxy.<br/>
-Note2: The tutorial that follows mentioned how to build a ROS environment on Ubuntu by sourcing is to take the ROS installed through the Debian packages as an example.<br/>
+
+Note: The `Github repo: TM 2 App Release` applies to TMflow Version 2.14 or above and adapts to HW5.0 mainly.<br/>
 
 
 ### __ROS2 Driver__
@@ -121,11 +181,11 @@ The user can manually click the `Data Table Setting` <sup>2</sup> item and check
 ###  &sect; __TM ROS driver usage__
 > __ROS2 driver usage__
 > 
-> After the user has set up the ROS2 environment (example : [Debian packages for ROS 2 Foxy](https://docs.ros.org/en/foxy/Installation/Ubuntu-Install-Debians.html)) and built the TM driver based on the specific workspace, please enter your workspace `<workspace>` by launching the terminal, and remember to make the workspace visible to ROS. 
+> After the user has set up the ROS2 environment (example : [Debian packages for ROS 2 Humble](https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debians.html)) and built the TM driver based on the specific workspace, please enter your workspace `<workspace>` by launching the terminal, and remember to make the workspace visible to ROS. 
 >
 >
 > ```bash
-> source /opt/ros/foxy/setup.bash
+> source /opt/ros/humble/setup.bash
 > cd <workspace>
 > source ./install/setup.bash
 > ```
@@ -140,60 +200,6 @@ The user can manually click the `Data Table Setting` <sup>2</sup> item and check
 >
 > Now, the user can use a new terminal to run each ROS node or command but don't forget to source the correct setup shell files as starting a new terminal.
 
-> __Usage with MoveIt2 (Tentative)__ 
->
-> See [MoveIt2 tutorial](https://moveit.ros.org/install-moveit2/source/) to install the MoveIt2 packages.<br/>
->
-> Assuming that the user is ready to build MoveIt2, and the user wants to apply the MoveIt by TM Robot, please do'nt forget to source the MoveIt environment, or you can add  ``source <MoveIt_WS>/install/setup.bash`` to your `.bashrc`.<br/>
-> The `<MoveIt_WS>` means the MoveIt2 workspace, for example `COLCON_WS` .<br/>
-> The `<TMDriver_WS>` means TM driver workspace, for example `tmdriver_ws` .<br/>
->
->
-> Then to build the TM driver based on the <TMDriver_WS> workspace, please enter the specific workspace `tmdriver_ws` by launching the terminal, and remember to make the workspace visible to ROS.<br/>
->
->
-> ```bash
-> source /opt/ros/foxy/setup.bash
-> source ~/COLCON_WS/install/setup.bash
-> cd ~/tmdriver_ws 
-> colcon build
-> source ./install/setup.bash
-> ```
->
-> :bulb: If you have built the TM driver before, you must use `colcon build --cmake-clean-cache` or `colcon build --cmake-force-configure` instead of `colcon build` in the previous step to force execution CMake configuration step, for example<br/>
->
->
-> ```bash
-> source /opt/ros/foxy/setup.bash
-> source ~/COLCON_WS/install/setup.bash
-> cd ~/tmdriver_ws 
-> colcon build --cmake-clean-cache
-> source ./install/setup.bash
-> ```
->
-> The demo launches the RViz GUI and demonstrates planning and execution of a simple collision-free motion plan with TM Robot.<br/> 
-> :bulb: Do you prepare the __TM Robot__ ready ? Make sure that TM Robot's operating software (__TMflow__) network settings are ready and the __Listen node__ is running.<br/>
->
-> To bring up the MoveIt2 demo environment in simulation mode with virtual TM Robot (Example: TM5-900), by typing<br/>
->
->
-> ```bash
-> ros2 launch tm_moveit_cpp_demo tm5-900_run_moveit_cpp.launch.py
-> ```
-> :bookmark_tabs: Note1: There are several built-in TM Robot nominal robot model settings, available for tm5-900, tm5-700, tm12, and tm14 models, as well as the eyeless models tm5x-900, tm5x-700, tm12x and tm14x models.<br/>
-> <br/>
->
-> The user can also manipulate real TM5-900 Robot (Example: TM5-900) to run, by typing<br/>
->> :warning:[CAUTION] This demo will let the real TM Robot move, please be careful. If the user is a beginner or unfamiliar with the arm movement path, it is recommended that the user place his hand on the big red emergency _Stick Stop Button_ at any time, and press the button appropriately in the event of any accident that may occur.<br/>
->
-> ```bash
-> ros2 launch tm_moveit_cpp_demo tm5-900_run_moveit_cpp.launch.py robot_ip:=<robot_ip_address>
-> ```
->
-> The parameter `<robot_ip_address>` means the IP address of the TM Robot.<br/>
-> :bookmark_tabs: Note2: If your real Robot is a TM12, in the above example, you should type "tm12_run_moveit_cpp.launch.py" to instead of "tm5-900_run_moveit_cpp.launch.py".<br/>
-> :bookmark_tabs: Note3: If your real Robot is the eyeless model as a TM12x, in the above example, you should type "tm12x_run_moveit_cpp.launch.py" to instead of "tm5-900_run_moveit_cpp.launch.py".<br/>
-
 
 ## __4. Vision__
 
@@ -202,7 +208,7 @@ The user can manually click the `Data Table Setting` <sup>2</sup> item and check
 >
 > __Dependencies__
 >
-> - ROS2 Foxy
+> - ROS2 Humble
 > - Python packages:
 >   1. flask
 >   2. waitress
@@ -362,7 +368,7 @@ In this demo code, the user can use send_script service sending a script to leav
 > 3. After the download done, rename the download folder ``tmr_ros2``(or ``tmr_ros2-master``) to ``src`` by typing<br/>
 ``mv tmr_ros2 src``<br/>  (or right-click on the download folder, select "Rename...")<br/>
 > 4. At the workspace directory to build the download packages and source 'setup.bash' in this workspace to make the workspace visible to ROS.<br/>
-**Note**: Do you set ``source /opt/ros/foxy/setup.bash`` ready? Make sure to obtain the correct setup file according to your workspace hierarchy, and then type the following below to compile.<br/>
+**Note**: Do you set ``source /opt/ros/humble/setup.bash`` ready? Make sure to obtain the correct setup file according to your workspace hierarchy, and then type the following below to compile.<br/>
 ``colcon build``<br/>
 ``source ./install/setup.bash``<br/>
 > 5. In a new terminal: Source setup.bash in the workspace path and run the driver to connect to TM Robot by typing<br/>
@@ -406,7 +412,7 @@ This chapter describes a simplified GUI for displaying tm_driver connection stat
 > 3. After the download done, rename the download folder ``tmr_ros2``(or ``tmr_ros2-master``) to ``src`` by typing<br/>
 ``mv tmr_ros2 src``<br/>  (or right-click on the download folder, select "Rename...")<br/>
 > 4. At the workspace directory to build the download packages and source 'setup.bash' in this workspace to make the workspace visible to ROS.<br/>
-**Note**: Do you set ``source /opt/ros/foxy/setup.bash`` ready? Make sure to obtain the correct setup file according to your workspace hierarchy, and then type the following below to compile.<br/>
+**Note**: Do you set ``source /opt/ros/humble/setup.bash`` ready? Make sure to obtain the correct setup file according to your workspace hierarchy, and then type the following below to compile.<br/>
 ``colcon build``<br/>
 ``source ./install/setup.bash``<br/>
 > 5. In a new terminal: Source setup.bash in the workspace path and run the driver to connect to TM Robot by typing<br/>
@@ -458,7 +464,7 @@ The user can use the tm_mod_urdf package to extract specific kinematic values fr
 > 1. In a terminal: Source setup.bash in the workspace path and run the driver to connect to TM Robot by typing<br/>
 >
 > ```bash
-> source /opt/ros/foxy/setup.bash
+> source /opt/ros/humble/setup.bash
 > cd <workspace>
 > source ./install/setup.bash
 > ros2 run tm_driver tm_driver robot_ip:=<robot_ip_address>
@@ -468,7 +474,7 @@ The user can use the tm_mod_urdf package to extract specific kinematic values fr
 > 2. In another new terminal: source setup.bash in the workspace path, change the current directory to the directory path of the python script to correct urdf, and then enter the specified command format to generate a new named URDF with arguments, for example, named user_defined.<br/>
 > 
 > ```bash
-> source /opt/ros/foxy/setup.bash
+> source /opt/ros/humble/setup.bash
 > cd <workspace>
 > source ./install/setup.bash
 > cd src/tm_mod_urdf/tm_mod_urdf
@@ -507,7 +513,7 @@ The user can use the tm_mod_urdf package to extract specific kinematic values fr
 > 1. In a terminal: Source setup.bash in the workspace path and run the driver to connect to TM Robot by typing<br/>
 >
 > ```bash
-> source /opt/ros/foxy/setup.bash
+> source /opt/ros/humble/setup.bash
 > cd <workspace>
 > source ./install/setup.bash
 > ros2 run tm_driver tm_driver robot_ip:=<robot_ip_address>
@@ -517,7 +523,7 @@ The user can use the tm_mod_urdf package to extract specific kinematic values fr
 > 2. In another new terminal: source setup.bash in the workspace path, change the current directory to the directory path of the python script to correct urdf, and then enter the specified command format to generate a new named URDF with arguments, for example, named user_defined.<br/>
 > 
 > ```bash
-> source /opt/ros/foxy/setup.bash
+> source /opt/ros/humble/setup.bash
 > cd <workspace>
 > source ./install/setup.bash
 > cd src/tm_mod_urdf/tm_mod_urdf
@@ -540,5 +546,5 @@ The user can use the tm_mod_urdf package to extract specific kinematic values fr
 > Ans: The user can first find the displayed string "``[new save file path:] ``" on the screen, and the following string is the file save location.<br/>
 
 
-## __8. Contact us/Technical support__
+## __8. Contact us / Technical support__
 More Support & Service, please contact us. [@TECHMAN ROBOT](https://www.tm-robot.com/zh-hant/contact-us/)``[https://www.tm-robot.com/zh-hant/contact-us/] ``<br/>

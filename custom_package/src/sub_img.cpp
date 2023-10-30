@@ -8,7 +8,6 @@
 #include "ament_index_cpp/get_package_share_directory.hpp"
 
 #include "rclcpp/rclcpp.hpp"
-#include "rclcpp_components/register_node_macro.hpp"
 #include "sensor_msgs/msg/image.hpp"
 
 

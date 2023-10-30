@@ -1,6 +1,6 @@
 #include "tm_driver/tm_ros2_svr.h"
 #include<iostream>
-#include <tf2_geometry_msgs/tf2_geometry_msgs.h>
+#include <tf2_geometry_msgs/tf2_geometry_msgs.hpp>
 TmSvrRos2::TmSvrRos2(rclcpp::Node::SharedPtr node, TmDriver &iface, bool is_fake, bool stick_play)
     : node(node)
     , svr_(iface.svr)
@@ -101,6 +101,7 @@ void TmSvrRos2::publish_fbs()
     pm.fbs_msg.joint_pos = state.joint_angle();
     pm.fbs_msg.joint_vel = state.joint_speed();
     pm.fbs_msg.joint_tor = state.joint_torque();
+    pm.fbs_msg.tool0_pose = state.flange_pose();
     pm.fbs_msg.tool_pose = state.tool_pose();
     pm.fbs_msg.tcp_speed = state.tcp_speed_vec();
     pm.fbs_msg.tcp_force = state.tcp_force_vec();

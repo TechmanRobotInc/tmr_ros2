@@ -29,9 +29,9 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ******************************************************************************
-ROS 2 Foxy Fitzroy is licensed under the Apache License 2.0
+ROS 2 Humble Hawksbill is licensed under the Apache License 2.0
 
-Various portions of the code are taken from the ROS 2 Foxy Fitzroy 
+Various portions of the code are taken from the ROS 2 Humble Hawksbill 
       (https://github.com/ros2/rclcpp/blob/master/LICENSE), 
 and are used in accordance with the following license:
 ******************************************************************************

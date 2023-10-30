@@ -47,7 +47,7 @@ public:
 
 	int length() const
 	{
-		return _bytes.size();
+		return static_cast<int>(_bytes.size());
 	}
 	char *data()
 	{
@@ -187,7 +187,7 @@ TmCommRC TmCommRecv::spin_once(int timeval_ms, int *n)
 
 	// fake
 	if (_sockfd == 6188) {
-		nb = _recv_fake_svr_pack_data(_recv_buf);
+		nb = static_cast<int>(_recv_fake_svr_pack_data(_recv_buf));
 		_sbuf.append(_recv_buf, nb);
 
 		if (n) *n = nb;
@@ -503,14 +503,14 @@ TmCommRC TmCommunication::send_packet(TmPacket &packet, int *n)
 	std::vector<char> bytes;
 	TmPacket::build_bytes(bytes, packet);
 	print_info(TmPacket::string_from_bytes(bytes).c_str());
-	return send_bytes(bytes.data(), bytes.size(), n);
+	return send_bytes(bytes.data(), static_cast<int>(bytes.size()), n);
 }
 TmCommRC TmCommunication::send_packet_all(TmPacket &packet, int *n)
 {
 	std::vector<char> bytes;
 	TmPacket::build_bytes(bytes, packet);
 	print_info(TmPacket::string_from_bytes(bytes).c_str());
-	return send_bytes_all(bytes.data(), bytes.size(), n);
+	return send_bytes_all(bytes.data(), static_cast<int>(bytes.size()), n);
 }
 TmCommRC TmCommunication::send_packet_(TmPacket &packet, int *n)
 {
@@ -518,23 +518,23 @@ TmCommRC TmCommunication::send_packet_(TmPacket &packet, int *n)
 	TmPacket::build_bytes(bytes, packet);
 	print_info(TmPacket::string_from_bytes(bytes).c_str());
 	if (bytes.size() > 0x1000)
-		return send_bytes_all(bytes.data(), bytes.size(), n);
+		return send_bytes_all(bytes.data(), static_cast<int>(bytes.size()), n);
 	else
-		return send_bytes(bytes.data(), bytes.size(), n);
+		return send_bytes(bytes.data(), static_cast<int>(bytes.size()), n);
 }
 
 TmCommRC TmCommunication::send_packet_silent(TmPacket &packet, int *n)
 {
 	std::vector<char> bytes;
 	TmPacket::build_bytes(bytes, packet);
-	return send_bytes(bytes.data(), bytes.size(), n);
+	return send_bytes(bytes.data(), static_cast<int>(bytes.size()), n);
 }
 
 TmCommRC TmCommunication::send_packet_silent_all(TmPacket &packet, int *n)
 {
 	std::vector<char> bytes;
 	TmPacket::build_bytes(bytes, packet);
-	return send_bytes_all(bytes.data(), bytes.size(), n);
+	return send_bytes_all(bytes.data(), static_cast<int>(bytes.size()), n);
 }
 
 TmCommRC TmCommunication::send_packet_silent_(TmPacket &packet, int *n)
@@ -542,9 +542,9 @@ TmCommRC TmCommunication::send_packet_silent_(TmPacket &packet, int *n)
 	std::vector<char> bytes;
 	TmPacket::build_bytes(bytes, packet);
 	if (bytes.size() > 0x1000)
-		return send_bytes_all(bytes.data(), bytes.size(), n);
+		return send_bytes_all(bytes.data(), static_cast<int>(bytes.size()), n);
 	else
-		return send_bytes(bytes.data(), bytes.size(), n);
+		return send_bytes(bytes.data(), static_cast<int>(bytes.size()), n);
 }
 
 bool TmCommunication::recv_init()

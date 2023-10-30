@@ -34,10 +34,10 @@ struct TmRobotStateData
 	float joint_torque_average[6] = {0};
 	float joint_torque_min[6] = {0};
 	float joint_torque_max[6] = {0};
-	int proj_speed;
-	int ma_mode;
+	int32_t proj_speed = 0;
+	int ma_mode = 0;
 	char stick_play_pause;
-	int robot_light;
+	int32_t robot_light = 0;
 	unsigned char ctrller_DO[16];
 	unsigned char ctrller_DI[16];
 	float ctrller_AO[2];
@@ -164,10 +164,10 @@ public:
 		return jointTorqueMax;
 	}
 
-	int project_speed() { return tmRobotStateDataToPublish.proj_speed; }
+	int32_t project_speed() { return tmRobotStateDataToPublish.proj_speed; }
 	int ma_mode() { return tmRobotStateDataToPublish.ma_mode; }
 	unsigned char stick_play_pause() { return tmRobotStateDataToPublish.stick_play_pause; } // R/W
-	int robot_light() { return tmRobotStateDataToPublish.robot_light; }
+	int32_t robot_light() { return tmRobotStateDataToPublish.robot_light; }
 
 	std::vector<unsigned char> ctrller_DO(){
 		std::vector<unsigned char>  ctrllerDO;

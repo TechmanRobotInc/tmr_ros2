@@ -54,7 +54,7 @@ ament_target_dependencies(sub_img
 install(TARGETS
 tm_send_command
   sub_img
-	DESTINATION lib/${PROJECT_NAME}
+  DESTINATION lib/${PROJECT_NAME}
 )
 
 install(

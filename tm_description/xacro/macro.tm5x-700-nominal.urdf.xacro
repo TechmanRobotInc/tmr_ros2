@@ -4,12 +4,12 @@
   <xacro:include filename="$(find tm_description)/xacro/macro.inertial.xacro" />
 
   <xacro:macro name="tm5x-700" params="ns prefix color:=none format:=obj
-    joint_1_lower_limit:=${radians(-360)}    joint_1_upper_limit:=${radians(360)}
-    joint_2_lower_limit:=${radians(-360)}    joint_2_upper_limit:=${radians(360)}
+    joint_1_lower_limit:=${radians(-270)}    joint_1_upper_limit:=${radians(270)}
+    joint_2_lower_limit:=${radians(-180)}    joint_2_upper_limit:=${radians(180)}
     joint_3_lower_limit:=${radians(-155)}    joint_3_upper_limit:=${radians(155)}
-    joint_4_lower_limit:=${radians(-360)}    joint_4_upper_limit:=${radians(360)}
-    joint_5_lower_limit:=${radians(-360)}    joint_5_upper_limit:=${radians(360)}
-    joint_6_lower_limit:=${radians(-360)}    joint_6_upper_limit:=${radians(360)}
+    joint_4_lower_limit:=${radians(-180)}    joint_4_upper_limit:=${radians(180)}
+    joint_5_lower_limit:=${radians(-180)}    joint_5_upper_limit:=${radians(180)}
+    joint_6_lower_limit:=${radians(-270)}    joint_6_upper_limit:=${radians(270)}
     joint_1_velocity_limit:=${radians(180)}    
     joint_2_velocity_limit:=${radians(180)}
     joint_3_velocity_limit:=${radians(180)}    

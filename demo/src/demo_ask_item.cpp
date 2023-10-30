@@ -32,7 +32,7 @@ int main(int argc, char **argv)
   auto result = client->async_send_request(request);
   // Wait for the result.
   if (rclcpp::spin_until_future_complete(node, result) ==
-    rclcpp::executor::FutureReturnCode::SUCCESS)
+    rclcpp::FutureReturnCode::SUCCESS)
   {
     if(result.get()->ok){
       RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"OK");
@@ -43,7 +43,7 @@ int main(int argc, char **argv)
   } else {
     RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"), "Failed to call service");
   }
-  return true;
+  //return true;
   
 
   rclcpp::shutdown();

@@ -213,7 +213,7 @@ public:
 	static const char *find_packet_bytes(const char *bytes, size_t max_len, size_t *pack_size = NULL)
 	{
 		const char *p = NULL;
-		int ind_b = find_packet_bytes_begin_index(bytes, max_len, pack_size);
+		int ind_b = static_cast<int>(find_packet_bytes_begin_index(bytes, max_len, pack_size));
 		if (ind_b < 0) {
 			return p;
 		}

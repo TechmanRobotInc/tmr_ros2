@@ -99,5 +99,5 @@ int main(int argc, char *argv[])
     //iface.halt();
 
     rclcpp::shutdown();
-    return 1;
+    return 1;//return 0;
 }
