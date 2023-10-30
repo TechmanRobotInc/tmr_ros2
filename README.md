@@ -471,7 +471,7 @@ The user can use the tm_mod_urdf package to extract specific kinematic values fr
 > ```
 > The parameter `<robot_ip_address>` means the IP address of your TM Robot, the user can get it through TM Flow.<br/>
 > 
-> 2. In another new terminal: source setup.bash in the workspace path, change the current directory to the directory path of the python script to correct urdf, and then enter the specified command format to generate a new named URDF with arguments, for example, named user_defined.<br/>
+> 2. In another new terminal: source setup.bash in the workspace path, change the current directory to the directory path of the Python script to get the specific kinematic parameters of your TM Robot, and then enter the specified command format to generate a new name by the <urdf_gen> argument, for example, named user_defined.<br/>
 > 
 > ```bash
 > source /opt/ros/humble/setup.bash
@@ -481,8 +481,9 @@ The user can use the tm_mod_urdf package to extract specific kinematic values fr
 > python3 modify_xacro.py tm5-900 user_defined
 > ```
 > When this procedure is completed, the user can find that the newly generated named robot description file has been saved, e.g."``user_defined.urdf.xacro``".<br/>
+> :bookmark_tabs: Note: In the previous chapter, we renamed the download folder tmr_ros2 (or tmr_ros2-master) to src. If the user misses this step, they will encounter such an error "``[Error] [modify_xacro]: workspace directory not find ``" on the screen when executing the above command.<br/>
 > 
-> 3. Next, the user must modify the filename part of the default pre-built nominal robot model in tm5-900.urdf.xacro to a newly generated robot model description naming the file.<br/>
+> 3. Next, the user must modify the filename part of the default pre-built nominal robot model in tm5-900.urdf.xacro to a newly generated robot model description naming file.<br/>
 > ```bash
 > cd src\tm_description\xacro\
 > sudo vim tm5-900.urdf.xacro
