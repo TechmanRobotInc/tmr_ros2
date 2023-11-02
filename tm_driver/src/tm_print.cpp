@@ -5,20 +5,13 @@
 #endif
 
 //#include <stdio.h>
-#include "iostream"
+#include <iostream>
 #include <stdarg.h>
 
 #ifdef _WIN32
 #define vsnprintf_s vsprintf_s
 #else
 #define vsnprintf_s vsnprintf
-#endif
-
-#ifdef ROS_BUILD
-#include <ros/ros.h>
-#endif
-#ifdef ROS2_BUILD
-//#include "rclcpp/rclcpp.hpp"
 #endif
 
 #define MAX_MSG_SIZE 256

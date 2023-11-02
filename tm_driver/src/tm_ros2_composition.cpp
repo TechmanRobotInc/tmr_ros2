@@ -84,9 +84,6 @@ int main(int argc, char *argv[])
       }
     }
 
-
-
-    //std::condition_variable sct_cv;
     TmDriver iface(host, nullptr, nullptr);
 
     rclcpp::Node::SharedPtr node = rclcpp::Node::make_shared("tm_driver_node");
@@ -95,9 +92,6 @@ int main(int argc, char *argv[])
     auto tm_sct = std::make_shared<TmSctRos2>(node, iface, false);
     rclcpp::spin(node);
 
-
-    //iface.halt();
-
     rclcpp::shutdown();
-    return 1;//return 0;
+    return 0;
 }

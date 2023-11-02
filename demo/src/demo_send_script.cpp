@@ -30,7 +30,6 @@ bool send_cmd(std::string cmd, std::shared_ptr<rclcpp::Node> node, rclcpp::Clien
     } else{
       RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"not OK");
     }
-
   } else {
     RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"), "Failed to call service");
   }
@@ -40,7 +39,6 @@ bool send_cmd(std::string cmd, std::shared_ptr<rclcpp::Node> node, rclcpp::Clien
 int main(int argc, char **argv)
 {
   rclcpp::init(argc, argv);
-
 
   std::shared_ptr<rclcpp::Node> node = rclcpp::Node::make_shared("demo_send_script");
   rclcpp::Client<tm_msgs::srv::SendScript>::SharedPtr client =

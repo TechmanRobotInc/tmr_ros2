@@ -11,7 +11,6 @@ int main(int argc, char **argv)
 {
   rclcpp::init(argc, argv);
 
-
   std::shared_ptr<rclcpp::Node> node = rclcpp::Node::make_shared("demo_set_positions");
   rclcpp::Client<tm_msgs::srv::SetPositions>::SharedPtr client =
     node->create_client<tm_msgs::srv::SetPositions>("set_positions");
@@ -47,11 +46,9 @@ int main(int argc, char **argv)
     } else{
       RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"not OK");
     }
-
   } else {
     RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"), "Failed to call service");
   }
-  //return true;
 
   rclcpp::shutdown();
   return 0;

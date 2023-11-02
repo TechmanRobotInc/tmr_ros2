@@ -364,7 +364,7 @@ In this demo code, the user can use send_script service sending a script to leav
 ``mkdir ~/tmdriver_ws``<br/>
 ``cd ~/tmdriver_ws``<br/>
 > 2. Clone the TM driver of the git repository into the current directory by typing<br/>
-``git clone https://github.com/TechmanRobotInc/tmr_ros2.git``<br/>
+``git clone https://github.com/TechmanRobotInc/tmr_ros2.git -b humble``<br/>
 > 3. After the download done, rename the download folder ``tmr_ros2``(or ``tmr_ros2-master``) to ``src`` by typing<br/>
 ``mv tmr_ros2 src``<br/>  (or right-click on the download folder, select "Rename...")<br/>
 > 4. At the workspace directory to build the download packages and source 'setup.bash' in this workspace to make the workspace visible to ROS.<br/>
@@ -378,7 +378,7 @@ The <robot_ip_address> is the IP address of the TM Robot, the user can get it th
 > 6. In another new terminal: Source setup.bash in the workspace path and type specific demo node function which the user wants to study for applications. For example: the user select to run demo_set_io, the user can type<br/>
 ``source ./install/setup.bash``<br/>
 ``ros2 run demo demo_set_io``<br/>
->:warning:[CAUTION] Some demos will let the TM Robot move, please be careful.<br/>
+> :warning:[CAUTION] Some demos will let the TM Robot move, please be careful.<br/>
 ><br/>
 
 
@@ -392,7 +392,7 @@ This chapter describes a simplified GUI for displaying tm_driver connection stat
 > * If "``Ethernet``" and "``Listen Node``" connection displays are "on", it means that ROS SvrClient and SctClient are successfully connected.<br/>
 > * If the"``Ethernet``" connection display is "off", the user should check whether the TM Robot has been started or whether the network settings are correct.<br/>
 > * If the"``Listen Node``" connection is "off", the user should check whether the task project is running.<br/>
-> :bulb: If "``Listen Node``" connection is interrupted as "``Project_Run``" is stopped, the "``Listen Node``" connection will be "off". <br/>
+> :bulb: If "``Listen Node``" connection is interrupted as "``Project_Run``" is stopped, the "``Listen Node``" connection will be "off".<br/>
 > * If both "``Ethernet``" and "``Listen Node``" connection displays  are "on", but the "``Robot_Link``" is false or "``Robot_Error``" is true; this means the robot is working abnormally, or maybe the ESTOP button was pressed or some kind of protection or error <sup>1</sup> occurred. Therefore, when the user sends a move script command at this time, it will not work.<br/> 
 > <sup>1</sup> For more detailed information, please refer to the TM Robot User Guide.<br/> 
 > * The user can use the self-developed script to read/write project data through communication protocols to control the TM Robot. If it does not work properly, the user can quickly determine whether there is a communication error code by viewing the "``Response ROS Node Status``" display.<br/>
@@ -408,7 +408,7 @@ This chapter describes a simplified GUI for displaying tm_driver connection stat
 ``mkdir ~/tmdriver_ws``<br/>
 ``cd ~/tmdriver_ws``<br/>
 > 2. Clone the TM driver of the git repository into the current directory by typing<br/>
-``git clone https://github.com/TechmanRobotInc/tmr_ros2.git``<br/>
+``git clone https://github.com/TechmanRobotInc/tmr_ros2.git -b humble``<br/>
 > 3. After the download done, rename the download folder ``tmr_ros2``(or ``tmr_ros2-master``) to ``src`` by typing<br/>
 ``mv tmr_ros2 src``<br/>  (or right-click on the download folder, select "Rename...")<br/>
 > 4. At the workspace directory to build the download packages and source 'setup.bash' in this workspace to make the workspace visible to ROS.<br/>

@@ -11,7 +11,6 @@ int main(int argc, char **argv)
 {
   rclcpp::init(argc, argv);
 
-
   std::shared_ptr<rclcpp::Node> node = rclcpp::Node::make_shared("demo_connect_tm");
   rclcpp::Client<tm_msgs::srv::ConnectTM>::SharedPtr client =
     node->create_client<tm_msgs::srv::ConnectTM>("connect_tmsvr");
@@ -35,13 +34,11 @@ int main(int argc, char **argv)
   if (rclcpp::spin_until_future_complete(node, result) ==
     rclcpp::FutureReturnCode::SUCCESS)
   {
-
     if(result.get()->ok){
       RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"OK");
     } else{
       RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"not OK");
     }
-
   } else {
     RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"), "Failed to call service");
   }

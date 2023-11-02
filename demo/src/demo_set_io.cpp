@@ -11,7 +11,6 @@ int main(int argc, char **argv)
 {
   rclcpp::init(argc, argv);
 
-
   std::shared_ptr<rclcpp::Node> node = rclcpp::Node::make_shared("demo_set_io");
   rclcpp::Client<tm_msgs::srv::SetIO>::SharedPtr client =
     node->create_client<tm_msgs::srv::SetIO>("set_io");
@@ -40,7 +39,6 @@ int main(int argc, char **argv)
     } else{
       RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"not OK");
     }
-
   } else {
     RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"), "Failed to call service");
   }

@@ -1,5 +1,5 @@
 #include "tm_driver/tm_ros2_svr.h"
-#include<iostream>
+#include <iostream>
 #include <tf2_geometry_msgs/tf2_geometry_msgs.hpp>
 TmSvrRos2::TmSvrRos2(rclcpp::Node::SharedPtr node, TmDriver &iface, bool is_fake, bool stick_play)
     : node(node)
@@ -76,7 +76,7 @@ void TmSvrRos2::publish_fbs()
     pm.fbs_msg.header.stamp = node->rclcpp::Node::now();
     if(state.get_receive_state() != TmCommRC::TIMEOUT){
       pm.fbs_msg.is_svr_connected = svr_.is_connected();
-      pm.fbs_msg.is_sct_connected = sct_.is_connected() & iface_.is_on_listen_node();
+      pm.fbs_msg.is_sct_connected = sct_.is_connected() && iface_.is_on_listen_node();
       pm.fbs_msg.tmsrv_cperr = (int)svr_.tmSvrErrData.error_code();  //Node State Response 
       pm.fbs_msg.tmsrv_dataerr = (int)pm.svr_msg.error_code;
       pm.fbs_msg.tmscript_cperr = (int)sct_.tmSctErrData.error_code();
