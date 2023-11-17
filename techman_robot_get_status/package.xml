@@ -2,9 +2,12 @@
 <?xml-model href="http://download.ros.org/schema/package_format2.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="2">
   <name>tm_get_status</name>
-  <version>1.0.0</version>
+  <version>1.0.1</version>
   <description>techman robot get status python scripts</description>
+
   <maintainer email="leo.wu@tm-robot.com">leo wu</maintainer>
+  <maintainer email="yh.wang@tm-robot.com">Yh Wang</maintainer>
+
   <license>BSD</license>
 
   <exec_depend>rclpy</exec_depend>

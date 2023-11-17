@@ -77,6 +77,13 @@ More information: TM ROS driver support list
         <th>&#9711;</th>
         <th>master</th>
     </tr>
+    <tr>
+        <td><a href="https://docs.ros.org/en/humble/index.html">ROS 2 Humble Hawksbill</a></td>
+        <td><a href="https://github.com/TechmanRobotInc/tm2_ros2/tree/humble">TM2 ROS2 Humble</a></td>
+        <th>&#9711;</th>
+        <th>&#9711;</th>
+        <th>humble</th>
+    </tr>
 </table>
 
 
@@ -198,7 +205,7 @@ The user can manually click the `Data Table Setting` <sup>2</sup> item and check
 >```
 > Example :``ros2 run tm_driver tm_driver robot_ip:=192.168.10.2``, if the <robot_ip_address> is 192.168.10.2
 >
-> Now, the user can use a new terminal to run each ROS node or command but don't forget to source the correct setup shell files as starting a new terminal.
+> Now, the user can use a new terminal to run each ROS node or command, but don't forget to source the correct setup shell files as starting a new terminal.
 
 
 ## __4. Vision__
@@ -210,16 +217,16 @@ The user can manually click the `Data Table Setting` <sup>2</sup> item and check
 >
 > - ROS2 Humble
 > - Python packages:
->   1. flask
->   2. waitress
->   3. opencv-python==3.4.13.47 (Minimum)
->   4. numpy
+>   1. flask==3.0.0
+>   2. waitress==2.1.2
+>   3. opencv-python==4.8.0.74
+>   4. numpy==1.21.5
 >   5. datetime  
 >
 >    For example, install Python3 packages: 
 >      *  pip3 install flask
 >      *  pip3 install waitress
->      *  pip3 install opencv-python
+>      *  pip install opencv-python==4.8.0.74
 >      *  pip3 install datetime
 >
 > __Techman Robot Vision__
@@ -305,7 +312,7 @@ The user can manually click the `Data Table Setting` <sup>2</sup> item and check
 > This chapter describes the _demo_ package and the code used as a C++ programming example, showing how to program robot scripts (TM Robot Expressions) through the TM ROS driver connection. <br/>
 >
 > * demo_send_script:<br/>
-In this demo code, it shows how to send a __Listen node__ script to control the TM Robot. <br/>
+In this demo code, it shows how to send a __Listen node__ script to control the TM Robot.<br/>
 The user can use a service named "send_script" to send the script.<br/>
 "id" &rarr; The transaction number expressed in any <u>alphanumeric</u> <sup>1</sup> characters.<br/> 
 "script" &rarr; the script that the user wants to send.<br/>
@@ -339,7 +346,7 @@ state &rarr;  STATE_OFF or STATE_ON value, or other value (if type expressed in 
 > <sup>4</sup> For more detailed information, please refer to _defined protocol_ (Chapter6.5 IO)<br/>
 >
 > * demo_set_positions:<br/>
-In this demo code, the user should pay attention to the parameter definition of the data format setting <sup>5</sup> and the unit of the parameter to be operated.  <br/>
+In this demo code, the user should pay attention to the parameter definition of the data format setting <sup>5</sup> and the parameter unit to be operated.  <br/>
 motion_type &rarr;  PTP_J , PTP_T , LINE_J , LINE_T , CIRC_J ,CIRC_T , PLINE_J ,PLINE_T <br/>
 positions &rarr;  motion target position: If expressed in Cartesian coordinate (unit: m), if expressed in joint angles (unit: rad)<br/>
 velocity &rarr;  motion velocity: if expressed in Cartesian coordinate (unit: m/s) <sup>6</sup>, if expressed in joint velocity (unit: rad/s, and the maximum value is limited to  &pi; )  <sup>6</sup>  <br/>
@@ -375,7 +382,7 @@ In this demo code, the user can use send_script service sending a script to leav
 ``source ./install/setup.bash``<br/>
 ``ros2 run tm_driver tm_driver robot_ip:=<robot_ip_address>``<br/>
 The <robot_ip_address> is the IP address of the TM Robot, the user can get it through TM Flow, for example, 192.168.10.2<br/>
-> 6. In another new terminal: Source setup.bash in the workspace path and type specific demo node function which the user wants to study for applications. For example: the user select to run demo_set_io, the user can type<br/>
+> 6. In another new terminal: Source setup.bash in the workspace path and type the specific demo node function that the user wants to study for applications. For example: the user select to run demo_set_io, the user can type<br/>
 ``source ./install/setup.bash``<br/>
 ``ros2 run demo demo_set_io``<br/>
 > :warning:[CAUTION] Some demos will let the TM Robot move, please be careful.<br/>

@@ -43,8 +43,8 @@ include_directories(include
 
 add_executable(demo_send_script 
   src/demo_send_script.cpp
- 
 )
+
 ament_target_dependencies(demo_send_script
   rclcpp
   std_msgs
@@ -59,8 +59,8 @@ install(TARGETS
 
 add_executable(demo_ask_sta
   src/demo_ask_sta.cpp
- 
 )
+
 ament_target_dependencies(demo_ask_sta
   rclcpp
   std_msgs
@@ -75,8 +75,8 @@ demo_ask_sta
 
 add_executable(demo_connect_tm
   src/demo_connect_tm.cpp
- 
 )
+
 ament_target_dependencies(demo_connect_tm
   rclcpp
   std_msgs
@@ -85,14 +85,14 @@ ament_target_dependencies(demo_connect_tm
 )
 
 install(TARGETS
-demo_connect_tm
+  demo_connect_tm
   DESTINATION lib/${PROJECT_NAME}
 )
 
 add_executable(demo_set_event
   src/demo_set_event.cpp
- 
 )
+
 ament_target_dependencies(demo_set_event
   rclcpp
   std_msgs
@@ -101,13 +101,14 @@ ament_target_dependencies(demo_set_event
 )
 
 install(TARGETS
-demo_set_event
+  demo_set_event
   DESTINATION lib/${PROJECT_NAME}
 )
+
 add_executable(demo_set_io
   src/demo_set_io.cpp
- 
 )
+
 ament_target_dependencies(demo_set_io
   rclcpp
   std_msgs
@@ -116,13 +117,14 @@ ament_target_dependencies(demo_set_io
 )
 
 install(TARGETS
-demo_set_io
+  demo_set_io
   DESTINATION lib/${PROJECT_NAME}
 )
+
 add_executable(demo_set_positions # robot does'nt move
   src/demo_set_positions.cpp
- 
 )
+
 ament_target_dependencies(demo_set_positions
   rclcpp
   std_msgs
@@ -131,13 +133,14 @@ ament_target_dependencies(demo_set_positions
 )
 
 install(TARGETS
-demo_set_positions
+  demo_set_positions
   DESTINATION lib/${PROJECT_NAME}
 )
+
 add_executable(demo_write_item
   src/demo_write_item.cpp
- 
 )
+
 ament_target_dependencies(demo_write_item
   rclcpp
   std_msgs
@@ -146,13 +149,14 @@ ament_target_dependencies(demo_write_item
 )
 
 install(TARGETS
-demo_write_item
+  demo_write_item
   DESTINATION lib/${PROJECT_NAME}
 )
+
 add_executable(demo_ask_item
   src/demo_ask_item.cpp
- 
 )
+
 ament_target_dependencies(demo_ask_item
   rclcpp
   std_msgs
@@ -161,13 +165,14 @@ ament_target_dependencies(demo_ask_item
 )
 
 install(TARGETS
-demo_ask_item
+  demo_ask_item
   DESTINATION lib/${PROJECT_NAME}
 )
+
 add_executable(demo_get_feedback
   get_status_demo_src/demo_get_feedback.cpp
- 
 )
+
 ament_target_dependencies(demo_get_feedback
   rclcpp
   std_msgs
@@ -176,13 +181,14 @@ ament_target_dependencies(demo_get_feedback
 )
 
 install(TARGETS
-demo_get_feedback
+  demo_get_feedback
   DESTINATION lib/${PROJECT_NAME}
 )
+
 add_executable(demo_get_torque_feedback
   get_status_demo_src/demo_get_torque_feedback.cpp
- 
 )
+
 ament_target_dependencies(demo_get_torque_feedback
   rclcpp
   std_msgs
@@ -191,13 +197,14 @@ ament_target_dependencies(demo_get_torque_feedback
 )
 
 install(TARGETS
-demo_get_torque_feedback
+  demo_get_torque_feedback
   DESTINATION lib/${PROJECT_NAME}
 )
+
 add_executable(demo_get_sct_response
   get_status_demo_src/demo_get_sct_response.cpp
- 
 )
+
 ament_target_dependencies(demo_get_sct_response
   rclcpp
   std_msgs
@@ -206,13 +213,14 @@ ament_target_dependencies(demo_get_sct_response
 )
 
 install(TARGETS
-demo_get_sct_response
+  demo_get_sct_response
   DESTINATION lib/${PROJECT_NAME}
 )
+
 add_executable(demo_get_sta_response
   get_status_demo_src/demo_get_sta_response.cpp
- 
 )
+
 ament_target_dependencies(demo_get_sta_response
   rclcpp
   std_msgs
@@ -221,14 +229,14 @@ ament_target_dependencies(demo_get_sta_response
 )
 
 install(TARGETS
-demo_get_sta_response
+  demo_get_sta_response
   DESTINATION lib/${PROJECT_NAME}
 )
 
 add_executable(demo_get_svr_response
   get_status_demo_src/demo_get_svr_response.cpp
- 
 )
+
 ament_target_dependencies(demo_get_svr_response
   rclcpp
   std_msgs
@@ -237,13 +245,13 @@ ament_target_dependencies(demo_get_svr_response
 )
 
 install(TARGETS
-demo_get_svr_response
+  demo_get_svr_response
   DESTINATION lib/${PROJECT_NAME}
 )
 add_executable(demo_leave_listen_node
   src/demo_leave_listen_node.cpp
- 
 )
+
 ament_target_dependencies(demo_leave_listen_node
   rclcpp
   std_msgs
@@ -252,10 +260,8 @@ ament_target_dependencies(demo_leave_listen_node
 )
 
 install(TARGETS
-demo_leave_listen_node
+  demo_leave_listen_node
   DESTINATION lib/${PROJECT_NAME}
 )
-
-
 
 ament_package()

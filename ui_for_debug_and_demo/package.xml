@@ -4,9 +4,12 @@
   <name>ui_for_debug_and_demo</name>
   <version>1.1.2</version>
   <description>TM DEMO GUI (ui_for_debug_and_demo) is a Qt-based framework used to quickly start connection debugging tools.</description>
-  <maintainer email="leo.wu@tm-robot.com">leowu</maintainer>
+
+  <maintainer email="leo.wu@tm-robot.com">leo wu</maintainer>
   <maintainer email="yh.wang@tm-robot.com">Yh Wang</maintainer>
+
   <license>BSD</license>
+
   <url type="repository">https://github.com/TechmanRobotInc/tmr_ros2/tree/humble</url>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
@@ -17,7 +20,6 @@
   <build_depend>qt5-qmake</build_depend>
   <build_depend>rclcpp_action</build_depend>
   <build_depend>tm_msgs</build_depend>
-
 
   <exec_depend>libqt5-core</exec_depend>
   <exec_depend>rclcpp</exec_depend>

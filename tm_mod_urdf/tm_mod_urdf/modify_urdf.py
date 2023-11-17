@@ -60,7 +60,7 @@ def _gen_urdf(args=None):
     elif new_model == 'tm14-nominal' or specific_w == '-K14':
         tm_model = 'tm14-nominal'
         nominal_model_restore = True
-        tm14_nominal_restore = True        
+        tm14_nominal_restore = True
     else:
         nominal_model_restore = False
     if nominal_model_restore is True:

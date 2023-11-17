@@ -2,10 +2,12 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>tm_mod_urdf</name>
-  <version>1.1.1</version>
+  <version>1.1.2</version>
   <description>tm_mod_urdf</description>
-  <maintainer email="ken.tsai@tm-robot.com">yhtsai</maintainer>
+
+  <maintainer email="ken.tsai@tm-robot.com">Ken Tsai</maintainer>
   <maintainer email="yh.wang@tm-robot.com">Yh Wang</maintainer>
+
   <license>BSD</license>
 
   <test_depend>ament_copyright</test_depend>

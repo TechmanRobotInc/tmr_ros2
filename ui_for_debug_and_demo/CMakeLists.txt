@@ -61,14 +61,15 @@ include_directories(
 link_directories(${catkin_LIBRARY_DIRS})
 
 qt5_wrap_ui(UIC_FILES src/tm_ros_driver_windows.ui)
+
 set(HEADERS
   src/tm_ros_driver_windows.hpp
 )
 
 set( SRCS
-src/main.cpp
-src/ros_page.cpp
-src/tm_ros_driver_windows.cpp
+  src/main.cpp
+  src/ros_page.cpp
+  src/tm_ros_driver_windows.cpp
 )
 
 # Demo executable
@@ -81,6 +82,7 @@ ament_target_dependencies(robot_ui
   ament_index_cpp
   tm_msgs
 )
+
 target_link_libraries(robot_ui
   Qt5::Core
   Qt5::Quick
@@ -95,12 +97,13 @@ target_link_libraries(robot_ui
 
 # Install libraries
 install(TARGETS
-robot_ui
-	DESTINATION lib/${PROJECT_NAME}
+  robot_ui
+  DESTINATION lib/${PROJECT_NAME}
 )
 
 install(
   DIRECTORY launch
   DESTINATION share/${PROJECT_NAME}
 )
+
 ament_package()
