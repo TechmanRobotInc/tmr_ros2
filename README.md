@@ -8,19 +8,86 @@ Techman Robot is a state-of-the-art production tool that is highly compatible an
 
 This driver is for <u>**ROS2 Dashing**</u> version.<br/>
 To use the driver, make sure your ROS PC is installed correctly.<br/>
-If the user wants to know how to use the ROS1 driver, please visit the [TM ROS1 driver](https://github.com/TechmanRobotInc/tmr_ros1) website or directly click the __TM ROS driver version__ listed in the table below.<br/>
+If the user wants to know how to use the ROS1 driver, please visit the [TM ROS1 driver](https://github.com/TechmanRobotInc/tmr_ros1/tree/noetic) website or directly click on the listed `Github repo: TM App Release` below ROS1 projects in the table.<br/>
 
 
 More information: TM ROS driver support list
-|ROS Distro (ROS Environment Setup)|TM ROS driver version|TM ROS Vision|Remark: switch GitHub branches|
-|:---|:---|:---:|:---:|
-|[**<font color=#808080>ROS Noetic Ninjemys**](http://wiki.ros.org/noetic)|[**<font color=#0000FF>TM ROS1 Noetic driver**](https://github.com/TechmanRobotInc/tmr_ros1/tree/noetic)|supported|noetic|
-|[**<font color=#808080>ROS Melodic Morenia**](http://wiki.ros.org/melodic)|[**<font color=#0000FF>TM ROS1 Melodic driver**](https://github.com/TechmanRobotInc/tmr_ros1/)|x|master|
-|[**<font color=#808080>ROS 2 Foxy Fitzroy**](https://index.ros.org/doc/ros2/Releases/Release-Foxy-Fitzroy/)|[**<font color=#800000>TM ROS2 Foxy driver**](https://github.com/TechmanRobotInc/tmr_ros2)|supported|master|
-|[**<font color=#808080>ROS 2 Dashing Diademata**](https://index.ros.org/doc/ros2/Releases/Release-Dashing-Diademata/)|[**<font color=#800000>TM ROS2 Dashing driver**](https://github.com/TechmanRobotInc/tmr_ros2/tree/dashing-devel)|supported|dashing-devel|
+<table>
+<head>
+</head>
+    <tr>
+        <th colspan="5">TMflow + TM Robot Series </th>
+    </tr>
+    <tr>
+        <th>ROS Distro</th>
+        <th>GitHub repo: TM App Release</th>
+        <th>TM ROS Driver</th>
+        <th>TMvision Support</th>
+        <th>GitHub Branch</th>
+    </tr>
+    <tr>
+        <td><a href="http://wiki.ros.org/melodic">ROS Melodic Morenia</a></td>
+        <td><a href="https://github.com/TechmanRobotInc/tmr_ros1/">TM ROS1 Melodic</a></td>
+        <th>&#9711;</th>
+        <th>&#10005;&nbsp</th>
+        <th>master</th>
+    </tr>
+    <tr>
+        <td><a href="http://wiki.ros.org/noetic">ROS Noetic Ninjemys</a></td>
+        <td><a href="https://github.com/TechmanRobotInc/tmr_ros1/tree/noetic">TM ROS1 Noetic</a></td>
+        <th>&#9711;</th>
+        <th>&#9711;</th>
+        <th>noetic</th>
+    </tr>
+    <tr>
+        <td><a href="https://index.ros.org/doc/ros2/Releases/Release-Dashing-Diademata/">ROS 2 Dashing Diademata</a></td>
+        <td><a href="https://github.com/TechmanRobotInc/tmr_ros2/tree/dashing">TM ROS2 Dashing</a></td>
+        <th>&#9711;</th>
+        <th>&#9711;</th>
+        <th>dashing</th>
+    </tr>
+    <tr>
+        <td><a href="https://index.ros.org/doc/ros2/Releases/Release-Foxy-Fitzroy/">ROS 2 Foxy Fitzroy</a></td>
+        <td><a href="https://github.com/TechmanRobotInc/tmr_ros2">TM ROS2 Foxy</a></td>
+        <th>&#9711;</th>
+        <th>&#9711;</th>
+        <th>master</th>
+    </tr>
+    <tr>
+        <td><a href="https://docs.ros.org/en/humble/index.html">ROS 2 Humble Hawksbill</a></td>
+        <td><a href="https://github.com/TechmanRobotInc/tmr_ros2/tree/humble">TM ROS2 Humble</a></td>
+        <th>&#9711;</th>
+        <th>&#9711;</th>
+        <th>humble</th>
+    </tr>
+    <tr>
+        <th colspan="5">TMflow 2 + TM AI Cobot S-Series </th>
+    </tr>
+    <tr>
+        <th>ROS Distro</th>
+        <th>GitHub repo: TM 2 App Release</th>
+        <th>TM ROS Driver</th>
+        <th>TMvision Support</th>
+        <th>GitHub Branch</th>
+    </tr>
+    <tr>
+        <td><a href="https://index.ros.org/doc/ros2/Releases/Release-Foxy-Fitzroy/">ROS 2 Foxy Fitzroy</a></td>
+        <td><a href="https://github.com/TechmanRobotInc/tm2_ros2">TM2 ROS2 Foxy</a></td>
+        <th>&#9711;</th>
+        <th>&#9711;</th>
+        <th>master</th>
+    </tr>
+    <tr>
+        <td><a href="https://docs.ros.org/en/humble/index.html">ROS 2 Humble Hawksbill</a></td>
+        <td><a href="https://github.com/TechmanRobotInc/tm2_ros2/tree/humble">TM2 ROS2 Humble</a></td>
+        <th>&#9711;</th>
+        <th>&#9711;</th>
+        <th>humble</th>
+    </tr>
+</table>
 
-Note1: The two current master branches are ROS1 Melodic and ROS2 Foxy.<br/>
-Note2: The tutorial that follows mentioned how to build a ROS environment on Ubuntu by sourcing is to take the ROS installed through the Debian packages as an example.<br/>
+
+Note: The `Github repo: TM 2 App Release` applies to TMflow Version 2.14 or above and adapts to HW5.0 mainly.<br/>
 
 
 ### __ROS2 Driver__
@@ -35,6 +102,8 @@ The user can directly refer to the chapters introduced in the following text: st
 
 
 ## __3. Usage__
+The TM ROS driver is designed to interface the TM Robot's operating software (__TMflow__) with the Robot Operating System (ROS) so that program developers and researchers can build and reuse their own programs to control the TM robot externally.
+
 After installing the correct ROS2 version of the computer, the next step is to ensure that your hardware, control computer, and TM Robot are all properly configured to communicate with each other. See below to make sure the network settings on your computer are correct, the TM Robot's operating software (__TMflow__) network settings are ready and the __Listen node__ is running.<br/>
 
 ### &sect; __TMflow Listen node setup__
@@ -132,9 +201,9 @@ The user can manually click the `Data Table Setting` <sup>2</sup> item and check
 > Then, run the driver to maintain the connection with TM Robot by typing 
 >
 >```bash
-> ros2 run tm_driver tm_driver <robot_ip_address>
+> ros2 run tm_driver tm_driver robot_ip:=<robot_ip_address>
 >```
-> Example :``ros2 run tm_driver tm_driver 192.168.10.2``, if the <robot_ip_address> is 192.168.10.2
+> Example :``ros2 run tm_driver tm_driver robot_ip:=192.168.10.2``, if the <robot_ip_address> is 192.168.10.2
 >
 > Now, the user can use a new terminal to run each ROS node or command but don't forget to source the correct setup shell files as starting a new terminal.
 
@@ -176,7 +245,7 @@ The user can manually click the `Data Table Setting` <sup>2</sup> item and check
 > Under the environment settings have been finished with your workspace`<workspace>`, then type
 >
 > ```bash
-> cd ~/<workspace> && source install/setup.bash
+> cd ~/<workspace> && source ./install/setup.bash
 > ros2 run tm_get_status image_talker
 > ```
 >
@@ -249,7 +318,7 @@ The user can manually click the `Data Table Setting` <sup>2</sup> item and check
 > This chapter describes the _demo_ package and the code used as a C++ programming example, showing how to program robot scripts (TM Robot Expressions) through the TM ROS driver connection. <br/>
 >
 > * demo_send_script:<br/>
-In this demo code, it shows how to send a __Listen node__ script to control the TM Robot. <br/>
+In this demo code, it shows how to send a __Listen node__ script to control the TM Robot.<br/>
 The user can use a service named "send_script" to send the script.<br/>
 "id" &rarr; The transaction number expressed in any <u>alphanumeric</u> <sup>1</sup> characters.<br/> 
 "script" &rarr; the script that the user wants to send.<br/>
@@ -283,7 +352,7 @@ state &rarr;  STATE_OFF or STATE_ON value, or other value (if type expressed in 
 > <sup>4</sup> For more detailed information, please refer to _defined protocol_ (Chapter6.5 IO)<br/>
 >
 > * demo_set_positions:<br/>
-In this demo code, the user should pay attention to the parameter definition of the data format setting <sup>5</sup> and the unit of the parameter to be operated.  <br/>
+In this demo code, the user should pay attention to the parameter definition of the data format setting <sup>5</sup> and the parameter unit to be operated.  <br/>
 motion_type &rarr;  PTP_J , PTP_T , LINE_J , LINE_T , CIRC_J ,CIRC_T , PLINE_J ,PLINE_T <br/>
 positions &rarr;  motion target position: If expressed in Cartesian coordinate (unit: m), if expressed in joint angles (unit: rad)<br/>
 velocity &rarr;  motion velocity: if expressed in Cartesian coordinate (unit: m/s) <sup>6</sup>, if expressed in joint velocity (unit: rad/s, and the maximum value is limited to  &pi; )  <sup>6</sup>  <br/>
@@ -319,12 +388,12 @@ or<br/>
 ``source ./install/setup.bash``<br/>
 > 5. In a new terminal: Source setup.bash in the workspace path and run the driver to connect to TM Robot by typing<br/>
 ``source ./install/setup.bash``<br/>
-``ros2 run tm_driver tm_driver <robot_ip_address>``<br/>
+``ros2 run tm_driver tm_driver robot_ip:=<robot_ip_address>``<br/>
 The <robot_ip_address> is the IP address of the TM Robot, the user can get it through TM Flow, for example, 192.168.10.2<br/>
-> 6. In another new terminal: Source setup.bash in the workspace path and type specific demo node function which the user wants to study for applications. For example: the user select to run demo_set_io, the user can type<br/>
+> 6. In another new terminal: Source setup.bash in the workspace path and type the specific demo node function that the user wants to study for applications. For example: the user select to run demo_set_io, the user can type<br/>
 ``source ./install/setup.bash``<br/>
 ``ros2 run demo demo_set_io``<br/>
->:warning:[CAUTION] Some demos will let the TM Robot move, please be careful.<br/>
+> :warning:[CAUTION] Some demos will let the TM Robot move, please be careful.<br/>
 ><br/>
 
 
@@ -338,7 +407,7 @@ This chapter describes a simplified GUI for displaying tm_driver connection stat
 > * If "``Ethernet``" and "``Listen Node``" connection displays are "on", it means that ROS SvrClient and SctClient are successfully connected.<br/>
 > * If the"``Ethernet``" connection display is "off", the user should check whether the TM Robot has been started or whether the network settings are correct.<br/>
 > * If the"``Listen Node``" connection is "off", the user should check whether the task project is running.<br/>
-> :bulb: If "``Listen Node``" connection is interrupted as "``Project_Run``" is stopped, the "``Listen Node``" connection will be "off". <br/>
+> :bulb: If "``Listen Node``" connection is interrupted as "``Project_Run``" is stopped, the "``Listen Node``" connection will be "off".<br/>
 > * If both "``Ethernet``" and "``Listen Node``" connection displays  are "on", but the "``Robot_Link``" is false or "``Robot_Error``" is true; this means the robot is working abnormally, or maybe the ESTOP button was pressed or some kind of protection or error <sup>1</sup> occurred. Therefore, when the user sends a move script command at this time, it will not work.<br/> 
 > <sup>1</sup> For more detailed information, please refer to the TM Robot User Guide.<br/> 
 > * The user can use the self-developed script to read/write project data through communication protocols to control the TM Robot. If it does not work properly, the user can quickly determine whether there is a communication error code by viewing the "``Response ROS Node Status``" display.<br/>
@@ -363,12 +432,12 @@ This chapter describes a simplified GUI for displaying tm_driver connection stat
 ``source ./install/setup.bash``<br/>
 > 5. In a new terminal: Source setup.bash in the workspace path and run the driver to connect to TM Robot by typing<br/>
 ``source ./install/setup.bash``<br/>
-``ros2 run tm_driver tm_driver <robot_ip_address>``<br/>
+``ros2 run tm_driver tm_driver robot_ip:=<robot_ip_address>``<br/>
 The <robot_ip_address> is the IP address of the TM Robot, the user can get it through TM Flow, for example, 192.168.10.2<br/>
 > 6. In another new terminal: Source setup.bash in the workspace path and start GUI debug by typing<br/>
 ``source ./install/setup.bash``<br/>
 ``ros2 run ui_for_debug_and_demo robot_ui``<br/>
 
 
-## __7. Contact us/Technical support__
+## __7. Contact us / Technical support__
 More Support & Service, please contact us. [@TECHMAN ROBOT](https://www.tm-robot.com/zh-hant/contact-us/)``[https://www.tm-robot.com/zh-hant/contact-us/] ``<br/>
