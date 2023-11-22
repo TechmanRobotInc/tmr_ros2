@@ -1,6 +1,7 @@
 #include "tm_driver/tm_ros2_svr.h"
-#include<iostream>
-#include <tf2_geometry_msgs/tf2_geometry_msgs.h>
+#include <iostream>
+#include <tf2_geometry_msgs/tf2_geometry_msgs.hpp>
+
 TmSvrRos2::TmSvrRos2(rclcpp::Node::SharedPtr node, TmDriver &iface, bool is_fake, bool stick_play)
     : node(node)
     , svr_(iface.svr)
@@ -10,6 +11,7 @@ TmSvrRos2::TmSvrRos2(rclcpp::Node::SharedPtr node, TmDriver &iface, bool is_fake
     , is_fake(is_fake)
 {
     jns_.clear();
+    jns_.reserve(6);
     jns_.push_back("joint_1");
     jns_.push_back("joint_2");
     jns_.push_back("joint_3");
@@ -76,7 +78,7 @@ void TmSvrRos2::publish_fbs()
     pm.fbs_msg.header.stamp = node->rclcpp::Node::now();
     if(state.get_receive_state() != TmCommRC::TIMEOUT){
       pm.fbs_msg.is_svr_connected = svr_.is_connected();
-      pm.fbs_msg.is_sct_connected = sct_.is_connected() & iface_.is_on_listen_node();
+      pm.fbs_msg.is_sct_connected = sct_.is_connected() && iface_.is_on_listen_node();
       pm.fbs_msg.tmsrv_cperr = (int)svr_.tmSvrErrData.error_code();  //Node State Response 
       pm.fbs_msg.tmsrv_dataerr = (int)pm.svr_msg.error_code;
       pm.fbs_msg.tmscript_cperr = (int)sct_.tmSctErrData.error_code();
@@ -101,6 +103,7 @@ void TmSvrRos2::publish_fbs()
     pm.fbs_msg.joint_pos = state.joint_angle();
     pm.fbs_msg.joint_vel = state.joint_speed();
     pm.fbs_msg.joint_tor = state.joint_torque();
+    pm.fbs_msg.tool0_pose = state.flange_pose();
     pm.fbs_msg.tool_pose = state.tool_pose();
     pm.fbs_msg.tcp_speed = state.tcp_speed_vec();
     pm.fbs_msg.tcp_force = state.tcp_force_vec();

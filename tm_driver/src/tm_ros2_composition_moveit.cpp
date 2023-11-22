@@ -1,41 +1,43 @@
 #include "tm_driver/tm_ros2_svr.h"
 #include "tm_driver/tm_ros2_movit_sct.h"
-#include "rclcpp/rclcpp.hpp"
+#include <rclcpp/rclcpp.hpp>
 
-void debug_function_print(char* msg){
+#include <regex>
+
+void debug_function_print(const char* msg){
   printf("%s[TM_DEBUG] %s\n%s", PRINT_CYAN.c_str(), msg, PRINT_RESET.c_str());
 }
-void info_function_print(char* msg){
+void info_function_print(const char* msg){
   printf("[TM_INFO] %s\n", msg);
 }
-void warn_function_print(char* msg){
+void warn_function_print(const char* msg){
   printf("%s[TM_WARN] %s\n%s", PRINT_YELLOW.c_str(), msg, PRINT_RESET.c_str());
 }
-void error_function_print(char* msg){
+void error_function_print(const char* msg){
   printf("%s[TM_ERROR] %s\n%s", PRINT_RED.c_str(), msg, PRINT_RESET.c_str());
 }
-void fatal_function_print(char* msg){
+void fatal_function_print(const char* msg){
   printf("%s[TM_FATAL] %s\n%s", PRINT_GREEN.c_str(), msg, PRINT_RESET.c_str());
 }
 
-void ros_debug_print(char* msg){
+void ros_debug_print(const char* msg){
   RCLCPP_DEBUG_STREAM(rclcpp::get_logger("rclcpp"),msg);
 }
-void ros_info_print(char* msg){
+void ros_info_print(const char* msg){
   RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),msg);
 }
-void ros_warn_function_print(char* msg){
+void ros_warn_function_print(const char* msg){
   RCLCPP_WARN_STREAM(rclcpp::get_logger("rclcpp"),msg);
 }
-void ros_error_print(char* msg){
+void ros_error_print(const char* msg){
   RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"),msg);
 }
-void ros_fatal_print(char* msg){
+void ros_fatal_print(const char* msg){
   std::string str = msg;
-  str = "[TM_FATAL]" + str;
+  str = "[TM_FATAL] " + str;
   RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"),str.c_str());
 }
-void ros_once_print(char* msg){
+void ros_once_print(const char* msg){
   RCLCPP_INFO_STREAM_ONCE(rclcpp::get_logger("rclcpp"),msg);
 }
 void set_up_print_fuction(){
@@ -62,31 +64,43 @@ int main(int argc, char *argv[])
 
     set_up_ros_print_fuction();
 
-    rclcpp::init(argc, argv);
+    std::vector<std::string> args = rclcpp::init_and_remove_ros_arguments(argc, argv);
+
+    if (args.size() < 2)
+    {
+      ros_fatal_print("Please provide the 'robot_ip_address'");
+      rclcpp::shutdown();
+      return 1;
+    }
 
     bool is_fake = true;
     std::string host;
-    if (argc > 1) {
-        host = argv[1];
-        if (host.find("robot_ip:=") != std::string::npos) {
-          host.replace(host.begin(), host.begin() + 10, "");
-          is_fake = false;
-        } else if (host.find("ip:=") != std::string::npos) {
-          host.replace(host.begin(), host.begin() + 4, "");
-          is_fake = false;
-        } else{
-          std::cout<<"ip is not found, use fake robot"<<std::endl;
-        }
+    if (args.size() > 1) {
+      host = args[1];
+      if (host.find("robot_ip:=") != std::string::npos) {
+        host.replace(host.begin(), host.begin() + 10, "");
+        is_fake = false;
+      } else if (host.find("ip:=") != std::string::npos) {
+        host.replace(host.begin(), host.begin() + 4, "");
+        is_fake = false;
+      } else{
+        print_info("ip is not found, using a fake robot");
+      }
     } else {
-        rclcpp::shutdown();
-    }
-    if (is_fake) {
-        std::cout<<"only ip or robot_ip support, but your type is "<<host<<std::endl;
+      print_fatal("Please provide the 'robot_ip_address'");
+      rclcpp::shutdown();
+      return 1;
     }
 
-    if(argc == 3){
+    if (is_fake) {
+      std::stringstream ss;
+      ss << "Only ip or robot_ip support, but your type is '" << host << "', using a fake robot";
+      print_info(ss.str().c_str());
+    }
+
+    if (args.size() == 3){
       bool isSetNoLogPrint;
-      std::istringstream(argv[2]) >> std::boolalpha >> isSetNoLogPrint;
+      std::istringstream(args[2]) >> std::boolalpha >> isSetNoLogPrint;
       if(isSetNoLogPrint){
         set_up_print_fuction();
       }
@@ -98,7 +112,9 @@ int main(int argc, char *argv[])
 
     auto tm_svr = std::make_shared<TmSvrRos2>(node, iface, is_fake);
     auto tm_sct = std::make_shared<TmRos2SctMoveit>(node, iface, is_fake);
+
     rclcpp::spin(node);
+
     rclcpp::shutdown();
-    return 1;//return 0;
+    return 0;
 }

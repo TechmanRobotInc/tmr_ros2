@@ -7,7 +7,6 @@ import xml.etree.cElementTree as ET
 
 import rclpy
 
-# from tm_mod_urdf._modify_urdf import *
 from tm_mod_urdf._modify_urdf import modify_urdf
 from tm_mod_urdf._modify_urdf import urdf_DH_from_tm_DH
 from tm_mod_urdf._modify_urdf import xyzrpys_from_urdf_DH
@@ -146,8 +145,8 @@ def _gen_urdf(args=None):
         node.get_logger().error('stop service, invalid delta_dh parameters')
         return
 
-    dh = [float(i) for i in dh_strs]
-    dd = [float(i) for i in dd_strs]
+    dh = list(map(float, dh_strs))
+    dd = list(map(float, dd_strs))
 
     # find urdf path
     curr_path = os.path.dirname(os.path.abspath(__file__))
@@ -162,7 +161,7 @@ def _gen_urdf(args=None):
         return
     src_path = curr_path[:ind] + 'src'
     urdf_path = ''
-    for dirpath, dirnames, filenames in os.walk(src_path):
+    for dirpath, dirnames, filenames in os.walk(src_path, followlinks=True):
         if dirpath.endswith('tm_description'):
             urdf_path = dirpath + '/urdf'
             break
@@ -180,9 +179,8 @@ def _gen_urdf(args=None):
 
     node.get_logger().info('[reference file path:] %s' % file_in)
 
-    fr = open(file_in, 'r')
-    link_data = fr.read()
-    fr.close()
+    with open(file_in, 'r') as fr:
+        link_data = fr.read()
 
     root = ET.fromstring(link_data)
 
@@ -190,17 +188,16 @@ def _gen_urdf(args=None):
     xyzs, rpys = xyzrpys_from_urdf_DH(udh)
     modify_urdf(root, xyzs, rpys, udh)
 
-    link_data = ET.tostring(root, encoding='UTF-8').decode('UTF-8')
+    link_data = ET.tostring(root, encoding='UTF-8', xml_declaration=True).decode('UTF-8')
 
-    file_save = ''
     if overwrite:
         file_save = file_in
         shutil.copyfile(file_in, file_out)
     else:
         file_save = file_out
 
-    fw = open(file_save, 'w')
-    fw.write(link_data)
+    with open(file_save, 'w') as fw:
+        fw.write(link_data)
 
     if overwrite:
         node.get_logger().info('File saved with new kinematic values')
@@ -212,7 +209,6 @@ def _gen_urdf(args=None):
     else:
         node.get_logger().info('File saved with new kinematic values')
         node.get_logger().info('[new save file path:] ' + str(file_save))
-    fw.close()
 
 
 def main(args=None):

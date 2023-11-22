@@ -29,13 +29,7 @@ def load_yaml(package_name, file_path):
 
 
 def generate_launch_description():
-    args = []
-    length = len(sys.argv)
-    if (len(sys.argv) >= 5):
-        i = 4
-        while i < len(sys.argv):
-            args.append(sys.argv[i])
-            i = i + 1
+    args = sys.argv[4:]
 
     # moveit_cpp.yaml is passed by filename for now since it's node specific
     moveit_cpp_yaml_file_name = get_package_share_directory('tm_moveit_cpp_demo') + "/config/moveit_cpp.yaml"
@@ -54,10 +48,10 @@ def generate_launch_description():
     )                                                    
     robot_description = {"robot_description": robot_description_config.toxml()}
 
-    robot_description_semantic_config = load_file('tm_moveit_config_tm5-700', 'config/tm5-700.srdf')
+    robot_description_semantic_config = load_file('tm_moveit_config_tm5_700', 'config/tm5-700.srdf')
     robot_description_semantic = {'robot_description_semantic' : robot_description_semantic_config}
 
-    kinematics_yaml = load_yaml('tm_moveit_config_tm5-700', 'config/kinematics.yaml')
+    kinematics_yaml = load_yaml('tm_moveit_config_tm5_700', 'config/kinematics.yaml')
     robot_description_kinematics = { 'robot_description_kinematics' : kinematics_yaml }
 
     controllers_yaml = load_yaml('tm_moveit_cpp_demo', 'config/controllers.yaml')
@@ -68,7 +62,7 @@ def generate_launch_description():
         'planning_plugin' : 'ompl_interface/OMPLPlanner',
         'request_adapters' : """default_planner_request_adapters/AddTimeOptimalParameterization default_planner_request_adapters/FixWorkspaceBounds default_planner_request_adapters/FixStartStateBounds default_planner_request_adapters/FixStartStateCollision default_planner_request_adapters/FixStartStatePathConstraints""" ,
         'start_state_max_bounds_error' : 0.1 } }
-    ompl_planning_yaml = load_yaml('tm_moveit_config_tm5-700', 'config/ompl_planning.yaml')
+    ompl_planning_yaml = load_yaml('tm_moveit_config_tm5_700', 'config/ompl_planning.yaml')
     ompl_planning_pipeline_config['ompl'].update(ompl_planning_yaml)
 
     # MoveItCpp demo executable

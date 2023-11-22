@@ -177,13 +177,24 @@ bool TmDriver::set_pvt_point(TmPvtMode mode, const TmPvtPoint &point, const std:
 
 bool TmDriver::set_pvt_traj(const TmPvtTraj &pvts, const std::string &id)
 {
-	std::string script = TmCommand::set_pvt_traj(pvts);
-	print_info("TM_DRV: send script (pvt traj.):\n");
-	print_info("%s\n", script.c_str());
+    const std::string script = TmCommand::set_pvt_traj(pvts);
+    print_info("TM_DRV: send script (pvt traj.):");
+    print_info("%s\n", script.c_str());
+
+    std::string script_copy = script;
+    const std::string delimiter = "\n";
+    size_t pos = 0;
+    std::string token;
+    while ((pos = script_copy.find(delimiter)) != std::string::npos) {
+        token = script_copy.substr(0, pos);
+        print_debug(token.c_str());
+        script_copy.erase(0, pos + delimiter.length());
+    }
+
 	return (sct.send_script_str(id, script) == RC_OK);
 }
 
-bool TmDriver::run_pvt_traj(const TmPvtTraj &pvts)
+bool TmDriver::run_pvt_traj(const TmPvtTraj &pvts, double goal_time_tolerance)
 {
 	auto time_start = std::chrono::steady_clock::now();
 	auto time_now = time_start;
@@ -201,11 +212,10 @@ bool TmDriver::run_pvt_traj(const TmPvtTraj &pvts)
 
 	// wait
 	double time = 0.0;
-	while (_is_executing_traj && time < pvts.total_time) {
+    while (_is_executing_traj && time < pvts.total_time + goal_time_tolerance) {
 		std::this_thread::sleep_for(std::chrono::milliseconds(1));
 		time_now = std::chrono::steady_clock::now();
 		time = std::chrono::duration_cast<std::chrono::duration<double>>(time_now - time_start).count();
-		//time += 0.001;
 	}
 
 	if (_is_executing_traj) {
@@ -294,7 +304,6 @@ bool TmDriver::fake_run_pvt_traj(const TmPvtTraj &pvts)
 	time_now = std::chrono::steady_clock::now();
 	point.time = std::chrono::duration_cast<std::chrono::duration<double>>(time_now - time_init).count();
 	print_info("TM_DRV: traj. exec. time:= %f", point.time);
-	//RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"TM_DRV: traj. exec. time:=" << point.time);
 
 	_is_executing_traj = false;
 	return true;

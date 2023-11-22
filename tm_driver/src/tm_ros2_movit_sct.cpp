@@ -1,4 +1,9 @@
 #include "tm_driver/tm_ros2_movit_sct.h"
+
+auto sec = [](const builtin_interfaces::msg::Duration& t) {
+    return static_cast<double>(t.sec) + 1e-9 * static_cast<double>(t.nanosec);
+};
+
 void TmRos2SctMoveit::intial_action(){
     as_ = rclcpp_action::create_server<control_msgs::action::FollowJointTrajectory>(
      node->get_node_base_interface(),
@@ -19,7 +24,6 @@ rclcpp_action::GoalResponse TmRos2SctMoveit::handle_goal(const rclcpp_action::Go
 {
   auto goal_id = rclcpp_action::to_string(uuid);
   print_info("Received new action goal %s", goal_id.c_str());
-  //RCLCPP_INFO_STREAM(node->get_logger(), "Received new action goal " << goal_id);
 
   if (has_goal_) {
     return rclcpp_action::GoalResponse::ACCEPT_AND_DEFER;
@@ -27,21 +31,35 @@ rclcpp_action::GoalResponse TmRos2SctMoveit::handle_goal(const rclcpp_action::Go
 
   if (!is_fake_) {
     if (!svr_.is_connected()) {
+      print_error("Goal: %s, got rejected because of SVR not being connected", goal_id.c_str());
       return rclcpp_action::GoalResponse::REJECT;
     }
     if (!sct_.is_connected()) {
+      print_error("Goal: %s, got rejected because of SCT not being connected", goal_id.c_str());
       return rclcpp_action::GoalResponse::REJECT;
     }
     if (state_.has_error()) {
+      print_error("Goal: %s, got rejected because STATE has an error", goal_id.c_str());
       return rclcpp_action::GoalResponse::REJECT;
     }
   }
 
   if (!has_points(goal->trajectory)) {
+    std::string msg = control_msgs::action::to_yaml(*goal);
+    const std::string delimiter = "\n";
+    size_t pos = 0;
+    std::string token;
+    while ((pos = msg.find(delimiter)) != std::string::npos) {
+      token = msg.substr(0, pos);
+      print_error(token.c_str());
+      msg.erase(0, pos + delimiter.length());
+    }
+
+    print_error("Goal: %s, got rejected because of no trajectory points", goal_id.c_str());
     return rclcpp_action::GoalResponse::REJECT;
   }
-  //for (auto &jn : goal->trajectory.joint_names) { tmr_DEBUG_STREAM(jn); }
 
+  print_info("Goal: %s, got accepted", goal_id.c_str());
   return rclcpp_action::GoalResponse::ACCEPT_AND_EXECUTE;
 }
 rclcpp_action::CancelResponse TmRos2SctMoveit::handle_cancel(
@@ -49,7 +67,6 @@ rclcpp_action::CancelResponse TmRos2SctMoveit::handle_cancel(
 {
   auto goal_id = rclcpp_action::to_string(goal_handle->get_goal_id());
   print_info("Got request to cancel goal %s", goal_id.c_str());
-  //RCLCPP_INFO_STREAM(node->get_logger(), "Got request to cancel goal " << goal_id);
   {
     std::lock_guard<std::mutex> lck(as_mtx_);
     if (goal_id_.compare(goal_id) == 0 && has_goal_) {
@@ -59,8 +76,8 @@ rclcpp_action::CancelResponse TmRos2SctMoveit::handle_cancel(
   }
   return rclcpp_action::CancelResponse::ACCEPT;
 }
-void TmRos2SctMoveit::handle_accepted(
-  std::shared_ptr<rclcpp_action::ServerGoalHandle<control_msgs::action::FollowJointTrajectory>> goal_handle)
+void
+TmRos2SctMoveit::handle_accepted(std::shared_ptr<rclcpp_action::ServerGoalHandle<control_msgs::action::FollowJointTrajectory>> goal_handle)
 {
   {
     std::unique_lock<std::mutex> lck(as_mtx_);
@@ -69,11 +86,10 @@ void TmRos2SctMoveit::handle_accepted(
   }
   // this needs to return quickly to avoid blocking the executor, so spin up a new thread
   std::thread{std::bind(&TmRos2SctMoveit::execute_traj, this, std::placeholders::_1), goal_handle}.detach();
-
 }
 
-void TmRos2SctMoveit::execute_traj(
-  const std::shared_ptr<rclcpp_action::ServerGoalHandle<control_msgs::action::FollowJointTrajectory>> goal_handle)
+void
+TmRos2SctMoveit::execute_traj(const std::shared_ptr<rclcpp_action::ServerGoalHandle<control_msgs::action::FollowJointTrajectory>> goal_handle)
 {
   print_info("TM_ROS: trajectory thread begin");
 
@@ -88,22 +104,19 @@ void TmRos2SctMoveit::execute_traj(
     result->error_code = result->PATH_TOLERANCE_VIOLATED;
     result->error_string = "Start point doesn't match current pose";
     print_warn(result->error_string.c_str());
-    //RCLCPP_WARN_STREAM(node->get_logger(), result->error_string);
-
-    //goal_handle->abort(result);
+    goal_handle->abort(result);
   }
 
   auto pvts = get_pvt_traj(traj_points, 0.025);
-  print_info("TM_ROS: traj. total time:= %d", (int)pvts->total_time);
-  //RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: traj. total time:=" << pvts->total_time);
+  print_info("TM_ROS: traj. total time:= %d", static_cast<int>(pvts->total_time));
 
   if (!goal_handle->is_executing()) {
-    goal_handle->execute();
     print_info("goal_handle->execute()");
+    goal_handle->execute();
   }
 
   if (!is_fake_) {
-    iface_.run_pvt_traj(*pvts);
+    iface_.run_pvt_traj(*pvts, ((100.0 / state_.project_speed()) - 0.95) * pvts->total_time);  // Total time running is X.05 * total_time, with X 100/project_speed
   }
   else {
     iface_.fake_run_pvt_traj(*pvts);
@@ -113,15 +126,14 @@ void TmRos2SctMoveit::execute_traj(
       result->error_code = result->GOAL_TOLERANCE_VIOLATED;
       result->error_string = "Current pose doesn't match Goal point";
       print_warn(result->error_string.c_str());
-      //RCLCPP_WARN_STREAM(node->get_logger(), result->error_string);
+      goal_handle->abort(result);
     }
     else {
       result->error_code = result->SUCCESSFUL;
       result->error_string = "Goal reached, success!";
       print_info(result->error_string.c_str());
-      //RCLCPP_INFO_STREAM(node->get_logger(), result->error_string);
+      goal_handle->succeed(result);
     }
-    goal_handle->succeed(result);
   }
   {
     std::lock_guard<std::mutex> lck(as_mtx_);
@@ -131,7 +143,8 @@ void TmRos2SctMoveit::execute_traj(
   print_info("TM_ROS: trajectory thread end");
 }
 
-void TmRos2SctMoveit::reorder_traj_joints(
+void
+TmRos2SctMoveit::reorder_traj_joints(
   std::vector<trajectory_msgs::msg::JointTrajectoryPoint> &new_traj_points,
   const trajectory_msgs::msg::JointTrajectory& traj)
 {
@@ -188,29 +201,46 @@ bool TmRos2SctMoveit::is_positions_match(
   }
   return true;
 }
-void TmRos2SctMoveit::set_pvt_traj(
-  TmPvtTraj &pvts, const std::vector<trajectory_msgs::msg::JointTrajectoryPoint> &traj_points, double Tmin)
+void
+TmRos2SctMoveit::set_pvt_traj(TmPvtTraj &pvts, const std::vector<trajectory_msgs::msg::JointTrajectoryPoint> &traj_points, double Tmin)
 {
+  print_debug("TM_ROS: Traj size: %d", static_cast<int>(traj_points.size()));
+  if (traj_points.size() < 2)
+  {
+    print_warn("TM_ROS: Traj rejected because size<2: %d", static_cast<int>(traj_points.size()));
+    return;
+  }
+
+  double total_time = sec(traj_points[traj_points.size()-1].time_from_start);
+  if (total_time < Tmin)
+  {
+    print_warn("TM_ROS: Traj rejected because total time<Tmin(%f): %f", Tmin, total_time);
+    return;
+  }
+
+  std::stringstream ss;
+  ss << "msg:\n";
+  for (const auto& point : traj_points)
+  {
+    ss << trajectory_msgs::msg::to_yaml(point) << "\n";
+  }
+  RCLCPP_DEBUG_STREAM(node->get_logger(), ss.str());
+
+  pvts.mode = TmPvtMode::Joint;
+
   size_t i = 0, i_1 = 0, i_2 = 0;
   int skip_count = 0;
   TmPvtPoint point;
 
-  if (traj_points.size() == 0) return;
-
-  pvts.mode = TmPvtMode::Joint;
-
-  auto sec = [](const builtin_interfaces::msg::Duration& t) {
-    return static_cast<double>(t.sec) + 1e-9 * static_cast<double>(t.nanosec);
-  };
-
   // first point
-  if (sec(traj_points[i].time_from_start) != 0.0) {
+  if (sec(traj_points[i].time_from_start) >= 1e-6) {
     print_warn("TM_ROS: Traj.: first point should be the current position, with time_from_start set to 0.0");
-    point.time = sec(traj_points[i].time_from_start);
-    point.positions = traj_points[i].positions;
-    point.velocities = traj_points[i].velocities;
-    pvts.points.push_back(point);
   }
+  point.time = sec(traj_points[i].time_from_start);
+  point.positions = traj_points[i].positions;
+  point.velocities = traj_points[i].velocities;
+  pvts.points.push_back(point);
+
   for (i = 1; i < traj_points.size() - 1; ++i) {
     point.time = sec(traj_points[i].time_from_start) - sec(traj_points[i_1].time_from_start);
     if (point.time >= Tmin) {
@@ -221,12 +251,12 @@ void TmRos2SctMoveit::set_pvt_traj(
       pvts.points.push_back(point);
     }
     else {
+      print_debug("Skipping index: %d", i);
       ++skip_count;
     }
   }
   if (skip_count > 0) {
     print_warn("TM_ROS: Traj.: skip %d points", (int)skip_count);	
-    //RCLCPP_WARN_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: Traj.: skip " << (int)skip_count << " points");
   }
   // last point
   if (traj_points.size() > 1) {
@@ -239,15 +269,16 @@ void TmRos2SctMoveit::set_pvt_traj(
     }
     else {
       point.time = sec(traj_points[i].time_from_start) - sec(traj_points[i_2].time_from_start);
-      pvts.points.back() = point;
+      pvts.points.back() = point; // This is safe because the starting point is always added.
       ++skip_count;
       print_warn("TM_ROS: Traj.: skip 1 more last point");
     }
   }
   pvts.total_time = sec(traj_points.back().time_from_start);
 }
-std::shared_ptr<TmPvtTraj> TmRos2SctMoveit::get_pvt_traj(
-    const std::vector<trajectory_msgs::msg::JointTrajectoryPoint> &traj_points, double Tmin)
+
+std::shared_ptr<TmPvtTraj>
+TmRos2SctMoveit::get_pvt_traj(const std::vector<trajectory_msgs::msg::JointTrajectoryPoint> &traj_points, double Tmin)
 {
   std::shared_ptr<TmPvtTraj> pvts = std::make_shared<TmPvtTraj>();
   set_pvt_traj(*pvts, traj_points, Tmin);
