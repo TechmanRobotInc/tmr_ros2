@@ -1,8 +1,75 @@
+# ROS, CMake files
+build/
+CMakeCache.txt
+CMakeFiles/
+Makefile
+cmake_install.cmake
+install_manifest.txt
+cmake-build-*/
+install/
+log/
+devel/
+logs/
+CATKIN_IGNORE
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Linux files 
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# Python VS files
 *.bin
+.vs
+.vscode/
 *.ipch
-*.json
+.idea
+__pycache__/
 *.pyc
 *.cpython-37.pyc
-*.pyc
+
+# Compiled or Executables
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+*.lai
+*.la
+*.a
+*.lib
+*.out
+*.app
+
+# Temp, autosave files
 *.bak
-.vscode/
+*.tmp
+*.gho
+*.ori
+*.orig
+.~lock.*#
+*.asv
+*.autosave
+
+# Logs and databases 
+*.log
+*.sqlite
+
+# Pack files
+*.7z
+*.dmg
+*.gz
+*.iso
+*.rar
+*.tar
+*.zip
+
+# Others
+Backup*/
+*bom.json
