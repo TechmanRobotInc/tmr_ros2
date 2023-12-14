@@ -13,18 +13,18 @@
 
 
 class SubImg : public rclcpp::Node {
- private:
-  cv::Mat image;
-  rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr imageSubscription;
-  const std::string packageName = "custom_package";
-  const std::string imageFileRelative = "/image/techman_robot.jpg";
-  bool isShowPic;
-  void get_new_image_callback(sensor_msgs::msg::Image::SharedPtr msg);
-  void show_image();
+  private:
+    cv::Mat image;
+    rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr imageSubscription;
+    const std::string packageName = "custom_package";
+    const std::string imageFileRelative = "/image/techman_robot.jpg";
+    bool isShowPic;
+    void get_new_image_callback(sensor_msgs::msg::Image::SharedPtr msg);
+    void show_image();
   
- public:
-  static int encoding_to_mat_type(const std::string & encoding);
-  SubImg();
+  public:
+    static int encoding_to_mat_type(const std::string & encoding);
+    SubImg();
 };
 
 int SubImg::encoding_to_mat_type(const std::string & encoding){
@@ -60,13 +60,14 @@ void SubImg::get_new_image_callback(sensor_msgs::msg::Image::SharedPtr msg){
     }
     std::cout << "Width : " << frame.size().width << std::endl;
     std::cout << "Height: " << frame.size().height << std::endl;
-     frame.copyTo(this->image);
+    frame.copyTo(this->image);
     std::cout<<"after set this->image = frame";
   }
   catch(std::runtime_error &exception){
     std::cout<<"there is a exception "<< exception.what()<< std::endl;
   }
 }
+
 void SubImg::show_image(){
   while(true){
     cv::imshow("showimage",this->image );
@@ -89,5 +90,6 @@ int main(int argc, char *argv[]){
   rclcpp::spin(std::make_shared<SubImg>());
   std::cout<<"end spin"<<std::endl;
   rclcpp::shutdown();
+
   return 0;
 }

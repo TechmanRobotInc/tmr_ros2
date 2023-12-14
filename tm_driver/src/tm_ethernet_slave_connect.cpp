@@ -199,6 +199,7 @@ void EthernetSlaveConnection::get_data_thread()
                     svr.close_socket();
                 }
             }
+
             if (!iface_.get_connect_recovery_guide()) {
                 while (run && svr.is_connected()) {
                     if (!get_data_function()){

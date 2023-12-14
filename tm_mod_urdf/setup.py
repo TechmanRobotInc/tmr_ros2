@@ -4,7 +4,7 @@ package_name = 'tm_mod_urdf'
 
 setup(
     name=package_name,
-    version='1.0.0',
+    version='1.1.2',
     packages=[package_name],
     data_files=[
         ('share/ament_index/resource_index/packages',
@@ -13,7 +13,7 @@ setup(
     ],
     install_requires=['setuptools'],
     zip_safe=True,
-    maintainer='yhtsai',
+    maintainer='Ken Tsai',
     maintainer_email='ken.tsai@tm-robot.com',
     description='tm_mod_urdf',
     license='BSD',

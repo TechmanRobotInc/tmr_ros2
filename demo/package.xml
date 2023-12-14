@@ -4,9 +4,12 @@
   <name>demo</name>
   <version>1.0.0</version>
   <description>The demo package</description>
-  <maintainer email="leo.wu@tm-robot.com">leowu</maintainer>
+
+  <maintainer email="leo.wu@tm-robot.com">leo wu</maintainer>
   <maintainer email="yh.wang@tm-robot.com">Yh Wang</maintainer>
+
   <license>BSD</license>
+
   <url type="repository">https://github.com/TechmanRobotInc/tmr_ros2</url>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
