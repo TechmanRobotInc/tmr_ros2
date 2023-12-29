@@ -30,7 +30,7 @@ More information: TM ROS driver support list
         <td><a href="https://github.com/TechmanRobotInc/tmr_ros1/">TM ROS1 Melodic</a></td>
         <th>&#9711;</th>
         <th>&#10005;&nbsp</th>
-        <th>master</th>
+        <th>melodic</th>
     </tr>
     <tr>
         <td><a href="http://wiki.ros.org/noetic">ROS Noetic Ninjemys</a></td>
@@ -51,7 +51,7 @@ More information: TM ROS driver support list
         <td><a href="https://github.com/TechmanRobotInc/tmr_ros2">TM ROS2 Foxy</a></td>
         <th>&#9711;</th>
         <th>&#9711;</th>
-        <th>master</th>
+        <th>foxy</th>
     </tr>
     <tr>
         <td><a href="https://docs.ros.org/en/humble/index.html">ROS 2 Humble Hawksbill</a></td>
@@ -71,11 +71,18 @@ More information: TM ROS driver support list
         <th>GitHub Branch</th>
     </tr>
     <tr>
+        <td><a href="http://wiki.ros.org/noetic">ROS Noetic Ninjemys</a></td>
+        <td><a href="https://github.com/TechmanRobotInc/tm2_ros1">TM2 ROS1 Noetic</a></td>
+        <th>&#9711;</th>
+        <th>&#9711;</th>
+        <th>noetic</th>
+    </tr>
+    <tr>
         <td><a href="https://index.ros.org/doc/ros2/Releases/Release-Foxy-Fitzroy/">ROS 2 Foxy Fitzroy</a></td>
         <td><a href="https://github.com/TechmanRobotInc/tm2_ros2">TM2 ROS2 Foxy</a></td>
         <th>&#9711;</th>
         <th>&#9711;</th>
-        <th>master</th>
+        <th>foxy</th>
     </tr>
     <tr>
         <td><a href="https://docs.ros.org/en/humble/index.html">ROS 2 Humble Hawksbill</a></td>
@@ -205,7 +212,7 @@ The user can manually click the `Data Table Setting` <sup>2</sup> item and check
 >```
 > Example :``ros2 run tm_driver tm_driver robot_ip:=192.168.10.2``, if the <robot_ip_address> is 192.168.10.2
 >
-> Now, the user can use a new terminal to run each ROS node or command but don't forget to source the correct setup shell files as starting a new terminal.
+> Now, the user can use a new terminal to run each ROS node or command, but don't forget to source the correct setup shell files as starting a new terminal.
 
 > __Usage with MoveIt2 (Tentative)__ 
 >
@@ -377,10 +384,10 @@ In this demo code, the user can use send_script service sending a script to leav
 ``mkdir ~/tmdriver_ws``<br/>
 ``cd ~/tmdriver_ws``<br/>
 > 2. Clone the TM driver of the git repository into the current directory by typing<br/>
-``git clone https://github.com/TechmanRobotInc/tmr_ros2.git -b dashing-devel``<br/>
+``git clone https://github.com/TechmanRobotInc/tmr_ros2.git -b dashing``<br/>
 or<br/>
-``git clone -b dashing-devel https://github.com/TechmanRobotInc/tmr_ros2.git``<br/>
-> 3. After the download done, rename the download folder ``tmr_ros2``(or ``tmr_ros2-dashing-devel``) to ``src`` by typing<br/>
+``git clone -b dashing https://github.com/TechmanRobotInc/tmr_ros2.git``<br/>
+> 3. After the download done, rename the download folder ``tmr_ros2``(or ``tmr_ros2-dashing``) to ``src`` by typing<br/>
 ``mv tmr_ros2 src``<br/>  (or right-click on the download folder, select "Rename...")<br/>
 > 4. At the workspace directory to build the download packages and source 'setup.bash' in this workspace to make the workspace visible to ROS.<br/>
 **Note**: Do you set ``source /opt/ros/dashing/setup.bash`` ready? Make sure to obtain the correct setup file according to your workspace hierarchy, and then type the following below to compile.<br/>
@@ -423,8 +430,8 @@ This chapter describes a simplified GUI for displaying tm_driver connection stat
 ``mkdir ~/tmdriver_ws``<br/>
 ``cd ~/tmdriver_ws``<br/>
 > 2. Clone the TM driver of the git repository into the current directory by typing<br/>
-``git clone https://github.com/TechmanRobotInc/tmr_ros2.git -b dashing-devel``<br/>  
-> 3. After the download done, rename the download folder ``tmr_ros2``(or ``tmr_ros2-dashing-devel``) to ``src`` by typing<br/>
+``git clone https://github.com/TechmanRobotInc/tmr_ros2.git -b dashing``<br/>  
+> 3. After the download done, rename the download folder ``tmr_ros2``(or ``tmr_ros2-dashing``) to ``src`` by typing<br/>
 ``mv tmr_ros2 src``<br/>  (or right-click on the download folder, select "Rename...")<br/>
 > 4. At the workspace directory to build the download packages and source 'setup.bash' in this workspace to make the workspace visible to ROS.<br/>
 **Note**: Do you set ``source /opt/ros/dashing/setup.bash`` ready? Make sure to obtain the correct setup file according to your workspace hierarchy, and then type the following below to compile.<br/>
