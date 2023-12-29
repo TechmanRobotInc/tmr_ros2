@@ -30,7 +30,7 @@ More information: TM ROS driver support list
         <td><a href="https://github.com/TechmanRobotInc/tmr_ros1/">TM ROS1 Melodic</a></td>
         <th>&#9711;</th>
         <th>&#10005;&nbsp</th>
-        <th>master</th>
+        <th>melodic</th>
     </tr>
     <tr>
         <td><a href="http://wiki.ros.org/noetic">ROS Noetic Ninjemys</a></td>
@@ -51,7 +51,7 @@ More information: TM ROS driver support list
         <td><a href="https://github.com/TechmanRobotInc/tmr_ros2">TM ROS2 Foxy</a></td>
         <th>&#9711;</th>
         <th>&#9711;</th>
-        <th>master</th>
+        <th>foxy</th>
     </tr>
     <tr>
         <td><a href="https://docs.ros.org/en/humble/index.html">ROS 2 Humble Hawksbill</a></td>
@@ -71,11 +71,18 @@ More information: TM ROS driver support list
         <th>GitHub Branch</th>
     </tr>
     <tr>
+        <td><a href="http://wiki.ros.org/noetic">ROS Noetic Ninjemys</a></td>
+        <td><a href="https://github.com/TechmanRobotInc/tm2_ros1">TM2 ROS1 Noetic</a></td>
+        <th>&#9711;</th>
+        <th>&#9711;</th>
+        <th>noetic</th>
+    </tr>
+    <tr>
         <td><a href="https://index.ros.org/doc/ros2/Releases/Release-Foxy-Fitzroy/">ROS 2 Foxy Fitzroy</a></td>
         <td><a href="https://github.com/TechmanRobotInc/tm2_ros2">TM2 ROS2 Foxy</a></td>
         <th>&#9711;</th>
         <th>&#9711;</th>
-        <th>master</th>
+        <th>foxy</th>
     </tr>
     <tr>
         <td><a href="https://docs.ros.org/en/humble/index.html">ROS 2 Humble Hawksbill</a></td>
@@ -372,7 +379,7 @@ In this demo code, the user can use send_script service sending a script to leav
 ``cd ~/tmdriver_ws``<br/>
 > 2. Clone the TM driver of the git repository into the current directory by typing<br/>
 ``git clone https://github.com/TechmanRobotInc/tmr_ros2.git -b humble``<br/>
-> 3. After the download done, rename the download folder ``tmr_ros2``(or ``tmr_ros2-master``) to ``src`` by typing<br/>
+> 3. After the download done, rename the download folder ``tmr_ros2``(or ``tmr_ros2-humble``) to ``src`` by typing<br/>
 ``mv tmr_ros2 src``<br/>  (or right-click on the download folder, select "Rename...")<br/>
 > 4. At the workspace directory to build the download packages and source 'setup.bash' in this workspace to make the workspace visible to ROS.<br/>
 **Note**: Do you set ``source /opt/ros/humble/setup.bash`` ready? Make sure to obtain the correct setup file according to your workspace hierarchy, and then type the following below to compile.<br/>
@@ -416,7 +423,7 @@ This chapter describes a simplified GUI for displaying tm_driver connection stat
 ``cd ~/tmdriver_ws``<br/>
 > 2. Clone the TM driver of the git repository into the current directory by typing<br/>
 ``git clone https://github.com/TechmanRobotInc/tmr_ros2.git -b humble``<br/>
-> 3. After the download done, rename the download folder ``tmr_ros2``(or ``tmr_ros2-master``) to ``src`` by typing<br/>
+> 3. After the download done, rename the download folder ``tmr_ros2``(or ``tmr_ros2-humble``) to ``src`` by typing<br/>
 ``mv tmr_ros2 src``<br/>  (or right-click on the download folder, select "Rename...")<br/>
 > 4. At the workspace directory to build the download packages and source 'setup.bash' in this workspace to make the workspace visible to ROS.<br/>
 **Note**: Do you set ``source /opt/ros/humble/setup.bash`` ready? Make sure to obtain the correct setup file according to your workspace hierarchy, and then type the following below to compile.<br/>
@@ -488,7 +495,7 @@ The user can use the tm_mod_urdf package to extract specific kinematic values fr
 > python3 modify_xacro.py tm5-900 user_defined
 > ```
 > When this procedure is completed, the user can find that the newly generated named robot description file has been saved, e.g."``user_defined.urdf.xacro``".<br/>
-> :bookmark_tabs: Note: In the previous chapter, we renamed the download folder tmr_ros2 (or tmr_ros2-master) to src. If the user misses this step, they will encounter such an error "``[Error] [modify_xacro]: workspace directory not find ``" on the screen when executing the above command.<br/>
+> :bookmark_tabs: Note: In the previous chapter, we renamed the download folder tmr_ros2 (or tmr_ros2-humble) to src. If the user misses this step, they will encounter such an error "``[Error] [modify_xacro]: workspace directory not find ``" on the screen when executing the above command.<br/>
 > 
 > 3. Next, the user must modify the filename part of the default pre-built nominal robot model in tm5-900.urdf.xacro to a newly generated robot model description naming file.<br/>
 > ```bash
