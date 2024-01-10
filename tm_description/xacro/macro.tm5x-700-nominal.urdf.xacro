@@ -25,7 +25,7 @@
     safety_limits:=false safety_pos_margin:=0.15
     safety_k_position:=20">
 
-   <xacro:property name="damping_factor" value="0.000"/>
+   <xacro:property name="damping_factor" value="600.000"/>
    <xacro:property name="d1" value="${damping_factor*0.1}"/>
    <xacro:property name="d2" value="${damping_factor*0.1}"/>
    <xacro:property name="d3" value="${damping_factor*0.1}"/>
@@ -33,7 +33,7 @@
    <xacro:property name="d5" value="${damping_factor*0.1}"/>
    <xacro:property name="d6" value="${damping_factor*0.1}"/>
 
-   <xacro:property name="friction_factor" value="0.000"/>
+   <xacro:property name="friction_factor" value="40.000"/>
    <xacro:property name="f1" value="${friction_factor*0.1}"/>
    <xacro:property name="f2" value="${friction_factor*0.1}"/>
    <xacro:property name="f3" value="${friction_factor*0.1}"/>
