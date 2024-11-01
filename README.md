@@ -298,7 +298,7 @@ The user can manually click the `Data Table Setting` <sup>2</sup> item and check
 > * The user can also manipulate the real TM Robot to run, by typing<br/>
 >
 > ```bash
-> roslaunch tm_move_group <tm_robot_type>_run_move_group.launch.py robot_ip:=<robot_ip_address>
+> ros2 launch tm_move_group <tm_robot_type>_run_move_group.launch.py robot_ip:=<robot_ip_address>
 > ```
 > :warning:[CAUTION] This demo will let the real TM Robot move, please be careful. If the user are a beginner or unfamiliar with the arm movement path, it is recommended that the user place your hand on the big red emergency _Stick Stop Button_ at any time, and press the button appropriately in the event of any accident that may occur.<br/>
 >
