@@ -71,13 +71,22 @@ void TmSvrRos2::publish_fbs()
 {
     PubMsg &pm = pm_;
     TmRobotState &state = state_;
+    bool fbs_lock_ = false; /* MC-001: modify */ 
+
+    // Modifications based on suggestions from Collaborators (remark as MC-list)
+    /* MC-001:start */  
+    if(state.get_receive_state() != TmCommRC::TIMEOUT) {
+      fbs_lock_ = true;
+      state.mtx_lock();
+    }
+    /* MC-001:end */
 
     // Publish feedback state
     pm.fbs_msg.header.stamp = node->rclcpp::Node::now();
     if(state.get_receive_state() != TmCommRC::TIMEOUT){
       pm.fbs_msg.is_svr_connected = svr_.is_connected();
       pm.fbs_msg.is_sct_connected = sct_.is_connected() && iface_.is_on_listen_node();
-      pm.fbs_msg.tmsrv_cperr = (int)svr_.tmSvrErrData.error_code();  //Node State Response 
+      pm.fbs_msg.tmsrv_cperr = (int)svr_.tmSvrErrData.error_code(); // Node State Response
       pm.fbs_msg.tmsrv_dataerr = (int)pm.svr_msg.error_code;
       pm.fbs_msg.tmscript_cperr = (int)sct_.tmSctErrData.error_code();
       pm.fbs_msg.tmscript_dataerr = (int)sct_.sct_data.sct_has_error();
@@ -130,6 +139,14 @@ void TmSvrRos2::publish_fbs()
     pm.fbs_msg.joint_tor_average = state.joint_torque_average();
     pm.fbs_msg.joint_tor_min = state.joint_torque_min();
     pm.fbs_msg.joint_tor_max = state.joint_torque_max();
+
+    /* MC-001:start */    
+    if((state.get_receive_state() != TmCommRC::TIMEOUT) || (fbs_lock_ != false)) {	
+      state.mtx_unlock();
+      fbs_lock_ = false; 
+    }
+    /* MC-001:end */	
+
     pm.fbs_pub->publish(pm.fbs_msg);
 
     // Publish joint state
@@ -154,6 +171,7 @@ void TmSvrRos2::fake_publisher()
 {
     PubMsg &pm = pm_;
     TmRobotState &state = state_;
+    bool fbs_lock_ = false; /* MC-001: modify */ 
 
     print_info("TM_ROS: fake publisher thread begin");		
 
@@ -161,9 +179,22 @@ void TmSvrRos2::fake_publisher()
       // Publish feedback state
       pm.fbs_msg.header.stamp = node->rclcpp::Node::now();
       {
+        /* MC-001:start */
+        if(state.get_receive_state() != TmCommRC::TIMEOUT) {
+          fbs_lock_ = true;
+          state.mtx_lock();
+        }
+        /* MC-001:end */		
         pm.fbs_msg.joint_pos = state.joint_angle();
         pm.fbs_msg.joint_vel = state.joint_speed();
         pm.fbs_msg.joint_tor = state.joint_torque();
+
+        /* MC-001:start */
+        if((state.get_receive_state() != TmCommRC::TIMEOUT) || (fbs_lock_ != false)) {	
+          state.mtx_unlock();
+          fbs_lock_ = false; 
+        }
+        /* MC-001:end */		
       }
       pm.fbs_pub->publish(pm.fbs_msg);
 

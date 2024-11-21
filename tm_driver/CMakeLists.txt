@@ -15,8 +15,6 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
-add_definitions(-DROS2_BUILD)
-
 # Please refer to https://moveit.ros.org/install-moveit2/source
 # If the MoveIt2 module is not ready for installation, or the user wants to close the relative MoveIt2 module, the user can modify the "true" of moveit2_lib_auto_judge to "false" to compile. 
 #set(moveit2_lib_auto_judge false)
@@ -94,7 +92,6 @@ if (moveit2_lib_auto_judge)
       std_msgs
       sensor_msgs
       tm_msgs
-
       trajectory_msgs
       control_msgs
       rclcpp_action
