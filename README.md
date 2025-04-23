@@ -270,7 +270,7 @@ The user can manually click the `Data Table Setting` <sup>2</sup> item and check
 > ros2 launch tm_moveit_cpp_demo <tm_robot_type>_run_moveit_cpp.launch.py
 > ```
 >
->> The prefix `<tm_robot_type>` means the TM Robot type, available for tm5-900, tm5-700, tm12, and tm14 models, as well as the eyeless models tm5x-900, tm5x-700, tm12x and tm14x models.<br/>
+>> The prefix `<tm_robot_type>` means the TM Robot type, available for tm5-900, tm5-700, tm12, tm14, and (without integrated camera) tm5x-900, tm5x-700, tm12x, tm14x models.<br/> 
 >
 > Taking the TM5-900 robot as an example, use the commands introduced above, by typing
 > ```bash
@@ -288,7 +288,7 @@ The user can manually click the `Data Table Setting` <sup>2</sup> item and check
 > ros2 launch tm_move_group <tm_robot_type>_run_move_group.launch.py
 > ```
 >
->> The prefix `<tm_robot_type>` means the TM Robot type, available for tm5-900, tm5-700, tm12, and tm14 models, as well as the eyeless models tm5x-900, tm5x-700, tm12x and tm14x models.<br/> 
+>> The prefix `<tm_robot_type>` means the TM Robot type, available for tm5-900, tm5-700, tm12, tm14, and (without integrated camera) tm5x-900, tm5x-700, tm12x, tm14x models.<br/> 
 >
 > Taking the TM5-900 robot as an example, use the commands introduced above, by typing
 > ```bash
@@ -311,7 +311,7 @@ The user can manually click the `Data Table Setting` <sup>2</sup> item and check
 >> The parameter `<robot_ip_address>` means the IP address of the TM Robot.<br/>
 >
 > Note: When you have finished, press CTRL + C in all terminal windows to shut everything down.<br/>
-> :bookmark_tabs: Note1: There are several built-in TM Robot nominal robot model settings, available for TM5-900, TM5-700, TM12, and TM14 models, as well as the eyeless models TM5X-900, TM5X-700, TM12X, and TM14X models.<br/>
+> :bookmark_tabs: Note1: There are several built-in TM Robot nominal robot model settings, available for TM5-900, TM5-700, TM12, TM14, and (without integrated camera) TM5X-900, TM5X-700, TM12X, TM14X models.<br/>
 > :bookmark_tabs: Note2: TM Robot set the default to read the Xacro file, such as _TM5-900_ model, to read the file _tm5-900.urdf.xacro_ into robot_description or such as _TM12_ model, to read the file _tm12.urdf.xacro_ into robot_description. If the user wants to use the specific model parameters instead of the nominal model to control the robot, please go back to the section __6. Generate your TM Robot-Specific Kinematics Parameters Files__ to modify the Xacro file.<br/>
 > :bookmark_tabs: Note3: __Running two tm ros drivers at the same IP address is not allowed.__ Since the tm driver node has been written into the moveit launch file, there is no need to execute _ros2 run tm_driver tm_driver robots_ip:=<robot_ip_address>_.<br/>
 
@@ -437,8 +437,6 @@ In this demo code, the user can use this service to send TMSTA <sup>3</sup> cmd.
 > <sup>3</sup> For more detailed information, please refer to _defined protocol_ (Chapter7.5 TMSTA)<br/>
 > * demo_connect_tm:<br/>
 In this demo code, the user can set the connection type. <br/>
-If the user sets reconnect to true, every time the driver disconnects from the __Listen node__, it will try to reconnect.<br/>
-There are two kinds of connection settings the user can select, one is "connect_tmsvr" for Ethernet server connection, and the other is "connect_tmsct" for  TMflow connection.<br/>
 >
 > * demo_set_event:<br/>
 In this demo code, six event types can be selected.<br/> 
@@ -500,8 +498,7 @@ The <robot_ip_address> is the IP address of the TM Robot, the user can get it th
 
 
 ## __6. TM GUI debugging and demonstration__
-This chapter describes a simplified GUI for displaying tm_driver connection status, sct, sta, svr messages, and robot status. The user can optionally install the _ui_for_debug_and_demo_ package to aid in viewing messages between the driver and the robot through the GUI display. If the driver connection fails, the user can also try to send a reconnect command on this GUI for debugging.
-
+This chapter describes a simplified GUI for displaying tm_driver connection status, sct, sta, svr messages, and robot status. The user can optionally install the _ui_for_debug_and_demo_ package to aid in viewing messages between the driver and the robot through the GUI display.
 
 ### &sect; GUI Debugging description
 > * If the user forgets to run the TM ROS driver, the user will see all the controlled label items of the GUI displayed as "NaN".<br/>
@@ -558,7 +555,7 @@ The user can use the tm_mod_urdf package to extract specific kinematic values fr
  >```
  > * <script_name> : Provide modify_xacro.py or modify_urdf.py two Python scripts program as options.
  > * <urdf_from>: The first argument represents the original URDF model form of the TM Robot, and the file part naming <sup>1</sup> is <urdf_from>.<br/>
- > <sup>1</sup> There are several built-in TM Robot nominal robot model settings, available for tm5-900, tm5-700, tm12, and tm14 models, as well as the eyeless models tm5x-900, tm5x-700, tm12x and tm14x models.<br/>
+ > <sup>1</sup> There are several built-in TM Robot nominal robot model settings, available for tm5-900, tm5-700, tm12, tm14 and (without integrated camera) tm5x-900, tm5x-700, tm12x, tm14x models.<br/>
  > For example, select the tm12 nominal robot model as the input model form, the user can type tm12 as the <urdf_from>. For details of this item, please refer to the modify_urdf.py or modify_xacro.py code.<br/>
  > * <urdf_gen>: The second argument means the newly generated URDF model form of the TM Robot, and the file <sup>2</sup> name is <urdf_gen>.<br/>
  > <sup>2</sup> For example, if the user names it test and select modify_xacro.py as script program, a test.urdf.xacro robot description file will be generated.<br/>
@@ -612,7 +609,7 @@ The user can use the tm_mod_urdf package to extract specific kinematic values fr
 > ```
 >
 > :bookmark_tabs: Note1: If your real Robot is a TM5-700, in the above example, you should type tm5-700 as an example for <urdf_from> and modify the tm5-700.urdf.xacro file.<br/>
-> :bookmark_tabs: Note2: If your real Robot is the eyeless model as a TM5X-700, in the above example, you should type tm5x-700 as an example for <urdf_from> and modify the tm5x-700.urdf.xacro file.<br/>
+> :bookmark_tabs: Note2: If your real Robot is a TM5X-700 without integrated camera, in the above example, you should type tm5x-700 as an example for <urdf_from> and modify the tm5x-700.urdf.xacro file.<br/>
 >
 > Please refer to the following to modify the content format of the filename line:<br/>
 > ```bash
@@ -651,7 +648,7 @@ The user can use the tm_mod_urdf package to extract specific kinematic values fr
 > When this procedure is completed, the user can find that the newly generated named robot description file has been saved, e.g."``user_defined.urdf``".<br/>
 >
 > :bookmark_tabs: Note1: If your real Robot is a TM12, in the above example, you should type tm12 as an example for <urdf_from>.<br/>
-> :bookmark_tabs: Note2: If your real Robot is the eyeless model as a TM12X, in the above example, you should type tm12x as an example for <urdf_from>.<br/>
+> :bookmark_tabs: Note2: If your real Robot is a TM12X without integrated camera, in the above example, you should type tm12x as an example for <urdf_from>.<br/>
 >
 > Finally, the user can use the new robot file, such as "``user_defined.urdf``", instead of the default nominal URDF model to run your TM Robot or simulate the robot more accurately.<br/>
 >> :bulb: **Tip**: Remember to recompile since the code has been changed.<br/>
@@ -665,5 +662,10 @@ The user can use the tm_mod_urdf package to extract specific kinematic values fr
 > Ans: The user can first find the displayed string "``[new save file path:] ``" on the screen, and the following string is the file save location.<br/>
 
 
-## __8. Contact us / Technical support__
-More Support & Service, please contact us. [@TECHMAN ROBOT](https://www.tm-robot.com/zh-hant/contact-us/)``[https://www.tm-robot.com/zh-hant/contact-us/] ``<br/>
+## __8. Contact us / Technical support__   [![Email](https://img.shields.io/badge/-Email-c14438?style=flat&logo=Gmail&logoColor=white)](mailto:tmsales@tm-robot.com)
+More Support & Service, please contact us. [@TECHMAN ROBOT](https://www.tm-robot.com/en/contact-us/)``[https://www.tm-robot.com/en/contact-us/] ``<br/>
+> [!TIP]
+> 1. The tm_description package contains description files and meshes, available for TM5-900, TM5-700, TM12, TM14, and (without integrated camera) TM5X-900, TM5X-700, TM12X, TM14X models.<br/>
+> 2. Some software packages with ROS2 Foxy MoveIt2 configurations for TM Cobots are available for TM5-900, TM5-700, TM12, TM14, TM5X-900, TM5X-700, TM12X, TM14X models.<br/>
+<div> </div>
+
