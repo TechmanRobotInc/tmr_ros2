@@ -15,15 +15,11 @@ class MinimalSubscriber : public rclcpp::Node
     }
 
   private:
-    
     void topic_callback(const tm_msgs::msg::SctResponse::SharedPtr msg) const
     {
-      
       RCLCPP_INFO_STREAM(this->get_logger(),"SctResponse: id is = " << msg->id << ", script is " << msg->script);
-      
     }
     rclcpp::Subscription<tm_msgs::msg::SctResponse>::SharedPtr subscription_;
-    
 };
 
 int main(int argc, char * argv[])

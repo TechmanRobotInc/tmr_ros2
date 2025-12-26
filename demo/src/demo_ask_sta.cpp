@@ -15,7 +15,7 @@ int main(int argc, char **argv)
   std::shared_ptr<rclcpp::Node> node = rclcpp::Node::make_shared("demo_ask_sta");
   rclcpp::Client<tm_msgs::srv::AskSta>::SharedPtr client =
     node->create_client<tm_msgs::srv::AskSta>("ask_sta");
-  
+
   auto request = std::make_shared<tm_msgs::srv::AskSta::Request>();
   request->subcmd = "00";
   request->subdata = "";
@@ -23,24 +23,23 @@ int main(int argc, char **argv)
 
   while (!client->wait_for_service(1s)) {
     if (!rclcpp::ok()) {
-      RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"), "Interrupted while waiting for the service. Exiting.");	
-      return false;
+      RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"), "Interrupted while waiting for the service. Exiting.");
+      return 1;
     }
-    RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"), "service not available, waiting again..."); 	
+    RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"), "service not available, waiting again...");
   }
 
   auto result = client->async_send_request(request);
   // Wait for the result.
-  if (rclcpp::spin_until_future_complete(node, result) ==
-    rclcpp::FutureReturnCode::SUCCESS)
+  if (rclcpp::spin_until_future_complete(node, result) == rclcpp::FutureReturnCode::SUCCESS)
   {
     auto getResult = result.get();
-    if(getResult->ok){
-      RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"OK");
+    if (getResult->ok) {
+      RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"), "OK");
       RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"), getResult->subcmd);
       RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"), getResult->subdata);
-    } else{
-      RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"),"not OK");	
+    } else {
+      RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"), "not OK");
     }
   } else {
     RCLCPP_ERROR_STREAM(rclcpp::get_logger("rclcpp"), "Failed to call service");

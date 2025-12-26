@@ -38,7 +38,6 @@ def load_file(package_name, file_path):
 def generate_launch_description():
     # Declare arguments
     args = []
-    length = len(sys.argv)
     if (len(sys.argv) >= 5):
         i = 4
         while i < len(sys.argv):
@@ -49,7 +48,7 @@ def generate_launch_description():
     tm_robot_type = 'tm20'
     description_path = 'tm_description'
     xacro_path = 'config/tm20.urdf.xacro'
-    moveit_config_path = 'tm20_moveit_config'    
+    moveit_config_path = 'tm20_moveit_config'
     srdf_path = 'config/tm20.srdf'
     rviz_path = '/rviz/moveit.rviz'
     controller_path = 'config/moveit2_controllers.yaml'
@@ -90,7 +89,7 @@ def generate_launch_description():
             moveit_config.robot_description,
             moveit_config.robot_description_semantic,
             moveit_config.planning_pipelines,
-            moveit_config.robot_description_kinematics,            
+            moveit_config.robot_description_kinematics,
             moveit_config.joint_limits,
             {'use_sim_time': True},
         ],

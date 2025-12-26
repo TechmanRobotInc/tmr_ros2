@@ -1,0 +1,196 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:include filename="$(find tm_gazebo)/xacro/macro.colors.xacro"/>
+
+  <xacro:macro name="tm_materials">
+    <material name="default">
+      <color rgba="${color_default}" />
+    </material>
+
+    <material name="red">
+      <color rgba="${color_red}" />
+    </material>
+
+    <material name="orange">
+      <color rgba="${color_orange}" />
+    </material>
+
+    <material name="yellow">
+      <color rgba="${color_yellow}" />
+    </material>
+
+    <material name="green">
+      <color rgba="${color_green}" />
+    </material>
+
+    <material name="blue">
+      <color rgba="${color_blue}" />
+    </material>
+
+    <material name="indigo">
+      <color rgba="${color_indigo}" />
+    </material>
+
+    <material name="violet">
+      <color rgba="${color_violet}" />
+    </material>
+
+    <material name="black">
+      <color rgba="${color_black}" />
+    </material>
+
+    <material name="darkolive">
+      <color rgba="${color_darkolive}" />
+    </material>		
+
+    <material name="pebblegray">
+      <color rgba="${color_pebblegray}" />
+    </material>
+
+    <material name="grey">
+      <color rgba="${color_grey}" />
+    </material>
+
+    <material name="whitegraphite">
+      <color rgba="${color_whitegraphite}" />
+    </material>
+
+    <material name="graywhite">
+      <color rgba="${color_graywhite}" />
+    </material>
+
+    <material name="purewhite">
+      <color rgba="${color_purewhite}" />
+    </material>
+
+    <material name="white">
+      <color rgba="${color_white}" />
+    </material>
+
+    <material name="gold">
+      <color rgba="${color_gold}" />
+    </material>
+
+    <material name="iron">
+      <color rgba="${color_iron}" />
+    </material>
+
+    <material name="emeraldgreen">
+      <color rgba="${color_emeraldgreen}" />
+    </material>
+  </xacro:macro>
+
+  <xacro:macro name="tm_material_default">
+    <material name="">
+      <color rgba="${color_default}" />
+    </material>
+  </xacro:macro>
+
+  <xacro:macro name="tm_material_red">
+    <material name="">
+      <color rgba="${color_red}" />
+    </material>
+  </xacro:macro>
+
+  <xacro:macro name="tm_material_orange">
+    <material name="">
+      <color rgba="${color_orange}" />
+    </material>
+  </xacro:macro>
+
+  <xacro:macro name="tm_material_yellow">
+    <material name="">
+      <color rgba="${color_yellow}" />
+    </material>
+  </xacro:macro>
+
+  <xacro:macro name="tm_material_green">
+    <material name="">
+      <color rgba="${color_green}" />
+    </material>
+  </xacro:macro>
+
+  <xacro:macro name="tm_material_blue">
+    <material name="">
+      <color rgba="${color_blue}" />
+    </material>
+  </xacro:macro>
+
+  <xacro:macro name="tm_material_indigo">
+    <material name="">
+      <color rgba="${color_indigo}" />
+    </material>
+  </xacro:macro>
+
+  <xacro:macro name="tm_material_violet">
+    <material name="">
+      <color rgba="${color_violet}" />
+    </material>
+  </xacro:macro>
+
+  <xacro:macro name="tm_material_black">
+    <material name="">
+      <color rgba="${color_black}" />
+    </material>
+  </xacro:macro>
+
+  <xacro:macro name="tm_material_darkolive">
+    <material name="">
+      <color rgba="${color_darkolive}" />
+    </material>
+  </xacro:macro>
+
+  <xacro:macro name="tm_material_pebblegray">
+    <material name="">
+      <color rgba="${color_pebblegray}" />
+    </material>								
+  </xacro:macro>
+
+  <xacro:macro name="tm_material_grey">
+    <material name="">
+      <color rgba="${color_grey}" />
+    </material>
+  </xacro:macro>
+
+  <xacro:macro name="tm_material_whitegraphite">
+    <material name="">
+      <color rgba="${color_whitegraphite}" />
+    </material>
+  </xacro:macro>
+
+  <xacro:macro name="tm_material_graywhite">
+    <material name="">
+      <color rgba="${color_graywhite}" />
+    </material>
+  </xacro:macro>	
+
+  <xacro:macro name="tm_material_purewhite">
+    <material name="">
+      <color rgba="${color_purewhite}" />
+    </material>								
+  </xacro:macro>
+
+  <xacro:macro name="tm_material_white}">
+    <material name="">
+      <color rgba="${color_white}" />
+    </material>
+  </xacro:macro>	
+
+  <xacro:macro name="tm_material_gold">
+    <material name="">
+      <color rgba="${color_gold}" />
+    </material>									
+  </xacro:macro>
+
+  <xacro:macro name="tm_material_iron">
+    <material name="">
+      <color rgba="${color_iron}" />
+    </material>
+  </xacro:macro>
+
+  <xacro:macro name="tm_material_emeraldgreen">
+    <material name="">
+      <color rgba="${color_emeraldgreen}" />
+    </material>
+  </xacro:macro>
+</robot>

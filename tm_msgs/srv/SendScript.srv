@@ -4,5 +4,5 @@
 string id
 string script
 ---
-#ok =   Correctness of the script.
+# ok : Correctness of the script.
 bool ok

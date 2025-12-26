@@ -1,21 +1,21 @@
-#motion_type :  PTP_J , PTP_T , LINE_J , LINE_T ,
-#               CIRC_J ,CIRC_T , PLINE_J ,PLINE_T
+# motion_type :  PTP_J , PTP_T , LINE_T ,
+#               LINE_J , CIRC_J ,CIRC_T , PLINE_J ,PLINE_T 
 # More details please refer to the TM_Robot_Expression.pdf(1.76 rev1.00) Chapter 8.6-8.9
 int8 PTP_J = 1
 int8 PTP_T = 2
-#int8 LINE_J = 3
+# int8 LINE_J = 3
 int8 LINE_T = 4
-#int8 CIRC_J = 5
+# int8 CIRC_J = 5
 int8 CIRC_T = 6
-#int8 PLINE_J = 7
+# int8 PLINE_J = 7
 int8 PLINE_T = 8
 
 int8 motion_type
 float64[] positions
-float64 velocity       # motion velocity: if expressed in Cartesian coordinate (unit: m/s) , if expressed in joint velocity (unit: rad/s, and the maximum value is limited to pi )
+float64 velocity       # motion velocity: if expressed in Cartesian coordinate (unit: m/s), if expressed in joint velocity (unit: rad/s, and the maximum value is limited to pi)
 float64 acc_time       # time to reach maximum speed (unit: ms)
 int32 blend_percentage # blending value: expressed as a percentage (unit: %, and the minimum value of 0 means no blending)
 bool fine_goal         # precise position mode : If activated, the amount of error in the final position will converge more.
 ---
-# ok :  set motion status 
+# ok : set motion status
 bool ok

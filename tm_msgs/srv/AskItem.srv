@@ -1,5 +1,5 @@
 # Ask: request 'Read'
-# id        : The discription you want to name. 
+# id        : The description you want to name.
 # item      : More details please refer to the TM_Robot_Expression.pdf(1.76 rev1.00) Chapter 9.6 TMSVR vs Chapter 9.2 svr_read
 # wait_time : set wait time.
 # More details please refer to the TM_Robot_Expression.pdf(version 1.76_6300) Chapter 9.6 TMSVR
@@ -10,10 +10,10 @@ string item
 float64 wait_time
 
 ---
-# ok        : read status 
+# ok        : read status
 bool ok
 
-# id        : The discribtion you want to name.
+# id        : The description you want to name.
 # value     : The value of asked item.
 string id
 string value

@@ -15,15 +15,12 @@ class MinimalSubscriber : public rclcpp::Node
     }
 
   private:
-    
     void topic_callback(const tm_msgs::msg::StaResponse::SharedPtr msg) const
     {
-      
       RCLCPP_INFO_STREAM(this->get_logger(),"StaResponse: subcmd is = " << msg->subcmd << ", subdata is " << msg->subdata);
-      
     }
+
     rclcpp::Subscription<tm_msgs::msg::StaResponse>::SharedPtr subscription_;
-    
 };
 
 int main(int argc, char * argv[])

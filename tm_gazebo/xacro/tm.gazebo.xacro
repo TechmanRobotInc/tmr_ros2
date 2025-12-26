@@ -1,0 +1,20 @@
+<?xml version="1.0" ?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:macro name="tm_gazebo" params="ns prefix">
+
+    <!-- The Gazebo plugin for ros2_control -->
+    <gazebo reference="world">
+    </gazebo>
+
+    <gazebo>
+      <plugin filename="libign_ros2_control-system.so" name="ign_ros2_control::IgnitionROS2ControlPlugin">
+        <parameters>$(find tm_gazebo)/config/ros2_controllers.yaml</parameters>
+        <ros>
+          <remapping>/controller_manager/robot_description:=/robot_description</remapping>
+        </ros>
+      </plugin>
+    </gazebo>
+  </xacro:macro>
+
+</robot>

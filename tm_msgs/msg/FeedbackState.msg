@@ -34,7 +34,7 @@ bool is_data_table_correct   # Data Table Setting is Correct
 bool robot_error             # Error or Not
 bool project_run             # Project Runing or not
 bool project_pause           # Project Pause or not
-bool safetyguard_a           # Safety IO(Safeguard Port A trigger) 
+bool safetyguard_a           # Safety IO(Safeguard Port A trigger)
 bool e_stop                  # Emergency STOP
 uint8 camera_light           # Light
 int32 error_code             # Last Error Code
@@ -54,4 +54,3 @@ float32[] ee_analog_input
 
 # String
 string error_content
-

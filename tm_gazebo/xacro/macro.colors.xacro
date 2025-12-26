@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- tm_material_colors -->
+  <xacro:property name="color_default" value="0.695 0.743 0.790 1.0" />
+
+  <xacro:property name="color_red" value="0.950 0.000 0.000 1.0" />      
+
+  <xacro:property name="color_orange" value="1.000 0.500 0.000 1.0" />
+
+  <xacro:property name="color_yellow" value="1.000 1.000 0.000 1.0" />
+
+  <xacro:property name="color_green" value="0.000 1.000 0.000 1.0" />
+
+  <xacro:property name="color_blue" value="0.000 0.000 1.000 1.0" />
+
+  <xacro:property name="color_indigo" value="0.300 0.300 0.600 1.0" />  
+
+  <xacro:property name="color_violet" value="0.600 0.000 1.000 1.0" />
+
+  <xacro:property name="color_black" value="0.000 0.000 0.000 1.0" />
+
+  <xacro:property name="color_darkolive" value="0.300 0.300 0.250 1.0" />
+
+  <xacro:property name="color_pebblegray" value="0.706 0.690 0.631 1.0" />  
+
+  <xacro:property name="color_grey" value="0.750 0.750 0.750 1.0" />
+
+  <xacro:property name="color_whitegraphite" value="0.773 0.780 0.769 1.0" />	
+
+  <xacro:property name="color_graywhite" value="0.839 0.835 0.792 1.0" />  
+
+  <xacro:property name="color_purewhite" value="0.941 0.929 0.882 1.0" />
+
+  <xacro:property name="color_white" value="0.950 0.950 0.950 1.0" />	
+
+  <xacro:property name="color_gold" value="0.831 0.686 0.218 1.0" />  
+
+  <xacro:property name="color_iron" value="0.380 0.400 0.417 1.0" />
+
+  <xacro:property name="color_emeraldgreen" value="0.040 0.455 0.251 1.0" />	
+										
+</robot>

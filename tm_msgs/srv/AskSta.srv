@@ -8,7 +8,7 @@ string subdata
 float64 wait_time
 
 ---
-# ok        : read status 
+# ok        : read status
 bool ok
 
 string subcmd

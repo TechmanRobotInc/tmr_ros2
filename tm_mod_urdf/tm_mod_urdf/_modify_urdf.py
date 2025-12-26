@@ -1,11 +1,9 @@
-
 import math
 
 # from xml.etree import ElementTree
 # import xml.etree.cElementTree as ET
 
 import numpy as np
-
 
 # always print floating point numbers using fixed point notation
 # np.set_printoptions(suppress=True)
@@ -106,13 +104,13 @@ def urdf_DH_from_tm_DH(tm_DH, tm_DeltaDH):
     # urdf_DH[0, _ALPHA] = 0.
     # urdf_DH[0, _BETA ] = 0.
     for i in range(_DoF):
-        urdf_DH[i, _D] = 0.001 * (tm_DH[7*i + 3] + tm_DeltaDH[5*i + 3])
-        urdf_DH[i, _THETA] = math.radians(tm_DH[7*i + 0] + tm_DeltaDH[5*i + 0])
-        urdf_DH[i, _LLIM] = math.radians(tm_DH[7*i + 5])
-        urdf_DH[i, _ULIM] = math.radians(tm_DH[7*i + 6])
-        urdf_DH[i + 1, _A] = 0.001 * (tm_DH[7*i + 2] + tm_DeltaDH[5*i + 2])
-        urdf_DH[i + 1, _ALPHA] = math.radians(tm_DH[7*i + 1] + tm_DeltaDH[5*i + 1])
-        urdf_DH[i + 1, _BETA] = math.radians(tm_DeltaDH[5*i + 4])
+        urdf_DH[i, _D] = 0.001 * (tm_DH[7 * i + 3] + tm_DeltaDH[5 * i + 3])
+        urdf_DH[i, _THETA] = math.radians(tm_DH[7 * i + 0] + tm_DeltaDH[5 * i + 0])
+        urdf_DH[i, _LLIM] = math.radians(tm_DH[7 * i + 5])
+        urdf_DH[i, _ULIM] = math.radians(tm_DH[7 * i + 6])
+        urdf_DH[i + 1, _A] = 0.001 * (tm_DH[7 * i + 2] + tm_DeltaDH[5 * i + 2])
+        urdf_DH[i + 1, _ALPHA] = math.radians(tm_DH[7 * i + 1] + tm_DeltaDH[5 * i + 1])
+        urdf_DH[i + 1, _BETA] = math.radians(tm_DeltaDH[5 * i + 4])
     # urdf_DH[_DoF, _D] = 0.
     # urdf_DH[_DoF, _THETA] = 0.
     return urdf_DH
@@ -169,7 +167,6 @@ def pretty_xml(element, indent, newline, level=0):
 
 
 def modify_urdf(root, xyzs, rpys, udh, prefix=''):
-
     for elem in root.findall('joint'):
         for index in elem.attrib:
             if index == 'name' and elem.attrib[index] == prefix + 'base_fixed_joint':

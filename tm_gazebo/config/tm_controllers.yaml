@@ -1,0 +1,45 @@
+# This config file is used by ros2_control
+controller_manager:
+  ros__parameters:
+    update_rate: 500  # Hz
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+    speed_scaling_state_broadcaster:
+      type: tm2_controllers/SpeedScalingStateBroadcaster
+
+    tmr_arm_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+
+speed_scaling_state_broadcaster:
+  ros__parameters:
+    state_publish_rate: 100.0
+
+tmr_arm_controller:
+  ros__parameters:
+    joints:
+      - joint_1
+      - joint_2
+      - joint_3
+      - joint_4
+      - joint_5
+      - joint_6
+
+    command_interfaces:
+      - position
+
+    state_interfaces:
+      - position
+      - velocity
+
+    state_publish_rate:  50.0
+    action_monitor_rate: 20.0
+    open_loop_control: false
+    allow_integration_in_goal_trajectories: true
+    allow_nonzero_velocity_at_trajectory_end: false
+    constraints:
+      stopped_velocity_tolerance: 0.2
+      goal_time: 0.0 # Defaults to 0.0 (start immediately)
+    allow_partial_joints_goal: false
+

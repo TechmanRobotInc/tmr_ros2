@@ -1,0 +1,40 @@
+<sdf version='1.9'>
+  <world name='test_world'>
+
+    <!-- Physics -->
+    <plugin
+      filename="gz-sim-physics-system"
+      name="gz::sim::systems::Physics">
+    </plugin>
+
+    <!-- User Commands -->
+    <plugin
+      filename="gz-sim-user-commands-system"
+      name="gz::sim::systems::UserCommands">
+    </plugin>
+
+    <!-- Scene -->
+    <plugin
+      filename="gz-sim-scene-broadcaster-system"
+      name="gz::sim::systems::SceneBroadcaster">
+    </plugin>
+
+    <!-- Gravity ON: 0 0 -9.8, Gravity OFF: 0 0 0 -->
+    <gravity>0.0 0.0 -9.8</gravity>
+
+    <!-- Include a model of A global light source -->
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Sun</uri>
+    </include>
+
+    <!-- Include a model of the Ground Plane -->
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Ground Plane</uri>
+    </include>
+
+    <!-- Define scene properties -->
+    <scene>
+      <shadows>false</shadows>
+    </scene>
+  </world>
+</sdf>

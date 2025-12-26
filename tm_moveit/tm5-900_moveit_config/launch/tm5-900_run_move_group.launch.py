@@ -42,7 +42,6 @@ def load_yaml(package_name, file_path):
 
 def generate_launch_description():
     args = []
-    length = len(sys.argv)
     if (len(sys.argv) >= 5):
         i = 4
         while i < len(sys.argv):
@@ -54,8 +53,10 @@ def generate_launch_description():
     xacro_path = 'tm5-900.urdf.xacro'
     moveit_config_path = 'tm5-900_moveit_config'    
     srdf_path = 'config/tm5-900.srdf'
-    rviz_path = '/launch/run_move_group.rviz'     
-    
+    rviz_path = '/launch/run_move_group.rviz'
+
+    # -------------------------------------------------------------------------
+    # Load the robot_description
     robot_description_config = xacro.process_file(
         os.path.join(
             get_package_share_directory(description_path),
@@ -64,6 +65,7 @@ def generate_launch_description():
         )
     )
     robot_description = {'robot_description': robot_description_config.toxml()}
+    # -------------------------------------------------------------------------
 
     # SRDF Configuration
     robot_description_semantic_config = load_file(moveit_config_path, srdf_path)
@@ -122,7 +124,7 @@ def generate_launch_description():
         parameters=[
             robot_description,
             robot_description_semantic,
-            robot_description_kinematics,           
+            robot_description_kinematics,
             ompl_planning_pipeline_config,
             trajectory_execution,
             moveit_controllers,

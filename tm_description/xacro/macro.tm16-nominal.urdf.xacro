@@ -3,44 +3,44 @@
 
   <xacro:include filename="$(find tm_description)/xacro/macro.inertial.xacro" />
 
-  <xacro:macro name="tm16" params="ns prefix color:=none format:=obj
+  <xacro:macro name="tm16" params="ns prefix color format
     joint_1_lower_limit:=${radians(-270)}    joint_1_upper_limit:=${radians(270)}
     joint_2_lower_limit:=${radians(-180)}    joint_2_upper_limit:=${radians(180)}
     joint_3_lower_limit:=${radians(-155)}    joint_3_upper_limit:=${radians(155)}
     joint_4_lower_limit:=${radians(-180)}    joint_4_upper_limit:=${radians(180)}
     joint_5_lower_limit:=${radians(-180)}    joint_5_upper_limit:=${radians(180)}
     joint_6_lower_limit:=${radians(-270)}    joint_6_upper_limit:=${radians(270)}
-    joint_1_velocity_limit:=${radians(120)}    
+    joint_1_velocity_limit:=${radians(120)}
     joint_2_velocity_limit:=${radians(120)}
-    joint_3_velocity_limit:=${radians(180)}    
+    joint_3_velocity_limit:=${radians(180)}
     joint_4_velocity_limit:=${radians(180)}
-    joint_5_velocity_limit:=${radians(180)}    
+    joint_5_velocity_limit:=${radians(180)}
     joint_6_velocity_limit:=${radians(180)}
-    joint_1_effort_limit:=${350}    
+    joint_1_effort_limit:=${350}
     joint_2_effort_limit:=${350}
-    joint_3_effort_limit:=${170}    
+    joint_3_effort_limit:=${170}
     joint_4_effort_limit:=${85}
-    joint_5_effort_limit:=${45}    
-    joint_6_effort_limit:=${45}   
+    joint_5_effort_limit:=${45}
+    joint_6_effort_limit:=${45}
     safety_limits:=false safety_pos_margin:=0.15
     safety_k_position:=20">
 
-   <xacro:property name="damping_factor" value="0.000"/>
-   <xacro:property name="d1" value="${damping_factor*0.1}"/>
-   <xacro:property name="d2" value="${damping_factor*0.1}"/>
-   <xacro:property name="d3" value="${damping_factor*0.1}"/>
-   <xacro:property name="d4" value="${damping_factor*0.1}"/>
-   <xacro:property name="d5" value="${damping_factor*0.1}"/>
-   <xacro:property name="d6" value="${damping_factor*0.1}"/>
+    <xacro:property name="damping_factor" value="0.000"/>
+    <xacro:property name="d1" value="${damping_factor*0.1}"/>
+    <xacro:property name="d2" value="${damping_factor*0.1}"/>
+    <xacro:property name="d3" value="${damping_factor*0.1}"/>
+    <xacro:property name="d4" value="${damping_factor*0.1}"/>
+    <xacro:property name="d5" value="${damping_factor*0.1}"/>
+    <xacro:property name="d6" value="${damping_factor*0.1}"/>
 
-   <xacro:property name="friction_factor" value="0.000"/>
-   <xacro:property name="f1" value="${friction_factor*0.1}"/>
-   <xacro:property name="f2" value="${friction_factor*0.1}"/>
-   <xacro:property name="f3" value="${friction_factor*0.1}"/>
-   <xacro:property name="f4" value="${friction_factor*0.1}"/>
-   <xacro:property name="f5" value="${friction_factor*0.1}"/>
-   <xacro:property name="f6" value="${friction_factor*0.1}"/>
-      
+    <xacro:property name="friction_factor" value="0.000"/>
+    <xacro:property name="f1" value="${friction_factor*0.1}"/>
+    <xacro:property name="f2" value="${friction_factor*0.1}"/>
+    <xacro:property name="f3" value="${friction_factor*0.1}"/>
+    <xacro:property name="f4" value="${friction_factor*0.1}"/>
+    <xacro:property name="f5" value="${friction_factor*0.1}"/>
+    <xacro:property name="f6" value="${friction_factor*0.1}"/>
+
     <!-- Inertia parameters -->
     <xacro:property name="mass_0" value="1.0" />
     <xacro:property name="mass_1" value="7.6" />
@@ -72,13 +72,34 @@
     <xacro:property name="izz_5" value="${2643.21*unit_factor}" />
     <xacro:property name="izz_6" value="${959.690*unit_factor}" />
 
+    <xacro:property name="specified_color_arms" default="false" />
+    <xacro:property name="prefix_monochrome_command" default="true" />
+
+    <!-- If other applications conflict with the color definition of URDF, try disable_prefix_color to close it -->
+    <xacro:property name="disable_prefix_color" default="false" />
+    <xacro:if value="${disable_prefix_color}">
+      <prefix_monochrome_command value="false"/>
+    </xacro:if>
+    <xacro:if value="${format == 'stl'}">
+      <specified_color_arms value="true"/>
+      <prefix_monochrome_command value="false"/>
+    </xacro:if>
+    <xacro:if value="${prefix_monochrome_command}">
+      <xacro:tm_materials/>
+    </xacro:if>
+
 <!--LinkDescription-->
   <link name="${prefix}link_0">
     <visual>
       <geometry>
         <mesh filename="package://tm_description/meshes/tm12/visual/tm12-base.${format}" />
       </geometry>
-      <material name="${color}" />
+      <xacro:if value="${specified_color_arms}">
+        <xacro:tm_material_whitegraphite />
+      </xacro:if>
+      <xacro:if value="${prefix_monochrome_command}">
+        <material name="${color}" />
+      </xacro:if>
     </visual>
     <collision>
       <geometry>
@@ -107,7 +128,12 @@
       <geometry>
         <mesh filename="package://tm_description/meshes/tm12/visual/tmr_750w_01.${format}" />
       </geometry>
-      <material name="${color}" />
+      <xacro:if value="${specified_color_arms}">
+        <xacro:tm_material_darkolive />
+      </xacro:if>
+      <xacro:if value="${prefix_monochrome_command}">
+        <material name="${color}" />
+      </xacro:if>
     </visual>
     <collision>
       <geometry>
@@ -137,7 +163,12 @@
       <geometry>
         <mesh filename="package://tm_description/meshes/tm16/visual/tm16-arm1.${format}" />
       </geometry>
-      <material name="${color}" />
+      <xacro:if value="${specified_color_arms}">
+        <xacro:tm_material_darkolive />
+      </xacro:if>
+      <xacro:if value="${prefix_monochrome_command}">
+        <material name="${color}" />
+      </xacro:if>
     </visual>
     <collision>
       <geometry>
@@ -167,7 +198,12 @@
       <geometry>
         <mesh filename="package://tm_description/meshes/tm16/visual/tm16-arm2.${format}" />
       </geometry>
-      <material name="${color}" />
+      <xacro:if value="${specified_color_arms}">
+        <xacro:tm_material_gold />
+      </xacro:if>
+      <xacro:if value="${prefix_monochrome_command}">
+        <material name="${color}" />
+      </xacro:if>
     </visual>
     <collision>
       <geometry>
@@ -197,7 +233,12 @@
       <geometry>
         <mesh filename="package://tm_description/meshes/tm5-900/visual/tmr_100w_01.${format}" />
       </geometry>
-      <material name="${color}" />
+      <xacro:if value="${specified_color_arms}">
+        <xacro:tm_material_darkolive />
+      </xacro:if>
+      <xacro:if value="${prefix_monochrome_command}">
+        <material name="${color}" />
+      </xacro:if>
     </visual>
     <collision>
       <geometry>
@@ -227,7 +268,12 @@
       <geometry>
         <mesh filename="package://tm_description/meshes/tm5-900/visual/tmr_100w_02.${format}" />
       </geometry>
-      <material name="${color}" />
+      <xacro:if value="${specified_color_arms}">
+        <xacro:tm_material_darkolive />
+      </xacro:if>
+      <xacro:if value="${prefix_monochrome_command}">
+        <material name="${color}" />
+      </xacro:if>
     </visual>
     <collision>
       <geometry>
@@ -257,7 +303,12 @@
       <geometry>
         <mesh filename="package://tm_description/meshes/tm5-900/visual/tmr_ee.${format}" />
       </geometry>
-      <material name="${color}" />
+      <xacro:if value="${specified_color_arms}">
+        <xacro:tm_material_purewhite />
+      </xacro:if>
+      <xacro:if value="${prefix_monochrome_command}">
+        <material name="${color}" />
+      </xacro:if>
     </visual>
     <collision>
       <geometry>

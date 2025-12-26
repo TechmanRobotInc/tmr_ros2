@@ -2,7 +2,7 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>demo</name>
-  <version>1.0.1</version>
+  <version>1.1.0</version>
   <description>The demo package</description>
 
   <maintainer email="leo.wu@tm-robot.com">leo wu</maintainer>
