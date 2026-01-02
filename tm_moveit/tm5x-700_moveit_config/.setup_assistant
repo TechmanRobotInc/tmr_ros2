@@ -1,13 +1,13 @@
 moveit_setup_assistant_config:
   urdf:
-    package: tm_description
+    package: tm_gazebo
     relative_path: xacro/tm5x-700.urdf.xacro
   srdf:
-    relative_path: config/tm5x-700.srdf
+    relative_path: config/tm5x-700_gz.srdf
   package_settings:
     author_name: yh.wang
     author_email: yh.wang@tm-robot.com
-    generated_timestamp: 1720683947
+    generated_timestamp: 1750683947
   control_xacro:
     command:
       - position

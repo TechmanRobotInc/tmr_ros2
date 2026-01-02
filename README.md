@@ -319,7 +319,7 @@ The user can manually click the `Data Table Setting` <sup>2</sup> item and check
 > ros2 launch tm_gazebo <tm_robot_type>_gazebo.launch.py
 > ```
 >
-> The prefix `<tm_robot_type>` means the TM Robot type, available for the tm5-900, tm5-700, tm12, tm14, tm16, and tm20 models.<br/>
+> The prefix `<tm_robot_type>` means the TM Robot type, available for the tm5-900, tm5-700, tm12, tm14, tm16, tm20 and (without the integrated camera) tm5x-900, tm5x-700, tm12x, tm14x models.<br/>
 > 
 >> Taking the TM5-900 robot as an example, use the ros2 action send_goal command line tool to send some FollowJointTrajectory goals to move to several positions.<br/>
 >> :bulb: If you have started some executable programs with ROS commands in some terminal windows, it is recommended that you close them and then execute the following commands.<br/>
@@ -727,6 +727,6 @@ More Support & Service, please contact us. [@TECHMAN ROBOT](https://www.tm-robot
 > [!TIP]
 > 1. The tm_description package contains description files and meshes, available for TM5-900, TM5-700, TM12, TM14, TM16, TM20, and (without the integrated camera) TM5X-900, TM5X-700, TM12X, and TM14X models.<br/>
 > 2. Some software packages with ROS2 Humble MoveIt2 configurations for TM Cobots are available for TM5-900, TM5-700, TM12, TM14, TM16, TM20, and (without the integrated camera) TM5X-900, TM5X-700, TM12X, and TM14X models.<br/>
-> 3. Some software packages with ROS2 Humble Gazebo Fortress configurations for TM Cobots are available for TM5-900, TM5-700, TM12, TM14, TM16, and TM20 models.<br/>
+> 3. Some software packages with ROS2 Humble Gazebo Fortress configurations for TM Cobots are available for TM5-900, TM5-700, TM12, TM14, TM16, TM20, and (without the integrated camera) TM5X-900, TM5X-700, TM12X, and TM14X models.<br/>
 <div> </div>
 
