@@ -52,6 +52,7 @@ TmSctRos2::~TmSctRos2(){
     print_info("TM_ROS: (Listen node) halt");		
 
     sta_updated_ = true;
+    listenNodeConnection.reset();
         
 }
 void TmSctRos2::sct_msg(TmSctData data)

@@ -255,7 +255,9 @@ void EthernetSlaveConnection::no_connect(){
     print_info("TM_ROS: set Ethernet slave NOT reconnect");
 }
 EthernetSlaveConnection::~EthernetSlaveConnection(){
-    if (svr_.is_connected()) {}
-    svr_.halt();
     run = false;
+    svr_.halt();
+    if (getDataThread.joinable()) {
+        getDataThread.join();
+    }
 }

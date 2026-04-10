@@ -63,6 +63,7 @@ TmSvrRos2::~TmSvrRos2()
     print_info("TM_ROS: (Ethernet slave) halt");		
     svr_updated_ = true;
     svr_cv_.notify_all();
+    ethernetSlaveConnection.reset();
 
      if (is_fake) return;
 }

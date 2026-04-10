@@ -270,6 +270,11 @@ ListenNodeConnection::~ListenNodeConnection(){
     sta_cv_.notify_all();
     firstCheckIsOnListenNodeCondVar.notify_all();
     checkIsOnListenNodeCondVar.notify_all();
-    if (sct_.is_connected()) {}
     sct_.halt();
+    if (listenNodeThread.joinable()) {
+        listenNodeThread.join();
+    }
+    if (checkListenNodeThread.joinable()) {
+        checkListenNodeThread.join();
+    }
 }
