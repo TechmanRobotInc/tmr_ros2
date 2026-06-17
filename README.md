@@ -2,7 +2,7 @@
 
 ## __1. Overview__
 
-Techman Robot is a state-of-the-art production tool that is highly compatible and flexible to collaboration between human and machine. The Robot Operating System (ROS) provides abundant libraries and tools which can be utilized to reduce the cost of trivial development software tool and build robot applications without struggling. Our TM ROS driver provides nodes for communication with Techman Robot controllers, data including robot states, images from the eye-in-hand camera and URDF models for various robot arms via _TMflow_.
+Techman Robot is a state-of-the-art production tool that is highly compatible and flexible to collaboration between human and machine. The Robot Operating System (ROS) provides abundant libraries and tools which can be utilized to reduce the cost of trivial development software tools and build robot applications without struggling. Our TM ROS driver provides nodes for communication with Techman Robot controllers, data including robot states, images from the eye-in-hand camera, and URDF models for various robot arms via __TMflow__.
 
 ## __2. Feature__
 
@@ -27,7 +27,7 @@ More information: TM ROS driver support list
     </tr>
     <tr>
         <td><a href="http://wiki.ros.org/melodic">ROS Melodic Morenia</a></td>
-        <td><a href="https://github.com/TechmanRobotInc/tmr_ros1/">TM ROS1 Melodic</a></td>
+        <td><a href="https://github.com/TechmanRobotInc/tmr_ros1/tree/melodic">TM ROS1 Melodic</a></td>
         <th>&#9711;</th>
         <th>&#10005;&nbsp</th>
         <th>melodic</th>
@@ -48,7 +48,7 @@ More information: TM ROS driver support list
     </tr>
     <tr>
         <td><a href="https://index.ros.org/doc/ros2/Releases/Release-Foxy-Fitzroy/">ROS 2 Foxy Fitzroy</a></td>
-        <td><a href="https://github.com/TechmanRobotInc/tmr_ros2">TM ROS2 Foxy</a></td>
+        <td><a href="https://github.com/TechmanRobotInc/tmr_ros2/tree/foxy">TM ROS2 Foxy</a></td>
         <th>&#9711;</th>
         <th>&#9711;</th>
         <th>foxy</th>
@@ -79,7 +79,7 @@ More information: TM ROS driver support list
     </tr>
     <tr>
         <td><a href="https://index.ros.org/doc/ros2/Releases/Release-Foxy-Fitzroy/">ROS 2 Foxy Fitzroy</a></td>
-        <td><a href="https://github.com/TechmanRobotInc/tm2_ros2">TM2 ROS2 Foxy</a></td>
+        <td><a href="https://github.com/TechmanRobotInc/tm2_ros2/tree/foxy">TM2 ROS2 Foxy</a></td>
         <th>&#9711;</th>
         <th>&#9711;</th>
         <th>foxy</th>
@@ -90,6 +90,13 @@ More information: TM ROS driver support list
         <th>&#9711;</th>
         <th>&#9711;</th>
         <th>humble</th>
+    </tr>
+    <tr>
+        <td><a href="https://docs.ros.org/en/jazzy/index.html">ROS 2 Jazzy Jalisco</a></td>
+        <td><a href="https://github.com/TechmanRobotInc/tm2_ros2/tree/jazzy">TM2 ROS2 Jazzy</a></td>
+        <th>&#9711;</th>
+        <th>&#9711;</th>
+        <th>jazzy</th>
     </tr>
 </table>
 
@@ -121,14 +128,14 @@ After installing the correct ROS2 version of the computer, the next step is to e
 >
 > 2. Set the `Network` settings: mouse-click to enter the page of __System &rArr; Network__ in order.  
 Example: Set the Subnet mask: to 255.255.255.0 and IP address 192.168.10.2  
-**Note**: Set the network mask, and the communication with the TM Robot must be in the set domain.  
+**Note**: Set the network mask, and the communication with the TM Robot must be in the set domain.
 > ![2](figures/2.png)
 >
-> 3. Set the __Ethernet Slave__ `Data Table Setting` item: mouse-click to enter the page of __Setting &rArr; Connection &rArr; Ethernet Slave__ in order.  
-We recommend _one easy method_ <sup>1</sup> to set the __Ethernet Slave__ `Data Table setting` is to directly import the software package.  
- <sup>1</sup> See [TM ROS Driver vs TMflow Software Usage: Import Data Table Setting](https://github.com/TechmanRobotInc/TM_Export).  
- Or the previously provided method as follows:  (Note: TMflow software version changes may have slightly different settings.)  
-The user can manually click the `Data Table Setting` <sup>2</sup> item and check the following boxes as item _predefined_ <sup>3</sup> to receive/send specific data: 
+> 3. Set the __Ethernet Slave__ `Data Table Setting`: mouse-click to enter the page of __Setting &rArr; Connection &rArr; Ethernet Slave__ in order.
+We recommend _one easy method_ <sup>1</sup> to set the __Ethernet Slave__ `Data Table setting` is to directly import the software package.
+ <sup>1</sup> See [TM ROS Driver vs TMflow Software Usage: Import Data Table Setting](https://github.com/TechmanRobotInc/TM_Export).
+ Or the previously provided method as follows:  (Note: TMflow software version changes may have slightly different settings.)
+The user can manually click the `Data Table Setting` <sup>2</sup> item and check the following boxes as item _predefined_ <sup>3</sup> to receive/send specific data:
 >
 >       - [x] Robot_Error
 >       - [x] Project_Run
@@ -157,8 +164,9 @@ The user can manually click the `Data Table Setting` <sup>2</sup> item and check
 >       - [x] END_DI0~DI2
 >       - [x] END_AI0
 >
->    <sup>2</sup> <u>Turn off</u> Ethernet Slave. Let "STATUS:   __Disable__" be displayed on the Ethernet Slave setting page, then click `Data Table Setting` to enter the next page for related settings.  
+>    <sup>2</sup> <u>Turn off</u> Ethernet Slave. Let "STATUS: __Disable__" displayed on the Ethernet Slave setting page, then click `Data Table Setting` to enter the next page for related settings.
 >    <sup>3</sup> The checked items listed above must <u>all</u> be selected for TM ROS setting.
+>> **Note**: Set the `Commounicate Mode`: __BINARY__<br/>
 >
 >    When you need to check more about the maximum, minimum, and average calculation properties of joint torque, the _three checked items_ <sup>4</sup> listed below can be checked individually or all of them, please leave them unchecked when not in use.
 >
@@ -177,7 +185,7 @@ The user can manually click the `Data Table Setting` <sup>2</sup> item and check
 
 
 ###  &sect; __Remote connection to TM ROBOT__
-> Static IP of remote connection network settings through the wired network.<br/> 
+> Static IP of the remote connection network settings through the wired network.<br/>
 >
 > 1. Set the wired network of the user's (remote) Ubuntu computer by mouse-click on the top right of the desktop &rArr; Click on "__Wired Settings__" &rArr; Click on the gear icon &rArr; In the IPv4 feature options, click on "Manual" in order.<br/> 
 > ![user_remote_network_settings](figures/user_remote_network_settings.png)
@@ -204,8 +212,8 @@ The user can manually click the `Data Table Setting` <sup>2</sup> item and check
 > source ./install/setup.bash
 > ```
 > :bulb: Do you prepare the __TM Robot__ ready ? Make sure that TM Robot's operating software (__TMflow__) network settings are ready and the __Listen node__ is running. 
-> 
-> Then, run the driver to maintain the connection with TM Robot by typing 
+>
+> Then, run the driver to test whether the complete communication interface is properly working with TM Robot by typing 
 >
 >```bash
 > ros2 run tm_driver tm_driver robot_ip:=<robot_ip_address>
@@ -213,12 +221,13 @@ The user can manually click the `Data Table Setting` <sup>2</sup> item and check
 > Example :``ros2 run tm_driver tm_driver robot_ip:=192.168.10.2``, if the <robot_ip_address> is 192.168.10.2
 >
 > Now, the user can use a new terminal to run each ROS node or command, but don't forget to source the correct setup shell files as starting a new terminal.
+> Note: When you finish executing your developed scripts or motion commands through the TM ROS driver connection, press __CTRL + C__ in all terminal windows to shut everything down.
 
 > __Usage with MoveIt2 (Tentative)__ 
 >
 > See [Moveit2 release Versions](https://moveit.ros.org/#release-versions).<br/>
 >
-> If the user want to know how to use ROS2 driver with MoveIt2, please visit the [TM ROS2 Foxy driver](https://github.com/TechmanRobotInc/tmr_ros2) website.<br/>
+> If the user want to know how to use ROS2 driver with MoveIt2, please visit the [TM ROS2 Foxy driver](https://github.com/TechmanRobotInc/tmr_ros2/tree/foxy) website.<br/>
 
 
 ## __4. Vision__
@@ -249,7 +258,7 @@ The user can manually click the `Data Table Setting` <sup>2</sup> item and check
 >
 > __Build TM ROS Vision driver node on your (remote) computer__
 >
-> Under the environment settings have been finished with your workspace`<workspace>`, then type
+> Under the environment settings, have been finished with your `<workspace>`, then type
 >
 > ```bash
 > cd ~/<workspace> && source ./install/setup.bash
@@ -316,7 +325,8 @@ The user can manually click the `Data Table Setting` <sup>2</sup> item and check
 > ros2 run custom_package sub_img
 > ```
 >
-> Then, the viewer will display image data from _TMflow_.
+> Then, the viewer will display image data from _TMflow_.<br/>
+> **Note**: When you have finished, press CTRL + C in all terminal windows to shut everything down.<br/>
 
 
 ## __5. Program script demonstration__
@@ -330,11 +340,11 @@ The user can use a service named "send_script" to send the script.<br/>
 "id" &rarr; The transaction number expressed in any <u>alphanumeric</u> <sup>1</sup> characters.<br/> 
 "script" &rarr; the script that the user wants to send.<br/>
 "ok" &rarr; the correctness of the script.<br/>
-> <sup>1</sup> If a non-alphanumeric byte is encountered, a CPERR 04 error is reported. When used as a communication packet response, it is a transaction number and identifies which group of commands to respond.<br/>
+> <sup>1</sup> If a non-alphanumeric byte is encountered, a CPERR 04 error is reported. When used as a communication packet response, it is a transaction number and identifies which group of commands to respond to.<br/>
 >
 > * demo_ask_item:<br/>
 In this demo code, the user can use this service to send TMSVR <sup>2</sup> cmd.<br/> 
-> <sup>2</sup> For more detailed information, please refer to _defined protocol_: Expression Editor and Listen Node.pdf (Chapter 9.6 TMSVR)<br/>
+> <sup>2</sup> For more detailed information, please refer to _defined protocol_: TM Expression Editor and Listen Node.pdf (Chapter 9.6 TMSVR)<br/>
 >
 > * demo_ask_sta:<br/>
 In this demo code, the user can use this service to send TMSTA <sup>3</sup> cmd.<br/>
@@ -360,14 +370,14 @@ state &rarr;  STATE_OFF or STATE_ON value, or other value (if type expressed in 
 >
 > * demo_set_positions:<br/>
 In this demo code, the user should pay attention to the parameter definition of the data format setting <sup>5</sup> and the parameter unit to be operated.  <br/>
-motion_type &rarr;  PTP_J , PTP_T , LINE_J , LINE_T , CIRC_J ,CIRC_T , PLINE_J ,PLINE_T <br/>
-positions &rarr;  motion target position: If expressed in Cartesian coordinate (unit: m), if expressed in joint angles (unit: rad)<br/>
+motion_type &rarr;  PTP_J , PTP_T , LINE_T <br/>
+positions &rarr;  motion target position: If expressed in Cartesian coordinates (unit: m), if expressed in joint angles (unit: rad)<br/>
 velocity &rarr;  motion velocity: if expressed in Cartesian coordinate (unit: m/s) <sup>6</sup>, if expressed in joint velocity (unit: rad/s, and the maximum value is limited to  &pi; )  <sup>6</sup>  <br/>
 acc_time &rarr; time to reach maximum speed (unit: ms)<br/> 
 blend_percentage &rarr; blending value: expressed as a percentage (unit: %, and the minimum value of 0 means no blending) <br/>
 fine_goal &rarr; precise position mode: If activated, the amount of error in the final position will converge more, but it will take a few more milliseconds.<br/>
 > <sup>5</sup> For more detailed information, please refer to _defined protocol_ (Chapter8 PTP, Line, Circle, Pline, Move_PTP, Move_Line, Move_PLine) <br/>
-> <sup>6</sup> The unit of the parameters are different, the user can find the conversion in the program of TM ROS driver.<br/>
+> <sup>6</sup> The units of the parameters are different, the user can find the conversion in the program of TM ROS driver.<br/>
 >
 > * demo_write_item: <br/>
 In this demo code, the user can use this service to send TMSVR <sup>7</sup> cmd. <br/>
@@ -401,13 +411,12 @@ The <robot_ip_address> is the IP address of the TM Robot, the user can get it th
 ``source ./install/setup.bash``<br/>
 ``ros2 run demo demo_set_io``<br/>
 > :warning:[CAUTION] Some demos will let the TM Robot move, please be careful.<br/>
-**Note**: When you are finished, press CTRL + C in all terminal windows to shut everything down.<br/>
+**Note**: When you have finished, press CTRL + C in all terminal windows to shut everything down.<br/>
 ><br/>
 
 
 ## __6. TM GUI debugging and demonstration__
 This chapter describes a simplified GUI for displaying tm_driver connection status, sct, sta, svr messages, and robot status. The user can optionally install the _ui_for_debug_and_demo_ package to aid in viewing messages between the driver and the robot through the GUI display. If the driver connection fails, the user can also try to send a reconnect command on this GUI for debugging.
-
 
 ### &sect; GUI Debugging description
 > * If the user forgets to run the TM ROS driver, the user will see all the controlled label items of the GUI displayed as "NaN".<br/>
@@ -422,7 +431,7 @@ This chapter describes a simplified GUI for displaying tm_driver connection stat
 > * When the user sends a command or clicks DO0 Ctrl "``H/L``" button of Control_Box, the user also can see the response message <sup>2</sup> embedded in the "``Robot Response``" item view.<br/>
 > <sup>2</sup> For details of this item, please refer to __SctResponse.msg__, __StaResponse.msg__ and __SvrResponse.msg__ of TM ROS driver code.<br/>
 > * The user can click "``clear``" button to clear the old response message.<br/>
-> :bulb: If the"``Ethernet``" connection is interrupted, the display of most controlled label items in the GUI will be displayed as "NaN" and the robot feedback state will remain the last state and become invalid.<br/>
+> :bulb: If the"``Ethernet``" connection is interrupted, the display of most controlled label items in the GUI will be displayed as "NaN", and the robot feedback state will remain the last state and become invalid.<br/>
 
 
 ### &sect; Usage with GUI debugging
@@ -441,12 +450,13 @@ This chapter describes a simplified GUI for displaying tm_driver connection stat
 > 5. In a new terminal: Source setup.bash in the workspace path and run the driver to connect to TM Robot by typing<br/>
 ``source ./install/setup.bash``<br/>
 ``ros2 run tm_driver tm_driver robot_ip:=<robot_ip_address>``<br/>
-The <robot_ip_address> is the IP address of the TM Robot, the user can get it through TM Flow, for example, 192.168.10.2<br/>
+The <robot_ip_address> is the IP address of the TM Robot. The user can get it through TM Flow, for example, 192.168.10.2<br/>
 > 6. In another new terminal: Source setup.bash in the workspace path and start GUI debug by typing<br/>
 ``source ./install/setup.bash``<br/>
 ``ros2 run ui_for_debug_and_demo robot_ui``<br/>
-**Note**: When you are finished, press CTRL + C in all terminal windows to shut everything down.<br/>
+**Note**: When you have finished, press CTRL + C in all terminal windows to shut everything down.<br/>
 
 
-## __7. Contact us / Technical support__
-More Support & Service, please contact us. [@TECHMAN ROBOT](https://www.tm-robot.com/zh-hant/contact-us/)``[https://www.tm-robot.com/zh-hant/contact-us/] ``<br/>
+## __7. Contact Us / Technical Support__   [![Email](https://img.shields.io/badge/-Email-c14438?style=flat&logo=Gmail&logoColor=white)](mailto:tmsales@tm-robot.com)
+Access to some software, manuals, and technical documents requires logging into the official [TM Download Center](https://www.tm-robot.com/en/support/download-center/).<br/>
+For further support and service, please contact us: [TM Contact Us](https://www.tm-robot.com/en/support/contact-us/) | 📞 [+886-3-3288350](tel:+88633288350)<br/>
