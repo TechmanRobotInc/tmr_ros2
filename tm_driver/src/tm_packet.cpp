@@ -202,8 +202,14 @@ size_t TmPacket::build_packet_from_bytes(TmPacket &packet, const char *bytes, si
 	ind_b = ind_e;
 
 	// check length
-	if (ind_e + length + 6 > size || bytes[ind_e + length] != P_SEPR) {
-		//is_valid = false; goto end;
+	if (ind_e + length + 6 > size) {
+		// TCP reads can split a valid robot packet across multiple recv() calls.
+		// Treat that as incomplete data instead of a malformed packet warning.
+		packet.set_as_not_finish_data();
+		packet._size = ind_e;
+		return ind_e;
+	}
+	if (bytes[ind_e + length] != P_SEPR) {
 		print_warn("package length not valid");
 		packet.set_as_not_finish_data();
 		packet._size = ind_e;
